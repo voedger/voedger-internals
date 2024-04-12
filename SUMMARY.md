@@ -1,6 +1,6 @@
 # Table of contents
 
-* [voedger-design](README.md)
+* [Introduction](README.md)
 * [Operation Services](operation-services/README.md)
   * [API Gateway](operation-services/api-gateway.md)
   * [Cluster Management](operation-services/cluster-management.md)
