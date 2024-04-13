@@ -6,11 +6,11 @@ For user-focused documentation and guidance on using the Voedger platform, pleas
 
 The documentation is written around the following concepts:
 "The documentation is organized around the following key concepts:
-- **Voedger Concepts**: Complex concepts that may not be designed and used as a part of the particular product service.
 - **Service**: Provided by Voedger.
-    - There are [Operation](svc-op/README.md) and [Development](svc-dev/README.md) services.
+    - There are Operation and Development services.
 - **Role**: Which consumes the services.
 - **Architecture**: The specific software architecture upon which Voedger is built.
+- **Voedger Concepts**: Complex concepts that may not be designed and used as a part of the particular product service.
 
 
 ## Operation Services
@@ -31,7 +31,7 @@ The documentation is written around the following concepts:
 
     DBMS([DBMS]):::S
     
-    ClusterMgmt([Cluster Management]):::S
+    ClusterCfg([Cluster Configuration]):::S
     Monitoring([Monitoring]):::S
     Alerting([Alerting]):::S
     AppMgmt([Application Management]):::S  
@@ -43,10 +43,10 @@ The documentation is written around the following concepts:
     scylla --> DBMS
     DBMS --> cmd.voedger
 
-    cmd.ctool --> ClusterMgmt
-    ClusterMgmt --> Admin
-    ClusterMgmt --> |configures| grafana
-    ClusterMgmt --> |configures| alertmanager
+    cmd.ctool --> ClusterCfg
+    ClusterCfg --> Admin
+    ClusterCfg --> |configures| grafana
+    ClusterCfg --> |configures| alertmanager
 
     grafana --> Monitoring
     alertmanager --> Alerting

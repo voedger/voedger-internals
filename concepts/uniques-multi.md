@@ -26,3 +26,8 @@ We can use existing Uniques view
 
 ## Context
 - #151 
+
+
+## Issues
+
+- https://github.com/voedger/voedger/issues/867
