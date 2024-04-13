@@ -1,6 +1,6 @@
 # Introduction
 
-This documentation provides a detailed description of the design and architecture of the Voedger platform.  It serves as a reference for developers and includes the latest designs, which may still be not implemented.
+This documentation provides a detailed description of the internal design and architecture of the Voedger platform.  It serves as a base for the development and includes the latest designs, which may still be not implemented.
 
 For user-focused documentation and guidance on using the Voedger platform, please visit [here](https://docs.voedger.io/).
 
