@@ -1,6 +1,6 @@
 # Introduction
 
-This documentation provides a detailed overview of the design and architecture of the Voedger platform from a technical perspective.
+This documentation provides a detailed overview of the internal design and architecture of the Voedger platform.
 
 For user-focused documentation and guidance on using the Voedger platform, please visit [here](https://docs.voedger.io/).
 
