@@ -2,7 +2,7 @@
 
 ## Motivation
 
-[https://dev.untill.com/projects/#!663686](It is needed) to have an unique on a fields combination `From` and `Till` varchar fields of `wdoc.air.UPPayout`
+[It is needed for Air](https://dev.untill.com/projects/#!663686) to have an unique on a fields combination `From` and `Till` varchar fields of `wdoc.air.UPPayout`
 Problems: 
 - old uniques engine is not suitable because `From` and `Till` are both varchar fields. Only one varchar field in one unique is allowed
 
