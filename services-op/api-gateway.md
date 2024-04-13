@@ -78,3 +78,6 @@ sys/router
   - c.EchoCommand
   - q.EchoQuery
 
+## Issues
+
+- https://github.com/voedger/voedger/issues/1872 
