@@ -1,4 +1,4 @@
-# Uniques with multiple fields 
+# Uniques With Multiple Fields
 
 ## Motivation
 
