@@ -1,0 +1,35 @@
+# Development Services
+
+```mermaid
+    graph TD
+
+    %% Entities ====================
+
+    Developer[Developer]:::B
+
+    vsqlddl[\VSQL DDL/]:::H  
+    pkg.exttinygo:::S
+    cmd.vpm:::S
+
+    Development([Development]):::S
+
+
+    %% Relations ====================
+
+    pkg.exttinygo --> Development
+    cmd.vpm --> Development
+    Development --> Developer
+    vsqlddl --> Development
+
+
+    classDef B fill:#FFFFB5,color:#333
+    classDef S fill:#B5FFFF,color:#333
+    classDef H fill:#C9E7B7,color:#333
+    classDef G fill:#ffffff15, stroke:#999, stroke-width:2px, stroke-dasharray: 5 5
+```
+
+Prefixes
+- *cmd*: command line utility
+- *mod*: Go module
+- *pkg*: Go package
+- *extsoft*: external software
