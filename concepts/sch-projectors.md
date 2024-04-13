@@ -31,9 +31,3 @@ Projector context:
 ## Context
 - https://www.ibm.com/docs/en/db2oc?topic=task-unix-cron-format
 - https://github.com/robfig/cron/blob/master/parser.go
-```[tasklist]
-### Tasks
-- [ ] https://github.com/voedger/voedger/issues/1786
-- [ ] appdef: support scheduled projectr
-- [ ] actualizer for scheduled projectors
-```
