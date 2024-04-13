@@ -6,6 +6,7 @@ For user-focused documentation and guidance on using the Voedger platform, pleas
 
 The documentation is written around the following concepts:
 "The documentation is organized around the following key concepts:
+- **Voedger Concepts**: Complex concepts that may not be designed and used as a part of the particular product service.
 - **Service**: Provided by Voedger.
     - There are [Operation](svc-op/README.md) and [Development](svc-dev/README.md) services.
 - **Role**: Which consumes the services.

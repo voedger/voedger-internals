@@ -1,7 +1,7 @@
 # Table of contents
 
 * [Introduction](README.md)
-* [Concepts](concepts/README.md)
+* [Voedger Concepts](concepts/README.md)
   * [Scheduled Projectors](concepts/sch-projectors.md)
   * [Uniques With Multiple Fields](concepts/uniques-multi.md)
 * [Operation Services](services-op/README.md)
