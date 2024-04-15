@@ -20,3 +20,4 @@
 * [Standarts / Protocols](stds/README.md)
   * [VSQL](stds/vsql.md)
 * [Architecture](architecture.md)
+  * [Bootstrap](architecture/bootstrap.md)
