@@ -2,25 +2,7 @@
 
 ## Motivation
 
-As a developer I want to:
-
-- Prepare test context data for storages like Record, View
-- Prepare test context data for storages like ArgumentObject, WLog, HTTP, etc.
-
-Storages
-```go
-	StorageEvent          = "sys.Event"
-	StorageSendMail       = "sys.SendMail"
-	StorageRecord         = "sys.Record"
-	StorageView           = "sys.View"
-	StorageWLog           = "sys.WLog"
-	StoragePLog           = "sys.PLog"
-	StorageHttp           = "sys.Http"
-	StorageAppSecret      = "sys.AppSecret"
-	StorageRequestSubject = "sys.RequestSubject"
-	StorageResult         = "sys.Result"
-	StorageCommandContext = "sys.CommandContext"
-```
+- https://github.com/voedger/voedger/issues/1647
 
 ## Context
 
