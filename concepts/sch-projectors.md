@@ -1,6 +1,13 @@
 # Schedule Projectors
 
+Issues
 - https://github.com/voedger/voedger/issues/1777
+
+## Principles
+
+- Scheduled Projector is triggered by time events
+- Time events are not kept in logs (PLog, WLog)
+- Scheduled Projector may not have intents
 
 ## Motivation
 
@@ -17,7 +24,7 @@ ALTER WORKSPACE sys.AppWorkspaceWS (
 	) AS RESULT OF ScheduledProjector;
 
 	EXTENSION ENGINE BUILTIN (
-		PROJECTOR ScheduledProjector CRON '1 0 * * *' INTENTS (View(test));
+		PROJECTOR ScheduledProjector CRON '1 0 * * *';
 	);
 );
 ```
