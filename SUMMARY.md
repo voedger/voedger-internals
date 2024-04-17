@@ -2,6 +2,8 @@
 
 * [Introduction](README.md)
 * [Voedger Concepts](concepts/README.md)
+  * [Clusters](concepts/clusters/README.md)
+    * [Bootstrap](concepts/clusters/bootstrap.md)
   * [Scheduled Projectors](concepts/sch-projectors.md)
   * [Uniques With Multiple Fields](concepts/uniques-multi.md)
 * [Operation Services](services-op/README.md)
