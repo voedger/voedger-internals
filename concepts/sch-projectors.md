@@ -1,4 +1,16 @@
+# Schedule Projectors
+
+Issues
+- https://github.com/voedger/voedger/issues/1777
+
+## Principles
+
+- Scheduled Projector is triggered by time events
+- Time events are not kept in logs (PLog, WLog)
+- Scheduled Projector may not have intents
+
 ## Motivation
+
 As a Developer I want to have scheduled jobs (required by sigma)
 
 ## Functional Design
@@ -12,7 +24,7 @@ ALTER WORKSPACE sys.AppWorkspaceWS (
 	) AS RESULT OF ScheduledProjector;
 
 	EXTENSION ENGINE BUILTIN (
-		PROJECTOR ScheduledProjector CRON '1 0 * * *' INTENTS (View(test));
+		PROJECTOR ScheduledProjector CRON '1 0 * * *';
 	);
 );
 ```
@@ -32,7 +44,3 @@ Projector context:
 
 - https://www.ibm.com/docs/en/db2oc?topic=task-unix-cron-format
 - https://github.com/robfig/cron/blob/master/parser.go
-
-## Issues
-
-- https://github.com/voedger/voedger/issues/1777
