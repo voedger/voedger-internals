@@ -2,8 +2,6 @@
 
 * [Introduction](README.md)
 * [Voedger Concepts](concepts/README.md)
-  * [Clusters](concepts/clusters/README.md)
-    * [Bootstrap](concepts/clusters/bootstrap.md)
   * [Scheduled Projectors](concepts/sch-projectors.md)
   * [Uniques With Multiple Fields](concepts/uniques-multi.md)
 * [Operation Services](services-op/README.md)
@@ -19,7 +17,5 @@
     * [vpm orm](services-dev/vpm/orm.md)
     * [vpm build](services-dev/vpm/build.md)
   * [API for testing](services-dev/api-testing.md)
-* [Standarts / Protocols](stds/README.md)
-  * [VSQL](stds/vsql.md)
-* [Architecture](architecture.md)
-  * [Bootstrap](architecture/bootstrap.md)
+* [Architecture](archi/README.md)
+  * [Bootstrap](archi/bootstrap.md)
