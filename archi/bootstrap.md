@@ -28,15 +28,23 @@ Built-in Application Deployment
 
 ## Technical Design
 
-**pkg/btstrp.New(bus, IAppStructsProvider, appparts, builtInApps []BuiltInApp)**
+**Algorythm**
+
+- Wire service pipeline
+  - Last operator calls btstrp.New(...)
+  - vvm.NewBootstrapSyncOp()
+- Start pipeline
+- If DoSync returns error => shutdown
+
+**pkg/btstrp.Bootstrap(bus IBus, IAppStructsProvider, appparts, clusterApp ClusterBuiltInApp, otherApps []BuiltInApp) error**
 
 Service
 
 - Initialize `cluster` application workspace, if needed, using IAppStructsProvider
   - All ID must be predefined
-- appparts: deploy cluster app
+- appparts: deploy clusterApp
    - Note for the future: Must be scheduled to the Bootstrap Leader
-- For each app in builtInApps
+- For each app in otherApps
   - q.cluster.QueryApp(app) + check apps compatibility + if needed c.cluster.DeployApp(app)
     - Use bus to send requests
     - Check: NumPartitions, NumAppWorkspaces, 
