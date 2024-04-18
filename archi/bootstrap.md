@@ -42,7 +42,7 @@ Built-in Application Deployment
 - appparts: deploy single clusterApp partition
    - Note for the future: Must be scheduled to the Bootstrap Leader
 - For each app in otherApps
-  - q.cluster.QueryApp(app) + check apps compatibility + if needed c.cluster.DeployApp(app)
+  - **q.cluster.QueryApp**(app) + check apps compatibility + if needed **c.cluster.DeployApp(app)**  
     - Use bus to send requests
     - Check: NumPartitions, NumAppWorkspaces, 
     - Read/write to the table `App` + some views
