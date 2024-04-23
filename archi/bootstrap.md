@@ -31,7 +31,7 @@ Built-in Application Deployment
 **Overview**
 
 - Wire service pipeline
-  - Last operator is **vvm.NewBootstrapSyncOp()**, calls btstrp.Bootstrap(...)
+  - Last operator is **vvm.provideBootstrapOperator()**, calls btstrp.Bootstrap(...)
 - Start pipeline
 - If DoSync returns error => shutdown
 
