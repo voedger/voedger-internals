@@ -49,8 +49,7 @@ packages
 
 ## Functional Design
 
-- https://github.com/michael-say/voedger/blob/1647-wasm-state-low-level-api-for-testing/pkg/iextengine/wazero/_testdata/basicusage/main_test.go
-
+- https://github.com/voedger/voedger/blob/d466918a151b00f54cea4dbf654786c84424bfb0/pkg/iextengine/wazero/_testdata/basicusage/main_test.go#L21
 
 ## Technical Design
 
