@@ -2,6 +2,7 @@
 
 * [Introduction](README.md)
 * [Voedger Concepts](concepts/README.md)
+  * [Clusters](concepts/clusters.md)
   * [Scheduled Projectors](concepts/sch-projectors.md)
   * [Uniques With Multiple Fields](concepts/uniques-multi.md)
 * [Operation Services](services-op/README.md)
@@ -19,4 +20,3 @@
   * [API for testing](services-dev/api-testing.md)
 * [Architecture](archi/README.md)
   * [Bootstrap](archi/bootstrap.md)
-  * [Clusters](archi/vvm.md)

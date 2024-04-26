@@ -1,2 +1,0 @@
-# Voedger Virtual Machine (VVM)
-
