@@ -7,9 +7,12 @@
 ## Requirements
 
 `vpm build [-C] [-o <archive-name>]`
-- Compile all packages which have `packages_gen.go` using tinygo and create a ZIP (`<folder-name>.var`) that contains *.wasm and *.vsql files
-  - `tinygo build --no-debug -o <folder-name>.wasm -scheduler=none -opt=2 -gc=leaking -target=wasi .`
-- Structure is similar to that of [vpm basline](https://github.com/voedger/voedger/issues/1057) command
+- Build a structure with *.vsql files that is similar to that of [vpm baseline](https://github.com/voedger/voedger/issues/1057) command
+  - If a package has `packages_gen.go` (result of `vpm init`) if shall be compiled to pkg.wasm using tinygo
+    - `tinygo build --no-debug -o pkg.wasm -scheduler=none -opt=2 -gc=leaking -target=wasi .`
+- Create a ZIP (`<folder-name>.var`)
 - Requirements
   - Package shall contain application statement (`package does not have an APPLICATION statement`)
+  
+  
    
