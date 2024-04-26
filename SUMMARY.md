@@ -19,3 +19,4 @@
   * [API for testing](services-dev/api-testing.md)
 * [Architecture](archi/README.md)
   * [Bootstrap](archi/bootstrap.md)
+  * [Clusters](archi/vvm.md)

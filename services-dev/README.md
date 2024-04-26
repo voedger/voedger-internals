@@ -11,15 +11,18 @@
     pkg.exttinygo:::S
     cmd.vpm:::S
 
-    Development([Development]):::S
+    ExtDevelopment([Extensions Development]):::S
+    Development([Application Development]):::B
 
 
     %% Relations ====================
 
-    pkg.exttinygo --> Development
-    cmd.vpm --> Development
-    Development --> Developer
-    vsqlddl --> Development
+    pkg.exttinygo --> ExtDevelopment
+    cmd.vpm --> ExtDevelopment
+    Developer --> Development
+    vsqlddl -.- Development
+
+    ExtDevelopment --- Development
 
 
     classDef B fill:#FFFFB5,color:#333

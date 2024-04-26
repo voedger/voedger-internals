@@ -5,12 +5,12 @@ This documentation provides a detailed description of the internal design and ar
 For user-focused documentation and guidance on using the Voedger platform, please visit [here](https://docs.voedger.io/).
 
 The documentation is organized around the following key concepts:
-- **Service**: Provided by the Voedger software. There are Development services and Operation services.
+- **Service**: Provided by the Voedger software. There are development-related services and operation-related services.
 - **Role**: Which consumes the services.
 - **Architecture**: The specific software architecture upon which Voedger is built.
 - **Voedger Concepts**: Complex concepts that may not be designed and used as a part of the particular product service.
 
-## Operation Services
+## Operation-related Services
 
 ```mermaid
     graph TD
@@ -66,7 +66,7 @@ The documentation is organized around the following key concepts:
 ```
 
 
-## Development Services
+## Development-related Services
 
 ```mermaid
     graph TD
@@ -80,7 +80,7 @@ The documentation is organized around the following key concepts:
     cmd.vpm:::S
 
     CBD([Config, Build, Deploy]):::S
-    Coding([Coding]):::S
+    Coding([Application Development]):::S
 
 
     %% Relations ====================
