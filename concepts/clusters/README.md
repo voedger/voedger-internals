@@ -1,6 +1,6 @@
 # Cluster
 
-## Key Cluster components
+## Cluster software and hardware components
 
 ```mermaid
 flowchart TD
@@ -36,7 +36,7 @@ flowchart TD
   classDef H fill:#C9E7B7
 ```
 
-## Cluster Storage components
+## Cluster storage components
 
 ```mermaid
     erDiagram
