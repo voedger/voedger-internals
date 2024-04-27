@@ -1,9 +1,13 @@
 # Table of contents
 
 * [Introduction](README.md)
-* [Voedger Concepts](concepts/README.md)
+* [Concepts](concepts/README.md)
   * [Clusters](concepts/clusters/README.md)
     * [bootstrap](concepts/clusters/bootstrap.md)
+  * [Workspaces](concepts/workspaces/README.md)    
+    * [Create Workspace](concepts/workspaces/create-workspace-v2.md)
+    * [Deactivate Workspace](concepts/workspaces/deactivate-workspace.md)
+    * [Invites](concepts/workspaces/invites.md)
   * [Scheduled Projectors](concepts/sch-projectors.md)
   * [Uniques With Multiple Fields](concepts/uniques-multi.md)
 * [Server](server/README.md)
