@@ -2,15 +2,11 @@
 
 This documentation provides a detailed description of the internal design and architecture of the Voedger platform.  It serves as a base for the development and includes the latest designs, which may still be not implemented.
 
+Voedger platform consists of Voedger Framework and Voedger Server that helps to develop and operate distributed applications.
+
 For user-focused documentation and guidance on using the Voedger platform, please visit [here](https://docs.voedger.io/).
 
-The documentation is organized around the following key concepts:
-- **Service**: Provided by the Voedger software. There are development-related services and operation-related services.
-- **Role**: Which consumes the services.
-- **Architecture**: The specific software architecture upon which Voedger is built.
-- **Voedger Concepts**: Complex concepts that may not be designed and used as a part of the particular product service.
-
-## Operation-related Services
+## Voedger Server
 
 ```mermaid
     graph TD
@@ -28,11 +24,11 @@ The documentation is organized around the following key concepts:
 
     DBMS([DBMS]):::S
     
-    ClusterCfg([Cluster Configuration]):::S
+    ClusterCfg([Cluster configuration]):::S
     Monitoring([Monitoring]):::S
     Alerting([Alerting]):::S
-    AppMgmt([Application Management]):::S  
-    RunApp([Application Execution]):::S
+    AppMgmt([Application management]):::S  
+    RunApp([Application execution]):::S
     APIGateway([API Gateway]):::S
 
     %% Relations ====================
@@ -66,7 +62,7 @@ The documentation is organized around the following key concepts:
 ```
 
 
-## Development-related Services
+## Voedger Framework
 
 ```mermaid
     graph TD
@@ -74,24 +70,29 @@ The documentation is organized around the following key concepts:
     %% Entities ====================
 
     Developer[Developer]:::B
+    DevelopTests([Develop tests]):::S
+    DevelopApps([Develop applications]):::S
 
     vsqlddl[\VSQL DDL/]:::H  
     pkg.exttinygo:::S
+    pkg.exttinygo.tests:::S
     cmd.vpm:::S
 
     CBD([Config, Build, Deploy]):::S
-    Coding([Application Development]):::S
 
 
     %% Relations ====================
 
-    pkg.exttinygo --> Coding
-    vsqlddl --> Coding
+    pkg.exttinygo --> DevelopApps
+    vsqlddl --> DevelopApps
     
+    pkg.exttinygo.tests --> DevelopTests
+
     cmd.vpm --> CBD
 
-    Coding --> Developer
+    DevelopApps --> Developer
     CBD --> Developer
+    DevelopTests --> Developer
 
     classDef B fill:#FFFFB5,color:#333
     classDef S fill:#B5FFFF,color:#333
@@ -100,7 +101,7 @@ The documentation is organized around the following key concepts:
 ```
 
 Prefixes
-- *cmd*: command line utility
+- *cmd*: command line utility or server
 - *mod*: Go module
 - *pkg*: Go package
 - *extsoft*: external software
