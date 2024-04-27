@@ -2,13 +2,6 @@
 
 Create User/Login/App Workspaces
 
-## Motivation
-
-- As a system architect I want to redesign Workspaces in particular I want to get rid of "pseudo workspaces"
-  - Currently there are a lot of "pseudo workspaces" (2^16) and this makes hard bulding list of logins
-- launchpad: [Create Workspace](https://dev.heeus.io/launchpad/#!17898)
-- launchpad: [Create Workspaces v2](https://dev.heeus.io/launchpad/#!21010)
-
 ## Content
 
 - [Principles](#solution-principles)
