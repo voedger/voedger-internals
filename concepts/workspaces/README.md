@@ -89,7 +89,7 @@ erDiagram
   }
 ```
 
-## Workspace-related Tables
+## Workspace-related tables
 
 ```mermaid
 erDiagram
