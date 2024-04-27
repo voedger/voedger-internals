@@ -1,6 +1,6 @@
 # Cluster
 
-## Cluster Components
+## Key Cluster components
 
 ```mermaid
 flowchart TD
@@ -10,33 +10,54 @@ flowchart TD
 
   Cluster{{Cluster}}:::H
   VVMNode:::H
-  Router:::S
-
+  
   app.sys.cluster[app.sys.cluster]:::S
   ws.cluster.Сluster[(ws.cluster.Сluster)]:::H
-  ws.cluster.VirtualMachine[(ws.cluster.VirtualMachine)]:::H
-
+  
   VVM:::S
 
 
   %% Relations =================================
 
-  Cluster --- app.sys.cluster
-  Cluster --x Router
   Cluster --x VVMNode
-  VVMNode --x |1..8| VVM
+  VVMNode --x VVM
 
-  Router x-.-x VVM
-
-  app.sys.cluster --- ws.cluster.Сluster
-  ws.cluster.Сluster --x ws.cluster.VirtualMachine
-
-  ws.cluster.VirtualMachine -.- VVM
+  VVM --- |execute exactly one| app.sys.cluster
+  app.sys.cluster <-.-> ws.cluster.Сluster
+  
+  
 
   classDef G fill:#FFFFFF,stroke:#000000, stroke-width:1px, stroke-dasharray: 5 5
   classDef B fill:#FFFFB5,color:#333
   classDef S fill:#B5FFFF
   classDef H fill:#C9E7B7
+```
+
+## Cluster Storage components
+
+```mermaid
+    erDiagram
+    Cluster ||--|{ VVM : has
+    Cluster ||--o{ Application : "has deployed"
+    Cluster ||--|| ClusterStorage : has
+    ClusterStorage ||--|{ AppStorage : has
+
+    Application ||--|{ AppPartition : "partitioned into"
+    Application ||--|| AppStorage : "uses"
+    AppPartition ||--|{ Workspace : "uses"
+    AppPartition ||--|| PLogPartition : "uses"
+
+    AppStorage ||--|{ Workspace: has
+    AppStorage ||--|| PLog: has
+
+    AppStorage ||--|| istorage: "has API"
+    istorage ||--|| istoragecas : "implemented e.g. by"
+    istorage ||--|| istoragemem : "implemented e.g. by"
+
+    Workspace ||--|{ InternalProjection: keeps
+    PLog ||--|{ PLogPartition : has
+
+    VVM ||--o{ AppPartition : "assigned by Scheduler to"
 ```
 
 
