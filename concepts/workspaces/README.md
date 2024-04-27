@@ -1,4 +1,4 @@
-### Concepts
+## Concepts
 
 - [Principles](#principles)
 - [Workspace Kinds](#workspace-kinds)
@@ -7,7 +7,7 @@
 - [Invites](invites.md)
 - [Child Workspaces](child-workspaces.md)
 
-### Principles
+## Principles
 
 - Workspace can be AppWorkspace, ProfileWorkspace or ChildWorkspace
 - ProfileWorkspace keeps Subject data, including list of ChildWorkspace-s
@@ -19,7 +19,7 @@
 - // TODO: Clearing the owner.error causes the workspace to be regenerated
 - OwningDocument.error must NOT be published to CUD function (only System can update)
 
-### Workspace Kinds
+## Workspace Kinds
 
 | English     | Russian     |
 | ----------- | ----------- |
@@ -44,7 +44,7 @@ erDiagram
   ChildWorkspace ||--|{ slack_Organization: "e.g. can be"
 ```
 
-### Owning Document
+## Owning Document
 
 > "Doc from App owns Workspace" means that
 Workspace.Docs[sys.WorkspaceDescriptor].OwnerID = Doc.ID AND Workspace.Docs[sys.WorkspaceDescriptor].App = Doc.App
