@@ -36,3 +36,7 @@ Prefixes
 - *mod*: Go module
 - *pkg*: Go package
 - *extsoft*: external software
+
+## Principles
+
+- main.go is a must, ref. https://github.com/tinygo-org/tinygo/issues/2703
