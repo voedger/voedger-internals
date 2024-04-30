@@ -50,11 +50,14 @@ Built-in Application Deployment
   * appparts: DeployApp
   * appparts: DeployAppPartition
 
-**c.cluster.DeployApp(app)** AuthN
+**c.cluster.DeployApp(app)**
 
-* System Params
-* AppQName
-* AppDeploymentDescriptor // cluster.AppDeploymentDescriptor
+AuthN
+- System
+
+Params
+- AppQName
+- AppDeploymentDescriptor // cluster.AppDeploymentDescriptor
 
 **apppartsctrl.New(...): Get rid of builtInApps**
 
