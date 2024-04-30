@@ -39,4 +39,4 @@ Prefixes
 
 ## Principles
 
-- main.go is a must, ref. https://github.com/tinygo-org/tinygo/issues/2703
+- Function `main()` and module `main` is a must, ref. https://github.com/tinygo-org/tinygo/issues/2703
