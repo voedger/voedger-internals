@@ -26,7 +26,7 @@ Built-in Application Deployment
 * F: All Built-in Applications partitions assignments (to VVMs) are known in advance
 * F: `IAppPartitions.DeployApp()` and `DeployAppPartitions()` shall be called after `cluster` application is started
 
-## Technical Design
+## Technical design
 
 **Overview**
 
