@@ -1,6 +1,6 @@
 # Cluster
 
-## Key Cluster components
+## Cluster software and hardware components
 
 ```mermaid
 flowchart TD
@@ -9,31 +9,34 @@ flowchart TD
 
 
   Cluster{{Cluster}}:::H
+  App:::S
+  AppPart[App Partition]:::S
   VVMNode:::H
   
   app.sys.cluster[app.sys.cluster]:::S
-  ws.cluster.Сluster[(ws.cluster.Сluster)]:::H
-  
+    
   VVM:::S
 
 
   %% Relations =================================
 
+  Cluster --x |has 0+ deployed| App
   Cluster --x VVMNode
+
+  App --x AppPart
+
   VVMNode --x VVM
+  VVM -.-x |executes 0+| AppPart
 
-  VVM --- |execute exactly one| app.sys.cluster
-  app.sys.cluster <-.-> ws.cluster.Сluster
-  
-  
-
+  Cluster --- app.sys.cluster
+    
   classDef G fill:#FFFFFF,stroke:#000000, stroke-width:1px, stroke-dasharray: 5 5
   classDef B fill:#FFFFB5,color:#333
   classDef S fill:#B5FFFF
   classDef H fill:#C9E7B7
 ```
 
-## Cluster Storage components
+## Cluster storage components
 
 ```mermaid
     erDiagram
