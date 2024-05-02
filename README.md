@@ -8,6 +8,44 @@ For user-focused documentation and guidance on using the Voedger platform, pleas
 
 To read about the notation used visit [here](https://docs.voedger.io/concepts/notation).
 
+## Voedger Framework
+
+```mermaid
+    graph TD
+
+    %% Entities ====================
+
+    Developer[Developer]:::B
+    DevelopTests([Develop tests]):::S
+    DevelopApps([Develop applications]):::S
+
+    vsqlddl[\VSQL DDL/]:::H  
+    pkg.exttinygo:::S
+    pkg.exttinygo.tests:::S
+    cmd.vpm:::S
+
+    CBD([Config, Build, Deploy]):::S
+
+
+    %% Relations ====================
+
+    pkg.exttinygo --> DevelopApps
+    vsqlddl --> DevelopApps
+    
+    pkg.exttinygo.tests --> DevelopTests
+
+    cmd.vpm --> CBD
+
+    DevelopApps --> Developer
+    CBD --> Developer
+    DevelopTests --> Developer
+
+    classDef B fill:#FFFFB5,color:#333
+    classDef S fill:#B5FFFF,color:#333
+    classDef H fill:#C9E7B7,color:#333
+    classDef G fill:#ffffff15, stroke:#999, stroke-width:2px, stroke-dasharray: 5 5
+```
+
 ## Voedger Server
 
 ```mermaid
@@ -56,45 +94,6 @@ To read about the notation used visit [here](https://docs.voedger.io/concepts/no
 
     cmd.voedger --> APIGateway
     APIGateway --> User
-
-    classDef B fill:#FFFFB5,color:#333
-    classDef S fill:#B5FFFF,color:#333
-    classDef H fill:#C9E7B7,color:#333
-    classDef G fill:#ffffff15, stroke:#999, stroke-width:2px, stroke-dasharray: 5 5
-```
-
-
-## Voedger Framework
-
-```mermaid
-    graph TD
-
-    %% Entities ====================
-
-    Developer[Developer]:::B
-    DevelopTests([Develop tests]):::S
-    DevelopApps([Develop applications]):::S
-
-    vsqlddl[\VSQL DDL/]:::H  
-    pkg.exttinygo:::S
-    pkg.exttinygo.tests:::S
-    cmd.vpm:::S
-
-    CBD([Config, Build, Deploy]):::S
-
-
-    %% Relations ====================
-
-    pkg.exttinygo --> DevelopApps
-    vsqlddl --> DevelopApps
-    
-    pkg.exttinygo.tests --> DevelopTests
-
-    cmd.vpm --> CBD
-
-    DevelopApps --> Developer
-    CBD --> Developer
-    DevelopTests --> Developer
 
     classDef B fill:#FFFFB5,color:#333
     classDef S fill:#B5FFFF,color:#333
