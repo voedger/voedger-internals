@@ -26,17 +26,24 @@ Built-in Application Deployment
 * F: All Built-in Applications partitions assignments (to VVMs) are known in advance
 * F: `IAppPartitions.DeployApp()` and `DeployAppPartitions()` shall be called after `cluster` application is started
 
-## Technical Design
+## Technical design
 
 **Overview**
 
 * Wire service pipeline
-  * Last operator is **vvm.provideBootstrapOperator()**, calls btstrp.Bootstrap(...)
+  * Second last operator is **vvm.provideBootstrapOperator()**
+    - calls btstrp.Bootstrap(...)
+    - Initialize AppStorageBlobber (* IAppStorage) and AppStorageRouter (* IAppStorage)
+  * Last operator starts services
 * Start pipeline
 * If DoSync returns error => shutdown
 
 **pkg/btstrp.Bootstrap(bus IBus, IAppStructsProvider, appparts, clusterApp ClusterBuiltInApp, otherApps \[]BuiltInApp) error**
 
+Params
+- otherApps includes `blobber`, `router`
+
+Algorythm
 * Initialize `cluster` application workspace, if needed, using IAppStructsProvider
   * All ID must be predefined
 * appparts: deploy single clusterApp partition
@@ -50,11 +57,18 @@ Built-in Application Deployment
   * appparts: DeployApp
   * appparts: DeployAppPartition
 
-**c.cluster.DeployApp(app)** AuthN
+**c.cluster.DeployApp(app)**
 
-* System Params
-* AppQName
-* AppDeploymentDescriptor // cluster.AppDeploymentDescriptor
+AuthN
+- System
+
+Params
+- AppQName
+- AppDeploymentDescriptor // cluster.AppDeploymentDescriptor
+
+Algorythm
+- Create keyspaces if not exists
+- Initialize App Workspaces (but `blobber`, `router`)
 
 **apppartsctrl.New(...): Get rid of builtInApps**
 
