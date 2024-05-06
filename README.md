@@ -3,7 +3,6 @@
 This documentation provides a detailed description of the internal design and architecture of the Voedger platform.  It serves as a base for the development and includes the latest designs, which may still be not implemented.
 
 **Voedger Platform** consists of [Voedger Framework](framework/README.md) and [Voedger Server](server/README.md) which helps to develop and operate distributed applications.
-
 ```mermaid
     graph TD
 
