@@ -2,98 +2,36 @@
 
 This documentation provides a detailed description of the internal design and architecture of the Voedger platform.  It serves as a base for the development and includes the latest designs, which may still be not implemented.
 
-Voedger platform consists of **Voedger Framework** and **Voedger Server** that helps to develop and operate distributed applications.
-
-For user-focused documentation and guidance on using the Voedger platform, please visit [here](https://docs.voedger.io/).
-
-To read about the notation used visit [here](https://docs.voedger.io/concepts/notation).
-
-## Voedger Framework
+**Voedger Platform** consists of [Voedger Framework](framework/README.md) and [Voedger Server](server/README.md) which helps to develop and operate distributed applications.
 
 ```mermaid
     graph TD
 
     %% Entities ====================
 
-    Developer[Developer]:::B
-    DevelopTests([Develop tests]):::S
-    DevelopApps([Develop applications]):::S
+    Voedger[["Voedger Platform"]]:::S
+    VoedgerFramework["Voedger Framework"]:::S
+    VoedgerServer["Voedger Server"]:::S
 
-    vsqlddl[\VSQL DDL/]:::H  
-    pkg.exttinygo:::S
-    pkg.exttinygo.tests:::S
-    cmd.vpm:::S
-
-    CBD([Config, Build, Deploy]):::S
-
-
-    %% Relations ====================
-
-    pkg.exttinygo --> DevelopApps
-    vsqlddl --> DevelopApps
-    
-    pkg.exttinygo.tests --> DevelopTests
-
-    cmd.vpm --> CBD
-
-    DevelopApps --> Developer
-    CBD --> Developer
-    DevelopTests --> Developer
-
-    classDef B fill:#FFFFB5,color:#333
-    classDef S fill:#B5FFFF,color:#333
-    classDef H fill:#C9E7B7,color:#333
-    classDef G fill:#ffffff15, stroke:#999, stroke-width:2px, stroke-dasharray: 5 5
-```
-
-## Voedger Server
-
-```mermaid
-    graph TD
-
-    %% Entities ====================
+    Operation(Operation):::B
+    Development(Development):::B
 
     Admin[Admin]:::B
     User[Application User]:::B
-
-    cmd.voedger:::S
-    cmd.ctool:::S  
-    grafana[extsoft.grafana]:::G
-    alertmanager[extsoft.alertmanager]:::G
-    scylla[extsoft.scylla]:::G
-
-    DBMS([DBMS]):::S
-    
-    ClusterCfg([Cluster configuration]):::S
-    Monitoring([Monitoring]):::S
-    Alerting([Alerting]):::S
-    AppMgmt([Application management]):::S  
-    RunApp([Application execution]):::S
-    APIGateway([API Gateway]):::S
+    Developer[Developer]:::B
 
     %% Relations ====================
 
-    scylla --> DBMS
-    DBMS --> cmd.voedger
+    Voedger --- VoedgerFramework
+    Voedger --- VoedgerServer
 
-    cmd.ctool --> ClusterCfg
-    ClusterCfg --> Admin
-    ClusterCfg --> |configures| grafana
-    ClusterCfg --> |configures| alertmanager
+    VoedgerServer --> Operation
+    VoedgerFramework --> Development
 
-    grafana --> Monitoring
-    alertmanager --> Alerting
-    Monitoring --> Admin
-    Alerting --> Admin
+    Development --- Developer
+    Operation --- Admin
+    Operation --- User
 
-    cmd.voedger --> AppMgmt
-    AppMgmt --> Admin
-
-    cmd.voedger --> RunApp
-    RunApp -.- APIGateway
-
-    cmd.voedger --> APIGateway
-    APIGateway --> User
 
     classDef B fill:#FFFFB5,color:#333
     classDef S fill:#B5FFFF,color:#333
@@ -101,14 +39,7 @@ To read about the notation used visit [here](https://docs.voedger.io/concepts/no
     classDef G fill:#ffffff15, stroke:#999, stroke-width:2px, stroke-dasharray: 5 5
 ```
 
-Prefixes
-- *cmd*: command line utility or server
-- *mod*: Go module
-- *pkg*: Go package
-- *extsoft*: external software
+## Additional resources
 
-## Context
-
-- geeksforgeeks.org: [What is a Framework?](https://www.geeksforgeeks.org/what-is-a-framework/)
-- bocasay.com: [What is a development framework?](https://www.bocasay.com/what-is-development-framework)
-
+- [Voedger Reference Guide](https://docs.voedger.io/): User-focused documentation and guidance
+- [Notation](https://docs.voedger.io/concepts/notation): Explains the notation conventions

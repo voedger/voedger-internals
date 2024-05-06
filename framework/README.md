@@ -1,4 +1,6 @@
-# Development Services
+# Voedger Framework
+
+Voedger Framework is a set of tools, libraries and conventions that enable developers to create and deploy Voedger applications.
 
 ```mermaid
     graph TD
@@ -6,24 +8,29 @@
     %% Entities ====================
 
     Developer[Developer]:::B
+    DevelopTests([Develop tests]):::S
+    DevelopApps([Develop applications]):::S
 
     vsqlddl[\VSQL DDL/]:::H  
     pkg.exttinygo:::S
+    pkg.exttinygo.tests:::S
     cmd.vpm:::S
 
-    ExtDevelopment([Extensions Development]):::S
-    Development([Application Development]):::B
+    CBD([Config, Build, Deploy]):::S
 
 
     %% Relations ====================
 
-    pkg.exttinygo --> ExtDevelopment
-    cmd.vpm --> ExtDevelopment
-    Developer --> Development
-    vsqlddl -.- Development
+    pkg.exttinygo --> DevelopApps
+    vsqlddl --> DevelopApps
+    
+    pkg.exttinygo.tests --> DevelopTests
 
-    ExtDevelopment --- Development
+    cmd.vpm --> CBD
 
+    DevelopApps --> Developer
+    CBD --> Developer
+    DevelopTests --> Developer
 
     classDef B fill:#FFFFB5,color:#333
     classDef S fill:#B5FFFF,color:#333
@@ -36,3 +43,10 @@ Prefixes
 - *mod*: Go module
 - *pkg*: Go package
 - *extsoft*: external software
+
+
+## Context
+
+- geeksforgeeks.org: [What is a Framework?](https://www.geeksforgeeks.org/what-is-a-framework/)
+- bocasay.com: [What is a development framework?](https://www.bocasay.com/what-is-development-framework)
+
