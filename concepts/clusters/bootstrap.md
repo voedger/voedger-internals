@@ -51,7 +51,7 @@ Algorythm
   * Note for the future: Must be scheduled to the Bootstrap Leader
 * For each app in otherApps
   * **q.cluster.QueryApp**(app) + check app compatibility + if needed **c.cluster.DeployApp(app)**
-    * Use bus to send requests
+    * Use Admin Endpoint to send requests    
     * Check app compatibility: NumPartitions, NumAppWorkspaces
     * Read/write to the table `App` + some views
 * For each app builtInApps
