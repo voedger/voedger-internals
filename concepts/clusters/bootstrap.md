@@ -1,7 +1,7 @@
 # bootstrap
 
 * https://github.com/voedger/voedger/issues/1890
-* https://github.com/voedger/voedger/issues/2005
+* [refactor bootstrap, #2005](https://github.com/voedger/voedger/issues/2005)
 
 ## Motivation
 
