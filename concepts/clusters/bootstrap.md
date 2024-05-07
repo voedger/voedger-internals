@@ -32,10 +32,12 @@ Built-in Application Deployment
 **Overview**
 
 * Wire service pipeline
-  * Second last operator is **vvm.provideBootstrapOperator()**
+  - ...
+  - "start admin endpoint", vvm.provideAdminEndpoint()
+  - "bootstrap", vvm.provideBootstrapOperator()
     - calls btstrp.Bootstrap(...)
     - Initialize AppStorageBlobber (* IAppStorage) and AppStorageRouter (* IAppStorage)
-  * Last operator starts services
+  - "start services", ref. [vvm/provide.go](https://github.com/voedger/voedger/blob/32314794fd814e8ed9d8e367c4e44baa573d07cf/pkg/vvm/provide.go#L614)  
 * Start pipeline
 * If DoSync returns error => shutdown
 
