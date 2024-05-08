@@ -71,7 +71,7 @@ Params
 - AppDeploymentDescriptor // cluster.AppDeploymentDescriptor
 
 Algorythm
-- Create stirages if not exists
+- Create storages if not exists
 - Initialize App Workspaces (but `blobber`, `router`)
 
 **apppartsctrl.New(...): Get rid of builtInApps**
