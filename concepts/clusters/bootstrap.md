@@ -1,11 +1,9 @@
 # bootstrap
 
-* https://github.com/voedger/voedger/issues/1890
-* [refactor bootstrap, #2005](https://github.com/voedger/voedger/issues/2005)
-
 ## Motivation
 
-Unclear how to initialize AppWorkspaces for built-in applications
+* https://github.com/voedger/voedger/issues/1890
+* [refactor bootstrap, #2005](https://github.com/voedger/voedger/issues/2005)
 
 ## Analysis
 
@@ -36,7 +34,7 @@ Built-in Application Deployment
   - "admin endpoint", vvm.provideAdminEndpoint()
   - "bootstrap", vvm.provideBootstrapOperator()
     - calls btstrp.Bootstrap(...)
-    - Initialize AppStorageBlobber (* IAppStorage) and AppStorageRouter (* IAppStorage)
+    - Initialize `AppStorageBlobber` (* IAppStorage), `AppStorageRouter` (* IAppStorage)
   - "public endpoint service"
   - "async actualizers"
 * Start pipeline
@@ -45,11 +43,13 @@ Built-in Application Deployment
 **pkg/btstrp.Bootstrap(bus IBus, IAppStructsProvider, appparts, clusterApp ClusterBuiltInApp, otherApps \[]BuiltInApp) error**
 
 Params
-- otherApps includes `blobber`, `router`
+- otherApps does NOT include `blobber`, `router`
 
 Algorythm
 * Initialize `cluster` application workspace, if needed, using IAppStructsProvider
   * All ID must be predefined
+* Create `blobber` and `router` storages, if needed
+  * sysmeta storage will be implicitly created, if needed
 * appparts: deploy single clusterApp partition
   * Note for the future: Must be scheduled to the Bootstrap Leader
 * For each app in otherApps
@@ -72,7 +72,7 @@ Params
 
 Algorythm
 - Create storages if not exists
-- Initialize App Workspaces (but `blobber`, `router`)
+- Initialize App Workspaces
 
 **apppartsctrl.New(...): Get rid of builtInApps**
 
