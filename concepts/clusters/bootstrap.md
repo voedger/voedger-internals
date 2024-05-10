@@ -53,9 +53,9 @@ Algorythm
 * appparts: deploy single clusterApp partition
   * Note for the future: Must be scheduled to the Bootstrap Leader
 * For each app in otherApps
-  * **q.cluster.QueryApp**(app) + check app compatibility + if needed **c.cluster.DeployApp(app)**
+  * **c.cluster.DeployApp(app)**
     * Use Admin Endpoint to send requests    
-    * Check app compatibility: NumPartitions, NumAppWorkspaces
+    * panic if not ok
     * Read/write to the table `App` + some views
 * For each app builtInApps
   * appparts: DeployApp
@@ -70,7 +70,9 @@ Params
 - AppQName
 - AppDeploymentDescriptor // cluster.AppDeploymentDescriptor
 
-Algorythm
+Body
+- Idemponent
+- Check application compatibility (409)
 - Create storages if not exists
 - Initialize App Workspaces
 
