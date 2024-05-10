@@ -45,7 +45,7 @@ Built-in Application Deployment
 Params
 - otherApps does NOT include `blobber`, `router`
 
-Algorythm
+Alg
 * Initialize `cluster` application workspace, if needed, using IAppStructsProvider
   * All ID must be predefined
 * Create `blobber` and `router` storages, if needed
@@ -70,8 +70,8 @@ Params
 - AppQName
 - AppDeploymentDescriptor // cluster.AppDeploymentDescriptor
 
-Body
-- Idemponent
+Alg
+- Idempotent
 - Check application compatibility (409)
 - Create storages if not exists
 - Initialize App Workspaces
