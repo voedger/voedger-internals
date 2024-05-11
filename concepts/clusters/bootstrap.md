@@ -5,26 +5,6 @@
 * https://github.com/voedger/voedger/issues/1890
 * [refactor bootstrap, #2005](https://github.com/voedger/voedger/issues/2005)
 
-## Analysis
-
-cluster.AppWorkspace initialization:
-
-* F: _AppWorkspace_ is initialized as a result of calling `cluster.c.DeployApp()`
-* C: cluster application shall be initialized internally (not using `cluster.c.DeployApp()`)
-
-Bootstrap Leader
-
-* F: `cluster.c.DeployApp()` is idempotent
-* C: Built-in Applications can be deployed multiple times
-* C: All nodes can deploy (in cluster) Built-in Applications
-* F: It has to be decided which node runs `cluster` partition (Bootstrap Leader)
-* C: Since we have a **leader**, **it can deploy** all Built-in Applications
-
-Built-in Application Deployment
-
-* F: All Built-in Applications partitions assignments (to VVMs) are known in advance
-* F: `IAppPartitions.DeployApp()` and `DeployAppPartitions()` shall be called after `cluster` application is started
-
 ## Technical design
 
 **Overview**
