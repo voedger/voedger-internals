@@ -54,6 +54,7 @@ Alg
 - Idempotent
 - Check application compatibility (409)
 - Create storage if not exists
+- Initialize appstructs data
 - Initialize App Workspaces
 
 **apppartsctrl.New(...): Get rid of builtInApps**
