@@ -14,8 +14,7 @@
   - "admin endpoint", vvm.provideAdminEndpoint()
   - "bootstrap", vvm.provideBootstrapOperator()
     - calls btstrp.Bootstrap(...)
-    - Initialize `AppStorageBlobber` (* IAppStorage), `AppStorageRouter` (* IAppStorage)
-  - "public endpoint service"
+  - "public endpoint"
   - "async actualizers"
 * Start pipeline
 * If DoSync returns error => shutdown
@@ -29,6 +28,7 @@ Alg
 * Initialize `cluster` application workspace, if needed, using IAppStructsProvider
   * All ID must be predefined
 * Create `blobber` and `router` storages, if needed
+  * Initialize `AppStorageBlobber` (* IAppStorage), `AppStorageRouter` (* IAppStorage)
   * sysmeta storage will be implicitly created, if needed
 * appparts: deploy single clusterApp partition
   * Note for the future: Must be scheduled to the Bootstrap Leader
