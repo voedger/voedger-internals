@@ -53,7 +53,7 @@ Params
 Alg
 - Idempotent
 - Check application compatibility (409)
-- Create storages if not exists
+- Create storage if not exists
 - Initialize App Workspaces
 
 **apppartsctrl.New(...): Get rid of builtInApps**
