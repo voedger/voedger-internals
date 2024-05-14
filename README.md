@@ -15,9 +15,9 @@ This documentation provides a detailed description of the internal design and ar
     Operation(Operation):::B
     Development(Development):::B
 
-    Admin[Admin]:::B
-    User[Application User]:::B
-    Developer[Developer]:::B
+    Admin[👤Admin]:::B
+    User[👤Application User]:::B
+    Developer[👤Developer]:::B
 
     %% Relations ====================
 
