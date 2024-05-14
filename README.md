@@ -12,8 +12,8 @@ This documentation provides a detailed description of the internal design and ar
     VoedgerFramework["Voedger Framework"]:::S
     VoedgerServer["Voedger Server"]:::S
 
-    Operation(Operation):::B
-    Development(Development):::B
+    Operation(➡️Operation):::B
+    Development(➡️Development):::B
 
     Admin[👤Admin]:::B
     User[👤Application User]:::B
