@@ -1,6 +1,6 @@
 # vpm build
 
-## Issues
+## Motivation
 
 - https://github.com/voedger/voedger/issues/1835
 
@@ -12,7 +12,4 @@
     - `tinygo build --no-debug -o pkg.wasm -scheduler=none -opt=2 -gc=leaking -target=wasi .`
 - Create a ZIP (`<folder-name>.var`)
 - Requirements
-  - Package shall contain application statement (`package does not have an APPLICATION statement`)
-  
-  
-   
+  - Package shall contain application statement (`package does not have an APPLICATION statement`)  
