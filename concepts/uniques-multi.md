@@ -6,7 +6,7 @@
 Problems: 
 - old uniques engine is not suitable because `From` and `Till` are both varchar fields. Only one varchar field in one unique is allowed
 
-## Functional Design
+## Functional design
 
 ```sql
 TABLE TablePlan INHERITS CDoc (
@@ -20,7 +20,7 @@ TABLE TablePlan INHERITS CDoc (
 )
 ```
 
-## Technical Design
+## Technical design
 
 We can use existing Uniques view
 
