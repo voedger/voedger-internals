@@ -124,25 +124,25 @@ For unit testing there is no need to run the whole system, just the extension it
 
 ### Cloud Agnostic Design
 
-- It shall be possible to run Voedger everywhere, including own infrastructure.
+- It shall be possible to run Voedger everywhere, including on your own infrastructure.
 
-This is a direct result of the Edge Computing requirement — if we can run Voedger on a POS device, we can run it on any cloud provider.
+This is a direct result of the Edge Computing requirement—if we can run Voedger on a POS device, we can run it on any cloud provider.
 
-### Operation Simplicity: DMBS
+### Operation Simplicity: DBMS
 
-- It shall be easy for Admin to build a cluster and replace a failed node.
+- It shall be easy for Admins to build a cluster and replace a failed node.
 
-Voedger primarily uses Cassandra/Scylla as a database management system and it is made as transparent as possible for the Developers and Admins. Developers are not aware about the underlying database system at all - the more so Voedger can run on a POS device with Android OS using bbolt key-value storage.
+Voedger primarily uses Cassandra/Scylla as a database management system and is designed to be as transparent as possible for Developers and Admins. Developers are not aware of the underlying database system at all, note that Voedger can even run on a POS device with Android OS using bbolt key-value storage.
 
-Admin should have an idea about what is going on in the system, but we simplified the process as much as possible.
+Admins should have an idea of what is going on in the system, but we have simplified the process as much as possible.
 
-Voedger provides a special utility called `ctool`, it expects that Admin will provide adresses of the nodes, nodes should have clean Ubuntu installation, and `ctool` will do the rest.
+Voedger provides a special utility called `ctool`. It expects Admins to provide the addresses of the nodes, which should have a clean Ubuntu installation, and `ctool` will handle the rest.
 
 - To create a cluster: `ctool init <node1-address> <node2-address> <node3-address>...`
 - To replace a node: `ctool replace <old-node-address> <new-node-address>`
 
-### Operation Simplicity: monitoring and alerting
+### Operation Simplicity: Monitoring and Alerting
 
-- It shall be easy for Admin to monitor the system and receive alerts
+- It shall be easy for Admins to monitor the system and receive alerts.
 
-`ctool` utility installs and configures Prometheus and Grafana on the nodes, comprehensive dashboards are provided out of the box.
+The `ctool` utility installs and configures Prometheus and Grafana on the nodes, providing comprehensive dashboards out of the box.
