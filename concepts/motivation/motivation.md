@@ -1,17 +1,18 @@
 # Motivation
 
-Here you will find - what is Voedger, how it helps us, how it can be used by you.
+Here you will find out what Voedger is, how it helps us, and how it can be used by you.
+
+---
 
 ## Jump to the Clouds
 
-Voedger was initially designed by unTill Software Development Group B.V. (unTill) in the early 2020s. At that time, unTill provided a mature "desktop" POS solution (unTill Prime) for the European market and sought to develop a cloud version and to expand into other markets.
+Voedger was initially designed by unTill Software Development Group B.V. ([unTill](https://untill.com/)) in the early 2020s. At that time, unTill provided a mature "desktop" POS solution (unTill Prime) for the European market and sought to develop a cloud version and to expand into other markets.
 
 Technical characteristics of unTill Prime:
 
 - Over 1 million lines of code (including the "frontend")
 - Database Management System: Firebird
 - More than 400 tables
-- Over 3000 lines of DDL code
 
 ## Requirements
 
@@ -20,6 +21,24 @@ Business (unTill company management) came up with the following requirements.
 ### Distributed data
 
 - It shall be possible to create clusters to keep POS data and configuration all over the world.
+
+
+```mermaid
+graph TD
+
+  Federation:::G
+  subgraph Federation
+    Cluster1[[cluster-eu-spain]]:::H
+    Cluster2[[cluster-eu-frankfurt]]:::H
+    Cluster3[[cluster-us-ohio]]:::H
+    Cluster4[[cluster-ap-singapore]]:::H
+  end 
+
+  classDef B fill:#FFFFB5,color:#333
+  classDef S fill:#B5FFFF,color:#333
+  classDef H fill:#C9E7B7,color:#333
+  classDef G fill:#ffffff15, stroke:#999, stroke-width:2px, stroke-dasharray: 5 5
+```
 
 ### Federation
 
@@ -30,11 +49,61 @@ Business (unTill company management) came up with the following requirements.
 - A Restaurant Owner shall be able to create a profile (Restaurant Owner Workspace) in any cluster, ideally one that is closer to the owner's location
 - The Restaurant Owner shall also be able to create Restaurants (Restaurant Workspaces) in any cluster, ideally one that is closer to the restaurant's location, regardless of where the Restaurant Owner Workspace was initially created
 
+```mermaid
+graph TD
+
+  Federation:::G
+  subgraph Federation
+    Cluster1[cluster-eu-spain]:::G
+    subgraph Cluster1[cluster-eu-spain]
+      Owner[(Owner Workspace)]:::S
+      Restaurant1[(Restaurant1 Workspace)]:::S
+    end
+    Cluster2[[cluster-eu-frankfurt]]:::G
+    subgraph Cluster2[cluster-eu-frankfurt]
+      Restaurant2[(Restaurant2 Workspace)]:::S
+    end
+    Owner[(Owner Workspace)]:::S
+    Restaurant1[(Restaurant1 Workspace)]:::S
+
+  end
+
+  Owner -.- Restaurant1
+  Owner -.- Restaurant2
+
+  classDef B fill:#FFFFB5,color:#333
+  classDef S fill:#B5FFFF,color:#333
+  classDef H fill:#C9E7B7,color:#333
+  classDef G fill:#ffffff15, stroke:#999, stroke-width:2px, stroke-dasharray: 5 5
+```
+
 ### Fault Tolerance
 
 - If a database node goes down, data shall NOT be lost
 
 This requirement means that every piece of data must be stored in multiple copies, and only synchronous replication shall be used.
+
+
+```mermaid
+graph TD
+
+  User[@ User]:::B
+  Voedger:::S
+  Node1{{Node1}}:::H
+  Node2{{Node2}}:::H
+  Node3{{Node3}}:::H  
+
+  User -.-> |Data| Voedger
+  Voedger -.-> |Data, copy #1| Node1
+  Voedger -.-> |Data, copy #2| Node2
+  Voedger -.-> |Data, copy #3| Node3
+
+
+  classDef B fill:#FFFFB5,color:#333
+  classDef S fill:#B5FFFF,color:#333
+  classDef H fill:#C9E7B7,color:#333
+  classDef G fill:#ffffff15, stroke:#999, stroke-width:2px, stroke-dasharray: 5 5
+```
 
 ### Resilience
 
@@ -43,6 +112,35 @@ This requirement means that every piece of data must be stored in multiple copie
 - If an application node goes down:
   - Clients shall experience downtime of less than 5 minutes.
   - Performance shall be fully restored within 10 minutes.
+
+This requirements are satisfied by using clusters which span multiple datacenters (**stretched clusters**)
+
+```mermaid
+graph TD
+
+  
+  Cluster:::G
+  subgraph Cluster
+    Datacenter1:::G
+    subgraph Datacenter1
+      Node1{{Node1}}:::H
+    end
+    Datacenter2:::G
+    subgraph Datacenter2
+      Node2{{Node2}}:::H
+    end    
+    Datacenter3:::G
+    subgraph Datacenter3
+      Node3{{Node3}}:::H
+    end        
+  end
+
+  classDef B fill:#FFFFB5,color:#333
+  classDef S fill:#B5FFFF,color:#333
+  classDef H fill:#C9E7B7,color:#333
+  classDef G fill:#ffffff15, stroke:#999, stroke-width:2px, stroke-dasharray: 5 5
+```
+
 
 ### Performance
 
@@ -61,6 +159,29 @@ Additionally, the cost of the hardware must be reasonable. Although the cost wil
 
 In practice, our cloud server software must run on typical, relatively weak POS hardware with Android OS.
 
+
+```mermaid
+graph LR
+
+
+  EdgeDevice:::G
+  subgraph EdgeDevice[Edge Device]
+    RestaurantCopy[("Restaurant Workspace (copy)")]:::S
+  end  
+
+  Cloud:::G
+  subgraph Cloud
+    Restaurant[("Restaurant Workspace)")]:::S
+  end
+
+  RestaurantCopy <-.-> |sync| Restaurant
+
+  classDef B fill:#FFFFB5,color:#333
+  classDef S fill:#B5FFFF,color:#333
+  classDef H fill:#C9E7B7,color:#333
+  classDef G fill:#ffffff15, stroke:#999, stroke-width:2px, stroke-dasharray: 5 5
+```
+
 ### Event Sourcing
 
 - All changes to the application state shall be stored as a sequence of events.
@@ -68,6 +189,7 @@ In practice, our cloud server software must run on typical, relatively weak POS 
 
 This is a common requirement for POS systems as it provides a natural audit trail. While highly beneficial for applications across various domains, it adds extra complexity to the project. From our observations of other projects, this feature is often added in the later stages of development if the project succeeds.
 
+---
 ## Analysis & research. Voedger comes to life
 
 Analyzing the requirements, we identified the Modern Tech Stack:
@@ -122,27 +244,27 @@ This way extension can be considered as a "pure function" without side effects, 
 
 For unit testing there is no need to run the whole system, just the extension itself.
 
-### Cloud Agnostic Design
+### Cloud Agnostic
 
 - It shall be possible to run Voedger everywhere, including on your own infrastructure.
 
-This is a direct result of the Edge Computing requirement—if we can run Voedger on a POS device, we can run it on any cloud provider.
+This is a direct result of the Edge Computing requirement: if we can run Voedger on a POS device, we can run it on any cloud provider.
 
 ### Operation Simplicity: DBMS
 
-- It shall be easy for Admins to build a cluster and replace a failed node.
+- It shall be easy for Admin to build a cluster and replace a failed node.
 
-Voedger primarily uses Cassandra/Scylla as a database management system and is designed to be as transparent as possible for Developers and Admins. Developers are not aware of the underlying database system at all, note that Voedger can even run on a POS device with Android OS using bbolt key-value storage.
+Voedger primarily uses Cassandra/Scylla as a database management system and is designed to be as transparent as possible for Developers and Admin. Developers are not aware of the underlying database system at all.
 
-Admins should have an idea of what is going on in the system, but we have simplified the process as much as possible.
+Admin should have an idea of what is going on in the system, but we have simplified the process as much as possible.
 
-Voedger provides a special utility called `ctool`. It expects Admins to provide the addresses of the nodes, which should have a clean Ubuntu installation, and `ctool` will handle the rest.
+Voedger provides a special utility called `ctool`. It expects Admin to provide the addresses of the nodes, which should have a clean Ubuntu installation, and `ctool` will handle the rest.
 
 - To create a cluster: `ctool init <node1-address> <node2-address> <node3-address>...`
 - To replace a node: `ctool replace <old-node-address> <new-node-address>`
 
 ### Operation Simplicity: Monitoring and Alerting
 
-- It shall be easy for Admins to monitor the system and receive alerts.
+- It shall be easy for Admin to monitor the system and receive alerts.
 
 The `ctool` utility installs and configures Prometheus and Grafana on the nodes, providing comprehensive dashboards out of the box.
