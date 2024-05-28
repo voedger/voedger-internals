@@ -4,21 +4,21 @@ Here you will find out what Voedger is, how it helps us, and how it can be used 
 
 ---
 
-## Jump to the Clouds
+## Jump to Clouds
 
 Voedger was initially designed by unTill Software Development Group B.V. ([unTill](https://untill.com/)) in the early 2020s. At that time, unTill provided a mature "desktop" POS solution (unTill Prime) for the European market and sought to develop a cloud version and to expand into other markets.
 
 Technical characteristics of unTill Prime:
 
 - Over 1 million lines of code (including the "frontend")
-- Database Management System: Firebird
-- More than 400 tables
+- RDBMS: Firebird
+- Database schema: more than 400 tables
 
 ## Requirements
 
 Business (unTill company management) came up with the following requirements.
 
-### Distributed data
+### Distributed Data
 
 - It shall be possible to create clusters to keep POS data and configuration all over the world.
 
@@ -107,11 +107,10 @@ graph TD
 
 ### Resilience
 
-- If a datacenter goes down, clients shall not experience any downtime.
-- If a database node goes down, clients shall not experience any downtime.
-- If an application node goes down:
+- If a datacenter or a node goes down:
   - Clients shall experience downtime of less than 5 minutes.
   - Performance shall be fully restored within 10 minutes.
+  - No data loss shall occur.
 
 This requirements are satisfied by using clusters which span multiple datacenters (**stretched clusters**)
 
@@ -187,7 +186,7 @@ graph LR
 - All changes to the application state shall be stored as a sequence of events.
 - In some cases, the sequence of events will be cryptographically signed to meet legal requirements.
 
-This is a common requirement for POS systems as it provides a natural audit trail. While highly beneficial for applications across various domains, it adds extra complexity to the project. From our observations of other projects, this feature is often added in the later stages of development if the project succeeds.
+This is a common requirement for POS systems as it provides a natural audit trail. While highly beneficial for applications across various domains, it adds extra complexity to the project this is why it is not widely used.
 
 ---
 ## Analysis & research. Voedger comes to life
@@ -206,7 +205,7 @@ This is how Voedger was born.
 
 As we wanted to go public with Voedger, we needed to add some extra requirements.
 
-### Development Simplicity: Coding
+### Development: Simple Coding
 
 - It shall be extremely easy to develop Voedger applications.
 
@@ -230,7 +229,7 @@ What you do NOT need to do:
 - Manage how to save and process events related to operations with Payments.
 - And much, much more...
 
-### Development Simplicity: Testing
+### Development: Simple Testing
 
 - It shall be extremely easy to test Voedger applications.
 
@@ -244,13 +243,19 @@ This way extension can be considered as a "pure function" without side effects, 
 
 For unit testing there is no need to run the whole system, just the extension itself.
 
-### Cloud Agnostic
+### Operation: Zero Downtime Updates
+
+- It shall be possible to update applicaton without downtime.
+
+Voedger Applications can be updated to new version without downtime. ??? Explain how and consequences
+
+### Operation: Cloud Agnostic
 
 - It shall be possible to run Voedger everywhere, including on your own infrastructure.
 
 This is a direct result of the Edge Computing requirement: if we can run Voedger on a POS device, we can run it on any cloud provider.
 
-### Operation Simplicity: DBMS
+### Operation: Simple Configuration
 
 - It shall be easy for Admin to build a cluster and replace a failed node.
 
@@ -263,8 +268,40 @@ Voedger provides a special utility called `ctool`. It expects Admin to provide t
 - To create a cluster: `ctool init <node1-address> <node2-address> <node3-address>...`
 - To replace a node: `ctool replace <old-node-address> <new-node-address>`
 
-### Operation Simplicity: Monitoring and Alerting
+### Operation: Simple Monitoring and Alerting
 
 - It shall be easy for Admin to monitor the system and receive alerts.
 
 The `ctool` utility installs and configures Prometheus and Grafana on the nodes, providing comprehensive dashboards out of the box.
+
+
+
+## Trade-offs
+
+### Node Loss Downtime
+
+**Architecture/Design Decisions:**
+- The application is divided into partitions.
+- Each application partition is executed on a separate node.
+- If a node goes down, all partitions have to be restarted on other nodes.
+
+**Problem:**
+- If a node goes down, it causes 2-5 minutes of downtime visible to some clients.
+
+**Can be improved:**
+- Yes, downtime can be reduced to approximately 30 seconds.
+
+### Extensions Performance
+
+**Architecture/Design Decisions:**
+- Extensions are executed as WASM modules.
+- If an extension needs to read 5 fields of some records, it has to make 6 calls to the host system—one to read the record and 5 to read the fields.
+- Extension execution time is controlled by the host system (anti-freeze), which increases the host-WASM-host latency.
+
+**Problem:**
+- Each call takes 300 ns, so 3000 calls will take around 1 ms.
+- ??? Proofs
+
+**Can be improved:**
+- Yes, by not using the anti-freeze option, in which case each call takes ~10 ns.
+- ??? Proofs
