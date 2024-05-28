@@ -120,6 +120,29 @@ What you do NOT need to do:
 
 This way extension can be considered as a "pure function" without side effects, state can be easily mocked and intents can be easily validated.
 
-For unit testing there is no need to run the whole system.
+For unit testing there is no need to run the whole system, just the extension itself.
+
+### Cloud Agnostic Design
+
+- It shall be possible to run Voedger everywhere, including own infrastructure.
+
+This is a direct result of the Edge Computing requirement — if we can run Voedger on a POS device, we can run it on any cloud provider.
 
 ### Operation Simplicity: DMBS
+
+- It shall be easy for Admin to build a cluster and replace a failed node.
+
+Voedger primarily uses Cassandra/Scylla as a database management system and it is made as transparent as possible for the Developers and Admins. Developers are not aware about the underlying database system at all - the more so Voedger can run on a POS device with Android OS using bbolt key-value storage.
+
+Admin should have an idea about what is going on in the system, but we simplified the process as much as possible.
+
+Voedger provides a special utility called `ctool`, it expects that Admin will provide adresses of the nodes, nodes should have clean Ubuntu installation, and `ctool` will do the rest.
+
+- To create a cluster: `ctool init <node1-address> <node2-address> <node3-address>...`
+- To replace a node: `ctool replace <old-node-address> <new-node-address>`
+
+### Operation Simplicity: monitoring and alerting
+
+- It shall be easy for Admin to monitor the system and receive alerts
+
+`ctool` utility installs and configures Prometheus and Grafana on the nodes, comprehensive dashboards are provided out of the box.
