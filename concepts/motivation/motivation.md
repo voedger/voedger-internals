@@ -1,8 +1,6 @@
 # Motivation
 
-Technical overview - what is Voedger, how it helps us, how it can be used by you
-
-Here's a refined version of your text for clarity and readability:
+Here you will find - what is Voedger, how it helps us, how it can be used by you.
 
 ## Jump to the Clouds
 
@@ -13,15 +11,15 @@ Technical characteristics of unTill Prime:
 - Over 1 million lines of code (including the "frontend")
 - Database Management System: Firebird
 - More than 400 tables
-- Over 3000 lines of Data Definition Language (DDL)
-
-![Tail of the SQL schema file (migrated to Voedger SQL)](image.png)
+- Over 3000 lines of DDL code
 
 ## Requirements
 
+Business (unTill company management) came up with the following requirements.
+
 ### Distributed data
 
-- It shall be possible to create clusters all over the world
+- It shall be possible to create clusters to keep POS data and configuration all over the world.
 
 ### Federation
 
@@ -31,7 +29,6 @@ Technical characteristics of unTill Prime:
 
 - A Restaurant Owner shall be able to create a profile (Restaurant Owner Workspace) in any cluster, ideally one that is closer to the owner's location
 - The Restaurant Owner shall also be able to create Restaurants (Restaurant Workspaces) in any cluster, ideally one that is closer to the restaurant's location, regardless of where the Restaurant Owner Workspace was initially created
-
 
 ### Fault Tolerance
 
@@ -49,7 +46,7 @@ This requirement means that every piece of data must be stored in multiple copie
 
 ### Performance
 
-- Each datacenter shall support 10,000 restaurants.
+- Each cluster shall support 10,000 restaurants.
 - It is estimated that, on average, a restaurant generates 2,000 operations (orders, payments, etc.) per day.
 - Therefore, a cluster must handle 20,000,000 operations per day, averaging 230 operations per second, with peaks up to 2,000 operations per second.
 
@@ -58,7 +55,8 @@ Additionally, the cost of the hardware must be reasonable. Although the cost wil
 ### Edge Computing
 
 - The system shall be installable at the "edge" (e.g., in a restaurant) and able to synchronize with the cloud.
-- Data loss is acceptable for the Edge Device.
+- If an Edge Device goes down, all other devices in the restaurant shall continue to work with the cloud.
+- "Minor" data loss is acceptable for the Edge Device.
 - For large restaurants, it shall be possible to build a Private Cloud (Cluster), meeting Fault Tolerance and Resilience requirements.
 
 In practice, our cloud server software must run on typical, relatively weak POS hardware with Android OS.
@@ -70,10 +68,58 @@ In practice, our cloud server software must run on typical, relatively weak POS 
 
 This is a common requirement for POS systems as it provides a natural audit trail. While highly beneficial for applications across various domains, it adds extra complexity to the project. From our observations of other projects, this feature is often added in the later stages of development if the project succeeds.
 
-## Analysis
+## Analysis & research. Voedger comes to life
 
-Analyzing the requirements, we identified the need for a Modern Tech Stack:
+Analyzing the requirements, we identified the Modern Tech Stack:
 
 ![Modern Tech Stack](stack.png)
 
-Using this stack, we could have built the system, but it would take man-years to develop. We agreed to invest these resources, as did our colleagues from other POS providers. However, during this process, we realized that we could create an "engine" to handle the requirements above. This engine would not only enable us to build our POS system but also allow us to bring a new product to the market. This product would enable the development of systems with similar requirements in a significantly shorter time, potentially up to 10 times faster than using just the Modern Tech Stack.
+Using components from this stack, we could have built the system, but it would take man-years to develop. We agreed to invest these resources, as did our colleagues from other POS providers. However, during analysys and researching process, we got an idea that we could create a "generic engine" to handle the requirements above. This engine would not only enable us to build our POS system but also allow us to bring a new product to the market. This product would enable the development of systems with similar requirements in a significantly shorter time, potentially up to 10 times faster than using just the Modern Tech Stack.
+
+We shared this idea with the colleagues from other companies, and they agreed to invest in the development of this engine.
+
+This is how Voedger was born.
+
+## Extra requriements
+
+As we wanted to go public with Voedger, we needed to add some extra requirements.
+
+### Development Simplicity: Coding
+
+- It shall be extremely easy to develop Voedger applications.
+
+The term "low-code" often has a bad reputation, but literally it precisely describes our goal: to develop applications with minimal coding. We want Voedger users to be free from any system-related development and focused solely on business logic.
+
+What is still necessary to code:
+
+- Develop schemas using Voedger DDL (similar to SQL DDL but with additional features).
+- Develop business logic using the Go language, Go-files will be compiled to WASM-files and run in the Voedger Servers. We call a code that extends Voedger engines capabilities **Voedger Extension**.
+
+For example, if you need to work with an entity such as Payment, you will need to:
+
+- Define an SQL schema for it.
+- Define validation rules, such as developing a function to check if a Visit (remember we are talking about restaurants) the Payment is related to is not paid yet.
+
+What you do NOT need to do:
+
+- Manage which cluster/node will process a particular Payment.
+- Determine which nodes will be used to save a particular Payment.
+- Handle synchronization of Payments between nodes to meet Fault Tolerance requirements.
+- Manage how to save and process events related to operations with Payments.
+- And much, much more...
+
+### Development Simplicity: Testing
+
+- It shall be extremely easy to test Voedger applications.
+
+**Voedger Extensions** has a design that is somehow similar to the design of the Redux reducers.
+
+- Extension receives `IState` and `IIntents` interfaces
+- `IState` reflects the current state of the system and the Action (in terms of Redux)
+- `IIntents` is used to say the system that we want to update or create a new record
+
+This way extension can be considered as a "pure function" without side effects, state can be easily mocked and intents can be easily validated.
+
+For unit testing there is no need to run the whole system.
+
+### Operation Simplicity: DMBS
