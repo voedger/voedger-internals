@@ -2,8 +2,6 @@
 
 * [Introduction](README.md)
 * [Concepts](concepts/README.md)
-  * [Motivation](concepts/motivation/motivation.md)
-  * [Trade-offs](concepts/motivation/motivation.md)
   * [Clusters](concepts/clusters/README.md)
     * [Bootstrap](concepts/clusters/bootstrap.md)
   * [VVMs](concepts/vvms/README.md)
