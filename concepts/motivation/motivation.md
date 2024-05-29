@@ -14,9 +14,40 @@ Technical characteristics of unTill Prime:
 - RDBMS: Firebird
 - Database schema: more than 400 tables
 
-## Requirements
+unTill company management came up with the following requirements.
 
-Business (unTill company management) came up with the following requirements.
+| Requirement name| Description |
+| ----------- | ----------- |
+| Distributed Data      | It shall be possible to create clusters to keep POS data and configuration all over the world.|
+| Federation | Users shall be able to work with their data across clusters transparently.|
+| Fault Tolerance | If a database node fails, data shall NOT be lost.|
+|Resilience| If a datacenter or a node fails clients shall experience downtime of less than 5 minutes.|
+|Performance| Each cluster shall support 10,000 restaurants.|
+|Edge Computing| The system shall be installable at the "edge" (e.g., in a restaurant) and able to synchronize with the cloud.|
+|Event Sourcing| All changes to the application state shall be stored as a sequence of events.|
+|Zero Downtime Updates| It shall be possible to update applicaton without downtime.|
+
+Analyzing the requirements, we identified the Modern Tech Stack:
+
+![Modern Tech Stack](stack.png)
+
+We could have built our system using components from this stack. It would take man-years to develop - we agreed to invest these resources, as did our colleagues from other POS providers. However, during analysys and researching process, we got an idea that we could create a "generic engine" that meets the requirements above. This engine would not only enable us to build our POS system but also allow us to bring a new product to the market. This product would enable the development of systems with similar requirements in a significantly shorter time, potentially up to 10 times faster than using just the Modern Tech Stack.
+
+We shared this idea with the colleagues from other companies ???mention, and they agreed to invest in the development of this engine.
+
+This is how Voedger was born.
+
+As we wanted to go public with Voedger, we needed to add some extra requirements.
+
+| Requirement name| Description |
+| ----------- | ----------- |
+| Simple Coding| It shall be extremely easy to develop Voedger applications.|
+| Simple Testing| It shall be extremely easy to test Voedger applications.|
+| Cloud Agnostic| It shall be possible to run Voedger everywhere, including on your own infrastructure.|
+| Simple Configuration| It shall be easy for Admin to build a cluster and replace a failed node.|
+
+You can find more details about the requirements in the next sections.
+
 
 ### Distributed Data
 
@@ -56,16 +87,13 @@ graph TD
   subgraph Federation
     Cluster1[cluster-eu-spain]:::G
     subgraph Cluster1[cluster-eu-spain]
-      Owner[(Owner Workspace)]:::S
-      Restaurant1[(Restaurant1 Workspace)]:::S
+      Owner[Owner Workspace]:::S
+      Restaurant1[Restaurant1 Workspace]:::S
     end
     Cluster2[[cluster-eu-frankfurt]]:::G
     subgraph Cluster2[cluster-eu-frankfurt]
-      Restaurant2[(Restaurant2 Workspace)]:::S
+      Restaurant2[Restaurant2 Workspace]:::S
     end
-    Owner[(Owner Workspace)]:::S
-    Restaurant1[(Restaurant1 Workspace)]:::S
-
   end
 
   Owner -.- Restaurant1
@@ -85,7 +113,7 @@ This requirement means that every piece of data must be stored in multiple copie
 
 
 ```mermaid
-graph TD
+graph LR
 
   User[@ User]:::B
   Voedger:::S
@@ -115,8 +143,10 @@ graph TD
 This requirements are satisfied by using clusters which span multiple datacenters (**stretched clusters**)
 
 ```mermaid
-graph TD
+graph LR
 
+  User[@ User]:::B
+  Voedger:::S
   
   Cluster:::G
   subgraph Cluster
@@ -133,6 +163,11 @@ graph TD
       Node3{{Node3}}:::H
     end        
   end
+
+  User -.-> |Data| Voedger
+  Voedger -.-> |Data, copy #1| Node1
+  Voedger -.-> |Data, copy #2| Node2
+  Voedger -.-> |Data, copy #3| Node3  
 
   classDef B fill:#FFFFB5,color:#333
   classDef S fill:#B5FFFF,color:#333
@@ -188,18 +223,11 @@ graph LR
 
 This is a common requirement for POS systems as it provides a natural audit trail. While highly beneficial for applications across various domains, it adds extra complexity to the project this is why it is not widely used.
 
+### Zero Downtime Updates
+
+- It shall be possible to update applicaton without downtime.
+
 ---
-## Analysis & research. Voedger comes to life
-
-Analyzing the requirements, we identified the Modern Tech Stack:
-
-![Modern Tech Stack](stack.png)
-
-Using components from this stack, we could have built the system, but it would take man-years to develop. We agreed to invest these resources, as did our colleagues from other POS providers. However, during analysys and researching process, we got an idea that we could create a "generic engine" to handle the requirements above. This engine would not only enable us to build our POS system but also allow us to bring a new product to the market. This product would enable the development of systems with similar requirements in a significantly shorter time, potentially up to 10 times faster than using just the Modern Tech Stack.
-
-We shared this idea with the colleagues from other companies, and they agreed to invest in the development of this engine.
-
-This is how Voedger was born.
 
 ## Extra requriements
 
@@ -218,7 +246,7 @@ What is still necessary to code:
 
 For example, if you need to work with an entity such as Payment, you will need to:
 
-- Define an SQL schema for it.
+- Define SQL schema for it.
 - Define validation rules, such as developing a function to check if a Visit (remember we are talking about restaurants) the Payment is related to is not paid yet.
 
 What you do NOT need to do:
@@ -243,12 +271,6 @@ This way extension can be considered as a "pure function" without side effects, 
 
 For unit testing there is no need to run the whole system, just the extension itself.
 
-### Operation: Zero Downtime Updates
-
-- It shall be possible to update applicaton without downtime.
-
-Voedger Applications can be updated to new version without downtime. ??? Explain how and consequences
-
 ### Operation: Cloud Agnostic
 
 - It shall be possible to run Voedger everywhere, including on your own infrastructure.
@@ -259,20 +281,16 @@ This is a direct result of the Edge Computing requirement: if we can run Voedger
 
 - It shall be easy for Admin to build a cluster and replace a failed node.
 
-Voedger primarily uses Cassandra/Scylla as a database management system and is designed to be as transparent as possible for Developers and Admin. Developers are not aware of the underlying database system at all.
-
-Admin should have an idea of what is going on in the system, but we have simplified the process as much as possible.
-
 Voedger provides a special utility called `ctool`. It expects Admin to provide the addresses of the nodes, which should have a clean Ubuntu installation, and `ctool` will handle the rest.
 
 - To create a cluster: `ctool init <node1-address> <node2-address> <node3-address>...`
 - To replace a node: `ctool replace <old-node-address> <new-node-address>`
 
-### Operation: Simple Monitoring and Alerting
+As a result of this command all necessary software will be installed and configured on the nodes:
 
-- It shall be easy for Admin to monitor the system and receive alerts.
-
-The `ctool` utility installs and configures Prometheus and Grafana on the nodes, providing comprehensive dashboards out of the box.
+- Scylla/Cassandra.
+- Prometheus.
+- Grafana, with comprehensive dashboards out of the box.
 
 
 
