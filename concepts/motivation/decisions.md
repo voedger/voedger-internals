@@ -4,7 +4,7 @@ Here you will find a description and discussion of the key architectural and des
 
 ## Decisions
 
-| Decision| Description | Advantages | Trade-offs |
+| Decision | Description | Advantages | Trade-offs |
 | ----------- | ----------- | ----------- | ----------- |
-| Application Partitions| Applications are divided into partitions, each partition is executed on its own node| STRONG PARTITION SERIALIZABLE guarantees, performance. | If a node fails some clients see 2-5 minutes of downtime|
-| High Granularity Host-WASM Protocol | WASM module has to call Host for every field of a record it is interested in| Simplicity | Performance|
+| Application Partitions | Applications are divided into partitions, each partition is executed on its own node | STRONG PARTITION SERIALIZABLE guarantees, performance | If a node fails, some clients experience 2-5 minutes of downtime |
+| High Granularity Host-WASM Protocol | WASM module has to call Host for every field of a record it is interested in | Simplicity | Reduced performance due to multiple host calls |
