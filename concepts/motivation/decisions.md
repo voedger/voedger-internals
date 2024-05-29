@@ -4,12 +4,11 @@ Here you will find a description and discussion of the key architectural and des
 
 ## Decisions
 
-| Decision | Description | Advantages | Trade-offs | Can be improved
+| Decision | Description | Advantages | Trade-offs | Can be improved |
 | ----------- | ----------- | ----------- | ----------- | ---- |
-| Application Partitions | Applications are divided into partitions, each partition is executed on its own node | [STRONG PARTITION SERIALIZABLE](https://dbmsmusings.blogspot.com/2019/06/correctness-anomalies-under.html) guarantees, performance | If a node fails, some clients experience 2-5 minutes of downtime | Yes, we beleive up to ~20 seconds
-| Naive Voedger engine update | Voedger engine leads to 2-5 minutes downtime, same as node restart | Simplicity | 2-5 minutes downtime | Yes, up to few seconds downtime |
-| High granularity WASM-Host protocol | WASM module has to call Host for every field of a record it is interested in | Simplicity | Reduced performance due to multiple host calls | Yes, a low-granularity protocol can be developed|
-
+| Application Partitions | Applications are divided into partitions, each partition is executed on its own node | [STRONG PARTITION SERIALIZABLE](https://dbmsmusings.blogspot.com/2019/06/correctness-anomalies-under.html) guarantees, performance | If a node fails, some clients experience 2-5 minutes of downtime | Yes, we believe up to ~20 seconds |
+| Naive Voedger engine update | Voedger engine updates lead to 2-5 minutes of downtime, similar to node restart | Simplicity | 2-5 minutes of downtime | Yes, up to a few seconds of downtime |
+| High granularity WASM-Host protocol | WASM module has to call Host for every field of a record it is interested in | Simplicity | Reduced performance due to multiple host calls | Yes, a low-granularity protocol can be developed |
 
 ## Application Partitions
 
