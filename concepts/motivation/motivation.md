@@ -298,7 +298,7 @@ As a result of this command all necessary software will be installed and configu
 
 ### Node Loss Downtime
 
-**Architecture/Design Decisions:**
+**Architecture/design decisions:**
 - The application is divided into partitions.
 - Each application partition is executed on a separate node.
 - If a node goes down, all partitions have to be restarted on other nodes.
