@@ -66,6 +66,6 @@ Alg
 - Initialize appstructs data
 - Initialize App Workspaces
 
-### apppartsctrl.New(...): Get rid of builtInApps**
+### apppartsctrl.New(...): Get rid of builtInApps
 
 * Get rid of builtInApps
