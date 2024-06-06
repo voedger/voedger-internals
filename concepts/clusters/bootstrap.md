@@ -3,6 +3,7 @@
 ## Motivation
 
 **Problem**: Applications and their partitions are deployed using `cluster` app, how to deploy `cluster` application itself?
+
 **Solution**: Bootstrap process. It "deploys" `cluster` app and then all builtin apps.
 
 * https://github.com/voedger/voedger/issues/1890
