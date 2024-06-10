@@ -13,6 +13,7 @@
   * [Editions](concepts/editions/README.md)
     * [Community Edition](concepts/editions/ce.md)
     * [Standart Edition](concepts/editions/se.md)
+  * [In-Memory Storage](concepts/inmemstg.md)
   * [Scheduled Projectors](concepts/sch-projectors.md)
   * [Uniques With Multiple Fields](concepts/uniques-multi.md)
 * [Server](server/README.md)
