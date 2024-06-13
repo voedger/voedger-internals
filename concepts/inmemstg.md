@@ -1,5 +1,7 @@
 # In-Memory Storage
 
+## Motivation
+
 [In-Memory Storage #2269](https://github.com/voedger/voedger/issues/2269)
 - 674859
 - As a location owner, I want to prevent POS users from working on the same table simultaneously to avoid confusion and errors.
