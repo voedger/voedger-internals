@@ -9,7 +9,7 @@
 
 ## Solution
 
-- POS device lock the table if the lock does not exist yet or the lock is expired.
+- POS device locks the table if the lock does not exist yet or the lock is expired.
 - Locks ares stored in unreliable In-Memory Storage (`[WSID][tableNo]lockedAt)`).
 - Can be also used to track the status of devices (`[partition][device]lastActivityAt)`).
 
