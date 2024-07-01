@@ -13,6 +13,7 @@
   * [Editions](concepts/editions/README.md)
     * [Community Edition](concepts/editions/ce.md)
     * [Standart Edition](concepts/editions/se.md)
+  * [VSQL Types](https://github.com/voedger/voedger/blob/main/pkg/parser/README.md)
   * [In-Memory Storage](concepts/inmemstg.md)
   * [Sidecar Applications](concepts/sidecarapps.md)
   * [Scheduled Projectors](concepts/sch-projectors.md)
