@@ -14,6 +14,7 @@
     * [Community Edition](concepts/editions/ce.md)
     * [Standart Edition](concepts/editions/se.md)
   * [In-Memory Storage](concepts/inmemstg.md)
+  * [Sidecar Applications](concepts/sidecarapps.md)
   * [Scheduled Projectors](concepts/sch-projectors.md)
   * [Uniques With Multiple Fields](concepts/uniques-multi.md)
 * [Server](server/README.md)
