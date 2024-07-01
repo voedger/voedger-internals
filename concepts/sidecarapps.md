@@ -1,3 +1,3 @@
 ## Sidecar Applications
 
-Ref. https://github.com/voedger/voedger/issues/2326
+Ref. the issue [Sidecar Applications](https://github.com/voedger/voedger/issues/2326)
