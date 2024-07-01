@@ -12,6 +12,7 @@
     * [Bootstrap](server/clusters/bootstrap.md)
     * [Deploy Application](https://github.com/voedger/voedger/issues/1814)
     * [Install CE](https://github.com/voedger/voedger/issues/1775)
+    * [Alerting](https://github.com/voedger/voedger/issues/1557)
   * [VVMs](server/vvms/README.md)
   * [Workspaces](server/workspaces/README.md)
     * [Create Workspace](server/workspaces/create-workspace-v2.md)
