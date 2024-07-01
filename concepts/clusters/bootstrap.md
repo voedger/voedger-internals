@@ -25,6 +25,8 @@
 
 ### pkg/btstrp.Bootstrap(bus IBus, IAppStructsProvider, appparts, clusterApp ClusterBuiltInApp, otherApps \[]BuiltInApp) error
 
+- [pkg/btstrp](https://github.com/voedger/voedger/tree/main/pkg/btstrp)
+
 #### Params
 - otherApps does NOT include `blobber`, `router`
 
