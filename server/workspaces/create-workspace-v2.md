@@ -187,4 +187,4 @@ Subject:
 
 ## See also
 
-- Originated from [Create Workspace v2](https://dev.heeus.io/launchpad/#!21010)
+- Originated from launchpad: [Create Workspace v2](21010)

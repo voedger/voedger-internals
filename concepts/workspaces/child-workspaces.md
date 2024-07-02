@@ -1,7 +1,7 @@
 # Motivation
 
-- Air: [Reseller Portal: Invite unTill Payments Users](https://dev.untill.com/projects/#!625718)
-- launchpad: [Child Workspaces](https://dev.heeus.io/launchpad/#!25679)
+- Air: [Reseller Portal: Invite unTill Payments Users](625718)
+- launchpad: [Child Workspaces](25679)
 
 
 # Concepts

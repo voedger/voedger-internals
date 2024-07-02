@@ -4,10 +4,15 @@ Invite Users/Devices to Workspaces
 
 ## Motivation
 
-- [Air: Reseller Portal: Invite unTill Payments Users](https://dev.untill.com/projects/#!625718)
-- [A&D: Invites](https://dev.heeus.io/launchpad/#!25709)
-  - [invites.md](https://github.com/heeus/heeus-design/blob/d9b14d105ef443a2f70cc6fc8530ab42f36a6f5d/workspaces/invites.md)
-- [A&D: Invites: Review](https://dev.heeus.io/launchpad/#!25847)
+- [Air: Reseller Portal: Invite unTill Payments Users](625718)
+- As a workspace owner I want to invite users into workspace with specified roles, so that if they accept it, they are granted to access my workspace\\
+- As a workspace owner I want to change invited user's roles
+- As a user, I want to see the list of my workspaces and roles, so that I know what am I available to work with
+- As a user, I want to be able to leave the workspace I'm invited to
+- As a workspace owner I want to ban user to he doesn't have access to my workspace anymore
+- [Resellers Portal](https://github.com/untillpro/airs-design/blob/master/resellerportal/usersmgmt.md) 
+- [invites.md](https://github.com/heeus/heeus-design/blob/d9b14d105ef443a2f70cc6fc8530ab42f36a6f5d/workspaces/invites.md)
+- https://github.com/heeus/heeus-design/blob/main/workspaces/invites.md
 
 ## Contents
 
