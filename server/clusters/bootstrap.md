@@ -1,4 +1,4 @@
-# bootstrap
+# Bootstrap
 
 ## Motivation
 
