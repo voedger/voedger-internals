@@ -13,7 +13,8 @@
     * [Deploy Application](https://github.com/voedger/voedger/issues/1814)
     * [Install CE](https://github.com/voedger/voedger/issues/1775)    * 
     * [Monitoring](server/mon.md)
-    * [Alerting](server/alert.md)
+    * [Secure prometheus and grafana](https://github.com/voedger/voedger/issues/1554)
+    * [Alerting](https://github.com/voedger/voedger/issues/1557)
     * [vSQL: SELECT, UPDATE](https://github.com/voedger/voedger/issues/1811)
   * [VVMs](server/vvms/README.md)
   * [Workspaces](server/workspaces/README.md)
@@ -26,6 +27,8 @@
   * [Sidecar Applications](server/sidecarapps.md)
   * [Scheduled Projectors](server/sch-projectors.md)
   * [Uniques With Multiple Fields](server/uniques-multi.md)  
+  * DMBS Drivers
+    * [AmazonDB Driver](https://github.com/voedger/voedger/issues/1332)
 * [Framework](framework/README.md)
   * [vpm](framework/vpm/README.md)
     * [vpm init](framework/vpm/init.md)
