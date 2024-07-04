@@ -25,7 +25,7 @@
   - [Admin Endpoint](server/admin-endpoint.md)  
   - [In-Memory Storage](server/inmemstg.md)
   - [Sidecar Applications](server/sidecarapps.md)
-  - [Scheduled Projectors](server/sch-projectors.md)
+  - [Jobs](server/jobs.md)
   - [Uniques With Multiple Fields](server/uniques-multi.md)  
   - DMBS Drivers
     - [AmazonDB Driver](server/amazondb-driver.md)

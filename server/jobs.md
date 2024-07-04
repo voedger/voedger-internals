@@ -1,19 +1,18 @@
-# Schedule Projectors
+# Jobs
 
-Issues
-- https://github.com/voedger/voedger/issues/1777
-
-## Principles
-
-- Scheduled Projector is triggered by time events
-- Time events are not kept in logs (PLog, WLog)
-- Scheduled Projector may not have intents
+- [Jobs](https://github.com/voedger/voedger/issues/1777)
 
 ## Motivation
 
-As a Developer I want to have scheduled jobs (required by sigma)
+SCADA, Supervisory Control and Data Acquisition
 
-## Functional Design
+## Principles
+
+- Job is triggered by time events
+- Time events are not kept in logs (PLog, WLog)
+- Job do not have intents
+
+## Functional design
 
 VSQL:
 ```sql
@@ -24,7 +23,8 @@ ALTER WORKSPACE sys.AppWorkspaceWS (
 	) AS RESULT OF ScheduledProjector;
 
 	EXTENSION ENGINE BUILTIN (
-		PROJECTOR ScheduledProjector CRON '1 0 * * *';
+		-- `CRON` token is not needed
+		JOB Job1 '1 0 * * *';
 	);
 );
 ```
@@ -35,7 +35,7 @@ Projector context:
 - Application workspace is used as an event workspace
   -  BaseWSID = FirstBaseAppWSID + PartitionNum % DefaultAppWSAmount
 
-## Tech Design
+## Tech design
 - parser analyser validates the cron schedule
 - cron schedule is saved as string in the appdef
 - ...
