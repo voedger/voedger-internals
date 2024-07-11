@@ -6,7 +6,7 @@
     - 📁<\folder path to .vsql files within the repository\> 
       - \<.vsq files\>
   - 📁sys
-    -\<sys .vsql files
+    - \<sys .vsql files
     
 ### example
 - 📁baseline
