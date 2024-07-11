@@ -4,7 +4,7 @@
 - 📁\<baseline folder\>
   - 📁\<full path of each repository\>
     - 📁<\folder path to .vsql files within the repository\> 
-      -\<.vsq files\>
+      - \<.vsq files\>
   - 📁sys
     -\<sys .vsql files
     
