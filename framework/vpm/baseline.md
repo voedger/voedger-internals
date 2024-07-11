@@ -11,12 +11,12 @@
 ### example
 - 📁baseline
   - 📁github.com
-    -📁voedger
+    - 📁voedger
       - 📁voedger
-        -📁pkg
+        - 📁pkg
           - 📁apps
-            -📁sys
-              -📁clusterapp
+            - 📁sys
+              - 📁clusterapp
                 - schema.vsql
   - 📁sys
     - sys.vsql
