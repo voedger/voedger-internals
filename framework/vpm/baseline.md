@@ -6,14 +6,13 @@ usage: `vpm baseline <output baseline folder>`
   - 📁pkg
     - 📁\<repo domain\>
       - 📁\<path elem1\>
-        - 📁\<path elemN\> 
-          - \<.vsq files\>
+        - ... 
+          - 📁\<path elemN\> 
+            - \<.vsq files\>
     - 📁sys
       - \<sys .vsql files\>
   - baseline.json 
 
-    - 
-    
 ### example
 - 📁baseline
   - 📁pkg 
