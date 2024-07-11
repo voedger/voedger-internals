@@ -4,9 +4,10 @@ usage: `vpm baseline <output baseline folder>`
 ## structure of the result
 - 📁\<baseline folder\>
   - 📁pkg
-    - 📁\<full path of each repository\>
-      - 📁<\folder path to .vsql files within the repository\> 
-        - \<.vsq files\>
+    - 📁\<repo domain\>
+      - 📁\<path elem1\>
+        - 📁\<path elemN\> 
+          - \<.vsq files\>
     - 📁sys
       - \<sys .vsql files\>
   - baseline.json 
