@@ -23,7 +23,7 @@ We will start with the Per-app Storage Extensions approach since it is easier to
 
 ## Principles
 
-- Storage Extension deployed as a part of an Application Image
+- Storage Extension is deployed as a part of an Application Image
 - Storage Extension is a Go plugin
   - Plugins are currently supported only on Linux, FreeBSD, and macOS
   - If a Storage Extension is updated, some resources related to the previous instance are wasted
@@ -43,7 +43,7 @@ We will start with the Per-app Storage Extensions approach since it is easier to
     - pkg.wasm
     - `storages-$version.so` // multiple storages
 - App Partition deployment
-  - `storages-$version.so` is copied (if needed) to some `storages` folder and loaded from there
+  - `storages-$version.so` is copied (if needed) to some internal `storages` folder and loaded from there
 - IAppPartition.Storage(FullQName) IStorage // QName ???
 - pkg/iextstgengine
   - 📂goplugin
