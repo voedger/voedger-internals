@@ -24,7 +24,7 @@ We start with the Per-app Storage Extensions approach since it is easier to impl
 
 ## Principles
 
-- Storage Extension deployed as a part of an application
+- Storage Extension deployed as a part of an Application Image
 - Storage Extension is a golang plugin
   - Plugins are currently supported only on Linux, FreeBSD, and macOS
   - If a Storage Extension is updated some resources related to the previous instance are wasted
