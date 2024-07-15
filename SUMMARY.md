@@ -7,6 +7,7 @@
     - [Community Edition](concepts/editions/ce.md)
     - [Standart Edition](concepts/editions/se.md)
   - [VSQL Types](concepts/vsql-types.md)
+  - [Storage Extensions](concepts/storage-extensions.md)
 - [Server](server/README.md)  
   - [Clusters](server/clusters/README.md)
     - [Bootstrap](server/clusters/bootstrap.md)
