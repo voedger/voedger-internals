@@ -14,7 +14,7 @@ Currently, we can load storage as a Go plugin. There are two approaches:
 |                             | Sidecar Storage Extensions | Per-app Storage Extensions |
 |-----------------------------|----------------------------|----------------------------|
 | More stable                 | Yes 👍                     | No                         |
-| Can cause memory problems   | No 👍                      | Yes                        |
+| More memory problems        | No 👍                      | Yes                        |
 | Upgradable                  | No                         | Yes 👍                     |
 | Easy to operate             | No                         | Yes 👍                     |
 | Easy to develop             | No                         | Yes 👍                     |
