@@ -44,10 +44,11 @@ We will start with the Per-app Storage Extensions approach since it is easier to
     - `storages-$version.so` // multiple storages
 - App Partition deployment
   - `storages-$version.so` is copied (if needed) to some internal `storages` folder and loaded from there
-- IAppPartition.Storage(FullQName) state.IStateStorage // Created from iextrowstorage.IRowStorage
+- IAppPartition.Storage(FullQName) state.IStateStorage
+  - // Created during app deployment from iextrowstorage.IRowStorage by state.NewIStateStorage(appdef IAppDef, iextrowstorage.IRowStorage)
+  - // appdef is needed for Typecheck
 - pkg/iextstgengine
   - 📂goplugin
   - IStateStorage
-- Refactor current sources: pkg/sys/storages
 - STATESTORAGE ENGINE BUILTIN
 - STATESTORAGE ENGINE GOPLUGIN
