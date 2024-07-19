@@ -44,6 +44,9 @@ Prefixes
 - *pkg*: Go package
 - *extsoft*: external software
 
+## Principles
+
+- Simplified validation (e.g. references, uniquess are not validated)
 
 ## Context
 
