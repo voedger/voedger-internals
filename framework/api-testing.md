@@ -47,7 +47,7 @@ packages
   - teststate
 
 
-## Functional Design
+## Functional design
 
 Test examples:
 
@@ -55,7 +55,7 @@ Test examples:
 - [Actualizer: WLog Get and Read, Secret, Http, SendMail](https://github.com/voedger/voedger/blob/d466918a151b00f54cea4dbf654786c84424bfb0/pkg/iextengine/wazero/_testdata/tests/main_test.go#L23)
 - [Command: CommandContext, Record, RequestSubject, Result](https://github.com/voedger/voedger/blob/d466918a151b00f54cea4dbf654786c84424bfb0/pkg/iextengine/wazero/_testdata/tests/main_test.go#L70)
 
-## Technical Design
+## Technical design
 
 ### Principles
 - Use events to prepare context CUDs and IArgumentObject data
