@@ -1,6 +1,6 @@
 # Ephemeral Storage
 
-**Ephemeral Storage** ([ɪˈfemərəl ˈstɔːrɪʤ]): keeps data that is not reliably stored and can be lost at any time. Possible implementation: LRU Cache that is lost after a VVM restart.
+**Ephemeral Storage** ([ɪˈfemərəl ˈstɔːrɪʤ]): a storage without strong durability guarantees. Keeps data that can be infrequently (~once per day) lost. Possible implementation: LRU Cache that is lost after a VVM restart.
 
 ## Motivation
 
