@@ -15,6 +15,7 @@
   - Key: {PartitionID, WSID, subject(device), tableNo}, Value: {lockedAt, userID}.
 - Track the status of devices.
   - Key: {PartitionID, WSID(app workspace), subject(device), }, Value: {lastActivity}.
+- 
 
 ## Functional design
 
@@ -29,9 +30,15 @@ Principles
 VQL:
 
 ```sql
-	STORAGE Ephemeral(
-		GET       SCOPE(COMMANDS, QUERIES),
-    SET       SCOPE(COMMANDS),
-    READ      SCOPE(QUERIES),
-	);
+STORAGE Ephemeral(
+	GET		SCOPE(COMMANDS, QUERIES),
+	INSERT		SCOPE(COMMANDS),
+	UPDATE		SCOPE(COMMANDS),
+	READ		SCOPE(QUERIES),
+);
+```
+
+Deployment descriptor:
+```
+???
 ```
