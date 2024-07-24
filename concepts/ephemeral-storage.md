@@ -15,7 +15,7 @@
   - Key: {PartitionID, WSID, subject(device), tableNo}, Value: {lockedAt, userID}.
 - Track the status of devices.
   - Key: {PartitionID, WSID(app workspace), subject(device), }, Value: {lastActivity}.
-- Keep demo operation data (bills). 
+- Keep demo operation data (`Cloud Bills`).
 
 ## Functional design
 
