@@ -50,5 +50,5 @@ We will start with the Per-app Storage Extensions approach since it is easier to
 - pkg/iextstgengine
   - 📂goplugin
   - IStateStorage
-- STATESTORAGE ENGINE BUILTIN
-- STATESTORAGE ENGINE GOPLUGIN
+- ROWSTORAGE ENGINE BUILTIN
+- ROWSTORAGE ENGINE GOPLUGIN
