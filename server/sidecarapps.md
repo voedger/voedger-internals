@@ -2,7 +2,7 @@
 
 - **Sidecar Applications** are placed near the Voedger executable and deployed automatically when VVM starts
 - Naming: after [Sidecar Containers](https://kubernetes.io/docs/concepts/workloads/pods/sidecar-containers/)
-- VVMConfig.ConfigFS
+- VVMConfig.DataPath
   - 📂apps
     - 📁app1Owner.app1Name
       - 📁image // unzipped app image, the same structure as baseline, see https://github.com/voedger/voedger-internals/edit/main/framework/vpm/baseline.md
