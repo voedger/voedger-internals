@@ -1,3 +1,3 @@
-## Motivation
+## Sidecar Applications
 
-- [Sidecar Applications](https://github.com/voedger/voedger/issues/2326)
+- [github: Sidecar Applications](https://github.com/voedger/voedger/issues/2326)
