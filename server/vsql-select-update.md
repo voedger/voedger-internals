@@ -4,7 +4,7 @@
 
 ## Motivation
 
-- login failed on Live Cluster again
+- login failed on Live Cluster again, it is necessary to fix things manually
 
 ## Functional design: Prinicples
 
