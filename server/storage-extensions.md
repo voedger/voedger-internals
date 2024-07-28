@@ -52,3 +52,8 @@ We will start with the Per-app Storage Extensions approach since it is easier to
   - IStateStorage
 - ROWSTORAGE ENGINE BUILTIN
 - ROWSTORAGE ENGINE GOPLUGIN
+
+## Technical design
+
+- https://github.com/voedger/voedger/blob/main/pkg/iextsse/README.md
+
