@@ -21,13 +21,14 @@
     - [Deactivate Workspace](server/workspaces/deactivate-workspace.md)
     - [Invites](server/workspaces/invites.md)
   - [API Gateway](server/api-gateway.md)
-  - [Admin Endpoint](server/admin-endpoint.md)  
-  - [VSQL Types](server/vsql-types.md)  
+  - [Admin Endpoint](server/admin-endpoint.md)
+  - VSQL
+    - [VSQL Types](server/vsql-types.md)
+    - [Uniques With Multiple Fields](server/uniques-multi.md)  
   - [Sidecar Applications](server/sidecarapps.md)
   - [Storage Extensions](server/storage-extensions.md)
   - [Ephemeral Storage](server/ephemeral-storage.md)
   - [Jobs](server/jobs.md)
-  - [Uniques With Multiple Fields](server/uniques-multi.md)  
   - DMBS Drivers
     - [AmazonDB Driver](server/amazondb-driver.md)
 - [Framework](framework/README.md)
