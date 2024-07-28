@@ -14,7 +14,6 @@
     - [Monitoring](server/mon.md)
     - [Secure prometheus and grafana](server/secure-prometheus-grafana.md)    
     - [Alerting](server/alerting.md)    
-    - [vSQL: SELECT, UPDATE](server/vsql-select-update.md)
   - [VVMs](server/vvms/README.md)
   - [Workspaces](server/workspaces/README.md)
     - [Create Workspace](server/workspaces/create-workspace-v2.md)
@@ -24,7 +23,8 @@
   - [Admin Endpoint](server/admin-endpoint.md)
   - VSQL
     - [VSQL Types](server/vsql-types.md)
-    - [Uniques With Multiple Fields](server/uniques-multi.md)  
+    - [VSQL: SELECT, UPDATE](server/vsql-select-update.md)
+    - [Uniques With Multiple Fields](server/uniques-multi.md)
   - [Sidecar Applications](server/sidecarapps.md)
   - [Storage Extensions](server/storage-extensions.md)
   - [Ephemeral Storage](server/ephemeral-storage.md)
