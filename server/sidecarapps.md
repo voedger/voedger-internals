@@ -26,6 +26,10 @@ Related issues:
 - `VVMConfig.DataPath`
 - `provideSidecarApps()` builds all sidecar applications if `VVMConfig.DataPath` is specified
 
+Tests
+- [Test app](https://github.com/voedger/voedger/tree/main/pkg/sys/it/testdata/apps/test2.app1)
+- [BasicUsage](https://github.com/voedger/voedger/blob/9dac6b1ee066b9634985c98d249ec9d62a5b950d/pkg/sys/it/impl_sidecar_test.go#L20)
+
 ## Limitations
 - Currently, the [following names](https://github.com/voedger/voedger/blob/f7ec852d5689fdf7c441bfb24e5395d52561634e/pkg/istructs/consts.go#L166) for sidecar applications are allowed:
   - test1/app1
