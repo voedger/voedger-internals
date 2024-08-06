@@ -1,6 +1,28 @@
 ## Sidecar Applications
 
 - **Sidecar Applications** are placed near the Voedger executable and deployed automatically when VVM starts
+```mermaid
+flowchart TD
+
+    Voedger:::G
+    subgraph Voedger
+        Air:::S
+        Cluster:::S
+        Registry:::S        
+    end
+
+    SidecarAppImage:::G
+    subgraph SidecarAppImage[Sidecar App Image]
+        WASMFiles[WASM files]:::H
+        VSQLFiles[VSQL files]:::H
+    end
+    Voedger -.-x |loads at startup| SidecarAppImage
+    
+    classDef B fill:#FFFFB5,color:#333
+    classDef S fill:#B5FFFF,color:#333
+    classDef H fill:#C9E7B7,color:#333
+    classDef G fill:#ffffff15, stroke:#999, stroke-width:2px, stroke-dasharray: 5 5
+```
 - Naming: after [Sidecar Containers](https://kubernetes.io/docs/concepts/workloads/pods/sidecar-containers/)
 - VVMConfig.DataPath
   - 📂apps
