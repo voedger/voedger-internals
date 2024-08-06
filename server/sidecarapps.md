@@ -16,7 +16,7 @@ flowchart TD
         WASMFiles[WASM files]:::H
         VSQLFiles[VSQL files]:::H
     end
-    Voedger -.-x |loads at startup| SidecarAppImage
+    Voedger -.-x |loads at startup 0+| SidecarAppImage
     
     classDef B fill:#FFFFB5,color:#333
     classDef S fill:#B5FFFF,color:#333
