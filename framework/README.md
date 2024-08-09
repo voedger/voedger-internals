@@ -8,7 +8,6 @@ Voedger Framework is a set of tools, libraries and conventions that enable devel
     %% Entities ====================
 
     Developer[Developer]:::B
-    DevelopTests([Develop tests]):::S
     DevelopApps([Develop applications]):::S
 
     vsqlddl[\VSQL DDL/]:::H  
@@ -22,15 +21,13 @@ Voedger Framework is a set of tools, libraries and conventions that enable devel
     %% Relations ====================
 
     pkg.exttinygo --> DevelopApps
-    vsqlddl --> DevelopApps
-    
-    pkg.exttinygo.tests --> DevelopTests
+    vsqlddl --> DevelopApps    
+    pkg.exttinygo.tests --> DevelopApps
 
     cmd.vpm --> CBD
 
     DevelopApps --> Developer
     CBD --> Developer
-    DevelopTests --> Developer
 
     classDef B fill:#FFFFB5,color:#333
     classDef S fill:#B5FFFF,color:#333
