@@ -1,6 +1,6 @@
 # Jobs
 
-- [Jobs](https://github.com/voedger/voedger/issues/1777)
+- [github: Jobs](https://github.com/voedger/voedger/issues/1777)
 
 ## Motivation
 
