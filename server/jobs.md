@@ -9,6 +9,8 @@ SCADA, Supervisory Control and Data Acquisition
 ## Principles
 
 - Job is triggered by time events
+- Jobs are controlled by Schedulers
+- Jobs are executed per ApplicationWorkspaces
 - Time events are not kept in logs (PLog, WLog)
 - Job state scope is almost the same as the Projector scope
   - +JobContext
@@ -22,7 +24,7 @@ ALTER WORKSPACE sys.AppWorkspaceWS (
 	VIEW test(
 		i int32,
 		PRIMARY KEY(i)
-	) AS RESULT OF ScheduledProjector;
+	) AS RESULT OF Job1;
 
 	EXTENSION ENGINE BUILTIN (
 		-- `CRON` token is not needed
@@ -38,7 +40,7 @@ Projector context:
   -  BaseWSID = FirstBaseAppWSID + PartitionNum % DefaultAppWSAmount
 
 ## Tech design
-- processors/schedulers/newSchedulers, similar to [newActualizers](https://github.com/voedger/voedger/blob/5cc5b443b1ba4969a521822dcf6f0474de80f767/pkg/projectors/actualizers.go#L30)
+- pkg/processors/schedulers/ProvideSchedulers(), similar to [ProvideActualizers](https://github.com/voedger/voedger/blob/5cc5b443b1ba4969a521822dcf6f0474de80f767/pkg/projectors/provide.go#L21)
 - appparts
 ```go
 func New2(
