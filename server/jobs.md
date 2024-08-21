@@ -35,11 +35,6 @@ ALTER WORKSPACE sys.AppWorkspaceWS (
 ```
 - Only sys.AppWorkspaceWS is allowed for now
 
-Projector context:
-- Event is generated for every application partition
-- Application workspace is used as an event workspace
-  -  BaseWSID = FirstBaseAppWSID + PartitionNum % DefaultAppWSAmount
-
 ## Tech design
 - pkg/processors/schedulers/ProvideSchedulers(), similar to [ProvideActualizers](https://github.com/voedger/voedger/blob/5cc5b443b1ba4969a521822dcf6f0474de80f767/pkg/projectors/provide.go#L21)
 - appparts
