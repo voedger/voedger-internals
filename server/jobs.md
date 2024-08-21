@@ -4,8 +4,8 @@
 
 ## Motivation
 
-- Download data periodically (SCADA, Supervisory Control and Data Acquisition)
-- Upload data periodically (e.g. to pass French certification for Air)
+- Import data periodically (SCADA, Supervisory Control and Data Acquisition)
+- Export data periodically (e.g. to pass French certification for Air)
 
 ## Principles
 
