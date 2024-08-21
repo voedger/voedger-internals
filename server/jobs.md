@@ -38,7 +38,21 @@ Projector context:
   -  BaseWSID = FirstBaseAppWSID + PartitionNum % DefaultAppWSAmount
 
 ## Tech design
-- newSchedulers, similar to [newActualizers](https://github.com/voedger/voedger/blob/5cc5b443b1ba4969a521822dcf6f0474de80f767/pkg/projectors/actualizers.go#L30)
+- processors/schedulers/newSchedulers, similar to [newActualizers](https://github.com/voedger/voedger/blob/5cc5b443b1ba4969a521822dcf6f0474de80f767/pkg/projectors/actualizers.go#L30)
+- appparts
+```go
+func New2(
+	vvmCtx context.Context,
+	structs istructs.IAppStructsProvider,
+	syncAct SyncActualizerFactory,
+	asyncActualizersRunner IProcessorRunner,
+	jobSchedulerRunner IProcessorRunner, // <--------------- 
+	eef iextengine.ExtensionEngineFactories,
+) (ap IAppPartitions, cleanup func(), err error) {
+	return newAppPartitions(vvmCtx, structs, syncAct, asyncActualizersRunner, jobSchedulerRunner, eef)
+}
+```
+
 
 
 ## Context
