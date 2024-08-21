@@ -5,7 +5,7 @@
 ## Motivation
 
 - SCADA, Supervisory Control and Data Acquisition
-- Upload data to somewhere periodically (e.g. to pass French certification for Air)
+- Upload data somewhere periodically (e.g. to pass French certification for Air)
 
 ## Principles
 
