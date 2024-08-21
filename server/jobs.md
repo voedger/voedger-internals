@@ -10,7 +10,9 @@ SCADA, Supervisory Control and Data Acquisition
 
 - Job is triggered by time events
 - Time events are not kept in logs (PLog, WLog)
-- Job do not have intents
+- Job state scope is almost the same as the Projector scope
+  - +JobContext
+  - -Event  
 
 ## Functional design
 
@@ -36,9 +38,8 @@ Projector context:
   -  BaseWSID = FirstBaseAppWSID + PartitionNum % DefaultAppWSAmount
 
 ## Tech design
-- parser analyser validates the cron schedule
-- cron schedule is saved as string in the appdef
-- ...
+- newSchedulers, similar to [newActualizers](https://github.com/voedger/voedger/blob/5cc5b443b1ba4969a521822dcf6f0474de80f767/pkg/projectors/actualizers.go#L30)
+
 
 ## Context
 
