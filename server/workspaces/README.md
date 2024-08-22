@@ -10,6 +10,7 @@
 ## Principles
 
 - Workspace can be AppWorkspace, ProfileWorkspace or ChildWorkspace
+- Number of AppWorkspaces is fixed during application deployment and can not be changed
 - ProfileWorkspace keeps Subject data, including list of ChildWorkspace-s
   - `sys.UserProfile`, `sys.DeviceProfile`
 - ChildWorkspace: `air.Restaurant` etc.
