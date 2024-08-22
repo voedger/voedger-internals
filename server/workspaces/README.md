@@ -26,7 +26,7 @@
 | Workspace| Рабочая область       |
 | AppWorkspace   |Рабочая область приложения|
 | ProfileWorkspace   | Профиль        |
-| ChildWorkspace   |Дочерняя рабочая область|
+| UserWorkspace   |Пользовательская рабочая область|
 
 ```mermaid
 erDiagram
