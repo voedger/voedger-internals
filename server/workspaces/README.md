@@ -13,6 +13,7 @@
 - ProfileWorkspace keeps Subject data, including list of ChildWorkspace-s
   - `sys.UserProfile`, `sys.DeviceProfile`
 - ChildWorkspace: `air.Restaurant` etc.
+  - ChildWorkspace keeps list of other ChildWorkspaces  
 - Workspace has the OwningDocument
 - OwningDocument: a document whose fields {WSID, wsError} will be updated when workspace will be ready
 - Currently, OwningDocument kinds: `cdoc.registry.Login`, `cdoc.sys.ChildWorkspace`
@@ -24,15 +25,15 @@
 | English     | Russian     |
 | ----------- | ----------- |
 | Workspace| Рабочая область       |
-| AppWorkspace   |Рабочая область приложения|
-| ProfileWorkspace   | Профиль        |
-| UserWorkspace   |Пользовательская рабочая область|
+| App Workspace   |Рабочая область приложения|
+| Profile Workspace   | Профиль        |
+| Child Workspace (can be also called `User Workspace`)   |Дочерняя рабочая область|
 
 ```mermaid
 erDiagram
   Workspace||--|| AppWorkspace: "can be"
   Workspace||--|| ProfileWorkspace: "can be"
-  Workspace||--|| UserWorkspace: "can be"
+  Workspace||--|| ChildWorkspace: "can be"
 
   AppWorkspace ||--|{ cdoc_sys_Login: "e.g. can keep"
   AppWorkspace ||--|{ cdoc_sys_WorkspaceID: "e.g. can keep"
@@ -40,8 +41,8 @@ erDiagram
   ProfileWorkspace ||--|{ UserProfile: "can be"
   ProfileWorkspace ||--|{ DeviceProfile: "can be"
 
-  UserWorkspace ||--|{ air_Restaurant: "e.g. can be"
-  UserWorkspace ||--|{ slack_Organization: "e.g. can be"
+  ChildWorkspace ||--|{ air_Restaurant: "e.g. can be"
+  ChildWorkspace ||--|{ slack_Organization: "e.g. can be"
 ```
 
 ## Owning Document
