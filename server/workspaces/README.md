@@ -32,7 +32,7 @@
 erDiagram
   Workspace||--|| AppWorkspace: "can be"
   Workspace||--|| ProfileWorkspace: "can be"
-  Workspace||--|| ChildWorkspace: "can be"
+  Workspace||--|| UserWorkspace: "can be"
 
   AppWorkspace ||--|{ cdoc_sys_Login: "e.g. can keep"
   AppWorkspace ||--|{ cdoc_sys_WorkspaceID: "e.g. can keep"
@@ -40,8 +40,8 @@ erDiagram
   ProfileWorkspace ||--|{ UserProfile: "can be"
   ProfileWorkspace ||--|{ DeviceProfile: "can be"
 
-  ChildWorkspace ||--|{ air_Restaurant: "e.g. can be"
-  ChildWorkspace ||--|{ slack_Organization: "e.g. can be"
+  UserWorkspace ||--|{ air_Restaurant: "e.g. can be"
+  UserWorkspace ||--|{ slack_Organization: "e.g. can be"
 ```
 
 ## Owning Document
