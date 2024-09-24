@@ -47,7 +47,7 @@ We will start with the Per-app Storage Extensions approach since it is easier to
 - IAppPartition.Storage(FullQName) state.IStateStorage
   - // Created during app deployment from iextrowstorage.IRowStorage by appparts.NewIStateStorage(appdef IAppDef, iextrowstorage.IRowStorage)
   - // appdef is needed for typechecking
-- pkg/iextstgengine
+- pkg/iextsse // State Storage Extension
   - 📂goplugin
   - IStateStorage
 - ROWSTORAGE ENGINE BUILTIN
