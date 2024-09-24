@@ -1,4 +1,4 @@
-# Storage Extensions
+# State Storage Extensions
 
 - [GitHub Issue #2366](https://github.com/voedger/voedger/issues/2366)
 
