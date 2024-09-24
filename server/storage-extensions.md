@@ -2,7 +2,7 @@
 
 - [GitHub Issue #2366](https://github.com/voedger/voedger/issues/2366)
 
-We have a number of built-in storages, but there should be a way to extend the storage capabilities.
+We have a number of built-in state storages, but there should be a way to extend the state storage capabilities.
 
 ## Analysis
 
