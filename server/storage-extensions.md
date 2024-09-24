@@ -50,8 +50,8 @@ We will start with the Per-app Storage Extensions approach since it is easier to
 - pkg/iextsse // State Storage Extensions
   - 📂goplugin
   - IStateStorage
-- ROWSTORAGE ENGINE BUILTIN
-- ROWSTORAGE ENGINE GOPLUGIN
+- STATESTORAGE ENGINE BUILTIN
+- STATESTORAGE ENGINE GOPLUGIN
 
 ## Technical design
 
