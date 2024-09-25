@@ -80,3 +80,6 @@ Purpose. Store
 
 - https://github.com/voedger/voedger/blob/main/pkg/iextsse/README.md
 
+## Context
+
+- [sys/sys.vsql](https://github.com/voedger/voedger/blob/d0431125a0aa7b42060fe85bf6aa21872cba4d26/pkg/sys/sys.vsql)
