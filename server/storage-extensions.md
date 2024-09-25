@@ -55,9 +55,15 @@ We will start with the Per-app Storage Extensions approach since it is easier to
 vsql:
 ```
 STATESTORAGE ENGINE BUILTIN (
-  EphemeralBills
-  
+  Ephemeral (
+    GET         SCOPE(COMMANDS, QUERIES, PROJECTORS, JOBS),
+    GETBATCH    SCOPE(COMMANDS, QUERIES, PROJECTORS, JOBS),
+    READ        SCOPE(QUERIES, PROJECTORS, JOBS),
+    INSERT      SCOPE(PROJECTORS),
+    UPDATE      SCOPE(PROJECTORS)    
+  )
 )
+
 STATESTORAGE ENGINE GOPLUGIN (
     STORAGE Http (
         READ SCOPE(QUERIES, PROJECTORS, JOBS)
@@ -68,6 +74,19 @@ STATESTORAGE ENGINE GOPLUGIN (
 ## Functional design
 
 ### Ephemeral storage
+
+vsql:
+```
+STATESTORAGE ENGINE BUILTIN (
+  EphemeralBills
+  
+)
+STATESTORAGE ENGINE GOPLUGIN (
+    STORAGE Http (
+        READ SCOPE(QUERIES, PROJECTORS, JOBS)
+    );
+)
+```
 
 Purpose. Store
 
