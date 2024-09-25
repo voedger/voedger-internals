@@ -59,7 +59,7 @@ STATESTORAGE ENGINE BUILTIN (
     GET         SCOPE(COMMAND, QUERY, PROJECTOR, JOB),
     INSERT      SCOPE(COMMAND, QUERY, PROJECTOR, JOB),
     UPDATE      SCOPE(COMMAND, QUERY, PROJECTOR, JOB),
-  ) WITH LRUCaches=(Cache1, Cache2) PartitionLimits=(10_000_000, 50_000_000)
+  ) WITH LRUCaches=(Cache1, Cache2) PartitionMaxSizes=(10_000_000, 50_000_000)
   ;
 
   Ephemeral2 (
