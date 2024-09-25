@@ -55,19 +55,32 @@ We will start with the Per-app Storage Extensions approach since it is easier to
 vsql:
 ```
 STATESTORAGE ENGINE BUILTIN (
-  Ephemeral (
-    GET         SCOPE(COMMANDS, QUERIES, PROJECTORS, JOBS),
-    GETBATCH    SCOPE(COMMANDS, QUERIES, PROJECTORS, JOBS),
-    READ        SCOPE(QUERIES, PROJECTORS, JOBS),
-    INSERT      SCOPE(PROJECTORS),
-    UPDATE      SCOPE(PROJECTORS)    
-  )
-)
+  Ephemeral1 (
+    GET         SCOPE(COMMAND, QUERY, PROJECTOR, JOB),
+    INSERT      SCOPE(COMMAND, QUERY, PROJECTOR, JOB),
+    UPDATE      SCOPE(COMMAND, QUERY, PROJECTOR, JOB),
+  ) WITH LRUCaches=(Cache1, Cache2) PartitionLimits=(10_000_000, 50_000_000)
+  ;
+
+  Ephemeral2 (
+    GET         SCOPE(COMMAND, QUERY, PROJECTOR, JOB),
+    INSERT      SCOPE(COMMAND, QUERY, PROJECTOR, JOB),
+    UPDATE      SCOPE(COMMAND, QUERY, PROJECTOR, JOB),
+  ) WITH JSONPARAM=` 
+      {
+        "LRUCaches": {
+          "Cache1": {
+            "PartitionMaxSize": 10000000
+          },
+          "Cache2": {
+            "PartitionMaxSize": 50000000
+          }
+        }
+      }
+`;
+);
 
 STATESTORAGE ENGINE GOPLUGIN (
-    STORAGE Http (
-        READ SCOPE(QUERIES, PROJECTORS, JOBS)
-    );
 )
 ```
 
