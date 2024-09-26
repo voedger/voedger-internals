@@ -52,25 +52,21 @@ We will start with the Per-app Storage Extensions approach since it is easier to
   - 📂goplugin
   - IStateStorage
 
-vsql:
-```
-STATESTORAGE ENGINE BUILTIN (
-  Ephemeral1 (
-    GET         SCOPE(COMMAND, QUERY, PROJECTOR, JOB),
-    INSERT      SCOPE(COMMAND, QUERY, PROJECTOR, JOB),
-    UPDATE      SCOPE(COMMAND, QUERY, PROJECTOR, JOB),
-  ) WITH LRUCaches=(Cache1, Cache2) PartitionLimits=(10_000_000, 50_000_000)
-  ;
+## Principles: Configuration
 
-  Ephemeral2 (
+📂pkg/air:
+```sql
+STATESTORAGE ENGINE BUILTIN (
+
+  Ephemeral (
     GET         SCOPE(COMMAND, QUERY, PROJECTOR, JOB),
     INSERT      SCOPE(COMMAND, QUERY, PROJECTOR, JOB),
     UPDATE      SCOPE(COMMAND, QUERY, PROJECTOR, JOB),
-  ) WITH JSONPARAM=` 
+  ) WITH JSONCONFIG=` 
       {
         "LRUCaches": {
           "Cache1": {
-            "PartitionMaxSize": 10000000
+            "PartitionMaxSize": "${Ephemeral_PartitionMaxSize:-50000000}"
           },
           "Cache2": {
             "PartitionMaxSize": 50000000
@@ -79,10 +75,47 @@ STATESTORAGE ENGINE BUILTIN (
       }
 `;
 );
-
-STATESTORAGE ENGINE GOPLUGIN (
-)
 ```
+
+📂pkg/scada:
+```sql
+STATESTORAGE ENGINE GOPLUGIN (
+  SCADA (
+    GET         SCOPE(COMMAND, QUERY, PROJECTOR, JOB),
+    INSERT      SCOPE(COMMAND, QUERY, PROJECTOR, JOB),
+    UPDATE      SCOPE(COMMAND, QUERY, PROJECTOR, JOB),
+  ) WITH JSONCONFIG=` 
+      {
+        "URL": "${SCADA_PartitionMaxSize:-'127.0.0.1:8765'}"
+        "Password": "${SCADA_Password:-"0123"}" // The syntax is taken from bash, note how double quotes are used.
+      }
+`;
+);
+```
+
+Application Deployment Descriptor:
+```json
+{
+  "NumPartitions":100,
+  "NumAppWorkspaces":10,
+  "PackageConfigs": {
+    "air":{
+      "Ephemeral_PartitionMaxSize":1000000
+    },
+    "scada":{
+      "URL":"https://myscadaurl.io",
+      "Password":"$SCADA_PASSWORD"
+    }    
+  }
+}
+```
+
+ctool, create a secret:
+```bash
+ctool secret create SCADA_PASSWORD <my-secret-password>
+```
+
+
 
 ## Functional design
 
