@@ -66,7 +66,7 @@ STATESTORAGE ENGINE BUILTIN (
       {
         "LRUCaches": {
           "Cache1": {
-            "PartitionMaxSize": "${Ephemeral_PartitionMaxSize:-50000000}"
+            "PartitionMaxSize": "${Ephemeral_PartitionMaxSize:-50000000}" // The syntax is taken from bash.
           },
           "Cache2": {
             "PartitionMaxSize": 50000000
@@ -86,7 +86,7 @@ STATESTORAGE ENGINE GOPLUGIN (
     UPDATE      SCOPE(COMMAND, QUERY, PROJECTOR, JOB),
   ) WITH JSONCONFIG=` 
       {
-        "URL": "${SCADA_PartitionMaxSize:-"127.0.0.1:8765"}" // The syntax is taken from bash, note how double quotes are used.
+        "URL": "${SCADA_PartitionMaxSize:-"127.0.0.1:8765"}" // Note how double quotes are used.
         "Password": "${SCADA_Password:-"0123"}" 
       }
 `;
