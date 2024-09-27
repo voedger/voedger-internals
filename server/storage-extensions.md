@@ -105,7 +105,7 @@ Application Deployment Descriptor:
 {
   "NumPartitions":100,
   "NumAppWorkspaces":10,
-  "PackageConfigs": {
+  "PackageParams": {
     "air":{
       "Ephemeral_PartitionMaxSize":1000000
     },
