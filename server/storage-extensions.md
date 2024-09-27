@@ -111,7 +111,7 @@ Application Deployment Descriptor:
     },
     "scada":{
       "SCADA_URL":"https://myscadaurl.io",
-      // "SCADA_PASSWORD" is not specified here, will be taken from a result of `ctool secret put`
+      // "SCADA_Password" is not specified here, will be taken from a result of `ctool secret put`
 
     }
   }
