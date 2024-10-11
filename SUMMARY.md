@@ -7,6 +7,7 @@
     - [Community Edition](concepts/editions/ce.md)
     - [Standart Edition](concepts/editions/se.md)
 - [Server](server/README.md)  
+  - [AuthNZ](server//README.md)
   - [Clusters](server/clusters/README.md)
     - [Bootstrap](server/clusters/bootstrap.md)
     - [Deploy Application](server/clusters/deploy-app.md)
