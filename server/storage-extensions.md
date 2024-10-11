@@ -284,11 +284,11 @@ By following these principles, you can ensure that secrets stored in a KV databa
 
 ### See also
 
-- https://chatgpt.com/share/e/66f68145-a168-800d-9b3a-3e6e3258de54
+- [Secure KV Database Secrets](https://chatgpt.com/share/e/66f68145-a168-800d-9b3a-3e6e3258de54)
 
 ## Research: Working with secrets in K8s
 
-- https://chatgpt.com/share/e/66f686ac-7b10-800d-9ec7-bba5f8281c22
+The information below is from [K8s Secret Management Guide](https://chatgpt.com/share/e/66f686ac-7b10-800d-9ec7-bba5f8281c22).
 
 Kubernetes handles secrets with a focus on secure storage and controlled access to sensitive information. The design principles that govern how Kubernetes manages secrets are centered around confidentiality, integrity, availability, and ease of use. Here’s a breakdown of how Kubernetes keeps and reads secrets, along with the core design principles behind this system.
 
