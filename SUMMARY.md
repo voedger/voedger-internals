@@ -27,6 +27,7 @@
     - [VSQL Types](server/vsql-types.md)
     - [VSQL: SELECT, UPDATE](server/vsql-select-update.md)
     - [Uniques With Multiple Fields](server/uniques-multi.md)
+    - [Verifiable Fields](server/ver-fields.md)
   - [Sidecar Applications](server/sidecarapps.md)
   - [Storage Extensions](server/storage-extensions.md)
   - [Ephemeral Storage](server/ephemeral-storage.md)
