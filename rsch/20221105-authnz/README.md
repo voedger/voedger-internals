@@ -1,8 +1,6 @@
 tags: [AuthNZ]($17072)
 
-## Goal
-
-Stidy existing AuthNZ concepts
+# Study existing AuthNZ concepts
 
 ## [Stackoverflow](https://stackoverflow.com/questions/4989063/what-is-the-meaning-and-difference-between-subject-user-and-principal): What is the meaning and difference between subject, user and principal?
 T.Rob:
@@ -88,3 +86,105 @@ bin/kafka-acls --bootstrap-server localhost:9092 --command-config adminclient-co
 ```
 
 -  Kafka ACLs are defined in the general format of “Principal P is [Allowed/Denied] Operation O From Host H On Resources matching ResourcePattern RP”.
+
+## MS SQL
+- [syslogins](https://docs.microsoft.com/en-us/sql/relational-databases/system-compatibility-views/sys-syslogins-transact-sql)
+  - The syslogins table contains information on every login that has the potential to access the SQL Server in question ([link](https://www.mssqltips.com/sqlservertip/2026/tables-and-views-for-auditing-sql-server-logins/))
+  - Having a login does not mean you have access to a database or having a user does not mean that you can connect to SQL or have access to the database ([link](https://www.sqlservercentral.com/forums/topic/relation-between-sysusers-and-syslogins))
+- syslogins is deprecated and it is a view for backward compatibility
+- [sys.server_principals](https://docs.microsoft.com/en-us/sql/relational-databases/system-catalog-views/sys-server-principals-transact-sq) is used:
+  - S = SQL login
+  - U = Windows login
+  - G = Windows group
+  - R = Server role
+  - C = Login mapped to a certificate
+  - E = External Login from Azure Active Directory
+  - X = External group from Azure Active Directory group or applications
+  - K = Login mapped to an asymmetric key
+
+## Heeus
+- “Principal P is %[Allowed/Denied%] Operation O From Host H On Resources matching ResourcePattern RP”.
+  - Principal
+  - Policy (Allow/Deny)
+  - Operation
+  - %[%]Host
+  - ResourcePattern
+  - MembershipInheritance (00, 10, 11, 01)
+
+Example
+
+- Project1: {ID:600, Type: Project, Membership: %[{Peter: Manager}%]}
+  - Project1%_1: {ID: 678, Type: Project}
+
+Manager should be able to delete subprojects only
+
+|Principal|Policy|Operation|Resource|MembershipInheritance
+|PM|Allow |Edit|Project.is%_active|01
+|PM|Allow |Edit|Project.descr |11
+principal%+operation%+resource authorization pseudocode:
+
+- Build accumulated (???) and memberships{Parent, Member}
+  - Including implicit membership
+- Build accumulated ACLs
+- policy = false
+- for ACL in ACLs
+  - Ignore ACL if membership.Parent = $ID AND ACL.Inheritance = 01
+  - Ignore ACL if membership.Parent %!= $ID AND ACL.Inheritance = 10
+  - Ignore if memberships%[ACL.Principal%] does not exist
+  - Ignore if Resource does not match
+  - Ignore if Operation does not match
+  - policy = ACL.policy
+
+## Windows 10
+
+
+### Principal: субъект
+
+**Add permissions**:
+![Add permissions](image-1.png)
+
+**Show advanced persmissions**:
+
+![Show advanced persmissions](image-2.png)
+
+
+### Default special identity groups
+
+https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/understand-special-identities-groups
+
+- Anonymous Logon
+- Attested key property
+- Authenticated Users
+- Authentication authority asserted identity
+- Batch
+- Console logon
+- Creator Group
+- Creator Owner
+- Dialup
+- Digest Authentication
+- Enterprise Domain Controllers
+- Enterprise Read-only Domain Controllers
+- Everyone
+- Fresh Public Key identity
+- Interactive
+- IUSR
+- Key trust
+- Local Service
+- LocalSystem
+- MFA key property
+- Network
+- Network Service
+- NTLM Authentication
+- Other Organization
+- Owner Rights
+- Principal Self
+- Proxy
+- Read-only Domain Controllers
+- Remote Interactive Logon
+- Restricted
+- SChannel Authentication
+- Service
+- Service asserted identity
+- Terminal Server User
+- This Organization
+- Window Manager\Window Manager Group
