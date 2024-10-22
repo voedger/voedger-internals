@@ -18,6 +18,7 @@
   - [VVMs](server/vvms/README.md)
   - [Workspaces](server/workspaces/README.md)
     - [Create Workspace](server/workspaces/create-workspace-v2.md)
+    - [Child Workspaces](server/workspaces/child-workspaces.md)
     - [Deactivate Workspace](server/workspaces/deactivate-workspace.md)
     - [Invites](server/workspaces/invites.md)
   - [API Gateway](server/api-gateway.md)
