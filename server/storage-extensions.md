@@ -3,6 +3,7 @@
 - [GitHub Issue #2366](https://github.com/voedger/voedger/issues/2366)
 
 We have a number of built-in state storages, but there should be a way to extend the state storage capabilities:
+- SCADA Storage (for data exchange with a proprietary SCADA system)
 - [Ephemeral Storage](https://github.com/voedger/voedger-internals/blob/main/server/ephemeral-storage.md)
 
 ## Analysis
@@ -29,7 +30,7 @@ We will start with the Per-app Storage Extensions approach since it is easier to
   - Plugins are currently supported only on Linux, FreeBSD, and macOS
   - If a Storage Extension is updated, some resources related to the previous instance are wasted
   - Multiple versions of a Storage Extension can be instantiated
-  - Storage must have a `Free()` method that is called when a storage instance is not needed anymore
+  - Storage must have a `Release()` method that is called when a storage instance is not needed anymore
   - Storage must have an `ILogger` interface as an input parameter
 - Package, development structure:
   - 📂package folder
