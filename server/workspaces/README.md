@@ -1,11 +1,4 @@
-## Concepts
-
-- [Principles](#principles)
-- [Workspace Kinds](#workspace-kinds)
-- [Ownership](#ownership)
-- [Workspace-related Tables](#workspace-related-tables)
-- [Invites](invites.md)
-- [Child Workspaces](child-workspaces.md)
+# Workspaces
 
 ## Principles
 
