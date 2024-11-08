@@ -9,11 +9,12 @@
 
 ## Principles
 
-- Job is triggered by time events
-- Jobs are controlled by Schedulers
-- Jobs are executed per ApplicationWorkspaces
-- Time events are not kept in logs (PLog, WLog)
-- Job state scope is almost the same as the Projector scope
+- Job is triggered by time events.
+- Jobs are controlled by Schedulers.
+- Jobs are executed per ApplicationWorkspaces.
+- Time events are not kept in logs (PLog, WLog).
+- Job has intents, only views allowes.
+- Job state scope is almost the same as the Projector scope.
   - +JobContext
   - -Event  
 
