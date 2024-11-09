@@ -13,7 +13,9 @@
 - Jobs are controlled by Schedulers.
 - Jobs are executed per ApplicationWorkspaces.
 - Time events are not kept in logs (PLog, WLog).
-- Job has intents, only views allowes.
+- Job support the following intents:
+	- Views
+	- SendMail
 - Job state scope is almost the same as the Projector scope.
   - +JobContext
   - -Event  
@@ -23,14 +25,15 @@
 VSQL:
 ```sql
 ALTER WORKSPACE sys.AppWorkspaceWS (
-	VIEW test(
-		i int32,
-		PRIMARY KEY(i)
-	) AS RESULT OF Job1;
+    VIEW JobStateView(
+        Fixed int,
+        Data bytes,
+        PRIMARY KEY ((Fixed))
+    ) AS RESULT OF TestJob1;
 
 	EXTENSION ENGINE BUILTIN (
 		-- `CRON` token is not needed
-		JOB Job1 '1 0 * * *';
+		JOB Job1 '1 0 * * *' INTENTS(View(JobStateView));
 	);
 );
 ```
