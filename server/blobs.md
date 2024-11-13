@@ -7,7 +7,7 @@ sequenceDiagram
     actor Subject
     participant BLOBber as Router.BLOBber
     participant HVM
-    participant cp as CommandProcessor
+    participant cp as CP
     participant cdocBLOB as cdoc.sys.BLOB
 
     Subject ->> BLOBber: Upload BLOB
@@ -37,18 +37,17 @@ sequenceDiagram
     actor Subject
     participant BLOBber as Router.BLOBber
     participant HVM
-    participant qp as QueryProcessor
+    participant qp as QP
     participant cdocBLOB as cdoc.sys.BLOB
 
     Subject ->> BLOBber: Download BLOB(blobID)
     BLOBber ->> qp: sys.downloadBLOBHelper(blobID)
     qp ->> qp: AuthZ and check blobID
+    cdocBLOB -->> qp: 
     qp -->> BLOBber: ok
     BLOBber ->> BLOBber: Read BLOB using iblobstorage
     BLOBber -->> Subject: Return BLOB stream
 
-    BLOBber ->> CommandProcessor: q.sys.downloadBLOBHelper()
-    CommandProcessor ->> Storage: Access heus/core-blobstoragestg
 ```
 
 **GET**
