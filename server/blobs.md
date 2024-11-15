@@ -4,7 +4,7 @@
 
 **POST**
 - url: `<federation-domain>/blob/<app-name>/<wsid>`
-  - `alpha.dev.mycompany.com/blob/mycompany/airs-bp/127889070`
+  - `alpha.dev.mycompany.com/blob/mycompany/airs-bp/127889070?name=blob&mimeType=text/plain`
   - PrincipalToken: header `Authorization`: Bearer `<PrincipalToken>`
 
 ```mermaid
