@@ -1,15 +1,19 @@
-# Temporary BLOB Storage and Access: A Technical Analysis
+# Secure UUID for Secure BLOB Access
 
-**Author**: Maxim Geraskin  
-**Copyright**: © 2024–present unTill Software Development Group B. V. All rights reserved.
+/*
+ * Copyright (c) 2024-present unTill Software Development Group B. V. 
+ * @author Maxim Geraskin
+ */
 
 ## Problem Statement
 
-We need to determine the best method for generating unique identifiers to access temporary BLOBs securely. The identifiers will be used in QR codes for easy scanning and access.
+We need to identify the most effective method for generating unique identifiers to securely access temporary BLOBs. These identifiers will be embedded in QR codes to enable convenient scanning and access.
 
 ## Concerns
 
 - **QR Code Density**: The size and complexity of the QR code generated to represent the BLOB identifier can affect scan reliability and user experience.
+- **Security**: The identifier must be sufficiently random to prevent unauthorized access to BLOBs.
+- **Uniqueness**: The identifier must be unique to avoid conflicts and ensure correct BLOB access.
 
 ## Goals
 
@@ -136,9 +140,9 @@ We are considering the use of UUIDs as defined in [RFC 4122](https://www.rfc-edi
 
 ## Proposed Solution
 
-### UUID+: Combining GUIDs with CSPRNGs
+### SUUID: Combining GUIDs with CSPRNGs
 
-To achieve both uniqueness and security while keeping QR code density manageable, we propose to generate UUID+ and their text representation as follows:
+To achieve both uniqueness and security while keeping QR code density manageable, we propose to generate SUUID (Secure UUID) and their text representation as follows:
 
 - **Generate a UUID (Version 4)**: Provides global uniqueness.
 - **Generate Additional Random Bytes**: Use a CSPRNG to add entropy.
@@ -214,6 +218,3 @@ UUID+ combines the uniqueness of GUIDs with the security of CSPRNGs. Encoding th
 - **Manage QR Code Density**: Base64 encoding keeps the identifier compact for efficient QR code generation.
 
 This approach is suitable for securely accessing temporary BLOBs while maintaining a balance between security, uniqueness, and usability.
-
-### References
-
