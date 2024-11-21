@@ -1,12 +1,11 @@
 # Temporary BLOB Storage and Access: A Technical Analysis
 
 **Author**: Maxim Geraskin  
-**Affiliation**: unTill Software Development Group B. V.  
 **Copyright**: © 2024–present unTill Software Development Group B. V. All rights reserved.
 
 ## Problem Statement
 
-We need to determine the best method for storing temporary binary large objects (BLOBs) and providing secure access to them.
+We need to determine the best method for generating unique identifiers to access temporary BLOBs securely. The identifiers will be used in QR codes for easy scanning and access.
 
 ## Concerns
 
@@ -23,11 +22,13 @@ We need to determine the best method for storing temporary binary large objects 
 
 ---
 
-## Analysis of GUIDs and CSPRNGs
+## Analysis of UUIDs and CSPRNGs
 
-### GUID (Globally Unique Identifier)
+### UUID
 
-We are considering the use of GUIDs, specifically UUIDs as defined in [RFC 4122](https://www.rfc-editor.org/rfc/rfc4122), for identifying temporary BLOBs.
+A **Universally Unique Identifier** (UUID) is a 128-bit label used to uniquely identify objects in computer systems. The term **Globally Unique Identifier** (GUID) is also used, mostly in Microsoft systems. 
+
+We are considering the use of UUIDs as defined in [RFC 4122](https://www.rfc-editor.org/rfc/rfc4122), for identifying temporary BLOBs.
 
 #### Relevant Points from RFC 4122:
 
@@ -47,8 +48,8 @@ We are considering the use of GUIDs, specifically UUIDs as defined in [RFC 4122]
 
 - [Are GUIDs safe for one-time tokens?](https://security.stackexchange.com/questions/890/are-guids-safe-for-one-time-tokens)
 - [UUID Version 4 Implementation](https://github.com/google/uuid/blob/master/version4.go)
-
----
+- UUID Generation: [github.com/google/uuid](https://github.com/google/uuid)
+- Cryptographically Secure Random Numbers: [pkg.go.dev/crypto/rand](https://pkg.go.dev/crypto/rand)
 
 ### GUID vs. CSPRNG
 
@@ -115,14 +116,14 @@ We are considering the use of GUIDs, specifically UUIDs as defined in [RFC 4122]
 #### Using UUID:
 
 - **Identifier**: `f12d6815-4e1e-4536-b260-80cab5d2a02d`
-- **URL**: `https://demo.dev.air.untill.com/qr/f12d6815-4e1e-4536-b260-80cab5d2a02d`
+- **URL**: `https://subdomain.mycompany.com/qr/f12d6815-4e1e-4536-b260-80cab5d2a02d`
 - **QR Code**:
   - ![](image.png)
 
 #### Using Base64-Encoded 256-Bit Random Number:
 
 - **Identifier**: `TlvrnLNSQ5C9bbsMBxmXjrfgLKTHl0CU2BV7RzUVRRg`
-- **URL**: `https://demo.dev.air.untill.com/qr/TlvrnLNSQ5C9bbsMBxmXjrfgLKTHl0CU2BV7RzUVRRg`
+- **URL**: `https://subdomain.mycompany.com/qr/TlvrnLNSQ5C9bbsMBxmXjrfgLKTHl0CU2BV7RzUVRRg`
 - **QR Code**:
   - ![](image-1.png)
 
@@ -135,9 +136,9 @@ We are considering the use of GUIDs, specifically UUIDs as defined in [RFC 4122]
 
 ## Proposed Solution
 
-### Combining GUIDs with CSPRNGs
+### UUID+: Combining GUIDs with CSPRNGs
 
-To achieve both uniqueness and security while keeping QR code density manageable, we propose:
+To achieve both uniqueness and security while keeping QR code density manageable, we propose to generate UUID+ and their text representation as follows:
 
 - **Generate a UUID (Version 4)**: Provides global uniqueness.
 - **Generate Additional Random Bytes**: Use a CSPRNG to add entropy.
@@ -204,19 +205,15 @@ It means:
 - **Encoded Size with Padding**: 44 characters.
 - **Encoded Size without Padding**: 43 characters (URL-safe, no padding).
 
-### References:
-
-- **UUID Generation**: [github.com/google/uuid](https://github.com/google/uuid)
-- **Cryptographically Secure Random Numbers**: [crypto/rand](https://pkg.go.dev/crypto/rand)
-
----
-
 ## Conclusion
 
-By combining the uniqueness of GUIDs with the security of CSPRNGs and encoding the result using Base64, we can:
+UUID+ combines the uniqueness of GUIDs with the security of CSPRNGs. Encoding the result using Base64, we can:
 
 - **Ensure Global Uniqueness**: The UUID component provides a globally unique identifier.
 - **Enhance Security**: Additional random bytes make the identifier unpredictable.
 - **Manage QR Code Density**: Base64 encoding keeps the identifier compact for efficient QR code generation.
 
 This approach is suitable for securely accessing temporary BLOBs while maintaining a balance between security, uniqueness, and usability.
+
+### References
+
