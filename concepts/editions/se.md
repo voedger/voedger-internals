@@ -23,10 +23,10 @@ TOC
 
   %% Entities
 
-  SECluster{{SE Cluster}}:::H
-  Node1("node-1"):::H
-  Node2("node-2"):::H
-  Node3("node-3"):::H
+  SECluster[[SE Cluster]]:::H
+  Node1{{"node-1"}}:::H
+  Node2{{"node-2"}}:::H
+  Node3{{"node-3"}}:::H
 
   Ports1(("80, 443")):::G
 
@@ -61,7 +61,7 @@ TOC
   SECluster --> Node2
   SECluster --> Node3
 
-  Node1 ----> Node1Services
+  Node1 --> Ports1
 
   classDef B fill:#FFFFB5,color:#333
   classDef S fill:#B5FFFF,color:#333
