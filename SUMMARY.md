@@ -6,6 +6,7 @@
   - [Editions](concepts/editions/README.md)
     - [Community Edition](concepts/editions/ce.md)
     - [Standart Edition](concepts/editions/se.md)
+    - [Standart Edition (v1))](concepts/editions/se1.md)
 - [Server](server/README.md)
   - [API Gateway](server/api-gateway.md)
     - [AuthNZ](server/authnz/README.md)
