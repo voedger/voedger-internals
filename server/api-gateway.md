@@ -1,5 +1,7 @@
 # API Gateway
 
+[API Conventions](http-conventions.md)
+
 ## Requirements
 
 - `<cluster-domain>/api/<AppQName.owner>/<AppQName.name>/<wsid>/<{q,c}.funcQName>`
@@ -77,9 +79,6 @@ type RequestHandler func(requestCtx context.Context, sender ISender, request ibu
 sys/router
   - c.EchoCommand
   - q.EchoQuery
-
-## See also
-- [HTTP Conventions](http-conventions.md)
 
 ## Issues
 
