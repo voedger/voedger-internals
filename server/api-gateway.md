@@ -1,20 +1,22 @@
 # API Gateway
 
+[API Conventions](http-conventions.md)
+
 ## Requirements
 
 - `<cluster-domain>/api/<AppQName.owner>/<AppQName.name>/<wsid>/<{q,c}.funcQName>`
   - 404, Application is not deployed
   - 404, Application Partition is not deployed
 - `<cluster-domain>/api/sys/router/<wsid>/c.EchoCommand`
-- `<cluster-domain>/api/sys/router/<wsid>/q.EchoQuery` 
+- `<cluster-domain>/api/sys/router/<wsid>/q.EchoQuery`
 
 ## Context: Current Solution
 
 Provide
-- requestHanlder 
+- requestHanlder
 
 Command
-- Router 
+- Router
   - calls IBus.SendRequest2()
     - Create sender
     - Call requestHandler()
@@ -26,7 +28,7 @@ Command
 Query
 - Router
   - Same as for Command
-- QP 
+- QP
   - sender is taken from service channel
   - var rs IResultSenderClosable = IBus.SendParallerResponse2(sender)
   - Use rs
@@ -36,13 +38,13 @@ Query
 ### ihttpimpl.Provide
 
 struct with
-  - IBus with httpimplRequestHandler 
+  - IBus with httpimplRequestHandler
   - IHTTPProcessor
 
 ### IHTTPProcessor
 
 type ISender interface {
-  SendResponse(sender interface{}) 
+  SendResponse(sender interface{})
   SendParallelResponse
 }
 implementation of ISender knows `IBus` and `sender interface{}`
@@ -51,7 +53,7 @@ implementation of ISender knows `IBus` and `sender interface{}`
 type RequestHandler func(requestCtx context.Context, sender ISender, request ibus.Request))
 
 - DeployApp(app istructs.AppQName, numPartitions int) (err error)
-  - Usage: (DeployApp( DeployAppPartition | UndeployAppPartition )*  UndeployApp)*- 
+  - Usage: (DeployApp( DeployAppPartition | UndeployAppPartition )*  UndeployApp)*-
   - ErrAppAlreadyDeployed
 - DeployAppPartition(app istructs.AppQName, partNo int, appPartitionRequestHandler RequestHandler) (err error)
   - ErrAppIsNotDeployed
@@ -64,13 +66,13 @@ type RequestHandler func(requestCtx context.Context, sender ISender, request ibu
 ### Handle HTTP Request
 
 - Call IBus.SendRequest2
-  - httpimplRequestHandler 
+  - httpimplRequestHandler
     - Determine App and Partition out of the Request
     - If AppPartition is not deployed return 404 ErrAppParitionIsNotDeployed
-    - Call appPartitionRequestHandler 
+    - Call appPartitionRequestHandler
       - that was provided to DeployAppPartition()
 
-### appPartitionRequestHandler 
+### appPartitionRequestHandler
 
 ### apps
 
@@ -80,4 +82,4 @@ sys/router
 
 ## Issues
 
-- https://github.com/voedger/voedger/issues/1872 
+- https://github.com/voedger/voedger/issues/1872
