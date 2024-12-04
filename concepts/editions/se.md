@@ -5,6 +5,7 @@
 - [Peer-to-peer cluster](https://github.com/voedger/voedger/issues/1891)
   - 5 nodes, one application server, 3 database servers. The load is unevenly distributed, one app node is idle.
   - 3 nodes, one application server, 3 database servers. The load is unevenly distributed, one node can be overloaded.
+- Failed: [Design "peer nodes" ctool principles](https://github.com/voedger/voedger/issues/2550)
 
 ## Principles
 
