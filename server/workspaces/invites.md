@@ -2,6 +2,42 @@
 
 Invite Users/Devices to Workspaces
 
+## Overview
+
+### Core Components
+
+#### Roles and Permissions
+- **WorkspaceOwner**: Highest level role, automatically has admin privileges
+- **WorkspaceAdmin**: Can manage invites and user access
+
+#### Key Documents
+- **Invite**: Tracks invitation status and metadata
+- **Subject**: Represents an invited user/device in the workspace
+- **JoinedWorkspace**: Records workspace membership details
+- **Login**: Manages user authentication and access
+
+### Invitation Lifecycle
+
+#### Core Commands
+
+##### Invitation Management
+- `InitiateInvitationByEmail`: Creates new invitation
+  - Requires WorkspaceAdmin role
+  - Includes email, roles, expiration, and email template
+- `InitiateJoinWorkspace`: Processes invite acceptance
+  - Requires verification code
+  - Creates necessary workspace access records
+
+##### Role Management
+- `InitiateUpdateInviteRoles`: Updates member permissions
+  - Available for joined members only
+  - Includes email notification
+
+##### Membership Termination
+- `InitiateCancelAcceptedInvite`: Admin removes member
+- `InitiateLeaveWorkspace`: Member voluntarily leaves
+- `CancelSentInvite`: Cancels pending invitation
+
 ## Motivation
 
 - [Air: Reseller Portal: Invite unTill Payments Users](625718)
@@ -142,6 +178,8 @@ stateDiagram-v2
     - State not in (None, Cancelled, Left, Invited)
     - invalid argument EmailTemplate
 - //TODO: EMail => Login must be implemented, currently it is supposed that EMail == Login
+
+**Behavior:**
 ```mermaid
     sequenceDiagram
 
@@ -195,8 +233,10 @@ stateDiagram-v2
   - Invite state is not in (Invited)
   - Invite does not exist
   - Invite expired
+  - token login does not match invite login
   - wrong Verification Code
 
+**Behavior:**
 ```mermaid
     sequenceDiagram
 
@@ -251,6 +291,7 @@ stateDiagram-v2
     - State not in (Joined)
     - invalid argument EmailTemplate
 
+**Behavior:**
 
 ```mermaid
     sequenceDiagram
@@ -288,6 +329,7 @@ stateDiagram-v2
 - Errors
     - State not in (Joined)
 
+**Behavior:**
 ```mermaid
 sequenceDiagram
 
@@ -323,6 +365,7 @@ sequenceDiagram
     - Invite not found
     - State not in (Joined)
 
+**Behavior:**
 ```mermaid
 sequenceDiagram
 
