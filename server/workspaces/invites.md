@@ -211,7 +211,8 @@ stateDiagram-v2
     front ->> workspace: sys.c.InitiateJoinWorkspace()
     activate workspace
         workspace ->> workspace: Verify VerificationCode
-        workspace ->> workspace: Read InviteeProfileWSID, SubjectKind from State
+        workspace ->> workspace: Read InviteeProfileWSID, Login, SubjectKind from Token
+        workspace ->> workspace: Assert Token.Login == cdoc.Invite.Login
         workspace ->> workspace: Update cdoc.Invite: State=ToBeJoined, InviteeProfileWSID, SubjectKind
         workspace -->> front: OK
     deactivate workspace
