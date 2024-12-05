@@ -252,7 +252,7 @@ stateDiagram-v2
     activate workspace
         workspace ->> workspace: Verify VerificationCode
         workspace ->> workspace: Read InviteeProfileWSID, Login, SubjectKind from Token
-        workspace ->> workspace: Assert Token.Login == cdoc.Invite.Login
+        workspace ->> workspace: Assert that Token.Login mathes cdoc.Invite.Login
         workspace ->> workspace: Update cdoc.Invite: State=ToBeJoined, InviteeProfileWSID, SubjectKind
         workspace -->> front: OK
     deactivate workspace
