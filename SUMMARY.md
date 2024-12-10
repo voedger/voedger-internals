@@ -9,6 +9,7 @@
     - [Standart Edition (v1)](concepts/editions/se1.md)
 - [Server](server/README.md)
   - [API Gateway](server/api-gateway.md)
+    - [API Conventions](server/api-conventions.md)
     - [AuthNZ](server/authnz/README.md)
     - [BLOBs](server/blobs.md)
   - [Admin Endpoint](server/admin-endpoint.md)
