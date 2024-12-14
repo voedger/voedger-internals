@@ -10,14 +10,12 @@
 ## Principles
 
 - Number of nodes: 3, peer-to-peer cluster.
+- Number of VVMs: 6, can not be changed yet.
 - Node must be a clean Ubuntu node.
   - Reason: We believe it will avoid possible conflicts between installed software and reduce operation costs.
 - Cloud-Managed Load Balancer is needed (e.g.  Amazon Elastic Load Balancer, Google Cloud Load Balancer, [Hetzner Load Balancer](https://www.hetzner.com/cloud/load-balancer))
 - Orchestrator: Docker Swarm
   - Every node is a manager
-- Number of VVMs
-  - 6 or 1 (legacy mode).
-  - Fixed, can not be changed yet.
 - Monitoring
   - 3 prometheus, 3 grafana
 - DMBS: Scylla
