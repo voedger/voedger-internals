@@ -9,7 +9,7 @@ The need for new Standard Edition architecture arose from challenges encountered
   - In a 3-node setup with one application server and 3 database servers, uneven load distribution led to potential node overload
 - The initiative to [Design "peer nodes" ctool principles](https://github.com/voedger/voedger/issues/2550) was unsuccessful
 
-## Architecture principles
+## Technical design
 
 ### Core infrastructure
 
@@ -27,18 +27,19 @@ The Standard Edition implements:
   - Google Cloud Load Balancer
   - [Hetzner Load Balancer](https://www.hetzner.com/cloud/load-balancer)
 
-- Orchestration: Docker Swarm implementation where:
+- Orchestration: 
+  - Docker Swarm implementation
   - All nodes function as managers
 
-- Monitoring infrastructure includes:
+- Monitoring:
   - 3 Prometheus instances
   - 3 Grafana instances
 
-- Database architecture:
+- Database:
   - DBMS: Scylla
-  - Cluster configuration: Logically stretched
+  - Scylla cluster configuration:
     - Physical deployment: One or three datacenters
-    - Logical configuration: Always maintains two datacenters (Scylla configuration)
+    - Logical configuration: ??? Always maintains two datacenters (Scylla configuration)
 
 - Routing implementation:
   - Router task runs on each node
