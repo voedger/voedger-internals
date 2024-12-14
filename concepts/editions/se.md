@@ -34,41 +34,27 @@
 
   SECluster[[SE Cluster]]:::H
 
-  Node1:::G
-  Node2:::G
-  Node3:::G
+  Node1["Node${n}"]:::G
 
-  subgraph Node1
-    direction LR
-    vvm12[vvm1, vvm2]:::S
-    prometheus1:::S
-    scylla1:::S
-  end
-
-  subgraph Node2
-    direction LR
-    vvm34[vvm3, vvm4]:::S
-    prometheus2:::S
-    scylla2:::S
-    grafana
-  end
-
-  subgraph Node3
-    direction LR
-    vvm56[vvm5, vvm6]:::S
-    prometheus3:::S
-    scylla3:::S
+  subgraph Node1["node$n"]
+    router1["router${n}"]:::S
+    vvm12["vvm${n\*2-1}, vvm${n\*2}"]:::S
+    prometheus1["prometheus${n}"]:::S
+    scylla1["scylla${n}"]:::S
+    grafana1["grafana${n}"]:::S
+    router1 --- vvm12
+    router1 --- prometheus1
+    router1 --- grafana1
+    vvm12 --- scylla1
   end
 
   %% Relations
 
-  SECluster --- Node1
-  SECluster --- Node2
-  SECluster --- Node3
+  SECluster --x |has nodes 1-3| Node1
+
 
   classDef B fill:#FFFFB5,color:#333
   classDef S fill:#B5FFFF,color:#333
   classDef H fill:#C9E7B7,color:#333
-  classDef G fill:#ffffff15, stroke:#999, stroke-width:2px, stroke-dasharray: 5 5  
-  
+  classDef G fill:#ffffff15, stroke:#999, stroke-width:2px, stroke-dasharray: 5 5
 ```  
