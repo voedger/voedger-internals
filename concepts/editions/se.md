@@ -9,21 +9,25 @@
 
 ## Principles
 
-- 3 nodes.
+- Number of nodes: 3, peer-to-peer cluster.
 - Node must be a clean Ubuntu node.
   - Reason: We believe it will avoid possible conflicts between installed software and reduce operation costs.
-- Cloud Service Provider Balancer is needed (e.g.  https://www.hetzner.com/cloud/load-balancer)
-- Orchestrator: swarm
+- Cloud-Managed Load Balancer is needed (e.g.  Amazon Elastic Load Balancer, Google Cloud Load Balancer, [Hetzner Load Balancer](https://www.hetzner.com/cloud/load-balancer))
+- Orchestrator: Docker Swarm
   - Every node is a manager
 - Number of VVMs
-  - 6 or 1 (3-node cluster: 2 per node).
+  - 6 or 1 (legacy mode).
   - Fixed, can not be changed yet.
 - Monitoring
-  - 3 prometheus.
-  - 1  grafana, always use "local" prometheus. If it starts on node1 use prometheus1, If it starts on node2 use prometheus2 etc.
-- Always stretched cluster.
-- nginx is not used yet.
-  - Too difficult to develop and maintain, maybe in the future.
+  - 3 prometheus, 3 grafana
+- DMBS: Scylla
+- Scylla cluster is always logically stretched
+  - One ore three physical datacenters.
+  - There are always two logical datacenters (scylla configuarion).
+- Routing
+  - Each node runs a router task.
+  - We beleive that nginx would be a good choice but it is not used yet (too difficult to develop and maintain, maybe in the future).
+  - We use a voedger image with a certain CLI option to run a router task.
 
 ## Nodes & Swarm Services
 
