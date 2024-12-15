@@ -8,6 +8,56 @@ check_java_executable() {
         exit 1
     fi
 }
+
+check_java_version() {
+    local major="$1"
+    local minor="$2"
+
+    # Ensure both parameters are provided
+    if [ -z "$major" ] || [ -z "$minor" ]; then
+        echo "Error: Both major and minor Java versions must be specified." >&2
+        exit 1
+    fi
+
+    # Check if 'java' is executable
+    if ! command -v java &> /dev/null; then
+        echo "Error: 'java' is not installed or not in the PATH." >&2
+        exit 1
+    fi
+
+    # Get the Java version
+    local javaVersion
+    javaVersion=$(java -version 2>&1 | awk -F '"' '/version/ {print $2}')
+    
+    # Extract major and minor versions from Java version string
+    local currentMajor currentMinor
+    currentMajor=$(echo "$javaVersion" | cut -d'.' -f1)
+    if [[ "$currentMajor" == "1" ]]; then
+        currentMajor=$(echo "$javaVersion" | cut -d'.' -f2)
+        currentMinor=$(echo "$javaVersion" | cut -d'.' -f3)
+    else
+        currentMinor=$(echo "$javaVersion" | cut -d'.' -f2)
+    fi
+
+    # Ensure numeric comparison
+    if ! [[ "$currentMajor" =~ ^[0-9]+$ ]] || ! [[ "$currentMinor" =~ ^[0-9]+$ ]]; then
+        echo "Error: Unable to parse Java version. Detected version: $javaVersion" >&2
+        exit 1
+    fi
+
+    # Check if the current version is at least the required version
+    if (( currentMajor > major )) || { (( currentMajor == major )) && (( currentMinor >= minor )); }; then
+        echo "Java version $javaVersion is sufficient (>= $major.$minor)."
+    else
+        echo "Error: Java version $javaVersion is less than the required $major.$minor." >&2
+        exit 1
+    fi
+}
+
+# Example usage
+# check_java_version 17 0
+
+
 create_work_folder() {
     if [ ! -d ".work" ]; then
         mkdir .work
@@ -76,7 +126,8 @@ actualize_repo() {
         fi
     fi
 }
-trace() {
+
+tracereqs() {
 
     reportFile=".work/report.html"
 
@@ -90,9 +141,9 @@ trace() {
 
 }
 
-check_java_executable
+check_java_version 17 0
 create_work_folder
 download_openfasttrace
 actualize_repo "https://github.com/voedger/voedger"
-trace
+tracereqs
 
