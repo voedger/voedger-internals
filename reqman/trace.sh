@@ -84,7 +84,8 @@ trace() {
     --log-level INFO \
     --output-file "$reportFile" \
     --output-format html \
-    "../server"
+    "../server" \
+    "../concepts"
     echo "Trace successful, see report at $reportFile"
 
 }

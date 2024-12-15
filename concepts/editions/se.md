@@ -20,16 +20,29 @@ The Standard Edition implements:
 - Clean Ubuntu nodes as a requirement
   - This decision aims to minimize software conflicts and reduce operational costs
 
-### Components and services
+### Components and Services
 
-- Load balancing: Requires a Cloud-Managed Load Balancer solution such as:
-  - Amazon Elastic Load Balancer
-  - Google Cloud Load Balancer
-  - [Hetzner Load Balancer](https://www.hetzner.com/cloud/load-balancer)
+#### se.load-balancer
 
-- Orchestration: 
-  - Docker Swarm implementation
-  - All nodes function as managers
+`dsn~se.load-balancer~1`
+
+The system’s load balancing layer must be provided by a cloud-managed load balancer solution, such as Amazon Elastic Load Balancer, Google Cloud Load Balancer, or [Hetzner Load Balancer](https://www.hetzner.com/cloud/load-balancer).
+
+#### se.orchestration
+
+##### se.orchestration.swarm
+
+`dsn~se.orchestration.swarm~1`
+
+The system uses Docker Swarm for orchestration
+
+##### se.orchestration.allmgrs
+
+`dsn~se.orchestration.allmgrs~1`
+
+All nodes function as managers
+
+#### se.monitoring
 
 - Monitoring:
   - 3 Prometheus instances
