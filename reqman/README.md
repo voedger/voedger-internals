@@ -19,14 +19,19 @@ Requirements tracing using [OpenFastTrace (OFT)](https://github.com/itsallcode/o
 flowchart TD
 
     feat:::S
-    dsn:::S
+    adsn:::S
+    fdsn:::S
+    tdsn:::S
     story:::S
     src:::S
 
-    feat --> dsn
-    feat --> story
-    dsn --> src
-    story --> src
+    feat --x adsn
+    feat --x story
+    adsn --x src
+    story --x fdsn
+    story --x tdsn
+    tdsn --x src
+    fdsn --x src
     src:::G
     subgraph "src"
         impl:::S
@@ -39,3 +44,14 @@ flowchart TD
     classDef H fill:#C9E7B7,color:#333
     classDef G fill:#ffffff15, stroke:#999, stroke-width:2px, stroke-dasharray: 5 5    
 ```
+
+- feat: Feature
+- story: User Story
+- fdsn: Functional Design
+- tdsn: Technical Design
+- adsn: Architectural Design
+- src: Source Code
+    - impl: Implementation
+    - test: Unit Test
+    - itest: Integration Test
+
