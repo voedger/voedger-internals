@@ -8,6 +8,9 @@
     - [Standart Edition](concepts/editions/se.md)
     - [Standart Edition (v1)](concepts/editions/se1.md)
 - [Server](server/README.md)
+  - Architecture
+    - [sys package](server/arch/sys/README.md)
+      - [Invites](server/arch/sys/c4.invites.md)
   - [API Gateway](server/api-gateway.md)
     - [API Conventions](server/api-conventions.md)
     - [AuthNZ](server/authnz/README.md)
@@ -30,7 +33,7 @@
     - [Create Workspace](server/workspaces/create-workspace-v2.md)
     - [Child Workspaces](server/workspaces/child-workspaces.md)
     - [Deactivate Workspace](server/workspaces/deactivate-workspace.md)
-    - [Invites](server/workspaces/invites.md)  
+  - [Invites](server/invites/invites.md)
   - VSQL
     - [VSQL Types](server/vsql/types.md)
     - [VSQL: SELECT, UPDATE](server/vsql/select-update.md)
