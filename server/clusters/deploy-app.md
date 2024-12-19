@@ -1,27 +1,27 @@
 # Deploy Application
 
-- [github: Deploy Application](https://github.com/voedger/voedger/issues/1814)
+- [GitHub: Deploy Application](https://github.com/voedger/voedger/issues/1814)
 
 ## Motivation
 
-- Air: login failed on live again
+- Air: Login failed on live again
 
 ## Principles
 
 - Pseudo app "cluster"
   - One partition
-- `apppartsctrl` first deploy `cluster` app and then uses its structures to deploy other applications
-  - cluster app is NOT in a built-in apps lists
+- `apppartsctrl` first deploys the `cluster` app and then uses its structures to deploy other applications
+  - The cluster app is NOT in the built-in apps list
 - Keyspace "cluster"
 
-## Functional design
+## Functional Design
 
-- apppartsctl: read/write to "cluster", AppWorkspace[0]
-- cluster.c.RegisterApp(descr AppDescriptor)
-  - AppDescriptor{AppQName, NumPartitions}
-- cluster.c.DeployAppImage(AppQName, image blob)
+- `apppartsctl`: Read/write to "cluster", `AppWorkspace[0]`
+- `cluster.c.RegisterApp(descr AppDescriptor)`
+  - `AppDescriptor{AppQName, NumPartitions}`
+- `cluster.c.DeployAppImage(AppQName, image blob)`
 
-## Technical design
+## Technical Design
 
 ```sql
 TABLE Application INHERITS CDoc(
