@@ -1,14 +1,12 @@
 # Deploy Application
 
-- [GitHub: Deploy Application](https://github.com/voedger/voedger/issues/1814)
-
 ## Motivation
 
-- Air: Login failed on live again
+- [GitHub: Deploy Application](https://github.com/voedger/voedger/issues/1814)
 
 ## Principles
 
-- Pseudo app "cluster"
+- Application "cluster"
   - One partition
 - `apppartsctrl` first deploys the `cluster` app and then uses its structures to deploy other applications
   - The cluster app is NOT in the built-in apps list

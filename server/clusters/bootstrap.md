@@ -2,9 +2,9 @@
 
 ## Motivation
 
-**Problem**: Applications and their partitions are deployed using `cluster` app, how to deploy `cluster` application itself?
+**Problem**: Applications and their partitions are deployed using `cluster` app, how to deploy the `cluster` application itself?
 
-**Solution**: Bootstrap process. It "deploys" `cluster` app and then use this app to deploy builtin apps.
+**Solution**: Bootstrap process. It "deploys" the `cluster` app and then uses this app to deploy built-in apps.
 
 * https://github.com/voedger/voedger/issues/1890
 * [refactor bootstrap, #2005](https://github.com/voedger/voedger/issues/2005)
