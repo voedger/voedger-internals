@@ -4,23 +4,23 @@ Invite Users/Devices to Workspaces
 
 ## Overview
 
-### Core Components
+### Core components
 
-#### Roles and Permissions
+#### Roles and permissions
 - **WorkspaceOwner**: Highest level role, automatically has admin privileges
 - **WorkspaceAdmin**: Can manage invites and user access
 
-#### Key Documents
+#### Key documents
 - **Invite**: Tracks invitation status and metadata
 - **Subject**: Represents an invited user/device in the workspace
 - **JoinedWorkspace**: Records workspace membership details
 - **Login**: Manages user authentication and access
 
-### Invitation Lifecycle
+### Invitation lifecycle
 
-#### Core Commands
+#### Core commands
 
-##### Invitation Management
+##### Invitation management
 - `InitiateInvitationByEmail`: Creates new invitation
   - Requires WorkspaceAdmin role
   - Includes email, roles, expiration, and email template
@@ -28,12 +28,12 @@ Invite Users/Devices to Workspaces
   - Requires verification code
   - Creates necessary workspace access records
 
-##### Role Management
+##### Role management
 - `InitiateUpdateInviteRoles`: Updates member permissions
   - Available for joined members only
   - Includes email notification
 
-##### Membership Termination
+##### Membership termination
 - `InitiateCancelAcceptedInvite`: Admin removes member
 - `InitiateLeaveWorkspace`: Member voluntarily leaves
 - `CancelSentInvite`: Cancels pending invitation
@@ -106,7 +106,7 @@ Invite Users/Devices to Workspaces
     classDef H fill:#C9E7B7,color:#333
 
 ```
-## Invite State Diagram
+## Invite state diagram
 
 ### Main sequence
 ```mermaid
@@ -140,6 +140,6 @@ stateDiagram-v2
     Left --> ToBeInvited: c.sys.InitiateInvitationByEMail() by Inviter
 ```
 
-### C4 specification
+## C4 specification
 
 - [C4: Invites](../arch/sys/c4.invites.md)
