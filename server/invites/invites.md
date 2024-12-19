@@ -4,39 +4,38 @@ Invite Users/Devices to Workspaces
 
 ## Overview
 
-### Core components
+Roles and permissions:
 
-#### Roles and permissions
-- **WorkspaceOwner**: Highest level role, automatically has admin privileges
-- **WorkspaceAdmin**: Can manage invites and user access
+- `WorkspaceOwner`: Highest level role, automatically has admin privileges
+- `WorkspaceAdmin`: Can manage invites and user access
 
-#### Key documents
-- **Invite**: Tracks invitation status and metadata
-- **Subject**: Represents an invited user/device in the workspace
-- **JoinedWorkspace**: Records workspace membership details
-- **Login**: Manages user authentication and access
+Key documents:
 
-### Invitation lifecycle
+- `Invite`: Tracks invitation status and metadata
+- `Subject`: Represents an invited user/device in the workspace
+- `JoinedWorkspace`: Records workspace membership details
+- `Login`: Manages user authentication and access
 
-#### Core commands
+Invitation management:
 
-##### Invitation management
-- `InitiateInvitationByEmail`: Creates new invitation
+- `c.InitiateInvitationByEmail`: Creates new invitation
   - Requires WorkspaceAdmin role
   - Includes email, roles, expiration, and email template
-- `InitiateJoinWorkspace`: Processes invite acceptance
+- `c.InitiateJoinWorkspace`: Processes invite acceptance
   - Requires verification code
   - Creates necessary workspace access records
 
-##### Role management
-- `InitiateUpdateInviteRoles`: Updates member permissions
+Role management:
+
+- `c.InitiateUpdateInviteRoles`: Updates member permissions
   - Available for joined members only
   - Includes email notification
 
-##### Membership termination
-- `InitiateCancelAcceptedInvite`: Admin removes member
-- `InitiateLeaveWorkspace`: Member voluntarily leaves
-- `CancelSentInvite`: Cancels pending invitation
+Membership termination:
+
+- `c.InitiateCancelAcceptedInvite`: Admin removes member
+- `c.InitiateLeaveWorkspace`: Member voluntarily leaves
+- `c.CancelSentInvite`: Cancels pending invitation
 
 ## Motivation
 
