@@ -9,7 +9,7 @@
     - [Standart Edition (v1)](concepts/editions/se1.md)
 - [Server](server/README.md)
   - Architecture
-    - [sys package](server/arch/sys/README.md)
+    - [pkg.sys](server/arch/sys/README.md)
       - [Invites](server/arch/sys/c4.invites.md)
   - [API Gateway](server/api-gateway.md)
     - [API Conventions](server/api-conventions.md)
