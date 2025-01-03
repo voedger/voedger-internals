@@ -16,5 +16,8 @@ This document outlines the requirements and considerations for establishing a pe
 1. **Swarm Configuration:**  
    Develop a recommended Docker Swarm configuration that efficiently manages deployment and fault tolerance across the distributed P2P cluster. This configuration should ensure seamless discovery, load balancing, and resilience of all services.
 
-2. **Go-Router Prototype:**  
+1. **Node failure/recovery:**  
+   Simulate node failure/recovery. Recovery should ensure an even distribution of the load.
+
+1. **Go-Router Prototype:**  
    Propose a high-level architectural design and code outline for a custom Go-based router. This component should handle routing  between services in the cluster.
