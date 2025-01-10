@@ -13,13 +13,14 @@ In a cluster environment with three nodes and six peer processes, we need to det
 - Total capacity: 6 processes (2 processes × 3 nodes)
 
 ## Key considerations
+
 - High availability requirements
 - Resource utilization efficiency
 - Industry best practices
 - Operational complexity
 - Failover performance
 
-## Question
+## Problem Statement
 
 Which orchestration strategy better aligns with industry standards for distributed systems?
 

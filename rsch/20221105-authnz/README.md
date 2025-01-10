@@ -2,6 +2,11 @@ tags: [AuthNZ]($17072)
 
 # Study existing AuthNZ concepts
 
+/*
+ * Copyright (c) 2024-present unTill Software Development Group B. V. 
+ * @author Maxim Geraskin
+ */
+
 ## [Stackoverflow](https://stackoverflow.com/questions/4989063/what-is-the-meaning-and-difference-between-subject-user-and-principal): What is the meaning and difference between subject, user and principal?
 T.Rob:
 
