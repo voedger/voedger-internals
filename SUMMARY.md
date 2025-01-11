@@ -35,8 +35,9 @@
     - [Deactivate Workspace](server/workspaces/deactivate-workspace.md)
   - [Invites](server/invites/invites.md)
   - VSQL
-    - [VSQL Types](server/vsql/types.md)
-    - [VSQL: SELECT, UPDATE](server/vsql/select-update.md)
+    - [Types](server/vsql/types.md)
+    - [SELECT, UPDATE](server/vsql/select-update.md)
+    - [ACL Rules](server/vsql/aclrules.md)
     - [Uniques With Multiple Fields](server/vsql/uniques-multi.md)
     - [Verifiable Fields](server/vsql/ver-fields.md)
     - [Ephemeral Storage](server/ephemeral-storage.md)
