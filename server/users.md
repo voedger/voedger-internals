@@ -4,10 +4,10 @@
 
 Users management.
 
-Needs: adsn, story
+Needs: story
 
-## Server: Users: Architectural design
-`adsn~srv.users~1`
+## Server: Users: Database
+
 
 [sys.UserProfile](https://github.com/voedger/voedger/blob/ecb97b1f282e2b1d4e19b1ab0394fa4eacafcbdd/pkg/sys/userprofile.vsql#L4)
 ```sql
@@ -33,10 +33,6 @@ ALTER WORKSPACE sys.AppWorkspaceWS (
 		WSKindInitializationData varchar(1024) NOT NULL
 	);
 ```
-
-Covers:
-- `feat~srv.users~1`
-
 
 ## Server: Users: Stories
 
@@ -64,5 +60,3 @@ Covers:
 As a user, I want to change my email address.
 
 ### Change Email
-
-
