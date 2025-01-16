@@ -32,7 +32,7 @@
     - [Child Workspaces](server/workspaces/child-workspaces.md)
     - [Deactivate Workspace](server/workspaces/deactivate-workspace.md)
   - [Invites](server/invites/invites.md)
-    - [Invites.C3](server/invites/invites-c3.md)
+    - [Invites.C3](server/invites/invites.c3.md)
   - [Users](server/users.md)
   - VSQL
     - [Types](server/vsql/types.md)

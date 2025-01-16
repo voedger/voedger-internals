@@ -1,4 +1,4 @@
-# Server: Users
+# Server.Users
 
 `feat~srv.users~1`
 
@@ -6,7 +6,7 @@ Users management.
 
 Needs: story
 
-## Server: Users: Database
+## Server.Users.Database
 
 
 [sys.UserProfile](https://github.com/voedger/voedger/blob/ecb97b1f282e2b1d4e19b1ab0394fa4eacafcbdd/pkg/sys/userprofile.vsql#L4)
