@@ -31,9 +31,10 @@
     - [Create Workspace](server/workspaces/create-workspace-v2.md)
     - [Child Workspaces](server/workspaces/child-workspaces.md)
     - [Deactivate Workspace](server/workspaces/deactivate-workspace.md)
+  - [Users](server/users.md)
   - [Invites](server/invites/invites.md)
     - [Invites.C3](server/invites/invites.c3.md)
-  - [Users](server/users.md)
+  - [Emails](server/emails/emails.md)
   - VSQL
     - [Types](server/vsql/types.md)
     - [SELECT, UPDATE](server/vsql/select-update.md)
