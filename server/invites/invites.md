@@ -139,6 +139,6 @@ stateDiagram-v2
     Left --> ToBeInvited: c.sys.InitiateInvitationByEMail() by Inviter
 ```
 
-## C4 specification
+## C3 specification
 
-- [C4: Invites](../arch/sys/c4.invites.md)
+- [C3: Invites](invites-c3.md)

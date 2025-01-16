@@ -12,8 +12,6 @@
     - [N1 Cluster](server/arch/c2.n1.md)
     - [N3 Cluster](server/arch/c2.n3.md)
     - [N5 Cluster](server/arch/c2.n5.md)
-    - [pkg.sys](server/arch/sys/README.md)
-      - [Invites](server/arch/sys/c4.invites.md)
   - [API Gateway](server/api-gateway.md)
     - [API Conventions](server/api-conventions.md)
     - [AuthNZ](server/authnz/README.md)
@@ -34,6 +32,7 @@
     - [Child Workspaces](server/workspaces/child-workspaces.md)
     - [Deactivate Workspace](server/workspaces/deactivate-workspace.md)
   - [Invites](server/invites/invites.md)
+    - [Invites.C3](server/invites/invites-c3.md)
   - [Users](server/users.md)
   - VSQL
     - [Types](server/vsql/types.md)
