@@ -1,13 +1,6 @@
-# Server.Users
+# Users.C3
 
-`feat~srv.users~1`
-
-Users management.
-
-Needs: story
-
-## Server.Users.Database
-
+## Database
 
 [sys.UserProfile](https://github.com/voedger/voedger/blob/ecb97b1f282e2b1d4e19b1ab0394fa4eacafcbdd/pkg/sys/userprofile.vsql#L4)
 ```sql
@@ -33,30 +26,3 @@ ALTER WORKSPACE sys.AppWorkspaceWS (
 		WSKindInitializationData varchar(1024) NOT NULL
 	);
 ```
-
-## Server: Users: Stories
-
-### Server: Users: Stories: Send Email
-`story~srv.users.stories.send-email~1`
-
-As Application, I want to send an Email to a user.
-
-Needs: tdsn
-
-Covers:
-- `feat~srv.users~1`
-
-#### Server: Users: Stories: Send Email: Technical design
-`tdsn~srv.users.stories.send-email~1`
-
-This is the description.
-
-Covers:
-- `story~srv.users.stories.send-email~1`
-
-
-### Server: Users: Stories: Change Email
-
-As a user, I want to change my email address.
-
-### Change Email
