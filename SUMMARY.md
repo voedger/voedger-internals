@@ -34,6 +34,7 @@
     - [Child Workspaces](server/workspaces/child-workspaces.md)
     - [Deactivate Workspace](server/workspaces/deactivate-workspace.md)
   - [Invites](server/invites/invites.md)
+  - [Users](server/users.md)
   - VSQL
     - [Types](server/vsql/types.md)
     - [SELECT, UPDATE](server/vsql/select-update.md)

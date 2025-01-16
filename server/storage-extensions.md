@@ -1,5 +1,6 @@
 # State Storage Extensions
 
+- Status: Frozen
 - [GitHub Issue #2366](https://github.com/voedger/voedger/issues/2366)
 
 We have a number of built-in state storages, but there should be a way to extend the state storage capabilities:
