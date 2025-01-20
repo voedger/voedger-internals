@@ -9,6 +9,7 @@
     - [Standart Edition (v1)](concepts/editions/se1.md)
 - [Server](server/README.md)
   - Architecture
+    - [Query Processor](server/arch/qp/qp.md)
     - [N1 Cluster](server/arch/c2.n1.md)
     - [N3 Cluster](server/arch/c2.n3.md)
     - [N5 Cluster](server/arch/c2.n5.md)
