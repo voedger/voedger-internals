@@ -58,3 +58,10 @@ Prefixes
 - *mod*: Go module
 - *pkg*: Go package
 - *extsoft*: external software
+
+## Documentation structure
+
+Documentation is organized as follows:
+
+- Architecture folder contains the server and components architecture in C4 model notation
+- Other folders contain the documentation about use cases and stories
