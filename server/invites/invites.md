@@ -139,6 +139,27 @@ stateDiagram-v2
     Left --> ToBeInvited: c.sys.InitiateInvitationByEMail() by Inviter
 ```
 
-## C3 specification
+## Documents
 
-- [C3: Invites](invites-c3.md)
+### cdoc.sys.Invite
+
+- ID
+- SubjectKind ([User/Device](https://github.com/heeus/core-istructs/blob/b95ff00ea97f3731f58b8d95f71914f29786e6bf/types.go#L81))
+- Login // actually `c.sys.InitiateInvitationByEmail.EMail`
+- Email // actually `c.sys.InitiateInvitationByEmail.EMail`
+- Roles (comma-separated)
+- ExpireDatetime (unix-timestamp)
+- VerificationCode
+- State
+- Created (unix-timestamp) ???
+- Updated (unix-timestamp) ???
+- SubjectID (Subject.ID) // by ap.sys.ApplyJoinWorkspace
+- InviteeProfileWSID     // by ap.sys.ApplyJoinWorkspace
+- ActualLogin            // `token.Login`, by ap.sys.ApplyJoinWorkspace
+
+
+### cdoc.sys.Subject
+
+- Login // old stored records -> `Invite.Login` that is actually `c.sys.InitiateInvitationByEMail.Email`, new records (starting from https://github.com/voedger/voedger/issues/1107) - `Invite.ActualLogin` that is login from token
+- SubjectKind ([User/Device](https://github.com/heeus/core-istructs/blob/b95ff00ea97f3731f58b8d95f71914f29786e6bf/types.go#L81))
+- Roles (comma-separated list)
