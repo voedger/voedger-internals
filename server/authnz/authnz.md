@@ -5,6 +5,8 @@ Authorization and authentication.
 
 ## Concepts (Основные понятия)
 
+### Naming
+
 Naming based on [Stidy existing AuthNZ concepts](../../rsch/20221105-authnz/README.md).
 
 - **Subject**: An entity that can make a request - User/Device/Service
@@ -27,7 +29,7 @@ Naming based on [Stidy existing AuthNZ concepts](../../rsch/20221105-authnz/READ
   - Permissions for Hosts can be manages by
     - GRANT ROLE ChargeBee TO ADDRESS <ip>
 
-## ACL Rules
+### ACL Rules
 
 - “Principal P from Workspace W is [Allowed/Denied] Operation O on Resources matching ResourcePattern RP”.
   - Principal
@@ -36,7 +38,7 @@ Naming based on [Stidy existing AuthNZ concepts](../../rsch/20221105-authnz/READ
   - ResourcePattern
   - MembershipInheritance (00, 10, 11, 01)
 
-## Query AuthNZ process
+### Query AuthNZ process
 
 |Step   |Actor      | Served by   |
 |-      |---------- | ----------  |
@@ -45,7 +47,7 @@ Naming based on [Stidy existing AuthNZ concepts](../../rsch/20221105-authnz/READ
 |Authorize EXECUTE operation|QueryProcessor |IAuthorizer.Authorize()
 |Opt: Authorize READ operation|QueryProcessor|IAuthorizer.Authorize()
 
-## Command AuthNZ process
+### Command AuthNZ process
 
 |Step|Actor|Served by|
 |-|-|-|
@@ -54,6 +56,14 @@ Naming based on [Stidy existing AuthNZ concepts](../../rsch/20221105-authnz/READ
 |Authorize EXECUTE operation|CommandProcessor |IAuthorizer.Authorize()
 |Authorize fields CREATE/UPDATE|CommandProcessor |IAuthenticator.Authorize() 
 
-### Detailed design
+### Roles (by Copilot)
 
-- [Reset password](reset-password.md)
+Here are some vsql files where ROLE is used in the voedger/voedger repository:
+
+1. **sys.vsql**
+   - [sys.vsql](https://github.com/voedger/voedger/blob/5935d2eaefc92dad72dbaab94a33e47d16d2264a/pkg/sys/sys.vsql#L426-L500)
+   - Everyone, Anonymous, AuthenticatedUser, System, ProfileOwner, WorkspaceDevice, RoleWorkspaceOwner, WorkspaceOwner, ClusterAdmin, WorkspaceAdmin
+
+3. **appws.vsql**
+   - [appws.vsql](https://github.com/voedger/voedger/blob/5935d2eaefc92dad72dbaab94a33e47d16d2264a/pkg/cluster/appws.vsql#L1-L36)
+   - ClusterAdmin
