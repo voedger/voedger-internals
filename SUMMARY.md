@@ -13,7 +13,7 @@
     - [N1 Cluster](server/arch/c2.n1.md)
     - [N3 Cluster](server/arch/c2.n3.md)
     - [N5 Cluster](server/arch/c2.n5.md)
-  - [API Gateway]
+  - API Gateway
     - [API v2](server/apiv2/apiv2.md)
     - [API v1](server/api-gateway.md)
       - [API Conventions](server/api-conventions.md)
