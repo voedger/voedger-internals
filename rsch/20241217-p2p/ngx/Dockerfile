@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 
-# Установка необходимых пакетов
+# РЈСЃС‚Р°РЅРѕРІРєР° РЅРµРѕР±С…РѕРґРёРјС‹С… РїР°РєРµС‚РѕРІ
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpcre3 \
@@ -12,36 +12,36 @@ RUN apt-get update && apt-get install -y \
     libc6-dev \
     libpthread-stubs0-dev
 
-# Добавляем пользователя nginx
+# Р”РѕР±Р°РІР»СЏРµРј РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ nginx
 RUN groupadd -r nginx && useradd -r -g nginx nginx
 
-# Скачивание исходников Nginx
+# РЎРєР°С‡РёРІР°РЅРёРµ РёСЃС…РѕРґРЅРёРєРѕРІ Nginx
 RUN wget http://nginx.org/download/nginx-1.20.2.tar.gz && \
     tar -xzvf nginx-1.20.2.tar.gz && \
     rm nginx-1.20.2.tar.gz
 
-# Копирование модуля в образ
+# РљРѕРїРёСЂРѕРІР°РЅРёРµ РјРѕРґСѓР»СЏ РІ РѕР±СЂР°Р·
 COPY modules/ngx_http_crc32_module.c /nginx-1.20.2/modules/
 COPY modules/config /nginx-1.20.2/modules/
 
-# Сборка Nginx с модулем
+# РЎР±РѕСЂРєР° Nginx СЃ РјРѕРґСѓР»РµРј
 WORKDIR /nginx-1.20.2
 RUN ./configure --with-threads --add-module=modules/ --user=nginx --group=nginx --prefix=/usr/local/nginx && \
     make && \
     make install
 
-# Копирование конфигурации Nginx
+# РљРѕРїРёСЂРѕРІР°РЅРёРµ РєРѕРЅС„РёРіСѓСЂР°С†РёРё Nginx
 COPY nginx.conf /usr/local/nginx/conf/nginx.conf
 
-# Создаем необходимые директории
+# РЎРѕР·РґР°РµРј РЅРµРѕР±С…РѕРґРёРјС‹Рµ РґРёСЂРµРєС‚РѕСЂРёРё
 RUN mkdir -p /var/cache/nginx /var/run/nginx && \
     chown -R nginx:nginx /var/cache/nginx /var/run/nginx /usr/local/nginx
 
-# Используем непривилегированного пользователя
+# РСЃРїРѕР»СЊР·СѓРµРј РЅРµРїСЂРёРІРёР»РµРіРёСЂРѕРІР°РЅРЅРѕРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
 USER nginx
 
-# Открытие порта
+# РћС‚РєСЂС‹С‚РёРµ РїРѕСЂС‚Р°
 EXPOSE 8822
 
-# Запуск Nginx
+# Р—Р°РїСѓСЃРє Nginx
 CMD ["/usr/local/nginx/sbin/nginx", "-g", "daemon off;"]

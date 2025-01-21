@@ -2,7 +2,7 @@
 
 SSL_CONF="/home/ubuntu/nginx/conf.d/ssl_server.conf"
 
-# Ñîçäà¸ì êîíôèãóðàöèþ SSL-ñåðâåðà
+# Ð¡Ð¾Ð·Ð´Ð°Ñ‘Ð¼ ÐºÐ¾Ð½Ñ„Ð¸Ð³ÑƒÑ€Ð°Ñ†Ð¸ÑŽ SSL-ÑÐµÑ€Ð²ÐµÑ€Ð°
 cat > "$SSL_CONF" <<EOF
     server {
         listen 443 ssl;
@@ -60,6 +60,6 @@ cat > "$SSL_CONF" <<EOF
     }
 EOF
 
-# Ïåðåçàãðóæàåì Nginx äëÿ ïðèìåíåíèÿ íîâîé êîíôèãóðàöèè
+# ÐŸÐµÑ€ÐµÐ·Ð°Ð³Ñ€ÑƒÐ¶Ð°ÐµÐ¼ Nginx Ð´Ð»Ñ Ð¿Ñ€Ð¸Ð¼ÐµÐ½ÐµÐ½Ð¸Ñ Ð½Ð¾Ð²Ð¾Ð¹ ÐºÐ¾Ð½Ñ„Ð¸Ð³ÑƒÑ€Ð°Ñ†Ð¸Ð¸
 # nginx -s reload
 docker service update SEDockerStack_nginx --force
