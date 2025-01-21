@@ -33,7 +33,7 @@
   - [Workspaces](server/workspaces/README.md)
     - [Create Workspace](server/workspaces/create-workspace-v2.md)
     - [Deactivate Workspace](server/workspaces/deactivate-workspace.md)
-    - [🔗Enrich token](server/authnz/enrich-token.md)
+    - [See also (Workspaces)](server/workspaces/workspaces-seealso.md)
   - [Invites](server/invites/invites.md)
     - [Invite to Workspace](server/invites/invite-to-ws.md)
     - [Join Workspace](server/invites/join-ws.md)
@@ -49,12 +49,12 @@
     - [Reset password](server/users/reset-password.md)
   - [Emails](server/emails/emails.md)
   - [Jobs](server/jobs.md)
-  - VSQL
+  - VSQL DATA
     - [Types](server/vsql/types.md)
     - [SELECT, UPDATE](server/vsql/select-update.md)
     - [Uniques With Multiple Fields](server/vsql/uniques-multi.md)
     - [Verifiable Fields](server/vsql/ver-fields.md)
-    - [🔗ACL Rules](server/authnz/aclrules.md)
+    - [See also (VSQL)](server/vsql/vsql-seealso.md)
   - DMBS Drivers
     - [AmazonDB Driver](server/amazondb-driver.md)
   - Frozen
