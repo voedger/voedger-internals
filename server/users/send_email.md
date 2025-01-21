@@ -1,7 +1,3 @@
-# Send Email to User
-
-As Application I want to send an Email to a User.
-
 ## Functional design
 
 ~story.srv.users.SendEmail~
