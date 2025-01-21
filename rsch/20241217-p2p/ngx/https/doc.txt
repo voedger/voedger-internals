@@ -1,0 +1,13 @@
+sudo apt install certbot -y
+
+
+sudo mkdir -p /var/www/certbot
+sudo chown -R $USER:$USER /var/www/certbot
+
+sudo mkdir -p /etc/letsencrypt
+sudo chown -R $USER:$USER /etc/letsencrypt
+
+-v /etc/letsencrypt:/etc/letsencrypt 
+-v /var/www/certbot:/var/www/certbot
+
+sudo certbot certonly --webroot -w /var/www/certbot -d app-node-01.cdci.voedger.io -m aaponomarev13@gmail.com  --agree-tos -n --deploy-hook "~/stacks/nginx/ssl_deploy.sh"
