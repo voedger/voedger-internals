@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 
-# Установка необходимых пакетов
+#  Установка необходимых пакетов
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpcre3 \
