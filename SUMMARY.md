@@ -43,7 +43,7 @@
     - [Update Invite roles](server/invites/update-invite-roles.md)
   - [AuthNZ](server/authnz/authnz.md)
     - [ACL Rules](server/authnz/aclrules.md)
-    - [Enrich token](server/authnz/enrich-token.md)
+    - [Enrich token2](server/authnz/enrich-token.md)
   - [Users](server/users/users.md)
     - [Send Email](server/users/send_email.md)
     - [Reset password](server/users/reset-password.md)
