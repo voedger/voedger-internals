@@ -63,5 +63,12 @@ Prefixes
 
 Documentation is organized as follows:
 
-- Architecture folder contains the server and components architecture in C4 model notation
+- Design folder contains the server and components architecture and design
 - Other folders contain the documentation about features and use cases
+
+Example:
+- 📁Design
+- 📂Feature1
+    - 📁UseCase1
+    - 📁UseCase2
+- 📁Feature2
