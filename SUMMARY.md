@@ -2,15 +2,12 @@
 
 - [Introduction](README.md)
 
-## Concepts
 - [Concepts](concepts/README.md)
   - [Event Sourcing & CQRS](concepts/evsrc/README.md)
   - [Editions (deprecated)](concepts/editions/README.md)
     - [Community Edition](concepts/editions/ce.md)
     - [Standart Edition](concepts/editions/se.md)
     - [Standart Edition (v1)](concepts/editions/se1.md)
-
-## Server
 
 - [Server](server/README.md)
   - Architecture
@@ -64,7 +61,6 @@
     - [Ephemeral Storage](server/ephemeral-storage.md)
     - [Storage Extensions](server/storage-extensions.md)    
 
-## Framework
 
 - [Framework](framework/README.md)
   - [vpm](framework/vpm/README.md)
