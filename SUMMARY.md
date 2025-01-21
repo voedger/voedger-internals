@@ -31,6 +31,7 @@
   - [Workspaces](server/workspaces/README.md)
     - [Create Workspace](server/workspaces/create-workspace-v2.md)
     - [Deactivate Workspace](server/workspaces/deactivate-workspace.md)
+    - [🔗Enrich token](server/authnz/enrich-token.md)
   - [Invites](server/invites/invites.md)
     - [Invite to Workspace](server/invites/invite-to-ws.md)
     - [Join Workspace](server/invites/join-ws.md)
@@ -51,8 +52,7 @@
     - [SELECT, UPDATE](server/vsql/select-update.md)
     - [Uniques With Multiple Fields](server/vsql/uniques-multi.md)
     - [Verifiable Fields](server/vsql/ver-fields.md)
-    - [VSQL usage](server/vsql/vsql-usage.md)
-    - [VSQL-related Topics](server/vsql/vsql-topics.md)
+    - [🔗ACL Rules](server/authnz/aclrules.md)
   - DMBS Drivers
     - [AmazonDB Driver](server/amazondb-driver.md)
 - [Framework](framework/README.md)
