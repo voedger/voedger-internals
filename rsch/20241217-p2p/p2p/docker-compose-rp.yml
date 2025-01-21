@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+
+  balancer:
+    image: reverse-proxy
+    ports:
+      - "82:82"
+    networks:
+      - voedger_net
+    deploy:
+      replicas: 3
+      placement:
+        constraints:
+          - node.labels.AppNode == true
+
+networks:
+  voedger_net:
+    external: true
