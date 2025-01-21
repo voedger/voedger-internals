@@ -1,1 +1,1 @@
-- [authnz: Enrich token](server/authnz/enrich-token.md)
+- [authnz: Enrich token](../authnz/enrich-token.md)
