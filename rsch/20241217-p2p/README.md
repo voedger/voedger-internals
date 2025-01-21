@@ -22,7 +22,7 @@ This document outlines the requirements and considerations for establishing a pe
 1. **Go-Router Prototype:**  
    Propose a high-level architectural design and code outline for a custom Go-based router. This component should handle routing  between services in the cluster.
 
-# Why You Can’t Evenly Distribute 6 Services Across 3 Nodes in a Docker Swarm Cluster (with Automatic Rebalancing)
+# Discovery results: Why You Can’t Evenly Distribute 6 Services Across 3 Nodes in a Docker Swarm Cluster (with Automatic Rebalancing)
 
 The main reason you cannot achieve a **perfectly even** distribution of services (as opposed to tasks) across three nodes and have them automatically return to that even distribution when a node recovers lies in how Docker Swarm’s scheduler works:
 
