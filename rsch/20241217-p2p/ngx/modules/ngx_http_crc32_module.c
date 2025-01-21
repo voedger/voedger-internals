@@ -3,7 +3,7 @@
 #include <ngx_config.h>
 #include <ngx_core.h>
 #include <ngx_http.h>
-#include <zlib.h>  // Для CRC32
+#include <zlib.h>  // Р”Р»СЏ CRC32
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <pthread.h>
@@ -11,7 +11,7 @@
 static ngx_array_t *backend_ips = NULL;
 static pthread_mutex_t ips_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-// Прототипы функций
+// РџСЂРѕС‚РѕС‚РёРїС‹ С„СѓРЅРєС†РёР№
 static char *ngx_http_crc32_proxy(ngx_conf_t *cf, ngx_command_t *cmd, void *conf);
 static ngx_int_t ngx_http_crc32_proxy_handler(ngx_http_request_t *r);
 static ngx_int_t ngx_http_crc32_init(ngx_conf_t *cf);
@@ -19,12 +19,12 @@ static void *ngx_http_crc32_create_loc_conf(ngx_conf_t *cf);
 static char *ngx_http_crc32_merge_loc_conf(ngx_conf_t *cf, void *parent, void *child);
 static void *ngx_http_crc32_create_main_conf(ngx_conf_t *cf);
 
-// Структура конфигурации
+// РЎС‚СЂСѓРєС‚СѓСЂР° РєРѕРЅС„РёРіСѓСЂР°С†РёРё
 typedef struct {
     ngx_str_t service_name;
 } ngx_http_crc32_main_conf_t;
 
-// Директивы модуля
+// Р”РёСЂРµРєС‚РёРІС‹ РјРѕРґСѓР»СЏ
 static ngx_command_t ngx_http_crc32_commands[] = {
     {
         ngx_string("crc32_proxy"),
@@ -37,7 +37,7 @@ static ngx_command_t ngx_http_crc32_commands[] = {
     ngx_null_command
 };
 
-// Контекст модуля
+// РљРѕРЅС‚РµРєСЃС‚ РјРѕРґСѓР»СЏ
 static ngx_http_module_t ngx_http_crc32_module_ctx = {
     NULL,                                  /* preconfiguration */
     ngx_http_crc32_init,                   /* postconfiguration */
@@ -52,7 +52,7 @@ static ngx_http_module_t ngx_http_crc32_module_ctx = {
     ngx_http_crc32_merge_loc_conf          /* merge location configuration */
 };
 
-// Определение модуля
+// РћРїСЂРµРґРµР»РµРЅРёРµ РјРѕРґСѓР»СЏ
 ngx_module_t ngx_http_crc32_module = {
     NGX_MODULE_V1,
     &ngx_http_crc32_module_ctx,            /* module context */
@@ -68,7 +68,7 @@ ngx_module_t ngx_http_crc32_module = {
     NGX_MODULE_V1_PADDING
 };
 
-// Функция для загрузки IP-адресов из DNS
+// Р¤СѓРЅРєС†РёСЏ РґР»СЏ Р·Р°РіСЂСѓР·РєРё IP-Р°РґСЂРµСЃРѕРІ РёР· DNS
 static ngx_int_t load_backend_ips(ngx_cycle_t *cycle) {
     struct addrinfo hints, *res, *p;
     int status;
@@ -83,7 +83,7 @@ static ngx_int_t load_backend_ips(ngx_cycle_t *cycle) {
     const char *service_name = (char *)mcf->service_name.data;
 
     memset(&hints, 0, sizeof hints);
-    hints.ai_family = AF_INET; // Используем IPv4
+    hints.ai_family = AF_INET; // РСЃРїРѕР»СЊР·СѓРµРј IPv4
     hints.ai_socktype = SOCK_STREAM;
 
     status = getaddrinfo(service_name, NULL, &hints, &res);
@@ -103,7 +103,7 @@ static ngx_int_t load_backend_ips(ngx_cycle_t *cycle) {
         struct sockaddr_in *ipv4 = (struct sockaddr_in *)p->ai_addr;
         addr = &(ipv4->sin_addr);
 
-        // Конвертируем IP в строку
+        // РљРѕРЅРІРµСЂС‚РёСЂСѓРµРј IP РІ СЃС‚СЂРѕРєСѓ
         inet_ntop(p->ai_family, addr, ipstr, sizeof ipstr);
 
         ngx_str_t *ip = ngx_array_push(new_backend_ips);
@@ -122,7 +122,7 @@ static ngx_int_t load_backend_ips(ngx_cycle_t *cycle) {
 
     freeaddrinfo(res);
 
-    // Обновляем глобальный массив IP-адресов
+    // РћР±РЅРѕРІР»СЏРµРј РіР»РѕР±Р°Р»СЊРЅС‹Р№ РјР°СЃСЃРёРІ IP-Р°РґСЂРµСЃРѕРІ
     pthread_mutex_lock(&ips_mutex);
     backend_ips = new_backend_ips;
     pthread_mutex_unlock(&ips_mutex);
@@ -130,28 +130,28 @@ static ngx_int_t load_backend_ips(ngx_cycle_t *cycle) {
     return NGX_OK;
 }
 
-// Функция периодического обновления IP-адресов
+// Р¤СѓРЅРєС†РёСЏ РїРµСЂРёРѕРґРёС‡РµСЃРєРѕРіРѕ РѕР±РЅРѕРІР»РµРЅРёСЏ IP-Р°РґСЂРµСЃРѕРІ
 static void *dns_update_thread(void *arg) {
     ngx_cycle_t *cycle = (ngx_cycle_t *)arg;
     while (1) {
         if (load_backend_ips(cycle) != NGX_OK) {
             ngx_log_error(NGX_LOG_ERR, cycle->log, 0, "Failed to load backend IPs");
         }
-        sleep(30); // Обновляем каждые 30 секунд
+        sleep(30); // РћР±РЅРѕРІР»СЏРµРј РєР°Р¶РґС‹Рµ 30 СЃРµРєСѓРЅРґ
     }
     return NULL;
 }
 
-// Инициализация модуля
+// РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РјРѕРґСѓР»СЏ
 static ngx_int_t ngx_http_crc32_init(ngx_conf_t *cf) {
     ngx_cycle_t *cycle = cf->cycle;
 
-    // Загружаем IP-адреса при старте
+    // Р—Р°РіСЂСѓР¶Р°РµРј IP-Р°РґСЂРµСЃР° РїСЂРё СЃС‚Р°СЂС‚Рµ
     if (load_backend_ips(cycle) != NGX_OK) {
         return NGX_ERROR;
     }
 
-    // Запускаем поток для обновления IP-адресов
+    // Р—Р°РїСѓСЃРєР°РµРј РїРѕС‚РѕРє РґР»СЏ РѕР±РЅРѕРІР»РµРЅРёСЏ IP-Р°РґСЂРµСЃРѕРІ
     pthread_t tid;
     if (pthread_create(&tid, NULL, dns_update_thread, cycle) != 0) {
         ngx_log_error(NGX_LOG_ERR, cycle->log, 0, "Failed to create DNS update thread");
@@ -161,7 +161,7 @@ static ngx_int_t ngx_http_crc32_init(ngx_conf_t *cf) {
     return NGX_OK;
 }
 
-// Обработчик запроса
+// РћР±СЂР°Р±РѕС‚С‡РёРє Р·Р°РїСЂРѕСЃР°
 static ngx_int_t ngx_http_crc32_proxy_handler(ngx_http_request_t *r) {
     ngx_str_t uri, id;
     u_char *p, *end;
@@ -170,26 +170,26 @@ static ngx_int_t ngx_http_crc32_proxy_handler(ngx_http_request_t *r) {
     ngx_str_t *ip_list;
     ngx_uint_t ip_count;
 
-    // Обрабатываем только GET и POST запросы
+    // РћР±СЂР°Р±Р°С‚С‹РІР°РµРј С‚РѕР»СЊРєРѕ GET Рё POST Р·Р°РїСЂРѕСЃС‹
     if (!(r->method & (NGX_HTTP_GET|NGX_HTTP_POST))) {
         return NGX_HTTP_NOT_ALLOWED;
     }
 
-    // Получаем URI запроса
+    // РџРѕР»СѓС‡Р°РµРј URI Р·Р°РїСЂРѕСЃР°
     uri = r->uri;
     end = uri.data + uri.len;
 
-    // Проверяем, что URI начинается с "/api/"
+    // РџСЂРѕРІРµСЂСЏРµРј, С‡С‚Рѕ URI РЅР°С‡РёРЅР°РµС‚СЃСЏ СЃ "/api/"
     ngx_str_t prefix = ngx_string("/api/");
     if (uri.len < prefix.len || ngx_strncmp(uri.data, prefix.data, prefix.len) != 0) {
         return NGX_HTTP_BAD_REQUEST;
     }
 
-    // Парсим URI, чтобы извлечь id (последний сегмент)
-    p = uri.data + prefix.len;  // Пропускаем "/api/"
-    while (p < end && *p != '/') p++;  // Пропускаем owner
-    while (p < end && *p != '/') p++;  // Пропускаем app-name
-    p++;  // Переходим к id
+    // РџР°СЂСЃРёРј URI, С‡С‚РѕР±С‹ РёР·РІР»РµС‡СЊ id (РїРѕСЃР»РµРґРЅРёР№ СЃРµРіРјРµРЅС‚)
+    p = uri.data + prefix.len;  // РџСЂРѕРїСѓСЃРєР°РµРј "/api/"
+    while (p < end && *p != '/') p++;  // РџСЂРѕРїСѓСЃРєР°РµРј owner
+    while (p < end && *p != '/') p++;  // РџСЂРѕРїСѓСЃРєР°РµРј app-name
+    p++;  // РџРµСЂРµС…РѕРґРёРј Рє id
     id.data = p;
     id.len = end - p;
 
@@ -197,11 +197,11 @@ static ngx_int_t ngx_http_crc32_proxy_handler(ngx_http_request_t *r) {
         return NGX_HTTP_BAD_REQUEST;
     }
 
-    // Вычисляем хэш CRC32 от id
+    // Р’С‹С‡РёСЃР»СЏРµРј С…СЌС€ CRC32 РѕС‚ id
     crc = crc32(0L, Z_NULL, 0);
     crc = crc32(crc, id.data, id.len);
 
-    // Получаем IP-адреса из массива
+    // РџРѕР»СѓС‡Р°РµРј IP-Р°РґСЂРµСЃР° РёР· РјР°СЃСЃРёРІР°
     pthread_mutex_lock(&ips_mutex);
     if (backend_ips == NULL || backend_ips->nelts == 0) {
         pthread_mutex_unlock(&ips_mutex);
@@ -213,7 +213,7 @@ static ngx_int_t ngx_http_crc32_proxy_handler(ngx_http_request_t *r) {
     ngx_str_t backend_ip = ip_list[index];
     pthread_mutex_unlock(&ips_mutex);
 
-    // Формируем backend_url
+    // Р¤РѕСЂРјРёСЂСѓРµРј backend_url
     ngx_str_t backend_url;
     backend_url.len = sizeof("http://") - 1 + backend_ip.len;
     backend_url.data = ngx_pnalloc(r->pool, backend_url.len);
@@ -225,37 +225,37 @@ static ngx_int_t ngx_http_crc32_proxy_handler(ngx_http_request_t *r) {
     q = ngx_cpymem(q, "http://", sizeof("http://") - 1);
     q = ngx_cpymem(q, backend_ip.data, backend_ip.len);
 
-    // Проксируем запрос
+    // РџСЂРѕРєСЃРёСЂСѓРµРј Р·Р°РїСЂРѕСЃ
     ngx_http_internal_redirect(r, &backend_url, &r->args);
     ngx_http_finalize_request(r, NGX_DONE);
 
     return NGX_DONE;
 }
 
-// Функция настройки директивы crc32_proxy
+// Р¤СѓРЅРєС†РёСЏ РЅР°СЃС‚СЂРѕР№РєРё РґРёСЂРµРєС‚РёРІС‹ crc32_proxy
 static char *ngx_http_crc32_proxy(ngx_conf_t *cf, ngx_command_t *cmd, void *conf) {
     ngx_http_core_loc_conf_t *clcf;
 
-    // Получаем конфигурацию локации
+    // РџРѕР»СѓС‡Р°РµРј РєРѕРЅС„РёРіСѓСЂР°С†РёСЋ Р»РѕРєР°С†РёРё
     clcf = ngx_http_conf_get_module_loc_conf(cf, ngx_http_core_module);
 
-    // Устанавливаем обработчик
+    // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РѕР±СЂР°Р±РѕС‚С‡РёРє
     clcf->handler = ngx_http_crc32_proxy_handler;
 
     return NGX_CONF_OK;
 }
 
-// Создание конфигурации локации
+// РЎРѕР·РґР°РЅРёРµ РєРѕРЅС„РёРіСѓСЂР°С†РёРё Р»РѕРєР°С†РёРё
 static void *ngx_http_crc32_create_loc_conf(ngx_conf_t *cf) {
     return NGX_CONF_OK;
 }
 
-// Слияние конфигураций локаций
+// РЎР»РёСЏРЅРёРµ РєРѕРЅС„РёРіСѓСЂР°С†РёР№ Р»РѕРєР°С†РёР№
 static char *ngx_http_crc32_merge_loc_conf(ngx_conf_t *cf, void *parent, void *child) {
     return NGX_CONF_OK;
 }
 
-// Создание конфигурации main
+// РЎРѕР·РґР°РЅРёРµ РєРѕРЅС„РёРіСѓСЂР°С†РёРё main
 static void *ngx_http_crc32_create_main_conf(ngx_conf_t *cf) {
     ngx_http_crc32_main_conf_t *conf;
 
@@ -264,7 +264,7 @@ static void *ngx_http_crc32_create_main_conf(ngx_conf_t *cf) {
         return NULL;
     }
 
-    // Исправлено использование ngx_string
+    // РСЃРїСЂР°РІР»РµРЅРѕ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ ngx_string
     conf->service_name.len = sizeof("tasks.app") - 1;
     conf->service_name.data = (u_char *) "tasks.app";
 
