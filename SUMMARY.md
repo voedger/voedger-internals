@@ -11,10 +11,10 @@
 
 - [Server](server/README.md)
   - Design
-    - [Query Processor](server/arch/qp/qp.md)
-    - [N1 Cluster](server/arch/c2.n1.md)
-    - [N3 Cluster](server/arch/c2.n3.md)
-    - [N5 Cluster](server/arch/c2.n5.md)
+    - [Query Processor](server/design/qp/qp.md)
+    - [N1 Cluster](server/design/c2.n1.md)
+    - [N3 Cluster](server/design/c2.n3.md)
+    - [N5 Cluster](server/design/c2.n5.md)
   - API Gateway
     - [API v2](server/apiv2/apiv2.md)
     - [API v1](server/api-gateway.md)
