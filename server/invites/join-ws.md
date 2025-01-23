@@ -1,3 +1,5 @@
+# Join Workspace
+
 ## c.sys.InitiateJoinWorkspace()
 
 - AuthZ: PrincipalToken + VerificationCode

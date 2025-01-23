@@ -47,6 +47,7 @@
   - [Users](server/users/users.md)
     - [Send Email](server/users/send_email.md)
     - [Reset password](server/users/reset-password.md)
+    - [Change Email](server/users/change_email.md)
   - [Emails](server/emails/emails.md)
   - [Jobs](server/jobs.md)
   - VSQL DATA

@@ -1,3 +1,5 @@
+# Invite to Workspace
+
 ## c.sys.InitiateInvitationByEMail()
 
 - AuthZ: role.sys.WorkspaceAdmin
