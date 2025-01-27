@@ -18,24 +18,29 @@ Requirements tracing using [OpenFastTrace (OFT)](https://github.com/itsallcode/o
 ```mermaid
 flowchart TD
 
-    ad:::S
-    feat:::S
-    adsn[c2, c3]:::S
-    story:::S
-    src:::S
+    reqs:::G
+    subgraph reqs[Requirements]
+        nfr:::S
+        ad:::S
+        tdsn:::S
+        fdsn:::S
+        feat:::S
 
-    ad --x adsn
-    ad --x src
-    feat --x adsn
-    feat --x story
-    adsn --x src
-    story --x adsn
+        nfr --x ad
+        ad --x tdsn
+
+        feat --x fdsn
+        feat --x tdsn        
+    end
+
     src:::G
     subgraph src[Source code]
         impl:::S
         test:::S
         itest:::S
     end
+
+    reqs --x src
     
     classDef B fill:#FFFFB5,color:#333
     classDef S fill:#B5FFFF,color:#333
@@ -43,12 +48,18 @@ flowchart TD
     classDef G fill:#ffffff15, stroke:#999, stroke-width:2px, stroke-dasharray: 5 5    
 ```
 
+Requirements
+- `nfr`: Non-functional Requirement
 - `ad`: Architectural Decision
+- `tdsn`: Technical Design
+- `fdsn`: Functional Design
 - `feat`: Feature
-- `story`: User Story
-- `c2, c3`: [C2-](https://c4model.com/diagrams/container), [C3-level](https://c4model.com/diagrams/component) requirements (ref. [The C4 model for visualising software architecture](https://c4model.com/)).
-- Source Code
+
+Source Code
     - `impl`: Implementation
     - `test`: Unit Test
     - `itest`: Integration Test
 
+## History
+
+- [adsn, story...]https://github.com/voedger/voedger-internals/blob/4379075396a1fd50275c7eaf7877eb1cb23ab265/reqman/README.md#L26

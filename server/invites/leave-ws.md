@@ -1,3 +1,5 @@
+# Leave Workspace
+
 ## c.sys.InitiateLeaveWorkspace()
 
 - AuthZ: role.sys.Subject

@@ -1,22 +1,14 @@
-## Functional design
+# Send Email
 
-~story.srv.users.SendEmail~
+As Application, I want to send an Email to a User.
 
-Application calls `sys.AppWorkspaceWS.SendEmailToUser` to send an Email to a User.
+## sys.UserProfileWS.SendEmailToUser
 
-## Technical design
-
-### sys.AppWorkspaceWS.SendEmailToUser
-
-`c3~srv.sys.AppWorkspaceWS.c.SendEmailToUser~1`
-
-- AuthZ: Workspace.Application
+- AuthZ: role.sys.Workspace.ProfileOwner
 - Params
-  - Subject
-  - Text
+    - NewEMail
 - Errors
+    - Email is mailformed // See similar message
 
 **Behavior:**
-
-- If UserProfile.Email is not empty, use it.
-- Else, use Login as Email.
+    - Update UserProfileWS.UserProfile.Email

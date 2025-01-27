@@ -1,3 +1,5 @@
+# Cancel Sent Invite
+
 ## c.sys.CancelSentInvite()
 
 - AuthZ: role.sys.WorkspaceAdmin
