@@ -1,22 +1,21 @@
 # Table of contents
 
 - [Introduction](README.md)
-
 - [Concepts](concepts/README.md)
   - [Event Sourcing & CQRS](concepts/evsrc/README.md)
   - [Editions (deprecated)](concepts/editions/README.md)
     - [Community Edition](concepts/editions/ce.md)
     - [Standart Edition](concepts/editions/se.md)
     - [Standart Edition (v1)](concepts/editions/se1.md)
-
 - [Server](server/README.md)
   - Design
-    - [Query Processor](server/design/qp/qp.md)
+    - [Query Processor](server/design/qp.md)
+    - [API Gateway implementation](server/design/agw.md)
     - [N1 Cluster](server/design/c2.n1.md)
     - [N3 Cluster](server/design/c2.n3.md)
     - [N5 Cluster](server/design/c2.n5.md)
   - API Gateway
-    - [API v2](server/apiv2/apiv2.md)
+    - [API v2](server/apiv2/README.md)
     - [API v1](server/api-gateway.md)
       - [API Conventions](server/api-conventions.md)
       - [BLOBs](server/blobs.md)
