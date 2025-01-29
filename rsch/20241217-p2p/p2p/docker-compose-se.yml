@@ -1,0 +1,133 @@
+version: '3.8'
+
+services:
+
+  nginx:
+    image: nginx:1.27.3
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - voedger_net
+    volumes:
+      - ~/nginx:/etc/nginx/
+    deploy:
+      replicas: 3
+      placement:
+        constraints:
+          - node.labels.AppNode == true
+
+
+  vvm1:
+    image: voedger/voedger:0.0.1-alpha
+    networks:
+      - voedger_net
+    volumes:
+      - /etc/hosts:/etc/hosts
+    environment:
+      - VOEDGER_HTTP_PORT=${VOEDGER_HTTP_PORT}
+      - VOEDGER_ACME_DOMAINS=${VOEDGER_ACME_DOMAINS}
+    deploy:
+      restart_policy:
+        condition: any
+      replicas: 1
+      endpoint_mode: vip
+      placement:
+        preferences:
+          - spread: node.labels.AppNode
+
+  vvm2:
+    image: voedger/voedger:0.0.1-alpha
+    networks:
+      - voedger_net
+    volumes:
+      - /etc/hosts:/etc/hosts
+    environment:
+      - VOEDGER_HTTP_PORT=${VOEDGER_HTTP_PORT}
+      - VOEDGER_ACME_DOMAINS=${VOEDGER_ACME_DOMAINS}
+    deploy:
+      restart_policy:
+        condition: any
+      replicas: 1
+      endpoint_mode: vip
+      placement:
+        preferences:
+          - spread: node.labels.AppNode
+
+  vvm3:
+    image: voedger/voedger:0.0.1-alpha
+    networks:
+      - voedger_net
+    volumes:
+      - /etc/hosts:/etc/hosts
+    environment:
+      - VOEDGER_HTTP_PORT=${VOEDGER_HTTP_PORT}
+      - VOEDGER_ACME_DOMAINS=${VOEDGER_ACME_DOMAINS}
+    deploy:
+      restart_policy:
+        condition: any
+      replicas: 1
+      endpoint_mode: vip
+      placement:
+        preferences:
+          - spread: node.labels.AppNode
+
+  vvm4:
+    image: voedger/voedger:0.0.1-alpha
+    networks:
+      - voedger_net
+    volumes:
+      - /etc/hosts:/etc/hosts
+    environment:
+      - VOEDGER_HTTP_PORT=${VOEDGER_HTTP_PORT}
+      - VOEDGER_ACME_DOMAINS=${VOEDGER_ACME_DOMAINS}
+    deploy:
+      restart_policy:
+        condition: any
+      replicas: 1
+      endpoint_mode: vip
+      placement:
+        preferences:
+          - spread: node.labels.AppNode
+
+
+  vvm5:
+    image: voedger/voedger:0.0.1-alpha
+    networks:
+      - voedger_net
+    volumes:
+      - /etc/hosts:/etc/hosts
+    environment:
+      - VOEDGER_HTTP_PORT=${VOEDGER_HTTP_PORT}
+      - VOEDGER_ACME_DOMAINS=${VOEDGER_ACME_DOMAINS}
+    deploy:
+      restart_policy:
+        condition: any
+      replicas: 1
+      endpoint_mode: vip
+      placement:
+        preferences:
+          - spread: node.labels.AppNode
+
+  vvm6:
+    image: voedger/voedger:0.0.1-alpha
+    networks:
+      - voedger_net
+    volumes:
+      - /etc/hosts:/etc/hosts
+    environment:
+      - VOEDGER_HTTP_PORT=${VOEDGER_HTTP_PORT}
+      - VOEDGER_ACME_DOMAINS=${VOEDGER_ACME_DOMAINS}
+    deploy:
+      restart_policy:
+        condition: any
+      replicas: 1
+      endpoint_mode: vip
+      placement:
+        preferences:
+          - spread: node.labels.AppNode
+
+
+networks:
+  voedger_net:
+    external: true

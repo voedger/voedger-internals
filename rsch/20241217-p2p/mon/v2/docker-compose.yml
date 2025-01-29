@@ -1,0 +1,246 @@
+version: '3.5'
+services:
+  prometheus1:
+    image: prom/prometheus:v2.44.0
+    networks:
+      - voedger_net
+    volumes:
+      - /prometheus:/prometheus
+      - ~/prometheus:/etc/prometheus
+      - /etc/hosts:/etc/hosts
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--web.config.file=/etc/prometheus/web.yml'
+      - '--web.enable-admin-api'
+      - '--web.enable-lifecycle'
+      - '--web.route-prefix=/prometheus/'
+      - '--web.external-url=/prometheus/'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=30d'
+    deploy:
+      restart_policy:
+        condition: any
+      placement:
+        constraints:
+          - node.labels.AppNode1 == true
+      replicas: 1
+    logging:
+      driver: "local"
+      options: 
+        max-size: 10m
+        max-file: "3"
+
+  prometheus2:
+    image: prom/prometheus:v2.44.0
+    networks:
+      - voedger_net
+    volumes:
+      - /prometheus:/prometheus
+      - ~/prometheus:/etc/prometheus
+      - /etc/hosts:/etc/hosts
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--web.config.file=/etc/prometheus/web.yml'
+      - '--web.enable-admin-api'
+      - '--web.enable-lifecycle'
+      - '--web.route-prefix=/prometheus/'
+      - '--web.external-url=/prometheus/'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=30d'
+    deploy:
+      restart_policy:
+        condition: any
+      placement:
+        constraints:
+          - node.labels.AppNode2 == true
+      replicas: 1
+    logging:
+      driver: "local"
+      options: 
+        max-size: 10m
+        max-file: "3"
+
+
+  grafana1:
+    image: grafana/grafana:8.3.4
+    networks:
+      - voedger_net
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ~/grafana/grafana.ini:/etc/grafana/grafana.ini
+      - ~/grafana/provisioning/datasources/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
+      - ~/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - /var/lib/grafana:/var/lib/grafana
+      - /etc/hosts:/etc/hosts
+    deploy:
+      restart_policy:
+        condition: any
+      placement:
+        constraints:
+          - node.labels.AppNode1 == true
+      replicas: 1
+    logging:
+      driver: "local"
+      options: 
+        max-size: 10m
+        max-file: "3"
+
+  grafana2:
+    image: grafana/grafana:8.3.4
+    networks:
+      - voedger_net
+    volumes:
+      - ~/grafana/grafana.ini:/etc/grafana/grafana.ini
+      - ~/grafana/provisioning/datasources/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
+      - ~/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - /var/lib/grafana:/var/lib/grafana
+      - /etc/hosts:/etc/hosts
+    deploy:
+      restart_policy:
+        condition: any
+      placement:
+        constraints:
+          - node.labels.AppNode2 == true
+      replicas: 1
+    logging:
+      driver: "local"
+      options: 
+        max-size: 10m
+        max-file: "3"
+
+  cadvisor1:
+    image: gcr.io/cadvisor/cadvisor:v0.47.1
+    deploy:
+      restart_policy:
+        condition: any
+      placement:
+        constraints:
+          - node.labels.AppNode1 == true
+      replicas: 1 
+    networks:
+      - voedger_net
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /etc/hosts:/etc/hosts
+
+  cadvisor2:
+    image: gcr.io/cadvisor/cadvisor:v0.47.1
+    deploy:
+      restart_policy:
+        condition: any
+      placement:
+        constraints:
+          - node.labels.AppNode2 == true
+      replicas: 1 
+    networks:
+      - voedger_net
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /etc/hosts:/etc/hosts
+
+  alertmanager1:
+    image: prom/alertmanager:v0.26.0
+    networks:
+      - voedger_net
+    volumes:
+      - /alertmanager:/alertmanager
+      - ~/alertmanager:/etc/alertmanager
+      - /etc/hosts:/etc/hosts
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/alertmanager'
+      - '--cluster.peer=alertmanager2:9094' 
+      - '--cluster.listen-address=:9094'
+      - '--cluster.advertise-address=:9094'
+    deploy:
+      restart_policy:
+        condition: any
+      placement:
+        constraints:
+          - node.labels.AppNode1 == true
+      replicas: 1
+
+  alertmanager2:
+    image: prom/alertmanager:v0.26.0
+    networks:
+      - voedger_net
+    volumes:
+      - /alertmanager:/alertmanager
+      - ~/alertmanager:/etc/alertmanager
+      - /etc/hosts:/etc/hosts
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/alertmanager'
+      - '--cluster.peer=alertmanager1:9094' 
+      - '--cluster.listen-address=:9094'
+      - '--cluster.advertise-address=""'
+    deploy:
+      restart_policy:
+        condition: any
+      placement:
+        constraints:
+          - node.labels.AppNode2 == true
+      replicas: 1
+
+
+  node-exporter1:
+    image: prom/node-exporter:v1.6.1
+    deploy:
+      restart_policy:
+        condition: any
+      placement:
+        constraints:
+          - node.labels.AppNode1 == true 
+      replicas: 1
+    networks:
+      - voedger_net
+    volumes:
+      - /etc/hostname:/etc/nodename
+      - /etc/node-exporter:/etc/node-exporter
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+      - /etc/hosts:/etc/hosts
+    command: 
+      - '--path.procfs=/host/proc' 
+      - '--path.sysfs=/host/sys'
+      - '--path.rootfs=/rootfs'
+      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
+      - '--collector.textfile.directory=/etc/node-exporter/'
+
+  node-exporter2:
+    image: prom/node-exporter:v1.6.1
+    deploy:
+      restart_policy:
+        condition: any
+      placement:
+        constraints:
+          - node.labels.AppNode2 == true 
+      replicas: 1
+    networks:
+      - voedger_net
+    volumes:
+      - /etc/hostname:/etc/nodename
+      - /etc/node-exporter:/etc/node-exporter
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+      - /etc/hosts:/etc/hosts
+    command: 
+      - '--path.procfs=/host/proc' 
+      - '--path.sysfs=/host/sys'
+      - '--path.rootfs=/rootfs'
+      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
+      - '--collector.textfile.directory=/etc/node-exporter/'
+
+networks:
+  voedger_net:
+    external: true
+
