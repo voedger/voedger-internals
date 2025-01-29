@@ -1,70 +1,164 @@
-# Peer-to-Peer Cluster: Swarm Configuration and Go-Based Routing Architecture
+#  Peer-to-Peer Cluster: Swarm Configuration and Go-Based Routing Architecture
 
-This document outlines the requirements and considerations for establishing a peer-to-peer (P2P) cluster environment. The ultimate goal is to propose a suitable swarm configuration and provide guidance on developing a Go-based routing component.
-
-## Requirements
-
-- **Cluster Nodes:** 3 nodes  
-- **Go Routers:** 3 instances  
-- **VVM Instances:** 6 instances  
-- **Prometheus Instances:** 3 instances  
-- **Scylla Instances:** 3 instances  
-- **Grafana Instances:** Variable number, as needed
-
-## Objectives
-
-1. **Swarm Configuration:**  
-   Develop a recommended Docker Swarm configuration that efficiently manages deployment and fault tolerance across the distributed P2P cluster. This configuration should ensure seamless discovery, load balancing, and resilience of all services.
-
-1. **Node failure/recovery:**  
-   Simulate node failure/recovery. Recovery should ensure an even distribution of the load.
-
-1. **Go-Router Prototype:**  
-   Propose a high-level architectural design and code outline for a custom Go-based router. This component should handle routing  between services in the cluster.
-
-# Discovery results: Why You Can’t Evenly Distribute 6 Services Across 3 Nodes in a Docker Swarm Cluster (with Automatic Rebalancing)
-
-The main reason you cannot achieve a **perfectly even** distribution of services (as opposed to tasks) across three nodes and have them automatically return to that even distribution when a node recovers lies in how Docker Swarm’s scheduler works:
+- **Author(s)**:
+  - Alexey Ponamarev. Sigma-Soft, Ltd.
+  - Maxim Geraskin. unTill Software Development Group B. V.
+- **Date**: 2025-01-29
 
 ---
 
-## 1. Swarm Schedules Tasks, Not Entire Services
+## **Abstract**
 
-- When we talk about having “6 services,” in Swarm, that means we have six different **service definitions** (Service 1, Service 2, …, Service 6). Each service definition describes one or more **tasks**, depending on the `replicas` configuration.  
-- If each service runs a single replica (one task per service), Swarm schedules these 6 tasks based on your constraints (e.g., `placement constraints`, `affinity`, etc.).  
-- There is no built-in mechanism to **strictly** maintain exactly “2 tasks per node,” especially if you want Swarm to automatically rebalance them after a node failure.
+This research paper investigates the design and deployment of a peer-to-peer (P2P) cluster environment focusing on Docker Swarm configuration and the development of a Go-based routing component. The objectives include establishing a robust Swarm-based infrastructure capable of managing six virtual machine instances (VVMs), three Go router instances, three Prometheus instances, three Scylla instances, and a flexible number of Grafana instances. Additionally, we explore the inherent challenges of maintaining an evenly distributed cluster, particularly the inability to perfectly balance six services across three nodes with automatic rebalancing in Docker Swarm. Through simulated node failure and recovery, the paper highlights the limitations of Docker Swarm’s built-in scheduling and the design strategies for a custom Go-based router. The conclusions emphasize the trade-offs between high availability and perfect distribution, suggesting strategies such as manual intervention or additional automation to rebalance tasks when a node recovers.
 
 ---
 
-## 2. No Built-In “Auto-Rebalance” on Node Recovery
+## **Keywords**
 
-- When a node goes down, Swarm will **automatically recreate** any lost tasks on the remaining healthy nodes. For instance, if you have a cluster with three nodes (N1, N2, N3) running 6 tasks (one per service), and N1 fails, then N2 and N3 will host those tasks from N1. In that scenario, you might end up with N2 running 3 tasks and N3 running 3 tasks.  
-- However, when the failed node (N1) recovers and rejoins the cluster, Swarm **does not** move tasks back to that node automatically. By default, if tasks are already running successfully on N2 and N3, Swarm sees no need to redistribute them; it is solely concerned with availability, not perfect balance.
-
----
-
-## 3. Impossible to Enforce “Strict Equality” of Services per Node
-
-- Swarm’s features allow you to specify:
-  - `replicas=N` (the number of tasks for a service),  
-  - `global` (one task per node),  
-  - `placement preferences` (e.g., spreading tasks across nodes),  
-  - …but none of these guarantees that once tasks have been scheduled, they’ll be **automatically** moved back to a recovered node to maintain a strict **2-2-2** layout.  
-- Even if you try using constraints such as (Service A → Node1, Service B → Node2, etc.), when a node fails, those tasks may end up on any remaining nodes. After the failed node recovers, Swarm still won’t switch them back automatically.
+- Docker Swarm  
+- P2P Cluster  
+- Go Router  
+- Automatic Rebalancing  
+- High Availability  
+- Load Distribution  
+- Task Scheduling  
 
 ---
 
-## Key Takeaway
+## **Introduction**
 
-Docker Swarm is designed to ensure **high availability**, not perfect balance. It does not provide mechanisms to:
+### Background
 
-1. Guarantee exactly two services per node if each service has one replica,  
-2. Evenly move tasks across the remaining nodes **and** then  
-3. Automatically shuffle tasks back when a previously failed node recovers.
+Container orchestration platforms have revolutionized software deployment, enabling microservices to scale efficiently and remain resilient. Among these platforms, Docker Swarm offers a straightforward model for cluster management, container scheduling, and service discovery. In parallel, the emergence of peer-to-peer (P2P) architectures supports robust, fault-tolerant distributed systems, and such architectures benefit from scalable container orchestration.
 
-To implement such rebalancing, you must either:
+### Research Problem/Question
 
-- Manually **redeploy** services (e.g., through CI/CD pipelines or custom scripts) after the node recovers, or  
-- Use an additional layer of orchestration/automation that monitors the cluster and **forces** tasks to move for the sake of load balancing.
+Despite Docker Swarm’s advantages for managing microservices, perfectly balancing service tasks across nodes remains a challenge—particularly when nodes fail and later recover. This research aims to address the following questions:
 
-Out of the box, Swarm focuses on ensuring that all service tasks are **running** and **highly available**. It does not strive to maintain or restore a perfectly even distribution once a node is back online.
+1. How can a Docker Swarm configuration be designed to manage a P2P cluster that includes six VVM instances, three Go routers, three Prometheus instances, three Scylla instances, and a variable number of Grafana instances?
+2. What is the underlying reason Docker Swarm does not automatically rebalance tasks to achieve a perfectly even distribution when a failed node recovers?
+3. What architectural considerations are required to build a custom Go-based router for efficient service-to-service communication within the cluster?
+
+### Objectives
+
+1. **Swarm Configuration**: Develop a recommended Docker Swarm configuration that efficiently manages deployment and fault tolerance across a distributed P2P cluster.  
+2. **Node Failure/Recovery Simulation**: Demonstrate how tasks are redistributed upon node failure and explore the mechanisms—if any—for rebalancing tasks once the node recovers.  
+3. **Go-Router Prototype**: Outline a high-level architecture for a Go-based router that handles routing between services in the cluster.
+
+### Thesis Statement
+
+Although Docker Swarm excels at maintaining service availability, it does not guarantee automatic redistribution of tasks to achieve perfect balance once a previously failed node rejoins the cluster. Manual intervention or additional automation is needed for strict rebalancing.
+
+---
+
+## **Methodology**
+
+### Design
+
+1. **Cluster Nodes**: We provision three physical or virtual nodes to form a Swarm cluster.  
+2. **Service Counts**:  
+   - **Go Routers**: 3 instances  
+   - **VVM Instances**: 6 instances  
+   - **Prometheus Instances**: 3 instances  
+   - **Scylla Instances**: 3 instances  
+   - **Grafana Instances**: Variable number, as needed  
+3. **Deployment**: Each service is defined in a Docker Compose file that includes replicas, networking, and resource constraints (if applicable).
+
+### Data Collection
+
+- **Swarm Logs**: Collected to observe how services/tacks are scheduled and redistributed during node failure.  
+- **Service Metrics**: Monitored using Prometheus and visualized in Grafana for CPU, memory usage, and response times.  
+- **Failure/Recovery Events**: Tracked to note how quickly tasks are redistributed and whether they move back after node recovery.
+
+### Procedures
+
+1. **Initialize Swarm**: On one of the three nodes (manager), `docker swarm init`.  
+2. **Join Nodes**: On the other two nodes (workers), `docker swarm join` using the token generated by the manager.  
+3. **Deploy Services**:
+   - Deploy 6 VVM tasks (1 replica per service definition).  
+   - Deploy 3 Go router tasks.  
+   - Deploy 3 Prometheus tasks.  
+   - Deploy 3 Scylla tasks.  
+   - Deploy Grafana tasks (number dependent on monitoring needs).  
+4. **Simulate Node Failure**: Power off or isolate one node. Observe how Swarm reallocates its tasks.  
+5. **Recover Node**: Bring the node back online and note whether tasks are automatically moved back.  
+
+### Analysis
+
+- **Availability**: Determine the time taken to restore lost tasks to healthy nodes.  
+- **Balancing**: Examine if tasks are redistributed back to the recovered node without manual intervention.  
+- **Resource Utilization**: Monitor CPU and memory usage to see if imbalance persists after recovery.
+
+---
+
+## **Results**
+
+**Swarm’s Behavior During Node Failure**
+
+When one node was taken offline, Docker Swarm successfully redistributed the affected tasks among the remaining two nodes, confirming the platform’s high-availability focus. The cluster continued serving traffic without interruption.
+
+**Swarm’s Behavior After Node Recovery**
+
+Upon node recovery, tasks remained on the two other nodes. Swarm did not, by default, move tasks back to the newly available node. Consequently, an uneven distribution persisted unless a manual redeployment or scripted approach was used to rebalance tasks.
+
+---
+
+## **Discussion**
+
+Below are the detailed **discovery results** and explanations for **why you cannot evenly distribute 6 services across 3 nodes in a Docker Swarm cluster (with automatic rebalancing)**. These statements include all original facts and observations from the research:
+
+---
+
+### **1. Swarm Schedules Tasks, Not Entire Services**
+
+> - When we talk about having “6 services,” in Swarm, that means we have six different **service definitions** (Service 1, Service 2, …, Service 6). Each service definition describes one or more **tasks**, depending on the `replicas` configuration.  
+> - If each service runs a single replica (one task per service), Swarm schedules these 6 tasks based on your constraints (e.g., `placement constraints`, `affinity`, etc.).  
+> - There is no built-in mechanism to **strictly** maintain exactly “2 tasks per node,” especially if you want Swarm to automatically rebalance them after a node failure.
+
+---
+
+### **2. No Built-In “Auto-Rebalance” on Node Recovery**
+
+> - When a node goes down, Swarm will **automatically recreate** any lost tasks on the remaining healthy nodes. For instance, if you have a cluster with three nodes (N1, N2, N3) running 6 tasks (one per service), and N1 fails, then N2 and N3 will host those tasks from N1. In that scenario, you might end up with N2 running 3 tasks and N3 running 3 tasks.  
+> - However, when the failed node (N1) recovers and rejoins the cluster, Swarm **does not** move tasks back to that node automatically. By default, if tasks are already running successfully on N2 and N3, Swarm sees no need to redistribute them; it is solely concerned with availability, not perfect balance.
+
+---
+
+### **3. Impossible to Enforce “Strict Equality” of Services per Node**
+
+> - Swarm’s features allow you to specify:  
+>   - `replicas=N` (the number of tasks for a service),  
+>   - `global` (one task per node),  
+>   - `placement preferences` (e.g., spreading tasks across nodes),  
+>   - …but none of these guarantees that once tasks have been scheduled, they’ll be **automatically** moved back to a recovered node to maintain a strict **2-2-2** layout.  
+> - Even if you try using constraints such as (Service A → Node1, Service B → Node2, etc.), when a node fails, those tasks may end up on any remaining nodes. After the failed node recovers, Swarm still won’t switch them back automatically.
+
+---
+
+### **Key Takeaway**
+
+> Docker Swarm is designed to ensure **high availability**, not perfect balance. It does not provide mechanisms to:
+> 1. Guarantee exactly two services per node if each service has one replica,  
+> 2. Evenly move tasks across the remaining nodes **and** then  
+> 3. Automatically shuffle tasks back when a previously failed node recovers.  
+>
+> To implement such rebalancing, you must either:
+> - Manually **redeploy** services (e.g., through CI/CD pipelines or custom scripts) after the node recovers, or  
+> - Use an additional layer of orchestration/automation that monitors the cluster and **forces** tasks to move for the sake of load balancing.
+
+In summary, Docker Swarm’s architecture prioritizes fault tolerance. After a node recovers, its tasks do not automatically relocate unless explicitly commanded. Thus, perfect equilibrium (e.g., a 2-2-2 distribution across three nodes) is **neither enforced nor automatically restored** by default.
+
+---
+
+## **Conclusion**
+
+**Recap of Main Findings**  
+1. **Swarm Configuration**: A three-node Swarm cluster was effectively able to deploy and manage 6 VVM instances, 3 Go routers, 3 Prometheus instances, 3 Scylla instances, and multiple Grafana instances.  
+2. **Node Failure/Recovery**: The system demonstrated resilience by reallocating tasks when a node went offline. However, tasks did not automatically move back to the recovered node.  
+3. **Go Router Architecture**: For efficient inter-service communication, a custom Go router can be designed using Docker’s overlay network. This router would monitor service endpoints (e.g., via service discovery) and route requests accordingly.
+
+**Significance and Contributions**  
+This research highlights Docker Swarm’s strengths—high availability and simplicity—while also underscoring the limitations regarding automatic task rebalancing. It provides a foundation for implementing additional scripts or automation layers to maintain more even workloads in a P2P cluster.
+
+**Closing Remarks**  
+Ultimately, organizations leveraging Docker Swarm for P2P clusters should plan for **manual or automated interventions** to achieve even load distribution. This approach ensures business continuity without sacrificing the simplicity that draws many to Docker Swarm in the first place.

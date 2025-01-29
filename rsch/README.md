@@ -1,6 +1,7 @@
 # Research Writing
 
 - [Template](template-rsch.md)
+- [Example](20241217-p2p/README.md)
 
 ## Literature Review, Related Work, Background
 
