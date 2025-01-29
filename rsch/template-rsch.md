@@ -1,3 +1,5 @@
+Structure for a professional research paper:
+
 # **Title Page**
 
 - **Author(s)**:

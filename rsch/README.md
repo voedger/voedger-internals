@@ -3,6 +3,13 @@
 - [Template](template-rsch.md)
 - [Example](20241217-p2p/README.md)
 
+## Prompt
+
+Create a professional research paper using this data
+- ask quiestions, if needed
+- include all original facts and statements
+
+
 ## Concepts
 
 ### Literature Review, Related Work, Background
