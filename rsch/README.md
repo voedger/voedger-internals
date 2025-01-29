@@ -5,16 +5,6 @@
 
 ## Concepts
 
-### Problem Statement, Objectives
-
-| Aspect              | Problem Statement                         | Objectives                              |
-|---------------------|-------------------------------------------|-----------------------------------------|
-| **Purpose**         | Explains the issue or gap being addressed. | Defines the specific goals to achieve.  |
-| **Focus**           | *Why* the research is important.          | *What* the research aims to accomplish. |
-| **Nature**          | Descriptive and contextual.               | Prescriptive and actionable.            |
-| **Level of Detail** | Broad and focuses on the overall problem.  | Specific and operational.               |
-| **Examples**        | Identifies the problem (e.g., lack of reliable assessment methods). | Outlines the solution steps (e.g., develop and validate a framework). |
-
 ### Literature Review, Related Work, Background
 
 Here’s a detailed comparison between **Literature Review**, **Related Work**, and **Background** presented in a table:
@@ -29,3 +19,14 @@ Here’s a detailed comparison between **Literature Review**, **Related Work**, 
 | **Focus**         | Field-wide, showing the state of the art and trends. | Directly related studies, contrasting their approaches or results with the current research. | Conceptual or contextual, ensuring readers understand the problem and terminology. |
 | **Examples of Use** | “Studies in X have primarily focused on Y, leaving Z unexplored...” | “Unlike the approach used by Smith et al. (2020), our method improves accuracy by 20%...” | “The concept of Z, introduced by A in 1980, refers to...” |
 | **Common in**     | Academic papers in fields like social sciences, humanities, and broad scientific research. | Technical papers, especially in computer science, engineering, or applied research. | Papers with specialized audiences who may lack familiarity with the specific topic. |
+
+### Problem Statement, Objectives
+
+| Aspect              | Problem Statement                         | Objectives                              |
+|---------------------|-------------------------------------------|-----------------------------------------|
+| **Purpose**         | Explains the issue or gap being addressed. | Defines the specific goals to achieve.  |
+| **Focus**           | *Why* the research is important.          | *What* the research aims to accomplish. |
+| **Nature**          | Descriptive and contextual.               | Prescriptive and actionable.            |
+| **Level of Detail** | Broad and focuses on the overall problem.  | Specific and operational.               |
+| **Examples**        | Identifies the problem (e.g., lack of reliable assessment methods). | Outlines the solution steps (e.g., develop and validate a framework). |
+

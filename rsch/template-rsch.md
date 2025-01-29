@@ -14,42 +14,40 @@
   - Key findings.
 
 ---
-## **Keywords**
-- A list of keywords to facilitate indexing and searchability.
-
----
 ## **Introduction**
 
 ### Background
+
+Explains foundational concepts, theories, or context needed to understand the paper.
+
+### Literature review
+
+Provides a broad overview of the existing body of knowledge, identifying gaps and justifying the need for the research.
+
+### Related work
+
+Focuses on closely related studies, emphasizing how the current work builds on or differs from them.
+
 ### Problem Statement
+
+Explains the issue or gap being addressed.
+
 ### Objective(s)
 
----
-## **Literature Review**
+Defines the specific goals to achieve.
 
-If appropriate:
-- Review of previous research on the topic.
-- Identification of gaps in the existing knowledge.
-- How the current research addresses these gaps.
-
----
-## **Related Work**
-
-If appropriate.
-
----
-## **Key Differences**
+### Key differences
 
 If appropriate. What distinguishes this article from others.
 
 ---
 ## **Methodology**
 
-### Design**
+### Design
 
 Research design (essentials).
 
-### Data Collection
+### Data collection
 
 Tools, instruments, or processes used.
 
