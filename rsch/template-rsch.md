@@ -19,10 +19,10 @@
 
 ---
 ## **Introduction**
-- **Background**: Context and rationale for the study.
-- **Research Problem/Question**: Clearly stated.
-- **Objective(s)**: What the study aims to achieve.
-- **Thesis Statement or Hypothesis**: Where applicable.
+
+### Background
+### Problem Statement
+### Objective(s)
 
 ---
 ## **Literature Review**
@@ -44,10 +44,22 @@ If appropriate. What distinguishes this article from others.
 
 ---
 ## **Methodology**
-- **Design**: Research design (essentials).
-- **Data Collection**: Tools, instruments, or processes used.
-- **Procedures**: Step-by-step outline of the methods.
-- **Analysis**: Statistical or analytical techniques employed.
+
+### Design**
+
+Research design (essentials).
+
+### Data Collection
+
+Tools, instruments, or processes used.
+
+### Procedures
+
+Step-by-step outline of the methods.
+
+### Analysis
+
+Statistical or analytical techniques employed.
 
 ---
 ## **Results**

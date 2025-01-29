@@ -146,8 +146,5 @@ In summary, Docker Swarm’s architecture prioritizes fault tolerance. After a n
 2. **Node Failure/Recovery**: The system demonstrated resilience by reallocating tasks when a node went offline. However, tasks did not automatically move back to the recovered node.  
 3. **Go Router Architecture**: For efficient inter-service communication, a custom Go router can be designed using Docker’s overlay network. This router would monitor service endpoints (e.g., via service discovery) and route requests accordingly.
 
-**Significance and Contributions**  
-This research highlights Docker Swarm’s strengths—high availability and simplicity—while also underscoring the limitations regarding automatic task rebalancing. It provides a foundation for implementing additional scripts or automation layers to maintain more even workloads in a P2P cluster.
-
 **Closing Remarks**  
 Ultimately, organizations leveraging Docker Swarm for P2P clusters should plan for **manual or automated interventions** to achieve even load distribution. This approach ensures business continuity without sacrificing the simplicity that draws many to Docker Swarm in the first place.

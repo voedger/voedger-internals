@@ -3,7 +3,19 @@
 - [Template](template-rsch.md)
 - [Example](20241217-p2p/README.md)
 
-## Literature Review, Related Work, Background
+## Concepts
+
+### Problem Statement, Objectives
+
+| Aspect              | Problem Statement                         | Objectives                              |
+|---------------------|-------------------------------------------|-----------------------------------------|
+| **Purpose**         | Explains the issue or gap being addressed. | Defines the specific goals to achieve.  |
+| **Focus**           | *Why* the research is important.          | *What* the research aims to accomplish. |
+| **Nature**          | Descriptive and contextual.               | Prescriptive and actionable.            |
+| **Level of Detail** | Broad and focuses on the overall problem.  | Specific and operational.               |
+| **Examples**        | Identifies the problem (e.g., lack of reliable assessment methods). | Outlines the solution steps (e.g., develop and validate a framework). |
+
+### Literature Review, Related Work, Background
 
 Here’s a detailed comparison between **Literature Review**, **Related Work**, and **Background** presented in a table:
 
