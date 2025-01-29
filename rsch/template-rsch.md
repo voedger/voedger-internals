@@ -1,6 +1,6 @@
 Structure for a professional research paper:
 
-# **Title Page**
+# Put paper title here
 
 - **Author(s)**:
     - Author 1. Affiliation 1
@@ -9,14 +9,14 @@ Structure for a professional research paper:
 - **Keywords**: Keyword 1, Keyword 2, Keyword 3
 
 ---
-## **Abstract**
+## Abstract
 - A brief summary (150–250 words) of the research, including:
   - Objective or research question.
   - Methods used.
   - Key findings.
 
 ---
-## **Introduction**
+## Introduction
 
 ### Background
 
