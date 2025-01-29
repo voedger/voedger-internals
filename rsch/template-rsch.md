@@ -37,26 +37,26 @@ If appropriate:
 If appropriate.
 
 ---
-### **Key Differences**
+## **Key Differences**
 
 If appropriate. What distinguishes this article from others.
 
 ---
-### **Methodology**
+## **Methodology**
 - **Design**: Research design (essentials).
 - **Data Collection**: Tools, instruments, or processes used.
 - **Procedures**: Step-by-step outline of the methods.
 - **Analysis**: Statistical or analytical techniques employed.
 
 ---
-### **Results**
+## **Results**
 - Presentation of findings, using:
   - Text descriptions.
   - Tables, charts, and figures (where applicable).
 - Avoid interpretation in this section.
 
 ---
-### **Discussion**
+## **Discussion**
 - **Interpretation**: Explain the meaning of the results.
 - **Comparison**: Relate findings to previous research.
 - **Implications**: Real-world or theoretical impact.
@@ -64,17 +64,17 @@ If appropriate. What distinguishes this article from others.
 - **Future Research**: Suggestions for follow-up studies.
 
 ---
-### **Conclusion**
+## **Conclusion**
 - Recap the main findings.
 - Emphasize the significance and contributions of the research.
 - Closing remarks, tying back to the introduction.
 
 ---
-### **References**
+## **References**
 - References in the IEEE style.
 
 ---
-### **Appendices**
+## **Appendices**
 
 If appropriate.
 
