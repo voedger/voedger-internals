@@ -4,24 +4,13 @@
   - Alexey Ponamarev. Sigma-Soft, Ltd.
   - Maxim Geraskin. unTill Software Development Group B. V.
 - **Date**: 2025-01-29
+- **Keywords**: Docker Swarm, P2P Cluster, Go Router, Automatic Rebalancing, High Availability, Load Distribution, Task Scheduling  
 
 ---
 
 ## **Abstract**
 
 This research paper investigates the design and deployment of a peer-to-peer (P2P) cluster environment focusing on Docker Swarm configuration and the development of a Go-based routing component. The objectives include establishing a robust Swarm-based infrastructure capable of managing six virtual machine instances (VVMs), three Go router instances, three Prometheus instances, three Scylla instances, and a flexible number of Grafana instances. Additionally, we explore the inherent challenges of maintaining an evenly distributed cluster, particularly the inability to perfectly balance six services across three nodes with automatic rebalancing in Docker Swarm. Through simulated node failure and recovery, the paper highlights the limitations of Docker Swarm’s built-in scheduling and the design strategies for a custom Go-based router. The conclusions emphasize the trade-offs between high availability and perfect distribution, suggesting strategies such as manual intervention or additional automation to rebalance tasks when a node recovers.
-
----
-
-## **Keywords**
-
-- Docker Swarm  
-- P2P Cluster  
-- Go Router  
-- Automatic Rebalancing  
-- High Availability  
-- Load Distribution  
-- Task Scheduling  
 
 ---
 

@@ -4,6 +4,7 @@
     - Author 1. Affiliation 1
     - Author 2. Affiliation 2
 - **Date**: YYYY-MM-DD
+- **Keywords**: Keyword 1, Keyword 2, Keyword 3
 
 ---
 ## **Abstract**
