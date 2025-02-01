@@ -1,7 +1,7 @@
 # API Gateway implementation
 Design of the implementation of the API Gateway.
 
-# Components
+# Context
 ```mermaid
 flowchart
 qp1[/Query Processor v1/]:::S
@@ -31,6 +31,12 @@ classDef S fill:#B5FFFF,color:#333
 classDef H fill:#C9E7B7,color:#333
 classDef G fill:#ffffff15, stroke:#999, stroke-width:2px, stroke-dasharray: 5 5
 ```
+
+# Components
+- Command Processor: `processors/command`
+- Query Processor 1: `processors/query`
+- Query Processor 2: `processors/query2`
+- Request Handler `vvm/impl_requesthandler.go`
 
 # Request dispatching
 ```mermaid
@@ -70,3 +76,4 @@ classDef G fill:#ffffff15, stroke:#999, stroke-width:2px, stroke-dasharray: 5 5
 # See Also
 - [Design: Query Processor](/server/design/qp)
 - [Design: API v2](/server/apiv2/README.md)
+
