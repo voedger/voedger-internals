@@ -188,3 +188,8 @@ classDef H fill:#C9E7B7,color:#333
 classDef G fill:#ffffff15, stroke:#999, stroke-width:2px, stroke-dasharray: 5 5
 ```
 
+# See ALso
+- [API Gateway Implementation](/server/design/agw.md)
+- [API v2](/server/apiv2/README.md)
+
+
