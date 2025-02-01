@@ -424,3 +424,7 @@ In the GET operations, returning the list of objects, when the error happens dur
 # Limitations
 - sys.CUD function cannot be called directly
 
+
+# See Also
+- [Query Processor](/server/design/qp.md)
+- [API Gateway Implementation](/server/design/agw.md)
