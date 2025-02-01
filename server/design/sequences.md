@@ -20,15 +20,15 @@ Sequence is a monotonic increasing list of numbers.
 ### NextPLogOffset(PartitionID, duration) Offset
 
 - Actor: CP
-- When: CP needs to process an request
+- When: CP needs to process a request
 - Flow:
     - `Status[PartitionID] == Clean && !IsRecoveryRunning(PartitionID)`):
         - Set `Status[PartitionID]` to `Dirty`
         - Return NextPLogOffset
     - `IsRecoveryRunning(PartitionID)`: 
         - Wait for duration
-        - If wait fails return 0. 
-        - Repeat Flow.
+        - If wait fails, return 0
+        - Repeat Flow
     - `Status[PartitionID] == Dirty`: panic
 
 ### NextInSequence(PartitionID, WSID, QName) ID
@@ -54,16 +54,16 @@ Sequence is a monotonic increasing list of numbers.
 
 - Actor: CP
 - When: After CP fails to save the PLog record
-- Flow
+- Flow:
     - `Status[PartitionID] == Dirty`:
         - Include all generated IDs into IDBatch and send it to the flusher routine for InvalidateBatch
-        - `Status[PartitionID] = Clean`
+        - Set `Status[PartitionID] = Clean`
     - panic
-  - Flow: startRecovery(PartitionID)`
+    - Flow: `startRecovery(PartitionID)`
 
-- `startRecovery(PartitionID)`
-  - When: Partition is deployed or invalidated
-  - Only one routine per PartitionID
-  - Read recovery plog position (recoveryOffset)
-  - Run ???projector starting from recoveryOffset
-  - Start rproutine
+### startRecovery(PartitionID)
+- When: Partition is deployed or invalidated
+- Only one routine per PartitionID is allowed
+- Read recovery PLog position (recoveryOffset)
+- Run projector starting from recoveryOffset
+- Start rproutine
