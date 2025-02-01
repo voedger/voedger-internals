@@ -189,11 +189,11 @@ Example Result 200:
 - URL:
     - GET `/api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/docs/{pkg}.{table}`
 - Parameters: 
-    - Query [constraints](../queryprocessor/request.md)
+    - Query [constraints](request.md)
 - Headers:
     - Authorization: Bearer {PrincipalToken}
 - Result 200: 
-    - The return value is a JSON object that contains a `results` field with a JSON array that lists the objects [example](../queryprocessor/request.md)
+    - The return value is a JSON object that contains a `results` field with a JSON array that lists the objects [example](request.md)
     - When the error happens during the read, the [error](#errors) property is added in the response
 - Result non-200: [error object](#errors) is returned in the body. Possible results:
     - 401: Unauthorized
@@ -207,12 +207,12 @@ Example Result 200:
 - URL:
     - GET `/api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/queries/{pkg}.{query}`
 - Parameters: 
-    - Query [constraints](../queryprocessor/request.md)
+    - Query [constraints](request.md)
     - Query function argument `&arg=...`
 - Headers:
     - Authorization: Bearer {PrincipalToken}
 - Result 200: 
-    -  The return value is a JSON object that contains a `results` field with a JSON array that lists the objects [example](../queryprocessor/request.md), ref. [Parse API](https://docs.parseplatform.org/rest/guide/#basic-queries)
+    -  The return value is a JSON object that contains a `results` field with a JSON array that lists the objects [example](request.md), ref. [Parse API](https://docs.parseplatform.org/rest/guide/#basic-queries)
     - When the error happens during the read, the [error](#errors) property is added in the response
 - Result non-200: [error object](#errors) is returned in the body. Possible results:
     - 401: Unauthorized
@@ -230,11 +230,11 @@ Example Result 200:
 - Headers:
     - Authorization: Bearer {PrincipalToken}
 - Parameters: 
-    - Query [constraints](../queryprocessor/request.md)
+    - Query [constraints](request.md)
 - Limitations:
     -  "where" must contain "eq" or "in" condition for PK fields
 - Result 200: 
-    - The return value is a JSON object that contains a results field with a JSON array that lists the objects [example](../queryprocessor/request.md)
+    - The return value is a JSON object that contains a results field with a JSON array that lists the objects [example](request.md)
     - When the error happens during the read, the [error](#errors) property is added in the response
 - Result non-200: [error object](#errors) is returned in the body. Possible results:
     - 401: Unauthorized
