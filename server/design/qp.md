@@ -6,7 +6,7 @@ A component used to query data and return it to client
 flowchart
 bus(Bus):::S
 bus2(Bus):::S
-qpMessage>QP Message]:::G
+qpMessage>Query Message]:::G
 qp[/Query Processor/]:::S
 vvm[[vvm]]:::S
 appPartition[[App Partition]]:::S
@@ -40,6 +40,7 @@ classDef G fill:#ffffff15, stroke:#999, stroke-width:2px, stroke-dasharray: 5 5
 ## Query Processor v1 (/api/)
 ### Principles
 - Only reads from query functions
+- package: `processors/query`
 - handled with HTTP POST
 
 ### QP Message & Query data
@@ -48,7 +49,7 @@ flowchart
 queryData[Query Data]:::G
 appPartition[[App Partition]]:::S
 state[State]:::H
-qpMessage>QP Message]:::S
+qpMessage>QueryMessage]:::S
 rp[Rows Processor]:::S
 
 subgraph queryData
@@ -111,12 +112,13 @@ classDef G fill:#ffffff15, stroke:#999, stroke-width:2px, stroke-dasharray: 5 5
 - Reads from query functions, documents, views
 - handled with HTTP GET
 - supports query constraints in ParseAPI syntax
+- package: `processors/query2`
 - see also: https://github.com/voedger/voedger/issues/1162 
 
 ### QP Message & Query data
 ```mermaid
 flowchart
-qpMessage>QP Message]:::S
+qpMessage>QueryMessage]:::S
 rp[Rows Processor]:::S
 queryData[Query Data]:::G
 subgraph queryData
