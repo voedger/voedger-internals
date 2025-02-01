@@ -30,10 +30,10 @@ Sequence is a monotonic increasing list of numbers.
 ### NextInSequence(PartitionID, WSID, QName) istructs.RecordID
 
 - Actor: CP
-- When: CP  needs next number in some sequence.
+- When: CP needs the next number in a sequence.
 - Main Flow:
-    - `Status[PartitionID] == Dirty`: generate next ID
-- Alternative Flow:  
+    - `Status[PartitionID] == Dirty`: generate the next ID
+- Alternative Flow:
     - panic
 
 ### Flush(PartitionID) IDBatch
