@@ -21,33 +21,46 @@ Sequence is a monotonic increasing list of numbers.
 
 - Actor: CP
 - When: CP needs to process an request
-- Main Flow:
-    - `Status[PartitionID] == Clean && !IsRecoveryRunning(PartitionID) `: return NextPLogOffset and set `Status[PartitionID]` to `Dirty`
-- Alternative Flow:
-    - `IsRecoveryRunning(PartitionID)`: wait for duration. If wait fails return 0. Repeat Main Flow.
+- Flow:
+    - `Status[PartitionID] == Clean && !IsRecoveryRunning(PartitionID)`):
+        - Set `Status[PartitionID]` to `Dirty`
+        - Return NextPLogOffset
+    - `IsRecoveryRunning(PartitionID)`: 
+        - Wait for duration
+        - If wait fails return 0. 
+        - Repeat Flow.
     - `Status[PartitionID] == Dirty`: panic
 
-### NextInSequence(PartitionID, WSID, QName) istructs.RecordID
+### NextInSequence(PartitionID, WSID, QName) ID
 
 - Actor: CP
 - When: CP needs the next number in a sequence.
-- Main Flow:
-    - `Status[PartitionID] == Dirty`: generate the next ID
-- Alternative Flow:
+- Flow:
+    - `Status[PartitionID] == Dirty`: 
+        - Generate the next ID
     - panic
 
 ### Flush(PartitionID) IDBatch
 
 - Actor: CP
 - When: After CP saves the PLog record successfully
-- Main Flow:
-    - `Status[PartitionID] == Dirty`
-    - Include all generated IDs into IDBatch and send it to the flusher routine for FlushBatch
-    - `Status[PartitionID] = Clean`
+- Flow
+    - `Status[PartitionID] == Dirty`:
+        - Include all generated IDs into IDBatch and send it to the flusher routine for FlushBatch
+        - `Status[PartitionID] = Clean`
+    - panic
 
-- `Invalidate(PartitionID)`
-  - When: After CP fails to save the PLog record
+### Invalidate(PartitionID) IDBatch
+
+- Actor: CP
+- When: After CP fails to save the PLog record
+- Flow
+    - `Status[PartitionID] == Dirty`:
+        - Include all generated IDs into IDBatch and send it to the flusher routine for InvalidateBatch
+        - `Status[PartitionID] = Clean`
+    - panic
   - Flow: startRecovery(PartitionID)`
+
 - `startRecovery(PartitionID)`
   - When: Partition is deployed or invalidated
   - Only one routine per PartitionID
