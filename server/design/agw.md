@@ -32,7 +32,7 @@ classDef H fill:#C9E7B7,color:#333
 classDef G fill:#ffffff15, stroke:#999, stroke-width:2px, stroke-dasharray: 5 5
 ```
 
-# Messages
+# Request dispatching
 ```mermaid
 flowchart
 qpMessage1>Query Message v1]:::S
@@ -50,8 +50,8 @@ rh2[Request Handler /api/v2/]:::S
 rh1 -.-x |for &quot;q&quot; prefix sends to bus|qpMessage1
 rh1 -.-x |for &quot;c&quot; prefix sends to bus|cpMessage1
 
-rh2 -.-x |for &quot;q&quot; prefix sends to bus|qpMessage2
-rh2 -.-x |for &quot;c&quot; prefix sends to bus|cpMessage2
+rh2 -.-x |HTTP GET|qpMessage2
+rh2 -.-x |HTTP PUT,POST,PATCH|cpMessage2
 
 qpMessage1 -.-x |handled by|qp1
 cpMessage1 -.-x |handled by|cp
