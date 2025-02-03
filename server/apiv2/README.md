@@ -1,6 +1,7 @@
 # APIv2
 
 # Motivation
+- [API Gateway (APIv2) #1162](https://github.com/voedger/voedger/issues/1162)
 - We need good REST API for Voedger
 - Old API must still be available until the new one is fully developed, so we can continue with AIR
 
