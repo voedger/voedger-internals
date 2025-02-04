@@ -22,14 +22,14 @@
 - Features  
   - API Gateway
     - [API v2](server/apiv2/README.md)
-      - [Query constraints](server/apiv2/query-constraints.md)
       - [Create document or record](server/apiv2/create-doc.md)
-      - [Read from CDoc collection](server/apiv2/read-cdocs.md)
       - [Update document or record](server/apiv2/update-doc.md)
       - [Deactivate document or record](server/apiv2/deactivate-doc.md)
       - [Read document or record](server/apiv2/read-doc.md)
+      - [Read from CDoc collection](server/apiv2/read-cdocs.md)
       - [Read from query](server/apiv2/read-from-query.md)
       - [Read from view](server/apiv2/read-from-view.md)
+      - [Query constraints](server/apiv2/query-constraints.md)
       - [Execute command](server/apiv2/execute-command.md)
       - [Create BLOB](server/apiv2/create-blob.md)
       - [Read BLOB](server/apiv2/read-blob.md)
