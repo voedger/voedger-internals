@@ -56,6 +56,14 @@ Naming based on [Stidy existing AuthNZ concepts](../../rsch/20221105-authnz/READ
 |Authorize EXECUTE operation|CommandProcessor |IAuthorizer.Authorize()
 |Authorize fields CREATE/UPDATE|CommandProcessor |IAuthenticator.Authorize() 
 
+### Published Roles
+A role can be marked as published, which means that resources available to the role are visible to the users in the [API schemas](../apiv2/list-ws-roles.md).
+
+```sql
+PUBLISHED ROLE ThirdPartyApp;
+GRANT SELECT ON ALL TABLES WITH TAG TagThirdPartyApp TO ThirdPartyApp;
+```
+
 ### Roles (by Copilot)
 
 Here are some vsql files where ROLE is used in the voedger/voedger repository:
