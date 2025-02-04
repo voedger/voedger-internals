@@ -15,7 +15,7 @@ Only workspaces returned which have resources available to [published roles](../
 | Code | Description | Body |
 | --- | --- | --- |
 | 200 | OK | app workspaces hierarchy in the selected format |
-| 400 | Bad Request | [error object](README.md#errors) |
+| 400 | Bad Request | [error object](conventions.md#errors) |
 
 ## See Also
 - [List workspace roles](list-ws-roles.md)

@@ -38,9 +38,9 @@ Content-Type: application/json
 | Code | Description | Body |
 | --- | --- | --- |
 | 201 | Created | blobId and metadata, see example below |
-| 413 | Payload Too Large | [error object](README.md#errors) |
-| 415 | Unsupported Media Type | [error object](README.md#errors) |
-| 400 | Bad Request | [error object](README.md#errors) |
+| 413 | Payload Too Large | [error object](conventions.md#errors) |
+| 415 | Unsupported Media Type | [error object](conventions.md#errors) |
+| 400 | Bad Request | [error object](conventions.md#errors) |
 
 
 Example response 201:

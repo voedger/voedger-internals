@@ -12,5 +12,5 @@ Deletes the BLOB and its metadata
 | Code | Description | Body |
 | --- | --- | --- |
 | 204 | No Content |  |
-| 401 | Unauthorized | [error object](#errors) |
-| 404 | Not Found | [error object](#errors) |
+| 401 | Unauthorized | [error object](conventions.md#errors) |
+| 404 | Not Found | [error object](conventions.md#errors) |

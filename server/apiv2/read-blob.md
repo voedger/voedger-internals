@@ -20,6 +20,6 @@ Retrieves the BLOB data (content) or metadata
 | Code | Description | Body |
 | --- | --- | --- |
 | 200 | OK | BLOB metadata or binary data |
-| 404 | Not Found | [error object](README.md#errors) |
-| 400 | Bad Request | [error object](README.md#errors) |
+| 404 | Not Found | [error object](conventions.md#errors) |
+| 400 | Bad Request | [error object](conventions.md#errors) |
 

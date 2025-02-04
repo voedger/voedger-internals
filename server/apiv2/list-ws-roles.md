@@ -15,7 +15,7 @@ Returns the list of [published roles](../authnz/README.md#published-roles) in th
 | Code | Description | Body |
 | --- | --- | --- |
 | 200 | OK | roles in the selected format |
-| 400 | Bad Request | [error object](README.md#errors) |
+| 400 | Bad Request | [error object](conventions.md#errors) |
 
 ## See Also
 - [Read workspace role schema](read-ws-role-schema.md)

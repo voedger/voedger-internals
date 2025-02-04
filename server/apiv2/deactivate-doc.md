@@ -12,10 +12,10 @@ Deactivates CDoc/WDoc/CRecord/WRecord
 | Code | Description | Body |
 | --- | --- | --- |
 | 200 | OK | current WLog offset, see example below |
-| 401 | Unauthorized | [error object](README.md#errors) |
-| 403 | Forbidden | [error object](README.md#errors) |
-| 404 | Table Not Found | [error object](README.md#errors) |
-| 405 | Method Not Allowed, table is an ODoc/ORecord | [error object](README.md#errors) |
+| 401 | Unauthorized | [error object](conventions.md#errors) |
+| 403 | Forbidden | [error object](conventions.md#errors) |
+| 404 | Table Not Found | [error object](conventions.md#errors) |
+| 405 | Method Not Allowed, table is an ODoc/ORecord | [error object](conventions.md#errors) |
 
 Example Result 200:
 ```json

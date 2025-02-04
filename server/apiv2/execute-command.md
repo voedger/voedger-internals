@@ -16,8 +16,8 @@ Command parameter or ODoc
 | Code | Description | Body |
 | --- | --- | --- |
 | 200 | OK | current WLog offset, see example below |
-| 400 | Bad Request, e.g. Record requires sys.ParentID | [error object](README.md#errors) |
-| 401 | Unauthorized | [error object](README.md#errors) |
+| 400 | Bad Request, e.g. Record requires sys.ParentID | [error object](conventions.md#errors) |
+| 401 | Unauthorized | [error object](conventions.md#errors) |
 
 Example result 200:
 ```json
