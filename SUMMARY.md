@@ -22,6 +22,7 @@
 - Features  
   - API Gateway
     - [API v2](server/apiv2/README.md)
+      - [API conventions](server/apiv2/conventions.md)
       - [Create document or record](server/apiv2/create-doc.md)
       - [Update document or record](server/apiv2/update-doc.md)
       - [Deactivate document or record](server/apiv2/deactivate-doc.md)
