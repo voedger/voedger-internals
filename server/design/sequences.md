@@ -77,14 +77,14 @@ Flow:
 
 ## Components
 
-- pkg/sequences
-    - ISequences
-- pkg/sequences/seqimpl
+- pkg/isequencer
+    - ISequencer
+- pkg/isequencer/sequencer
     - provide: Factory(PartitionID) cleanup()
         - Start recovery
         - cleanup should stop flush/recovery and wait
 - appparts.AppPartitions
-    - IAppPqrtition.Sequences() ISequences
+    - IAppPqrtition.Sequencer() ISequencer
     - On deploy starts recovery
 - QNames
     - appdef/sys
