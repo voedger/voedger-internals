@@ -1,5 +1,5 @@
 # Read from CDoc collection
-GET `/api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/docs/{pkg}.{table}`
+GET `/api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/cdocs/{pkg}.{table}`
 
 Reads CDoc collection
 
