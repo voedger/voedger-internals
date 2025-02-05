@@ -1,5 +1,3 @@
-tags: [AuthNZ]($17072)
-
 # Study existing AuthNZ concepts
 
 /*
