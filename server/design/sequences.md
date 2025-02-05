@@ -75,7 +75,7 @@ Sequence is a monotonic increasing list of numbers.
 Flow:
   - ??? Should repeat
 
-## Components
+## Architecture
 
 - pkg/isequencer
     - ISequencer
