@@ -1,7 +1,7 @@
 # **Investigating Replica Addressability in a Docker Swarm Cluster**
 
 - **Author(s)**:
-  - Alexey Ponamarev. Sigma-Soft, Ltd.
+  - Alexey Ponomarev. Sigma-Soft, Ltd.
   - Maxim Geraskin. unTill Software Development Group B. V.
 - **Date**: 2025-02-05  
 - **Keywords**: Docker Swarm, Replica Addressing, Service Discovery, Cluster Networking  
@@ -36,80 +36,144 @@ In a Docker Swarm setup, a service is typically accessed through a virtual IP (V
 ## **Methodology**
 
 ### **Cluster Setup**
-- A three-node Docker Swarm cluster was initialized:
-  - **Node 1**: Swarm Manager
-  - **Node 2 & Node 3**: Worker Nodes
+- All nodes Docker Swarm cluster was initialized as:
+  - Swarm Manager
+  - Worker Node
 
 - The cluster was configured using the following commands:
 
 ```sh
-docker swarm init
-docker swarm join --token <token> <manager-ip>:2377
+ctool init SE --ssh-key <key> --skip-stack app -p 2214 10.0.0.11 10.0.0.12 10.0.0.13
 ```
 
 ### **Service Deployment**
-A test service was deployed with six replicas using an Alpine-based container running a simple web server:
+A test service was deployed with six replicas using custom  Voedger-based container running a voedger server:
 
-```sh
-docker service create --name test-service \
-  --replicas 6 \
-  --publish 8080:80 \
-  alpine sh -c "apk add --no-cache curl && hostname -i && sleep 3600"
+```yaml
+version: '3.8'
+
+services:
+
+  vvm:
+    image: voedger/paa
+    networks:
+      - voedger_net
+    volumes:
+      - /etc/hosts:/etc/hosts
+    environment:
+      - VOEDGER_HTTP_PORT=${VOEDGER_HTTP_PORT}
+      - VOEDGER_ACME_DOMAINS=${VOEDGER_ACME_DOMAINS}
+    deploy:
+      restart_policy:
+        condition: any
+      replicas: 6
+      endpoint_mode: dnsrr
+      placement:
+        preferences:
+          - spread: node.id
+
+networks:
+  voedger_net:
+    external: true
 ```
+- Key Points docker-compose.yml: 
+  - `endpoint_mode: dnsrr` was used to disable the default VIP-based load balancing.
+    - Now every replica has its own IP address. 
+  - `placement preferences` were set to spread replicas evenly across nodes.
+
+- Internal Network 
+  -  docker network create -d overlay --attachable --subnet 10.10.0.0/24 voedger_net
+                  
+Modify entrypoint.sh in Docker image
+ ```sh
+# Iterate over all container ip, if found ip in voedger network - store as VVM_IP
+for ip in $(hostname -I); do
+  case "$ip" in
+    10.10.*)
+      VVM_IP=$ip
+      break
+      ;;
+  esac
+done
+
+# if VVM_IP empty - exit with error
+if [ -z "$VVM_IP" ]; then
+  echo "Cannot resolve IP in subnet 10.10.0.0/24" >&2
+  exit 1
+fi
+
+export VVM_IP
+
+echo "VVM IP: $VVM_IP"
+```
+- Key Points entrypoint.sh modification and docker image prepare:
+  - Get all IPs assigned to the container, iterate over and select the one from the `voedger_net` subnet.
+    - selected ip will be defined as VVM_IP. 
+  - export VVM_IP to make it accessible from the container.
+  - build and push the image to cluster node
+```sh                               
+    cd ~/voedger/cmd/voedger
+    docker build -t voedger/paa:latest .
+    docker save voedger/paa:latest | bzip2 | ssh -i ~/amazonKey.pem -p 2214  ubuntu@db-node-2 'bunzip2 | docker load'
+```
+- Deploy the service
+  - 'docker stack deploy SEDockerStack --compose-file ~/docker-compose-vvm.yml' 
+
+
 
 ### **Replica Address Collection**
 To examine replica addressability:
-1. Each container executed `hostname -i` to obtain its assigned IP.
-2. Logs were retrieved via `docker service logs test-service`.
-3. Network inspection tools such as `docker network inspect` and `curl` were used to determine access patterns.
-
+- Get ip address of each replica 
+```shell
+ubuntu@node-1:~$ docker service logs SEDockerStack_vvm -n 100 | grep "VVM IP"
+SEDockerStack_vvm.6.p4qyjdpl893s@node-3    | VVM IP: 10.10.0.227
+SEDockerStack_vvm.3.mocrhy4dv0dz@node-3    | VVM IP: 10.10.0.224
+SEDockerStack_vvm.1.37hq4bkt3djs@node-2    | VVM IP: 10.10.0.222
+SEDockerStack_vvm.4.4bq4eyrxzp5e@node-2    | VVM IP: 10.10.0.225
+SEDockerStack_vvm.5.k3wvh30j1oaj@node-1    | VVM IP: 10.10.0.226
+SEDockerStack_vvm.2.jwebapllaes9@node-1    | VVM IP: 10.10.0.223
+```
+- Check voedger service availability with curl 
+  - return http code must be 200 - OK 
+```shell
+docker exec -it SEDockerStack_vvm.2.jwebapllaes9 bash
+apt install curl
+curl -s -o /dev/null  -w "%{http_code}\n" http://10.10.0.227/static/sys/monitor/site/hello
+200
+```
 ---
 
 ## **Results**
 
 ### **Address Retrieval**
 - Each replica was able to retrieve an internal IP.
-- IPs were dynamically assigned from the Swarm overlay network.
-
-### **Direct Access Testing**
-- **Attempted direct access to replicas via IP:** Failed.
-- **Access through Swarm VIP (published port 8080):** Successful but load-balanced.
-- **Checking DNS resolution using `tasks.test-service`:** Provided a list of replica IPs.
+- IPs were dynamically assigned from the Swarm overlay network, that define by the `voedger_net` subnet. 
 
 ### **Observations**
 - Swarm assigns an internal IP to each replica within the overlay network.
 - The service VIP load-balances requests, making direct access unreliable.
-- Using `tasks.<service_name>` resolves to multiple IPs but does not guarantee access to a specific replica.
+- Using 'dnsrr' endpoint mode allows for per-replica addressing.
 
 ---
 
 ## **Discussion**
 
 ### **Interpretation of Results**
-- Docker Swarm does not natively support direct external access to specific replicas.
-- While internal service discovery allows listing replica IPs, external requests are always routed through Swarm's built-in load balancer.
-- Workarounds such as using labels or sidecar containers could potentially track and expose replica-specific addresses.
+- Docker Swarm does not natively support direct access to specific replicas.
+- Swarm's VIP endpoint mode enforces load balancing, preventing direct replica access.
+- Workaround - use 'dnsrr' endpoint mode to bypass VIP-based load balancing.
 
 ### **Comparison with Kubernetes**
 - Kubernetes allows replica differentiation via unique Pod IPs.
 - Swarm's approach emphasizes service abstraction rather than individual container exposure.
 
 ### **Implications**
-- Developers requiring per-replica access should consider alternative approaches, such as using dedicated services per replica or bypassing Swarm’s VIP system.
-
-### **Limitations**
-- This study only examines a single service within a single overlay network.
-- Real-world scenarios may involve more complex networking setups.
-
-### **Future Research**
-- Investigating custom networking solutions for per-replica addressing.
-- Exploring use of node-local services for finer control over container access.
+- Developers requiring per-replica access should consider alternative approaches, such as using 'dnsrr' endpoint mode.
 
 ---
 
 ## **Conclusion**
-
-This research confirms that while each replica within a Docker Swarm service obtains an internal address, direct access to a specific replica is not possible through default networking configurations. Swarm’s design prioritizes service-level abstraction over container-level routing, enforcing load-balancing through a VIP. Future studies could explore workarounds for cases where per-replica addressing is necessary.
+This research confirms that while each replica within a Docker Swarm service obtains an internal address, direct access to a specific replica is not possible through default networking configurations. Swarm’s design prioritizes service-level abstraction over container-level routing, enforcing load-balancing through a VIP endpoint mode. 
 
 ---
 
