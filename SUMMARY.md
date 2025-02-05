@@ -19,7 +19,8 @@
   - [N1 Cluster](server/design/c2.n1.md)
   - [N3 Cluster](server/design/c2.n3.md)
   - [N5 Cluster](server/design/c2.n5.md)
-- Features  
+  - [Storages](server/design/storage.md)
+- Features
   - API Gateway
     - [API v2](server/apiv2/README.md)
       - [API conventions](server/apiv2/conventions.md)
@@ -84,7 +85,7 @@
     - [AmazonDB Driver](server/amazondb-driver.md)
   - Frozen
     - [Ephemeral Storage](server/ephemeral-storage.md)
-    - [Storage Extensions](server/storage-extensions.md)    
+    - [Storage Extensions](server/storage-extensions.md)
 
 ## Framework
 
