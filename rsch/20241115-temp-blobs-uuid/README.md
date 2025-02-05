@@ -1,9 +1,11 @@
 # Secure UUID for Secure BLOB Access
 
-/*
- * Copyright (c) 2024-present unTill Software Development Group B. V. 
- * @author Maxim Geraskin
- */
+- **Author(s)**:
+  - Maxim Geraskin. unTill Software Development Group B. V.
+- **Date**: 2024-11-15
+- **Keywords**: UUID, GUID, CSPRNG, QR Code, BLOB, Security
+
+---
 
 ## Problem Statement
 
