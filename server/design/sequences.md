@@ -37,7 +37,7 @@ Sequence is a monotonic increasing list of numbers.
 - When: CP needs the next number in a sequence.
 - Flow:
     - `Status[PartitionID] == InProcess`: 
-        - Generate the next ID
+        - Generate the next ID. ReadIDView through cache.
     - panic
 
 ### Flush(PartitionID) IDBatch
@@ -70,10 +70,16 @@ Sequence is a monotonic increasing list of numbers.
 - Run projector starting from recoveryOffset
 - Start rproutine
 
+### Flusher routine
+
+- Actor: flusher routine
+- Flow:
+  - Save IDBatch to IDView
+
 ### recovery(PartitionID)
 
 Flow:
-  - ??? Should repeat
+  - Should read last saved NextPLogOffset, read all events starting from this offset and update IDView
 
 ## Architecture
 
