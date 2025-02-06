@@ -50,7 +50,7 @@ Sequence is a monotonic increasing list of numbers.
         - `Status[PartitionID] = Clean`
     - panic
 
-### Invalidate(PartitionID) IDBatch
+### Invalidate(PartitionID)
 
 - Actor: CP
 - When: After CP fails to save the PLog record
@@ -63,7 +63,6 @@ Sequence is a monotonic increasing list of numbers.
 
 ### startRecovery(PartitionID)
 
-???
 - When: Partition is deployed or invalidated
 - Only one routine per PartitionID is allowed
 - Read recovery PLog position (recoveryOffset)
