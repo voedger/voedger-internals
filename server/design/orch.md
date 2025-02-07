@@ -6,10 +6,10 @@
 
 ## Problem Statement
 
-Design reliable orchestration mechanism for VVM (Virtual Virtual Machine) that ensures:
+Design reliable orchestration mechanism for VVM (Voedger Virtual Machine) that ensures:
+
 - Clean termination of all goroutines
-- Thread-safe error handling
-- Leadership-based workload management
+- Concurrent-safe error handling
 - Graceful shutdown capabilities
 
 ## Technical Design
