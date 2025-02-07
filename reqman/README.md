@@ -49,6 +49,7 @@ flowchart TD
 ```
 
 Requirements
+
 - `nfr`: Non-functional Requirement
 - `ad`: Architectural Decision
 - `tdsn`: Technical Design
@@ -62,4 +63,4 @@ Source Code
 
 ## History
 
-- [adsn, story...]https://github.com/voedger/voedger-internals/blob/4379075396a1fd50275c7eaf7877eb1cb23ab265/reqman/README.md#L26
+- [adsn, story...](https://github.com/voedger/voedger-internals/blob/4379075396a1fd50275c7eaf7877eb1cb23ab265/reqman/README.md#L26)
