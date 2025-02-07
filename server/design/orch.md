@@ -8,6 +8,7 @@
 
 Design reliable orchestration mechanism for VVM (Voedger Virtual Machine) that ensures:
 
+- VVM goroutines work only if leadership is acquired
 - Clean termination of all goroutines
 - Concurrent-safe error handling
 - Graceful shutdown capabilities
