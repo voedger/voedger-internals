@@ -93,7 +93,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 #### Shutdowner
 
 - Flow:
-  - Read from buffered `VVM.shutChannel`
+  - Wait for `VVM.vvmShutCtx`
   - Shutdown everything but `LeadershipMonitor` (close `VVM.servicesShutCtx` and wait for services to stop)
   - Shutdown `LeadershipMonitor` (close `VVM.monitorShutCtx` and wait for `LeadershipMonitor` to stop)
   - Close `VVM.shutdownedCtx`
@@ -111,13 +111,13 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
     - Wait for timer (30 seconds) or `VVM.monitorShutCtx`
     - If `VVM.monitorShutCtx` is closed - break
 
-## Implementation Requirements
+## Implementation requirements
 
 - Clear ownership and cleanup responsibilities
 - All error reporting must use `VVM.updateProblem`
 - All algorithms are be finite
-- No active goroutines after VVM.Shutdown (except killer)
+- No active goroutines after VVM.Shutdown (except killerRoutine)
 - No data races
 - No multiple channel closes
 - Predictable error propagation
-- No goroutine leaks (except intentional killer)
+- No goroutine leaks (except intentional killerRoutine)
