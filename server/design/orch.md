@@ -75,9 +75,10 @@
 - Flow:
   - Loop
     - If leadership lost
-        - tartgo killerRoutine
+        - go `killerRoutine` 
             - After 30 seconds kills the process
-        - VVM.updateProblem(leadershipLostErr)
-    - Wait for timer (30 seconds) or VVM.monitorShutCtx
+            - Never stoped, process must exit and goroutine must die
+            - Yes, this is the anti-patterm "Goroutine/Task/Thread Leak"
+        - `VVM.updateProblem(leadershipLostErr)`
+    - Wait for timer (30 seconds) or `VVM.monitorShutCtx`
     - If `VVM.monitorShutCtx` is closed - break
-  - Cancel killerRoutine context and wait
