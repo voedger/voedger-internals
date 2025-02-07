@@ -14,10 +14,11 @@
 - VVM
   - problemCtx. Closed when some problem occurs, VVM terminates itself due to leadership loss or problems with the launching
   - problemErr. Error that describes the problem, see also problemCtx.
-  - servicesCtx. Closed when VVM is shutting down
-  - monitorCtx. Closed after all services are stopped
-  - shutdownedCtx. Closed after Monitor is stopped
-  - shutChannel. Buffered (10) channel that is used to signal shutdown.
+  - vvmShutCtx. Closed when VVM should be stopped.
+  - vvmShutCtxOnce. `sync.Once` to close `vvmShutCtx` only once.
+  - servicesShutCtx. Closed when VVM services should be stopped (but LeadershipMonitor)
+  - monitorShutCtx. Closed after all services are stopped and LeadershipMonitor should be stopped
+  - shutdownedCtx. Closed after all (services and LeadershipMonitor) is stopped
 
 ### VVMHost: Create VVM
 
@@ -43,13 +44,14 @@
 - When: After `Wait for signals`
 - Flow
   - err := VVM.Shutdown() 
-    - Write to buffered `VVM.shutChannel` and wait for `VVM.shutdownedCtx`
-    - Return `VVMproblemErr`
+    - VVM.vvmShutCtxOnce.Do(func() { close(VVM.vvmShutCtx) })
+    - Wait for `VVM.shutdownedCtx`
+    - Return `VVM.problemErr`
 
 ### Launcher
 
-- Flow
-  - Wait for leadership or VVM.servicesCtx
+- Flow:
+  - Wait for leadership or VVM.servicesShutCtx
   - If leadership is acquired 
     - Start LeadershipMonitor
     - Start servicePipeline
@@ -63,8 +65,8 @@
 
 - Flow:
   - Read from buffered `VVM.shutChannel`
-  - Shutdown everything but `LeadershipMonitor` (close `VVM.servicesCtx` and wait for services to stop)
-  - Shutdown `LeadershipMonitor` (close `VVM.monitorCtx` and wait for `LeadershipMonitor` to stop)
+  - Shutdown everything but `LeadershipMonitor` (close `VVM.servicesShutCtx` and wait for services to stop)
+  - Shutdown `LeadershipMonitor` (close `VVM.monitorShutCtx` and wait for `LeadershipMonitor` to stop)
   - Close `VVM.shutdownedCtx`
 
 ### LeadershipMonitor
@@ -75,6 +77,6 @@
         - Start killerRoutine
             - After 30 seconds kills the process
         - VVM.updateProblem(problemErr)
-    - Wait for timer (30 seconds) or VVM.monitorCtx
-    - If `VVM.monitorCtx` is closed - break
+    - Wait for timer (30 seconds) or VVM.monitorShutCtx
+    - If `VVM.monitorShutCtx` is closed - break
   - Cancel killerRoutine context and wait
