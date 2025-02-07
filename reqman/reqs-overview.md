@@ -1,3 +1,6 @@
+---
+requirement_package: auth.login 
+---
 # Requirements Management: A Comprehensive Guide to Modern Software Development
 
 Requirements Management (RM) represents a critical cornerstone of successful software development and project management. This systematic approach to collecting, documenting, and tracking requirements throughout a project's lifecycle ensures alignment between stakeholder needs and delivered solutions.
