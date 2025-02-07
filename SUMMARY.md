@@ -85,7 +85,7 @@
     - [AmazonDB Driver](server/amazondb-driver.md)
   - Frozen
     - [Ephemeral Storage](server/ephemeral-storage.md)
-    - [Storage Extensions](server/storage-extensions.md)    
+    - [Storage Extensions](server/storage-extensions.md)
 
 ## Framework
 
@@ -101,5 +101,6 @@
 
 ## Development
 
-  - [Requirements Management](reqman/README.md)
-  - [Requirements Management (Overview)](reqman/reqs-overview.md)
+- [Requirements Management](reqman/README.md)
+- [Requirements Management (Overview)](reqman/reqs-overview.md)
+- [OpenFastTrace](reqman/oft.md)
