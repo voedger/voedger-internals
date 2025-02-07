@@ -1,6 +1,6 @@
-# Orchestration
 
-**Orchestration** in the context of clusters refers to the automated coordination, scheduling, and management of distributed workloads—including applications, services, or even threads within applications—to optimize resource utilization, ensure reliability, and maintain desired state across multiple computing units.
+
+**Orchestration** in the context of clusters refers to the automated coordination, scheduling, and management of distributed workloads to optimize resource utilization, ensure reliability, and maintain desired state across multiple computing units.
 
 ## Motivation
 
