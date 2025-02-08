@@ -132,7 +132,8 @@ The future of requirements management is shaped by several emerging trends:
 
 [^2]: The [IEEE Standard 830-1998](https://standards.ieee.org/ieee/830/1222/) provides guidelines for software requirements specifications, emphasizing the importance of systematic requirements management.
 
-[^3]: Research by Carnegie Mellon University indicates that effective requirements elicitation can reduce project rework by up to 68%.
+[^3]: Research by Carnegie Mell
+on University indicates that effective requirements elicitation can reduce project rework by up to 68%.
 
 [^4]: The Standish Group's CHAOS Report highlights that clear requirements documentation increases project success rates by 42%.
 
