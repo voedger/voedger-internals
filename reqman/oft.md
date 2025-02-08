@@ -5,7 +5,7 @@
 OpenFastTrace (OFT) is a requirements tracing tool that ensures all defined requirements are covered in your code and helps identify outdated code. The basic workflow is:
 
 1. Write requirements in Markdown with OFT-readable specification items
-2. Add tags in source code to mark requirement coverage 
+2. Add tags in source code to mark requirement coverage
 3. Use OFT to trace requirements through to implementation
 
 ## Getting started
@@ -13,6 +13,7 @@ OpenFastTrace (OFT) is a requirements tracing tool that ensures all defined requ
 ### Setting up OFT
 
 System requirements:
+
 - Java Runtime Environment (JRE) 11 or higher
 
 Install OFT by downloading the latest release JAR file from the [releases page](https://github.com/itsallcode/openfasttrace/releases).
@@ -80,7 +81,7 @@ Common options:
 
 ## Advanced features
 
-### Tag filtering 
+### Tag filtering
 
 Filter specifications by component:
 
@@ -96,7 +97,7 @@ Forward requirements directly:
 arch --> dsn : req~logging-format~1
 ```
 
-## Integration 
+## Integration
 
 Build system plugins available for:
 
