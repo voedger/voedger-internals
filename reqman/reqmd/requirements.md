@@ -77,7 +77,7 @@ CoverageTagURL is a URL that points to the location of the coverage tag in the s
 https://github.com/voedger/voedger/blob/979d75b2c7da961f94396ce2b286e7389eb73d75/pkg/sys/sys.vsql#L4
 ```
 
-## Coverage Tags
+## Inpit Files
 
 Each `InpitFile` contains multiple `CoverageTag` in the text.
 
@@ -146,18 +146,48 @@ The tool produces structured documentation with the following characteristics:
 
 ## EBNF
 
+Core:
+
 ```ebnf
-PackageName = Identifier { "." Identifier }
-Identifier = Letter { Letter | Digit | "_" }
-Letter = "a" | ... | "z" | "A" | ... | "Z"
-Digit = "0" | ... | "9"
+(* Identifiers and their basic parts follow the provided definitions. *)
+Identifier        ::= Letter { Letter | Digit | "_" }
 
-RequirementName = Identifier
+(* A requirement identifier is a package name, a literal slash, and a requirement name. *)
+RequirementIdentifier ::= PackageName "/" RequirementName
 
-RequirementIdentifier = PackageName "/" RequirementName
+(* Package and requirement names follow the given style. *)
+PackageName       ::= Identifier { "." Identifier }
+RequirementName   ::= Identifier
+```
 
-CoverageTag = "[~" RequirementIdentifier "~" CoverageType "]"
+Coverage
 
-CoveringFootnote = 
+```ebnf
+CoveringFootnote  ::= FootnoteMarker "`" CoverageTag "`" ":" FileCoverageList
 
+FootnoteMarker    ::= "[^" Identifier "]:"
+
+CoverageTag       ::= "[~" RequirementIdentifier "~" CoverageType "]"
+
+CoverageType      ::= Identifier
+
+(* A list of file coverage entries is one or more FileCoverage items separated by commas. *)
+FileCoverageList  ::= FileCoverage { "," FileCoverage }
+
+(* Each file coverage entry consists of a file reference immediately followed by a coverage URL. *)
+FileCoverage      ::= CoverageLabel CoverageURL
+
+(* The file reference is enclosed in square brackets and has the form: 
+   file path, colon, line specification, colon, a coverage type. *)
+CoverageLabel     ::= "[" FilePath ":" Line ":" CoverageType "]"
+
+(* A file path is given as one or more path components (identifiers) separated by a slash. *)
+FilePath          ::= Identifier { "/" Identifier }
+
+(* A line specification begins with the literal "line" followed by one or more digits. *)
+Line              ::= "line" Digit { Digit }
+
+(* The coverage URL is provided in parentheses. (This production may be adapted
+   to a fuller URL grammar as needed.) *)
+CoverageURL       ::= "(" URL ")"
 ```
