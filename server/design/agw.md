@@ -1,6 +1,9 @@
 # API Gateway implementation
 Design of the implementation of the API Gateway.
 
+# Motivation
+[API Gateway (APIv2)](https://github.com/voedger/voedger/issues/1162)
+
 # Context
 ```mermaid
 flowchart
