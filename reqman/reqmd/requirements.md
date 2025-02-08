@@ -2,30 +2,38 @@
 
 ## Overview
 
-This document defines the specifications for a command-line tool that traces requirements from Markdown files to their corresponding implementations in source files. The tool establishes traceability links between requirement identifiers and implementation identifiers, automatically generating documentation through footnotes.
+This document defines the specifications for a command-line tool that traces requirements from Markdown files to their corresponding coverage in source files. The tool establishes traceability links between requirement identifiers and coverage tags, automatically generating footnotes that links requirement identifiers and coverage tags.
 
-## Core Functionality
+## Markdown elements
 
-The tool scans both Markdown and source files to establish relationships between requirements and their implementations. It automatically generates footnotes within requirement documents, linking each requirement to its corresponding implementation locations.
+- **Footnote reference**: A reference to a footnote in the markdown text.
+- **Footnote label**: A label that identifies a footnote.
 
-## Detailed Requirements
+Example:
 
-### Input Files
+```markdown
+This is a footnote reference[^1].
 
-Input files:
+[^1]: This is a footnote label.
+```
 
-- **Markdown files**
-- **Source files** (including Markdown files).
+## Input Files
 
-The tool processes input text files and obtain list of requirements and implementation identifiers.
+`InputFiles`:
 
-### Requirement Identifiers
+- `MarkdownFile`s
+- `SourceFile`s (including `MarkdownFile`s).
 
-- `RequirementIdentifiers` are located in `MarkdownFile`s only.
+The tool processes input text files and obtain list of requirements and coverage tags.
+
+## Markdown Files
+
+- `MarkdownFile` is a text file with `.md` extension.
+- `RequirementIdentifier`s are located in `MarkdownFile`s only.
 - Each `MarkdownFile` contains a single `PackageName` at the beginning and multiple `RequirementName` in the text.
-- A `RequirementIdentifier` is a combination: `PackageName/RequirementName`.
+- A `RequirementIdentifier` is build as: `PackageName/RequirementName`.
 
-PackageName is specified as follows:
+`PackageName` is specified as follows:
 
 ```markdown
 ---
@@ -47,22 +55,33 @@ reqmd.package: server.api.v2
 - APIv2 implementation shall provide a handler for POST requests. `~Post~`
 ```
 
-```ebnf
-PackageName = Identifier { "." Identifier }
-Identifier = Letter { Letter | Digit | "_" }
-Letter = "a" | ... | "z" | "A" | ... | "Z"
-Digit = "0" | ... | "9"
+`CoveredRequirementIdentifier` looks like:
 
-RequirementName = Identifier
-
-RequirementIdentifier = PackageName "/" RequirementName
+```markdown
+- APIv2 implementation shall provide a handler for POST requests. `~Post~`covered[^coverersN].
 ```
 
-### Implementation Identifiers
+`CoveringNote` looks like:
 
-Each `InpitFile` contains multiple `ImplementationIdentifier` in the text.
+```markdown
+- APIv2 implementation shall provide a handler for POST requests. `~Post~`covered[^coverersN].
 
-ImplementationIdentifier is specified as follows:
+This is CoveringFootnote:
+
+[^coverersN]: `[~server.api.v2~impl]`[folder/filename1:line1:impl](CoverageTagURL1), [folder/filename2:line2:test](CoverageTagURL2)...
+```
+
+CoverageTagURL is a URL that points to the location of the coverage tag in the source file, an example:
+
+```text
+https://github.com/voedger/voedger/blob/979d75b2c7da961f94396ce2b286e7389eb73d75/pkg/sys/sys.vsql#L4
+```
+
+## Coverage Tags
+
+Each `InpitFile` contains multiple `CoverageTag` in the text.
+
+`CoverageTag` is specified as explained in the following example:
 
 ```go
 // [~server.api.v2/Post~impl]
@@ -76,20 +95,69 @@ func handlePostRequestTest(t *testing.T) {
 }
 ```
 
-### Tracing Mechanism
+Breakdown of the `[~server.api.v2/Post~test]`:
 
-The tool follows these steps to establish traceability:
+- `server.api.v2` is the `PackageName`.
+- `Post` is the `RequirementName`.
+- `test` is the `CoverageType`.
 
-1. **Scans** all specified files to detect requirement and implementation identifiers.
+## Processing requirements
+
+## Tracing mechanism
+
+### Concepts
+
+RequirementIdentifierEntry:
+
+- RequrementIdentifier
+- Location
+
+RequirementIdentifierEntry:
+
+- RequrementIdentifier
+- Location
+
+Location
+
+- Repository URL
+- Path in Repository
+- Hash
+
+The tool follows these steps to establish traceability.
+
+### Tracing
+
+- Scan all `InputFile`s and identify `RequirementIdentifierEntry`s and `CoverageTagEntry`s
+
+
+1. **Scans** all specified files to detect requirement identifiers and coverage tags.
 2. For each **requirement identifier**:
-   - Identifies all corresponding implementation identifiers.
-   - Generates footnotes referencing each implementation.
-   - Creates links within the footnotes pointing to the corresponding implementation locations.
+   - Identifies all corresponding coverage tags.
+   - Generates footnotes referencing each coverage.
+   - Creates links within the footnotes pointing to the corresponding coverage locations.
 
-### Output Format
+## Output Format
 
 The tool produces structured documentation with the following characteristics:
 
 - Each requirement may have multiple footnotes.
-- Each footnote corresponds to a single implementation identifier.
-- Footnotes contain clickable links to the respective implementation locations.
+- Each footnote corresponds to a single coverage tag.
+- Footnotes contain clickable links to the respective coverage locations.
+
+## EBNF
+
+```ebnf
+PackageName = Identifier { "." Identifier }
+Identifier = Letter { Letter | Digit | "_" }
+Letter = "a" | ... | "z" | "A" | ... | "Z"
+Digit = "0" | ... | "9"
+
+RequirementName = Identifier
+
+RequirementIdentifier = PackageName "/" RequirementName
+
+CoverageTag = "[~" RequirementIdentifier "~" CoverageType "]"
+
+CoveringFootnote = 
+
+```
