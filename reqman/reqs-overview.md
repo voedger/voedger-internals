@@ -9,7 +9,7 @@ Requirements Management (RM) represents a critical cornerstone of successful sof
 
 Requirements Management encompasses the processes and tools used to document, analyze, trace, prioritize and control requirements changes throughout the project lifecycle. This discipline ensures that an organization documents, verifies, and meets the needs and expectations of its customers and internal/external stakeholders [^1].
 
-- `~req1~`impl[^req1].
+- `~req1~`sources[^req1].
 - `~req2~`⚒️[^req2].
 
 ### Core Components
