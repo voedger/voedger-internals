@@ -148,4 +148,4 @@ The future of requirements management is shaped by several emerging trends:
 
 [^10]: Industry analysts predict that by 2026, 40% of enterprise-level organizations will incorporate AI/ML in their requirements management processes.
 
-[^req1]: `[~auth.login.req1~impl|test]`, [test](http://www.rbc.ru)
+[^req1]: `[~auth.login.req1~impl]`, [test](http://www.rbc.ru)
