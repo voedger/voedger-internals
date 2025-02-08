@@ -1,5 +1,5 @@
 ---
-requirement_package: auth.login 
+regme.: auth.login 
 ---
 # Requirements Management: A Comprehensive Guide to Modern Software Development
 
@@ -7,10 +7,10 @@ Requirements Management (RM) represents a critical cornerstone of successful sof
 
 ## Understanding Requirements Management
 
-Requirements Management encompasses the processes and tools used to document, analyze, trace, prioritize and control requirements changes throughout the project lifecycle. This discipline ensures that an organization documents, verifies, and meets the needs and expectations of its customers and internal/external stakeholders [^req1].
+Requirements Management encompasses the processes and tools used to document, analyze, trace, prioritize and control requirements changes throughout the project lifecycle. This discipline ensures that an organization documents, verifies, and meets the needs and expectations of its customers and internal/external stakeholders [^1].
 
-- `~req.stakeholders1~`impl[^1][^2].
-- `~req.stakeholders2~`⚒️[^1][^2].
+- `~req1~`impl[^req1].
+- `~req2~`⚒️[^req2].
 
 ### Core Components
 
@@ -147,3 +147,5 @@ The future of requirements management is shaped by several emerging trends:
 [^9]: According to PMI's Pulse of the Profession, organizations with mature requirements management processes waste 20 times less money than their counterparts.
 
 [^10]: Industry analysts predict that by 2026, 40% of enterprise-level organizations will incorporate AI/ML in their requirements management processes.
+
+[^req1]: auth.login.req1, [test](http://www.rbc.ru
