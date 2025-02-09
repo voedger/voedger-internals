@@ -125,5 +125,4 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 ## Experiments with LLMs
 
 - Claude
-  - [Prepare mermad flowchart diagram. Each goroutine shall be a separate subgraph.](https://claude.ai/chat/3f7c98c6-bee3-4e57-a1b0-c9ee27dd02e4)
-  - https://claude.site/artifacts/ccefba09-b102-4179-ab59-184a7fc99122
+  - [Flowchart](https://claude.site/artifacts/ccefba09-b102-4179-ab59-184a7fc99122) ( the [whole private chat](https://claude.ai/chat/3f7c98c6-bee3-4e57-a1b0-c9ee27dd02e4))  
