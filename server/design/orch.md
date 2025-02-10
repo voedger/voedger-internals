@@ -53,7 +53,6 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 
 - Flow:
   - vvm.Provide()
-    - go Shutdowner
 
 #### VVMHost: Launch VVM
 
@@ -61,6 +60,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 - Flow:
   - vvmProblemCtx := VVM.Launch()
     - go Launcher
+    - go Shutdowner
     - Return VVM.problemCtx
 
 #### VVMHost: Wait for signals
