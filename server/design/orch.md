@@ -13,7 +13,7 @@ Design reliable orchestration mechanism for VVM (Voedger Virtual Machine) that e
 - Concurrent-safe error handling
 - Graceful shutdown capabilities
 
-## Technical Design
+## Functional design
 
 ### Core Components
 
@@ -31,6 +31,7 @@ Design reliable orchestration mechanism for VVM (Voedger Virtual Machine) that e
 ### Error Handling
 
 The error propagation follows these principles:
+
 - Single error channel (`problemErrCh`) for reporting critical issues
 - Write-once semantics using `sync.Once`
 - Non-blocking error reads during shutdown
@@ -39,6 +40,7 @@ The error propagation follows these principles:
 ### Goroutine Management
 
 Goroutine hierarchy:
+
 1. Main (VVMHost)
    - Launcher
      - LeadershipMonitor
@@ -86,9 +88,9 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
     - go LeadershipMonitor
     - pipelineErr := servicePipeline
     - If pipelineErr != nil call `VVM.updateProblem(pipelineErr)`
-        - synchronized via `VVM.problemErrOnce`
-            - Close `VVM.problemCtx`
-            - Write error to `VVM.problemErrCh` using `VVM.problemErrOnce`
+      - synchronized via `VVM.problemErrOnce`
+        - Close `VVM.problemCtx`
+        - Write error to `VVM.problemErrCh` using `VVM.problemErrOnce`
 
 #### Shutdowner
 
@@ -103,15 +105,17 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 - Flow:
   - Loop
     - If leadership lost
-        - go `killerRoutine` 
-            - After 30 seconds kills the process
-            - // Never stoped, process must exit and goroutine must die
-            - // Yes, this is the anti-patterm "Goroutine/Task/Thread Leak"
-        - `VVM.updateProblem(leadershipLostErr)`
+      - go `killerRoutine` 
+        - After 30 seconds kills the process
+        - // Never stoped, process must exit and goroutine must die
+        - // Yes, this is the anti-patterm "Goroutine/Task/Thread Leak"
+      - `VVM.updateProblem(leadershipLostErr)`
     - Wait for timer (30 seconds) or `VVM.monitorShutCtx`
     - If `VVM.monitorShutCtx` is closed - break
 
-## Implementation requirements
+## Technical design
+
+### Implementation requirements
 
 - Clear ownership and cleanup responsibilities
 - All error reporting must use `VVM.updateProblem`
@@ -122,8 +126,26 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 - Predictable error propagation
 - No goroutine leaks (except intentional killerRoutine)
 
-## Experiments with LLMs
+### Components, resposibilities and injection cases
+
+- **pkg/elections**
+  - Purpose: Describe and implement the interface to acquire and manage leadership for a given key
+  - `IELections`
+    - Purpose: Describe the interface to acquire and manage leadership for a given key
+  - `elections`
+    - Purpose: Implementation of IELections
+- **pkg/elections/n5**
+  - Purpose: Provide InsertIfNotExist, CompareAndSwap for N5 cluster
+- **pkg/elections/n1**
+  - Purpose: Provide  InsertIfNotExist, CompareAndSwap for N1 cluster (CE)
+- **view.sys.N5Leader**
+  - Purpose: View that provides leadership information for N5 cluster
+
+### Experiments with LLMs
 
 - Claude
   - [Flowchart](https://claude.site/artifacts/ccefba09-b102-4179-ab59-184a7fc99122)
   - Prompt: Prepare mermad flowchart diagram. Each goroutine shall be a separate subgraph. The whole private chat is [here](https://claude.ai/chat/3f7c98c6-bee3-4e57-a1b0-c9ee27dd02e4).
+
+## Test design
+
