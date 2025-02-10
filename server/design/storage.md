@@ -1,6 +1,33 @@
 ### Storages
 This document describes how Storages interface wired into the entire Voedger infrastructure
 
+
+#### Concepts
+- `appparts.IAppPartitions` provider uses `IAppStructsProvider`, actualizers sync and async, schdulerRunner. It does not require `IAppStorage`
+```mermaid
+erDiagram
+  Federation ||--|{ Cluster : has
+  Cluster ||--|{ AppPartitions : has
+  AppPartitions ||--|{ Application : deploys
+  AppPartitions ||--|{ AppPartition : deploys
+  Application ||--|{ AppPartition : defines
+  ExtensionEngineFactory }|--|| AppPartitions : "provided to"
+  AppPartition ||--|{ Extension : invokes
+  ExtensionEngineFactory ||--|| Builtin : "could be"
+  ExtensionEngineFactory ||--|| WASM : "could be"
+  ExtensionEngineFactory ||--|{ ExtensionEngine : creates
+  ExtensionEngine ||--|{ Extension : holds
+  Extension ||--|| Func : "could be"
+  Extension ||--|| Projector : "could be"
+```
+
+#### Executable
+```mermaid
+erDiagram
+  
+```
+
+
 ### Principles
 - current document is actual for Voedger CE and SE only
 - Storage could be:
