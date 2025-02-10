@@ -2,7 +2,7 @@
 
 - [Introduction](README.md)
 
-## Concepts
+## 💡Concepts
 
 - [Event Sourcing & CQRS](concepts/evsrc/README.md)
 - [Editions (deprecated)](concepts/editions/README.md)
@@ -10,7 +10,7 @@
   - [Standart Edition](concepts/editions/se.md)
   - [Standart Edition (v1)](concepts/editions/se1.md)
 
-## Server
+## 🚀Server
 
 - [Overview (Server)](server/README.md)
 - Design
@@ -87,7 +87,7 @@
     - [Ephemeral Storage](server/ephemeral-storage.md)
     - [Storage Extensions](server/storage-extensions.md)
 
-## Framework
+## 🛠️Framework
 
 - [Overview (Framework)](framework/README.md)
 - Features

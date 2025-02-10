@@ -1,10 +1,9 @@
 # Motivation
 
-- Air: [Reseller Portal: Invite unTill Payments Users](625718)
-- launchpad: [Child Workspaces](25679)
+- Air: Reseller Portal: Invite unTill Payments Users, $625718
+- launchpad: Child Workspaces, $25679
 
-
-# Concepts
+## Concepts
 
 ```mermaid
     flowchart TD
@@ -72,9 +71,10 @@
 
 - AuthZ: role.sys.Subject
 - Params
-    - PrincipalToken
+  - PrincipalToken
 - Returns
-    - PrincipalToken enriched with subject workspace principals
+  - PrincipalToken enriched with subject workspace principals
 
 ## Unclear
+
 - Implicit roles like Owner?
