@@ -15,7 +15,7 @@ Design reliable orchestration mechanism for VVM (Voedger Virtual Machine) that e
 
 ## Functional design
 
-### Core Components
+### Actors
 
 - VVMHost: Application that starts and manages VVM
 - VVM
