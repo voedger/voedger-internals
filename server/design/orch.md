@@ -126,7 +126,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 - Predictable error propagation
 - No goroutine leaks (except intentional killerRoutine)
 
-### Components, resposibilities and injection cases
+### Components
 
 - **pkg/elections**
   - Purpose: Describe and implement the interface to acquire and manage leadership for a given key
