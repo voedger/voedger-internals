@@ -19,7 +19,6 @@
   - State not in (None, Cancelled, Left, Invited)
   - invalid argument EmailTemplate
 - //TODO: EMail => Login must be implemented, currently it is supposed that EMail == Login
-
 **Behavior:**
 
 ```mermaid

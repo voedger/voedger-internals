@@ -1,3 +1,7 @@
+---
+reqmd.package: server.design.orch
+---
+
 # VVM Orchestration Design
 
 ## Overview
@@ -146,6 +150,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
   - `ITTLStorage`
     - Purpose: interface with methods InsertIfNotExist(), CompareAndSwap(), CompareAndDelete() used to persist `view.cluster.VVMLeader`
 - **view.sys.VVMLeader**
+  - Definition by IAppDef constructor: `~VVMLeader.def~`covered[^~VVMLeader.def~]
   - Purpose: view that provides leadership information for the entire cluster
 
     ```golang
@@ -154,8 +159,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
     viewVVMLeader.Key().ClustCols().AddField("VVMIndex", appdef.DataKind_int32)
     viewVVMLeader.Value().AddField("IP", appdef.DataKind_string, true) // ip within swarm network of the VVM that managed to lock the VVMIndex
     ```
-
-  - created automatically by IAppDef constructor [here](https://github.com/voedger/voedger/blob/67cb0d8e2960a0b09546bf86a986bc40a1f05584/pkg/appdef/internal/apps/app.go#L80)
+    
   - app `sys/cluster`, WSID 0
 // если виртуальных машин 6, то какждая из них лочит номерки от 1 до 6 случайным образом
 
@@ -191,3 +195,5 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
   - 2 VVMs services
 - `docker compse up -d`
 - expect 1 of 2 VVMs services are failed to start
+
+[^~VVMLeader.def~]: `[~server.design.orch/VVMLeader.def~]`, [apps/app.go:80:impl](https://github.com/voedger/voedger/blob/67cb0d8e2960a0b09546bf86a986bc40a1f05584/pkg/appdef/internal/apps/app.go#L80)
