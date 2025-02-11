@@ -150,7 +150,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
   - `ITTLStorage`
     - Purpose: interface with methods InsertIfNotExist(), CompareAndSwap(), CompareAndDelete() used to persist `view.cluster.VVMLeader`
 - **view.sys.VVMLeader**
-  - Definition by IAppDef constructor: `~VVMLeader.def~`covered[^~VVMLeader.def~]
+  - Definition by IAppDef constructor: `~VVMLeader.def~`cvrd[^~VVMLeader.def~]✅
   - Purpose: view that provides leadership information for the entire cluster
   - app `sys/cluster`, WSID 0
 
