@@ -6,10 +6,10 @@ reqmd.package: server.invites
 
 ## c.sys.InitiateJoinWorkspace()
 
-`~InitiateJoinWorkspace~`rqmd_non_covered[^~InitiateJoinWorkspace~].
-`~InitiateJoinWorkspace~`rqmd_covered[^~InitiateJoinWorkspace~].
-`~InitiateJoinWorkspace~`rqmd-covered[^~InitiateJoinWorkspace~].
-`~InitiateJoinWorkspace~`rqmd-non-covered[^~InitiateJoinWorkspace~].
+- `~InitiateJoinWorkspace~`rqmd_non_covered[^~InitiateJoinWorkspace~]
+- `~InitiateJoinWorkspace~`rqmd_covered[^~InitiateJoinWorkspace~]
+- `~InitiateJoinWorkspace~`rqmd-covered[^~InitiateJoinWorkspace~]
+- `~InitiateJoinWorkspace~`rqmd-non-covered[^~InitiateJoinWorkspace~]
 
 - AuthZ: PrincipalToken + VerificationCode
 - Params
