@@ -127,13 +127,16 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 - No goroutine leaks (except intentional killerRoutine)
 
 ### Components
+
 - **pkg/vvm**
+
   ```golang
   type VVMConfig {
     ...
     ClusterSize int // amount of VVMs in the cluster. Default 1
   }
   ```
+
 - **pkg/elections**
   - Purpose: Describe and implement the interface to acquire and manage leadership for a given key
   - `IELections`
@@ -144,16 +147,17 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
     - Purpose: interface with methods InsertIfNotExist(), CompareAndSwap(), CompareAndDelete() used to persist `view.cluster.VVMLeader`
 - **view.sys.VVMLeader**
   - Purpose: view that provides leadership information for the entire cluster
-  - ```golang
+
+    ```golang
     viewVVMLeader := wsb.AddView(appdef.NewQName(appdef.SysPackage, "VVMLeader"))
     viewVVMLeader.Key().PartKey().AddField("dummy1", appdef.DataKind_int32) // always 1
     viewVVMLeader.Key().ClustCols().AddField("VVMIndex", appdef.DataKind_int32)
     viewVVMLeader.Value().AddField("IP", appdef.DataKind_string, true) // ip within swarm network of the VVM that managed to lock the VVMIndex
     ```
+
   - created automatically by IAppDef constructor [here](https://github.com/voedger/voedger/blob/67cb0d8e2960a0b09546bf86a986bc40a1f05584/pkg/appdef/internal/apps/app.go#L80)
   - app `sys/cluster`, WSID 0
 // если виртуальных машин 6, то какждая из них лочит номерки от 1 до 6 случайным образом
-
 
 ### Experiments with LLMs
 
@@ -162,7 +166,9 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
   - Prompt: Prepare mermad flowchart diagram. Each goroutine shall be a separate subgraph. The whole private chat is [here](https://claude.ai/chat/3f7c98c6-bee3-4e57-a1b0-c9ee27dd02e4).
 
 ## Test design
+
 ### Automatic
+
 - Basic
   - provide and laucnh VVM1
   - wait for successful VVM1 start
@@ -179,6 +185,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
   - expect the VVM shutdown
 
 ### Manual
+
 - docker container:
   - scylla db
   - 2 VVMs services
