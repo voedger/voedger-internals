@@ -11,7 +11,6 @@ reqmd.package: reqman.tracing.examples
 - Covered: `~VVMLeader.def~`covered[^~VVMLeader.def~]📋✅
 - Uncovered: `~VVMLeader.def~`covered[^~VVMLeader.def~]📋❓
 
-
 ## **Requirement Tracing: Ensuring Consistency and Compliance in Software Development**
 
 ### Introduction
