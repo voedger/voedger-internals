@@ -152,6 +152,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 - **view.sys.VVMLeader**
   - Definition by IAppDef constructor: `~VVMLeader.def~`covered[^~VVMLeader.def~]
   - Purpose: view that provides leadership information for the entire cluster
+  - app `sys/cluster`, WSID 0
 
     ```golang
     viewVVMLeader := wsb.AddView(appdef.NewQName(appdef.SysPackage, "VVMLeader"))
@@ -159,8 +160,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
     viewVVMLeader.Key().ClustCols().AddField("VVMIndex", appdef.DataKind_int32)
     viewVVMLeader.Value().AddField("IP", appdef.DataKind_string, true) // ip within swarm network of the VVM that managed to lock the VVMIndex
     ```
-    
-  - app `sys/cluster`, WSID 0
+
 // если виртуальных машин 6, то какждая из них лочит номерки от 1 до 6 случайным образом
 
 ### Experiments with LLMs
