@@ -6,12 +6,9 @@ reqmd.package: server.invites
 
 ## c.sys.InitiateJoinWorkspace()
 
-- `~InitiateJoinWorkspace~`rqmd_non_covered[^~InitiateJoinWorkspace~]
-- `~InitiateJoinWorkspace~`rqmd_covered[^~InitiateJoinWorkspace~]
-- `~InitiateJoinWorkspace~`rqmd-covered[^~InitiateJoinWorkspace~]
-- `~InitiateJoinWorkspace~`rqmd-non-covered[^~InitiateJoinWorkspace~]
-
+- `~InitiateJoinWorkspace~`covered[^~InitiateJoinWorkspace~]
 - AuthZ: PrincipalToken + VerificationCode
+  - `~InitiateJoinWorkspace.AuthZ~`reqmdnoncovered[^~InitiateJoinWorkspace.AuthZ~]
 - Params
   - InviteID
   - VerificationCode
@@ -63,3 +60,5 @@ reqmd.package: server.invites
 ## Footnotes
 
 [^~InitiateJoinWorkspace~]: `[~server.invites/InitiateJoinWorkspace~impl]`, [invite/impl_initiatejoinworkspace.go:26:impl](https://github.com/voedger/voedger/blob/67cb0d8e2960a0b09546bf86a986bc40a1f05584/pkg/sys/invite/impl_initiatejoinworkspace.go#L26), [it/impl_invite_test.go:173:itest](https://github.com/voedger/voedger/blob/67cb0d8e2960a0b09546bf86a986bc40a1f05584/pkg/sys/it/impl_invite_test.go#L173)
+
+[^~InitiateJoinWorkspace.AuthZ~]: `[~server.invites/InitiateJoinWorkspace.AuthZ~impl]`
