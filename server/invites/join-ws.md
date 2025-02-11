@@ -6,9 +6,9 @@ reqmd.package: server.invites
 
 ## c.sys.InitiateJoinWorkspace()
 
-- `~InitiateJoinWorkspace~`covered[^~InitiateJoinWorkspace~]✅
+- `~InitiateJoinWorkspace~`cvrd[^~InitiateJoinWorkspace~]✅
 - AuthZ: PrincipalToken + VerificationCode
-  - `~InitiateJoinWorkspace.AuthZ~`reqmdnoncovered[^~InitiateJoinWorkspace.AuthZ~]❓
+  - `~InitiateJoinWorkspace.AuthZ~`nncvrd[^~InitiateJoinWorkspace.AuthZ~]❓
 - Params
   - InviteID
   - VerificationCode
