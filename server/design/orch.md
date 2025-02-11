@@ -75,7 +75,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 
 - When: After `Wait for signals`
 - Flow
-  - err := VVM.Shutdown() 
+  - err := VVM.Shutdown()
     - VVM.vvmShutCtxOnce.Do(func() { close(VVM.vvmShutCtx) })
     - Wait for `VVM.shutdownedCtx`
     - Return error from `VVM.problemErrCh`, non-blocking.
@@ -105,7 +105,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 - Flow:
   - Loop
     - If leadership lost
-      - go `killerRoutine` 
+      - go `killerRoutine`
         - After 30 seconds kills the process
         - // Never stoped, process must exit and goroutine must die
         - // Yes, this is the anti-patterm "Goroutine/Task/Thread Leak"
@@ -127,19 +127,33 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 - No goroutine leaks (except intentional killerRoutine)
 
 ### Components
-
+- **pkg/vvm**
+  ```golang
+  type VVMConfig {
+    ...
+    ClusterSize int // amount of VVMs in the cluster. Default 1
+  }
+  ```
 - **pkg/elections**
   - Purpose: Describe and implement the interface to acquire and manage leadership for a given key
   - `IELections`
     - Purpose: Describe the interface to acquire and manage leadership for a given key
   - `elections`
     - Purpose: Implementation of IELections
-- **pkg/elections/n5**
-  - Purpose: Provide InsertIfNotExist, CompareAndSwap for N5 cluster
-- **pkg/elections/n1**
-  - Purpose: Provide  InsertIfNotExist, CompareAndSwap for N1 cluster (CE)
-- **view.sys.N5Leader**
-  - Purpose: View that provides leadership information for N5 cluster
+  - `ITTLStorage`
+    - Purpose: interface with methods InsertIfNotExist(), CompareAndSwap(), CompareAndDelete() used to persist `view.cluster.VVMLeader`
+- **view.sys.VVMLeader**
+  - Purpose: view that provides leadership information for the entire cluster
+  - ```golang
+    viewVVMLeader := wsb.AddView(appdef.NewQName(appdef.SysPackage, "VVMLeader"))
+    viewVVMLeader.Key().PartKey().AddField("dummy1", appdef.DataKind_int32) // always 1
+    viewVVMLeader.Key().ClustCols().AddField("VVMIndex", appdef.DataKind_int32)
+    viewVVMLeader.Value().AddField("IP", appdef.DataKind_string, true) // ip within swarm network of the VVM that managed to lock the VVMIndex
+    ```
+  - created automatically by IAppDef constructor [here](https://github.com/voedger/voedger/blob/67cb0d8e2960a0b09546bf86a986bc40a1f05584/pkg/appdef/internal/apps/app.go#L80)
+  - app `sys/cluster`, WSID 0
+// если виртуальных машин 6, то какждая из них лочит номерки от 1 до 6 случайным образом
+
 
 ### Experiments with LLMs
 
@@ -148,4 +162,25 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
   - Prompt: Prepare mermad flowchart diagram. Each goroutine shall be a separate subgraph. The whole private chat is [here](https://claude.ai/chat/3f7c98c6-bee3-4e57-a1b0-c9ee27dd02e4).
 
 ## Test design
+### Automatic
+- Basic
+  - provide and laucnh VVM1
+  - wait for successful VVM1 start
+  - provide and launch VVM2
+  - wait for VVM2 start failure
+- 3 VVMs work in the cluster with size 3: expect 4th fail
+  - provide and launch 3 VVMs with cluster size 3
+  - wait for launch
+  - provide and launch 4th VVM, wait for failure
+- automatic shutdown on leadership loss
+  - provide and launch a VVM
+  - update `view.cluster.VVMLeader`: modify the single value
+  - bump mock time
+  - expect the VVM shutdown
 
+### Manual
+- docker container:
+  - scylla db
+  - 2 VVMs services
+- `docker compse up -d`
+- expect 1 of 2 VVMs services are failed to start
