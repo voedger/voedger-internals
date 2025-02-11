@@ -4,8 +4,6 @@ reqmd.package: reqman.tracing.examples2
 
 # Examples of the tracing
 
-Purpose: if 📋✅ sequence searchable
-
 - Covered: `~VVMLeader.def~`covered[^~VVMLeader.def~]✅
 - Uncovered: `~VVMLeader.def~`covered[^~VVMLeader.def~]📋
 - Covered: `~VVMLeader.def~`covered[^~VVMLeader.def~]✅
