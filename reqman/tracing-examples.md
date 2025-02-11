@@ -11,11 +11,14 @@ reqmd.package: reqman.tracing.examples
 - Covered: `~VVMLeader.def~`covered[^~VVMLeader.def~]📋✅
 - Uncovered: `~VVMLeader.def~`covered[^~VVMLeader.def~]📋❓
 
+
 ## **Requirement Tracing: Ensuring Consistency and Compliance in Software Development**
 
 ### Introduction
 
 Requirement tracing is a critical practice in software development and systems engineering that ensures requirements are consistently managed throughout the project lifecycle. It establishes a clear relationship between requirements, design, implementation, testing, and verification processes. By maintaining traceability, teams can ensure compliance with regulations, track changes effectively, and validate that the final product meets the intended objectives.
+
+- Covered: `~VVMLeader.def~`covered[^~VVMLeader.def~]🎯
 
 ### What Is Requirement Tracing?
 
@@ -25,6 +28,8 @@ Requirement tracing refers to the ability to follow a requirement from its origi
 - **Backward Tracing**: Ensuring that each implemented feature and test case is linked back to a specific requirement.
 
 By maintaining bidirectional traceability, organizations can confirm that no requirement is overlooked and that all features serve a documented purpose.
+
+- Uncovered: `~VVMLeader.def~`covered[^~VVMLeader.def~]🚧
 
 ### Importance of Requirement Tracing
 

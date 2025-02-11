@@ -6,10 +6,8 @@ reqmd.package: reqman.tracing.examples2
 
 Purpose: if 📋✅ sequence searchable
 
-- Bulb: `~VVMLeader.def~`covered[^~VVMLeader.def~]💡
-- Bulb inside: `~VVMLeader.def~`covered💡[^~VVMLeader.def~]
-- Pushpin: `~VVMLeader.def~`covered[^~VVMLeader.def~]📌
-- Pushpin inside: `~VVMLeader.def~`covered📌[^~VVMLeader.def~]
+- Covered: `~VVMLeader.def~`covered[^~VVMLeader.def~]✅
+- Uncovered: `~VVMLeader.def~`covered[^~VVMLeader.def~]📋
 - Covered: `~VVMLeader.def~`covered[^~VVMLeader.def~]✅
 - Uncovered: `~VVMLeader.def~`covered[^~VVMLeader.def~]📋
 
