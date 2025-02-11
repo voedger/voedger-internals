@@ -5,11 +5,11 @@ reqmd.package: reqman.tracing.examples
 # Examples of the tracing
 
 - Bulb: `~VVMLeader.def~`cvrd[^~VVMLeader.def~]💡
-- Bulb inside: `~VVMLeader.def~`covered💡[^~VVMLeader.def~]
-- Pushpin: `~VVMLeader.def~`covered[^~VVMLeader.def~]📌
-- Pushpin inside: `~VVMLeader.def~`covered📌[^~VVMLeader.def~]
-- Covered: `~VVMLeader.def~`covered[^~VVMLeader.def~]📋✅
-- Uncovered: `~VVMLeader.def~`covered[^~VVMLeader.def~]📋❓
+- Bulb inside: `~VVMLeader.def~`cvrd💡[^~VVMLeader.def~]
+- Pushpin: `~VVMLeader.def~`cvrd[^~VVMLeader.def~]📌
+- Pushpin inside: `~VVMLeader.def~`cvrd📌[^~VVMLeader.def~]
+- Covered: `~VVMLeader.def~`cvrd[^~VVMLeader.def~]📋✅
+- Uncovered: `~VVMLeader.def~`cvrd[^~VVMLeader.def~]📋❓
 
 ## **Requirement Tracing: Ensuring Consistency and Compliance in Software Development**
 
