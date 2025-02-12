@@ -64,7 +64,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 
 - When: After `Create VVM`
 - Flow:
-  - vvmProblemCtx := VVM.Launch()
+  - vvmProblemCtx := VVM.Launch(leadershipAcquisitionDuration)
     - go Launcher
     - go Shutdowner
     - Return VVM.problemCtx
@@ -87,7 +87,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 #### Launcher
 
 - Flow:
-  - Wait for leadership or `VVM.servicesShutCtx`
+  - Wait for leadership or `VVM.servicesShutCtx` during leadershipAcquisitionDuration
   - If leadership is acquired
     - go LeadershipMonitor
     - pipelineErr := servicePipeline
@@ -95,6 +95,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
       - synchronized via `VVM.problemErrOnce`
         - Close `VVM.problemCtx`
         - Write error to `VVM.problemErrCh` using `VVM.problemErrOnce`
+  - Else call `VVM.updateProblem(leadershipAcquisitionErr)`
 
 #### Shutdowner
 
