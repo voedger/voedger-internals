@@ -161,8 +161,6 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
     viewVVMLeader.Value().AddField("IP", appdef.DataKind_string, true) // ip within swarm network of the VVM that managed to lock the VVMIndex
     ```
 
-// если виртуальных машин 6, то какждая из них лочит номерки от 1 до 6 случайным образом
-
 ### Experiments with LLMs
 
 - Claude
@@ -178,15 +176,15 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
   - wait for successful VVM1 start
   - provide and launch VVM2
   - wait for VVM2 start failure
-- 3 VVMs work in the cluster with size 3: expect 4th fail
-  - provide and launch 3 VVMs with cluster size 3
-  - wait for launch
-  - provide and launch 4th VVM, wait for failure
-- automatic shutdown on leadership loss
+- Automatic shutdown on leadership loss
   - provide and launch a VVM
   - update `view.cluster.VVMLeader`: modify the single value
   - bump mock time
   - expect the VVM shutdown
+- Cancel the leadership on manual shutdown
+  - provide and launch a VVM
+  - shut it down on the launcher side
+  - expect that the leadership in canceled
 
 ### Manual
 
