@@ -150,17 +150,11 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
     - Purpose: Implementation of IELections
   - `ITTLStorage`
     - Purpose: interface with methods InsertIfNotExist(), CompareAndSwap(), CompareAndDelete() used to persist `view.cluster.VVMLeader`
-- **view.sys.VVMLeader**
-  - Definition by IAppDef constructor: `~VVMLeader.def~`cvrd[^~VVMLeader.def~]✅
-  - Purpose: view that provides leadership information for the entire cluster
-  - app `sys/cluster`, WSID 0
-
-    ```golang
-    viewVVMLeader := wsb.AddView(appdef.NewQName(appdef.SysPackage, "VVMLeader"))
-    viewVVMLeader.Key().PartKey().AddField("dummy1", appdef.DataKind_int32) // always 1
-    viewVVMLeader.Key().ClustCols().AddField("VVMIndex", appdef.DataKind_int32)
-    viewVVMLeader.Value().AddField("IP", appdef.DataKind_string, true) // ip within swarm network of the VVM that managed to lock the VVMIndex
-    ```
+- **keyspace(vvm).VVMLeaderPrefix**
+  - Key prefix `VVMLeaderPrefix` to keep data for elections
+- **pkg/vvm/ttlstorage**
+  - Implementation of `ITTLStorage` interface that uses `keyspace(vvmdata)` and keys prefixed with keyspace(vvmdata).VVMLeaderPrefix
+  - Like we had here `~VVMLeader.def~`cvrd[^~VVMLeader.def~]✅
 
 ### Experiments with LLMs
 
