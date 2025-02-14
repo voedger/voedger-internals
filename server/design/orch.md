@@ -67,6 +67,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
   - vvmProblemCtx := VVM.Launch(leadershipAcquisitionDuration)
     - go Launcher
     - go Shutdowner
+    - wait for launcher finish (blocking)
     - Return VVM.problemCtx
 
 #### VVMHost: Wait for signals
@@ -88,6 +89,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 
 - Flow:
   - Wait for leadership or `VVM.servicesShutCtx` during leadershipAcquisitionDuration
+    - `leadershipDuration` default is 20 seconds
   - If leadership is acquired
     - go LeadershipMonitor
     - pipelineErr := servicePipeline
@@ -108,15 +110,16 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 #### LeadershipMonitor
 
 - Flow:
-  - Loop
-    - If leadership lost
+  - wait for any of:
+    - leadership loss
       - go `killerRoutine`
-        - After 30 seconds kills the process
+        - After `leadershipDuration/4` seconds kills the process
         - // Never stoped, process must exit and goroutine must die
         - // Yes, this is the anti-patterm "Goroutine/Task/Thread Leak"
       - `VVM.updateProblem(leadershipLostErr)`
-    - Wait for timer (30 seconds) or `VVM.monitorShutCtx`
-    - If `VVM.monitorShutCtx` is closed - break
+      - break
+    - `VVM.monitorShutCtx`
+      - break
 
 ## Technical design
 
