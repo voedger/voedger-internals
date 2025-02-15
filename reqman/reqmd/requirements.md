@@ -76,7 +76,7 @@ Markdown body is a sequence if text elements, some of them are RequirementID, so
 RequirementID:
 
 - Not covered: `~Post~`.
-- Covered: `~Post~`coverers[^coverersN].
+- Covered: `~Post~`covered[^coverersN].
 
 CoveringFootnote:
 
@@ -98,14 +98,14 @@ RequirementID      = InlineReqID [ CoverageAnnotation ]
    a tilde, contains a requirement name, and ends with a tilde. *)
 InlineReqID        = "`" "~" Identifier "~" "`"
 
-(* A covered RequirementID is marked by the literal "coverers" immediately following the inline code, followed by a CoveringFootnote. *)
-CoverageAnnotation = "coverers" FootnoteReference
+(* A covered RequirementID is marked by the literal "covered" immediately following the inline code, followed by a CoveringFootnote. *)
+CoverageAnnotation = "covered" FootnoteReference
 
 FootnoteReference = FootnoteLabel
 
 FootnoteLabel = "[^" CoverersID "]"
 
-CoverersID = "coverers" NUMBER
+CoverersID = "covered" NUMBER
 
 (* A CoveringFootnote is a footnote marker followed by a CoverageTag and a FileCoverageList. *)
 CoveringFootnote  = FootnoteMarker "`" CoverageTag "`" ":" FileCoverageList
@@ -137,7 +137,7 @@ reqmd.package: server.api.v2
 `CoveredRequirementIdentifier` looks like:
 
 ```markdown
-- APIv2 implementation shall provide a handler for POST requests. `~Post~`coverers[^coverersN].
+- APIv2 implementation shall provide a handler for POST requests. `~Post~`covered[^coverersN].
 ```
 
 `CoveringNote` looks like:

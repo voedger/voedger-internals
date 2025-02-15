@@ -157,7 +157,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
   - Key prefix `VVMLeaderPrefix` to keep data for elections
 - **pkg/vvm/ttlstorage**
   - Implementation of `ITTLStorage` interface that uses `keyspace(vvmdata)` and keys prefixed with keyspace(vvmdata).VVMLeaderPrefix
-  - Like we had here `~VVMLeader.def~`cvrd[^~VVMLeader.def~]✅
+  - Like we had here `~VVMLeader.def~`covered[^~VVMLeader.def~]✅
 
 ### Experiments with LLMs
 
