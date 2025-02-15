@@ -208,7 +208,6 @@ The tool follows these steps to establish traceability.
 
 - Scan all `InputFile`s and identify `RequirementIdentifierEntry`s and `CoverageTagEntry`s
 
-
 1. **Scans** all specified files to detect requirement identifiers and coverage tags.
 2. For each **requirement identifier**:
    - Identifies all corresponding coverage tags.
