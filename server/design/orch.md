@@ -87,7 +87,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 #### Launcher
 
 - Flow:
-  - Wait for leadership or `VVM.servicesShutCtx` during leadershipAcquisitionDuration
+  - Wait for leadership ~or `VVM.servicesShutCtx`~ during leadershipAcquisitionDuration
     - `leadershipDuration` default is 20 seconds
   - If leadership is acquired
     - go LeadershipMonitor
