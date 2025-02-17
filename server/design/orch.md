@@ -23,9 +23,8 @@ Design reliable orchestration mechanism for VVM (Voedger Virtual Machine) that e
 
 - VVMHost: Application that starts and manages VVM
 - VVM
-  - problemCtx. Closed when some problem occurs, VVM terminates itself due to leadership loss or problems with the launching
-  - problemErrCh. Channel that receives the error describing the problem, written only once
-  - problemErrOnce. `sync.Once` to ensure problemErrCh is written only once
+  - problemCtx. Closed with nil or with an error or nil when some problem occurs, VVM terminates itself due to leadership loss or problems with the launching
+  - problemErrOnce. `sync.Once` to ensure problemCtx is closed only once
   - vvmShutCtx. Closed when VVM should be stopped
   - vvmShutCtxOnce. `sync.Once` to close `vvmShutCtx` only once
   - servicesShutCtx. Closed when VVM services should be stopped (but LeadershipMonitor)
@@ -36,7 +35,7 @@ Design reliable orchestration mechanism for VVM (Voedger Virtual Machine) that e
 
 The error propagation follows these principles:
 
-- Single error channel (`problemErrCh`) for reporting critical issues
+- Single context that could return an error  (`problemCtx`) for reporting critical issues
 - Write-once semantics using `sync.Once`
 - Non-blocking error reads during shutdown
 - Thread-safe error updates via `updateProblem()`
