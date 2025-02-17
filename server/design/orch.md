@@ -27,7 +27,7 @@ Design reliable orchestration mechanism for VVM (Voedger Virtual Machine) that e
   - problemCtxErrOnce. `sync.Once` to ensure problemCtx is closed only once
   - vvmShutCtx. Closed when VVM should be stopped (`Shutdown()` is called outside)
   - vvmShutCtxOnce. `sync.Once` to close `vvmShutCtx` only once
-  - servicesShutCtx. Closed when VVM services should be stopped (but LeadershipMonitor) (that should be context for services: servicesShutCtx closed -> services pipeline is stopped)
+  - servicesShutCtx. Closed when VVM services should be stopped (but LeadershipMonitor) (that should be context for services: servicesShutCtx closed -> services pipeline is stopped. Closed when `Shutdown()` is called outside)
   - monitorShutCtx. Closed after all services are stopped and LeadershipMonitor should be stopped
   - shutdownedCtx. Closed after all (services and LeadershipMonitor) is stopped
 
