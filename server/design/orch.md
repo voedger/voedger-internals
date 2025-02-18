@@ -12,7 +12,7 @@ reqmd.package: server.design.orch
 
 Design reliable orchestration mechanism for VVM (Voedger Virtual Machine) that ensures:
 
-- VVM goroutines work only if leadership is acquired
+- VVM goroutines work only if leadership is acquired and held
 - Clean termination of all goroutines
 - Concurrent-safe error handling
 - Graceful shutdown capabilities
@@ -23,12 +23,11 @@ Design reliable orchestration mechanism for VVM (Voedger Virtual Machine) that e
 
 - VVMHost: Application that starts and manages VVM
 - VVM
-  - problemCtx. Closed when some problem occurs, VVM terminates itself due to leadership loss or problems with the launching
-  - problemErrCh. Channel that receives the error describing the problem, written only once
-  - problemErrOnce. `sync.Once` to ensure problemErrCh is written only once
-  - vvmShutCtx. Closed when VVM should be stopped
+  - problemCtx. Closed with nil or with an error or nil when some problem occurs, VVM terminates itself due to leadership loss or problems with the launching
+  - problemCtxErrOnce. `sync.Once` to ensure problemCtx is closed only once
+  - vvmShutCtx. Closed when VVM should be stopped (`Shutdown()` is called outside)
   - vvmShutCtxOnce. `sync.Once` to close `vvmShutCtx` only once
-  - servicesShutCtx. Closed when VVM services should be stopped (but LeadershipMonitor)
+  - servicesShutCtx. Closed when VVM services should be stopped (but LeadershipMonitor) (that should be context for services: servicesShutCtx closed -> services pipeline is stopped. Closed when `Shutdown()` is called outside)
   - monitorShutCtx. Closed after all services are stopped and LeadershipMonitor should be stopped
   - shutdownedCtx. Closed after all (services and LeadershipMonitor) is stopped
 
@@ -36,7 +35,7 @@ Design reliable orchestration mechanism for VVM (Voedger Virtual Machine) that e
 
 The error propagation follows these principles:
 
-- Single error channel (`problemErrCh`) for reporting critical issues
+- Single context that could return an error  (`problemCtx`) for reporting critical issues
 - Write-once semantics using `sync.Once`
 - Non-blocking error reads during shutdown
 - Thread-safe error updates via `updateProblem()`
@@ -88,15 +87,15 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 #### Launcher
 
 - Flow:
-  - Wait for leadership or `VVM.servicesShutCtx` during leadershipAcquisitionDuration
+  - Wait for leadership ~or `VVM.servicesShutCtx`~ (do not wait for servicesShutCtx because Launch is blocking method) during leadershipAcquisitionDuration
     - `leadershipDuration` default is 20 seconds
   - If leadership is acquired
     - go LeadershipMonitor
     - pipelineErr := servicePipeline
     - If pipelineErr != nil call `VVM.updateProblem(pipelineErr)`
-      - synchronized via `VVM.problemErrOnce`
+      - synchronized via `VVM.problemCtxErrOnce`
         - Close `VVM.problemCtx`
-        - Write error to `VVM.problemErrCh` using `VVM.problemErrOnce`
+        - Write error to `VVM.problemErrCh` using `VVM.problemCtxErrOnce`
   - Else call `VVM.updateProblem(leadershipAcquisitionErr)`
 
 #### Shutdowner
@@ -111,7 +110,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 
 - Flow:
   - wait for any of:
-    - leadership loss
+    - leadership loss (watch over context got from AcquireLeadership (problemCtx))
       - go `killerRoutine`
         - After `leadershipDuration/4` seconds kills the process
         - // Never stoped, process must exit and goroutine must die
@@ -153,10 +152,10 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
     - Purpose: Implementation of IELections
   - `ITTLStorage`
     - Purpose: interface with methods InsertIfNotExist(), CompareAndSwap(), CompareAndDelete() used to persist `view.cluster.VVMLeader`
-- **keyspace(vvm).VVMLeaderPrefix**
+- **keyspace(sysvvm).VVMLeaderPrefix**
   - Key prefix `VVMLeaderPrefix` to keep data for elections
 - **pkg/vvm/ttlstorage**
-  - Implementation of `ITTLStorage` interface that uses `keyspace(vvmdata)` and keys prefixed with keyspace(vvmdata).VVMLeaderPrefix
+  - Implementation of `ITTLStorage` interface that uses `keyspace(vvmdata)` and keys prefixed with keyspace(sysvvm).VVMLeaderPrefix
   - Like we had here `~VVMLeader.def~`covered[^~VVMLeader.def~]✅
 
 ### Experiments with LLMs
