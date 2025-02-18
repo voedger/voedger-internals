@@ -12,7 +12,7 @@ reqmd.package: server.design.orch
 
 Design reliable orchestration mechanism for VVM (Voedger Virtual Machine) that ensures:
 
-- VVM goroutines work only if leadership is acquired
+- VVM goroutines work only if leadership is acquired and held
 - Clean termination of all goroutines
 - Concurrent-safe error handling
 - Graceful shutdown capabilities
