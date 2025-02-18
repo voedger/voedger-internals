@@ -152,10 +152,10 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
     - Purpose: Implementation of IELections
   - `ITTLStorage`
     - Purpose: interface with methods InsertIfNotExist(), CompareAndSwap(), CompareAndDelete() used to persist `view.cluster.VVMLeader`
-- **keyspace(vvm).VVMLeaderPrefix**
+- **keyspace(sysvvm).VVMLeaderPrefix**
   - Key prefix `VVMLeaderPrefix` to keep data for elections
 - **pkg/vvm/ttlstorage**
-  - Implementation of `ITTLStorage` interface that uses `keyspace(vvmdata)` and keys prefixed with keyspace(vvmdata).VVMLeaderPrefix
+  - Implementation of `ITTLStorage` interface that uses `keyspace(vvmdata)` and keys prefixed with keyspace(sysvvm).VVMLeaderPrefix
   - Like we had here `~VVMLeader.def~`covered[^~VVMLeader.def~]✅
 
 ### Experiments with LLMs
