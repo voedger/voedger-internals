@@ -110,7 +110,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 
 - Flow:
   - wait for any of:
-    - leadership loss
+    - leadership loss (watch over context got from AcquireLeadership (problemCtx))
       - go `killerRoutine`
         - After `leadershipDuration/4` seconds kills the process
         - // Never stoped, process must exit and goroutine must die
