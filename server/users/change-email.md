@@ -6,9 +6,10 @@ As sys.Workspace.ProfileOwner I want to change my Email.
 
 - AuthZ: role.sys.Workspace.ProfileOwner
 - Params
-    - NewEMail
+  - NewEMail
 - Errors
-    - Email is mailformed // See similar message
+  - Email is mailformed // See similar message
 
-**Behavior:**
-    - Update UserProfileWS.UserProfile.Email
+**Flow**:
+
+- Update UserProfileWS.UserProfile.Email

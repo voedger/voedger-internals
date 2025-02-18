@@ -1,8 +1,8 @@
 # Server.Users
 
-## Schema
+## Data
 
-[sys.UserProfile](https://github.com/voedger/voedger/blob/ecb97b1f282e2b1d4e19b1ab0394fa4eacafcbdd/pkg/sys/userprofile.vsql#L4)
+[sys.UserProfileWS.UserProfile](https://github.com/voedger/voedger/blob/ecb97b1f282e2b1d4e19b1ab0394fa4eacafcbdd/pkg/sys/userprofile.vsql#L4)
 ```sql
 ALTERABLE WORKSPACE UserProfileWS INHERITS sys.ProfileWS (
 	DESCRIPTOR UserProfile (
@@ -10,10 +10,10 @@ ALTERABLE WORKSPACE UserProfileWS INHERITS sys.ProfileWS (
         Email varchar,
 	);
     ...
-```    
-
-[registry.Login](https://github.com/voedger/voedger/blob/ecb97b1f282e2b1d4e19b1ab0394fa4eacafcbdd/pkg/registry/appws.vsql#L6)
 ```
+
+[registry.AppWorkspaceWS.Login](https://github.com/voedger/voedger/blob/ecb97b1f282e2b1d4e19b1ab0394fa4eacafcbdd/pkg/registry/appws.vsql#L6)
+```sql
 ALTER WORKSPACE sys.AppWorkspaceWS (
 	TABLE Login INHERITS sys.CDoc (
 		ProfileCluster int32 NOT NULL,

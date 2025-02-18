@@ -1,7 +1,11 @@
-## Motivation
+# Reset password
+
+## Use cases
+
 - As a user I want to reset password so that I can continue working with my account
 
 ## Principles
+
 - password reset operation is secured by 6-digit verification code sent to the email
 - code is correct -> it is possible to reset password for an unlimited amount of times
 - code is wrong -> tries amount is limited to 3 times per hour per profile
@@ -9,6 +13,7 @@
 - `c.sys.ResetPasswordByEmail` has no rate limits
 
 ## Functional design
+
 - `sys/registry/pseudoProfileWSID/q.sys.InitiateResetPasswordByEmail`
   - null auth
   - `loginApp/profileWSID/q.sys.InitiateEmailVerification` is called under the hood with `forRegistry` mark with system auth
@@ -19,7 +24,9 @@
   - null auth
 
 ## Technical design
+
 Notes:
+
 - `c.sys.ResetPasswordByEmail` called at pseudo profile because `CDoc<sys.Login>` is located there
 - `q.sys.InitiateEmailVerification` should be called at login's app:
   - profileWSID exists at the login's app
@@ -28,6 +35,7 @@ Notes:
   - we got "workspace is not initialized error" when `c.sys.SendEmailVerification` because command processor checks that
   - conclusion - should call `loginApp/profileWSID/q.sys.InitiateEmailVerification`
 - `q.sys.IssueVerifiedValueToken` should also be called at loginApp because it accepts a token issued for `loginApp`, not for `sys/registry`
+
 ```mermaid
 sequenceDiagram
 	participant u as User
@@ -73,13 +81,16 @@ sequenceDiagram
 ```
 
 ## Limitations
+
 - //TODO issued Principal Tokens are kept valid after password reset
 - //TODO works only if Login == Email
 - //TODO it is possible to reset password for an unlimited amount of times when the verified value token is still valid (10 minutes)
 - //TODO WSID where the token is using must  be the same the token is issued for. To be done in [Check WSID on Verified Field value apply](https://dev.heeus.io/launchpad/#!25720)
 
 ## Appendix: Best practices
+
 ### Google
+
 - account with phone (not confirmed) and an alternative email
   - never logged in
     - via alternative email
@@ -89,12 +100,12 @@ sequenceDiagram
       - wrong code enter for 3 times -> "Too many retires. Try again later"
     - via phone
       - asked the telephone number
-          -  wrong -> error
-      -  6-digit code is sent via SMS
-      -  3 times entered wrong -> Too many retries. Try again later
-      -  "I don't have my phone" button pressed
-          - enter the alternative email
-            - wrong -> error
+        - wrong -> error
+      - 6-digit code is sent via SMS
+      - 3 times entered wrong -> Too many retries. Try again later
+      - "I don't have my phone" button pressed
+        - enter the alternative email
+          - wrong -> error
           - 6-digit code is sent to the email
           - Try another way button pressed -> "You did not provided enough info to restore".
   - logged in, then logged out
@@ -105,5 +116,6 @@ sequenceDiagram
   - "forgot password" pressed for the account that has neither phone nor alternative email -> "failed to ensured that it is your account". Impossible reset the password.
 
 ### Amazon
+
 - aked for 6-digit code sent to the email, then suggested to enter a new password
 - wrong code entered for 10 times -> stop to ask the code, back to the form with email input box. I.e. the sent code becomes obsoleted after 10 tries.

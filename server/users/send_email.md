@@ -6,9 +6,9 @@ As Application, I want to send an Email to a User.
 
 - AuthZ: role.sys.Workspace.ProfileOwner
 - Params
-    - NewEMail
+  - NewEMail
 - Errors
-    - Email is mailformed // See similar message
+  - Email is mailformed // See similar message
 
 **Behavior:**
     - Update UserProfileWS.UserProfile.Email

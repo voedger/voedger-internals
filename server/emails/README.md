@@ -2,7 +2,6 @@
 
 ## Overview by Copilot
 
-
 1. **Email Sending Implementation:**
    - The `impl_applyinvitation.go` file contains code to send invitation emails using SMTP configuration: [impl_applyinvitation.go](https://github.com/voedger/voedger/blob/5935d2eaefc92dad72dbaab94a33e47d16d2264a/pkg/sys/invite/impl_applyinvitation.go#L33-L109).
    - The `impl.go` file in the `verifier` package sends email verification codes: [impl.go](https://github.com/voedger/voedger/blob/5935d2eaefc92dad72dbaab94a33e47d16d2264a/pkg/sys/verifier/impl.go#L45-L104).
