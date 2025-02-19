@@ -82,6 +82,7 @@ CoveringFootnote:
 
 ```markdown
 [^coverersN]: `[~server.api.v2~impl]`[folder/filename1:line1:impl](CoverageTagURL1), [folder/filename2:line2:test](CoverageTagURL2)...
+```
 
 ```ebnf
 (* A MarkdownBody is a sequence of text elements. *)
