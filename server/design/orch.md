@@ -109,6 +109,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
     - close `VVM.servicesShutCtx` and wait for services to stop
   - Shutdown `LeadershipMonitor` (close `VVM.monitorShutCtx` and wait for `LeadershipMonitor` to stop)
   - Cleanup `elections`
+    - // Note: all goroutines will be stopped and leaderships will be released
   - Close `VVM.shutdownedCtx`
 
 #### LeadershipMonitor
