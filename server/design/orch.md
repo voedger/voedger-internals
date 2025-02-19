@@ -23,8 +23,9 @@ Design reliable orchestration mechanism for VVM (Voedger Virtual Machine) that e
 
 - VVMHost: Application that starts and manages VVM
 - VVM
+  - elections IElections: Interface to acquire and manage leadership for a given key
   - problemCtx. Closed with nil or with an error or nil when some problem occurs, VVM terminates itself due to leadership loss or problems with the launching
-  - problemErrCh. Channel that receives the error describing the problem, written only once. Contents is returned on Shutdown()
+  - problemErrCh. Channel that receives the error describing the problem, written only once. Content is returned on Shutdown()
   - problemErrOnce. `sync.Once` to ensure problemErrCh is written only once
   - vvmShutCtx. Closed when VVM should be stopped (`Shutdown()` is called outside)
   - vvmShutCtxOnce. `sync.Once` to close `vvmShutCtx` only once
@@ -59,6 +60,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 
 - Flow:
   - vvm.Provide()
+    - Construct vvm.elections
 
 #### VVMHost: Launch VVM
 
@@ -103,8 +105,10 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 
 - Flow:
   - Wait for `VVM.vvmShutCtx`
-  - Shutdown everything but `LeadershipMonitor` (close `VVM.servicesShutCtx` and wait for services to stop)
+  - Shutdown everything but `LeadershipMonitor` and `elections`
+    - close `VVM.servicesShutCtx` and wait for services to stop
   - Shutdown `LeadershipMonitor` (close `VVM.monitorShutCtx` and wait for `LeadershipMonitor` to stop)
+  - Cleanup `elections`
   - Close `VVM.shutdownedCtx`
 
 #### LeadershipMonitor
