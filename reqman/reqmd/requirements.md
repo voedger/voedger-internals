@@ -1,3 +1,7 @@
+---
+reqmd.package: auth.login
+---
+
 # Requirements Tracing Tool Specification
 
 ## Overview
@@ -75,8 +79,8 @@ Markdown body is a sequence if text elements, some of them are RequirementID, so
 
 RequirementID:
 
-- Not covered: `~Post~`.
-- Covered: `~Post~`covered[^coverersN].
+- Not covered: `~Post.req1~`.
+- Covered: `~Post.req2~`covered[^~Post.req2~].
 
 CoveringFootnote:
 
