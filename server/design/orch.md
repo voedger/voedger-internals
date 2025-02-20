@@ -28,7 +28,6 @@ Design reliable orchestration mechanism for VVM (Voedger Virtual Machine) that e
   - problemErrCh. Channel that receives the error describing the problem, written only once. Content is returned on Shutdown()
   - problemErrOnce. `sync.Once` to ensure problemErrCh is written only once
   - vvmShutCtx. Closed when VVM should be stopped (`Shutdown()` is called outside)
-  - vvmShutCtxOnce. `sync.Once` to close `vvmShutCtx` only once
   - servicesShutCtx. Closed when VVM services should be stopped (but LeadershipMonitor) (that should be context for services: servicesShutCtx closed -> services pipeline is stopped. Closed when `Shutdown()` is called outside)
   - monitorShutCtx. Closed after all services are stopped and LeadershipMonitor should be stopped
   - shutdownedCtx. Closed after all (services and LeadershipMonitor) is stopped
@@ -112,7 +111,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 - When: After `Wait for signals`
 - Flow
   - err := VVM.Shutdown()
-    - VVM.vvmShutCtxOnce.Do(func() { close(VVM.vvmShutCtx) })
+    - close(VVM.vvmShutCtx)
     - Wait for `VVM.shutdownedCtx`
     - Return error from `VVM.problemErrCh`, non-blocking.
 
