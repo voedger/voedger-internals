@@ -17,6 +17,8 @@ Design reliable orchestration mechanism for VVM (Voedger Virtual Machine) that e
 - Concurrent-safe error handling
 - Graceful shutdown capabilities
 
+---
+
 ## Functional design
 
 ### Actors
@@ -45,6 +47,8 @@ VVMHost creates a VVM instance and launches it. VVM acquires leadership and star
 
 ```
 
+---
+
 ## Technical design
 
 ### Implementation requirements
@@ -57,6 +61,7 @@ VVMHost creates a VVM instance and launches it. VVM acquires leadership and star
 - No multiple channel closes
 - Predictable error propagation
 - No goroutine leaks (except intentional killerRoutine)
+
 
 ### Components
 
@@ -82,6 +87,8 @@ VVMHost creates a VVM instance and launches it. VVM acquires leadership and star
 - **pkg/vvm/ttlstorage**
   - Implementation of `ITTLStorage` interface that uses `keyspace(vvmdata)` and keys prefixed with keyspace(sysvvm).VVMLeaderPrefix
   - Like we had here `~VVMLeader.def~`covered[^~VVMLeader.def~]✅
+
+---
 
 ### VVM
 
@@ -182,11 +189,15 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
   - Close `VVM.problemCtx`
   - Write error to `VVM.problemErrCh` using `VVM.problemErrOnce`
 
+---
+
 ## Experiments with LLMs
 
 - Claude
   - [Flowchart](https://claude.site/artifacts/ccefba09-b102-4179-ab59-184a7fc99122)
   - Prompt: Prepare mermad flowchart diagram. Each goroutine shall be a separate subgraph. The whole private chat is [here](https://claude.ai/chat/3f7c98c6-bee3-4e57-a1b0-c9ee27dd02e4).
+
+---
 
 ## Test design
 
