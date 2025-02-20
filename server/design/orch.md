@@ -55,13 +55,12 @@ VVMHost creates a VVM instance and launches it. VVM acquires leadership and star
 
 - Clear ownership and cleanup responsibilities
 - All error reporting must use `VVM.updateProblem`
-- All algorithms are be finite
-- No active goroutines after VVM.Shutdown (except killerRoutine)
+- All algorithms must be finite
+- No active goroutines should remain after VVM.Shutdown (except killerRoutine)
 - No data races
-- No multiple channel closes
+- Each channel shall be closed exactly once
 - Predictable error propagation
-- No goroutine leaks (except intentional killerRoutine)
-
+- No goroutine leaks (except the intentional killerRoutine)
 
 ### Components
 
