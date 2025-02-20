@@ -1,3 +1,7 @@
+---
+reqmd.package: ignoreme
+---
+
 # Requirements Tracing Tool Specification
 
 ## Overview
@@ -75,13 +79,14 @@ Markdown body is a sequence if text elements, some of them are RequirementID, so
 
 RequirementID:
 
-- Not covered: `~Post~`.
-- Covered: `~Post~`covered[^coverersN].
+- Not covered: `~Post.req1~`.
+- Covered: `~Post.req2~`covered[^~Post.req2~].
 
 CoveringFootnote:
 
 ```markdown
 [^coverersN]: `[~server.api.v2~impl]`[folder/filename1:line1:impl](CoverageTagURL1), [folder/filename2:line2:test](CoverageTagURL2)...
+```
 
 ```ebnf
 (* A MarkdownBody is a sequence of text elements. *)
