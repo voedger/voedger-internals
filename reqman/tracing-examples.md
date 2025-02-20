@@ -1,5 +1,5 @@
 ---
-reqmd.package: reqman.tracing.examples
+reqmd.package: ignoreme
 ---
 
 # Examples of the tracing
