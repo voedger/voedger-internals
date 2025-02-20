@@ -32,6 +32,8 @@ Design reliable orchestration mechanism for VVM (Voedger Virtual Machine) that e
   - servicesShutCtx. Closed when VVM services should be stopped (but LeadershipMonitor) (that should be context for services: servicesShutCtx closed -> services pipeline is stopped. Closed when `Shutdown()` is called outside)
   - monitorShutCtx. Closed after all services are stopped and LeadershipMonitor should be stopped
   - shutdownedCtx. Closed after all (services and LeadershipMonitor) is stopped
+  - numVVM. Number of VVMs in the cluster
+  - ip. IP address of the VVM
 
 ### Error Handling
 
@@ -90,7 +92,10 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 #### Launcher
 
 - Flow:
-  - Wait for leadership ~or `VVM.servicesShutCtx`~ (do not wait for servicesShutCtx because Launch is blocking method) during leadershipAcquisitionDuration
+  - Wait for leadership ~or `VVM.servicesShutCtx`~ 
+    - Leadership key is choosen
+    - Do not wait for servicesShutCtx because Launch is blocking method
+    - During leadershipAcquisitionDuration
     - `leadershipDuration` default is 20 seconds
   - If leadership is acquired
     - go LeadershipMonitor
