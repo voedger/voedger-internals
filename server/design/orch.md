@@ -23,122 +23,27 @@ Design reliable orchestration mechanism for VVM (Voedger Virtual Machine) that e
 
 - VVMHost: Application that starts and manages VVM
 - VVM
-  - elections IElections: Interface to acquire and manage leadership for a given key
-  - problemCtx. Closed by VVM.updateProblem(err) (e.g. leadership loss or service failure)
-  - problemErrCh. Channel that receives the error describing the problem, written only once. Content is returned on Shutdown()
-  - problemErrOnce. `sync.Once` to ensure problemErrCh is written only once
-  - vvmShutCtx. Closed when VVM should be stopped (`Shutdown()` is called outside)
-  - servicesShutCtx. Closed when VVM services should be stopped (but LeadershipMonitor) (that should be context for services: servicesShutCtx closed -> services pipeline is stopped. Closed when `Shutdown()` is called outside)
-  - monitorShutCtx. Closed after all services are stopped and LeadershipMonitor should be stopped
-  - shutdownedCtx. Closed after all (services and LeadershipMonitor) is stopped
-  - leadershipCtx. Context for watching leadership. Closed when leadership is lost.
-  - numVVM. Number of VVMs in the cluster
-  - ip. IP address of the VVM
 
-### Error Handling
+### Use VVM
 
-The error propagation follows these principles:
+VVMHost creates a VVM instance and launches it. VVM acquires leadership and starts services. VVMHost waits for vvmProblemCtx and shuts down VVM.
 
-- Single error channel (`problemErrCh`) for reporting critical issues
-- Write-once semantics using `sync.Once`
-- Non-blocking error reads during shutdown
-- Thread-safe error updates via `updateProblem()`
+```go
 
-### Goroutine Management
+  // Create VVM instance
+  myVVM := vvm.Provide(...)
 
-Goroutine hierarchy:
+  // Launch VVM
+  vvmProblemCtx := myVVM.Launch(leadershipAcquisitionDuration)
+  
+  // Wait for `problemCtx` and optionally for other events like os.Interrupt, syscall.SIGTERM, syscall.SIGINT
+  ...
 
-1. Main (VVMHost)
-   - Launcher
-     - LeadershipMonitor
-     - ServicePipeline
-   - Shutdowner
+  // Shutdown VVM
+  // Might be called immediately after myVVM.Launch()
+  err := VVM.Shutdown()
 
-Each goroutine's lifecycle is controlled by dedicated context cancellation.
-
-### Use Cases
-
-#### VVMHost: Create VVM
-
-- Flow:
-  - vvm.Provide()
-    - Construct vvm.elections
-
-#### VVMHost: Launch VVM
-
-- LaunchVVM() problemCtx
-- When: After `Create VVM`
-- Flow:
-  - vvmProblemCtx := VVM.Launch(leadershipAcquisitionDuration)
-    - err := tryToAcquireLeadership()
-    - if err != nil
-      - call `VVM.updateProblem(err)`
-      - return VVM.problemCtx
-    - pipelineErr := servicePipeline
-      - If pipelineErr != nil call `VVM.updateProblem(pipelineErr)`
-      - return VVM.problemCtx
-    - go Shutdowner
-    - Return VVM.problemCtx
-
-##### VVM.tryToAcquireLeadership()
-
-- Try to acquire leadership in loop.Wait
-  - Exit if `leadershipDuration` expired
-  - Exit if `VVM.servicesShutCtx` closed
-  - Leadership key is choosen in the [1, VVM.numVVM] interval
-  - Leadership value is VVM.ip
-  - Do not wait for servicesShutCtx because Launch is blocking method
-  - During leadershipAcquisitionDuration
-- If leadership is acquired
-  - Set VVM.leadershipCtx
-  - go LeadershipMonitor
-- Else return leadershipAcquisitionErr
-
-##### VVM.updateProblem(err)
-
-- synchronized via `VVM.problemErrOnce`
-  - Close `VVM.problemCtx`
-  - Write error to `VVM.problemErrCh` using `VVM.problemErrOnce`
-
-#### VVMHost: Wait for signals
-
-- When: After `Launch VVM`
-- Flow
-  - Wait for `problemCtx` and optionally for other events like os.Interrupt, syscall.SIGTERM, syscall.SIGINT
-
-#### VVMHost: Shutdown VVM
-
-- When: After `Wait for signals`
-- Flow
-  - err := VVM.Shutdown()
-    - close(VVM.vvmShutCtx)
-    - Wait for `VVM.shutdownedCtx`
-    - Return error from `VVM.problemErrCh`, non-blocking.
-
-#### Shutdowner
-
-- Flow:
-  - Wait for `VVM.vvmShutCtx`
-  - Shutdown everything but `LeadershipMonitor` and `elections`
-    - close `VVM.servicesShutCtx` and wait for services to stop
-  - Shutdown `LeadershipMonitor` (close `VVM.monitorShutCtx` and wait for `LeadershipMonitor` to stop)
-  - Cleanup `elections`
-    - // Note: all goroutines will be stopped and leaderships will be released
-  - Close `VVM.shutdownedCtx`
-
-#### LeadershipMonitor
-
-- Flow:
-  - wait for any of:
-    - `VVM.leadershipCtx` (leadership loss)
-      - go `killerRoutine`
-        - After `leadershipDuration/4` seconds kills the process
-        - // Never stoped, process must exit and goroutine must die
-        - // Yes, this is the anti-patterm "Goroutine/Task/Thread Leak"
-      - `VVM.updateProblem(leadershipLostErr)`
-      - break
-    - `VVM.monitorShutCtx`
-      - break
+```
 
 ## Technical design
 
@@ -178,7 +83,106 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
   - Implementation of `ITTLStorage` interface that uses `keyspace(vvmdata)` and keys prefixed with keyspace(sysvvm).VVMLeaderPrefix
   - Like we had here `~VVMLeader.def~`covered[^~VVMLeader.def~]✅
 
-### Experiments with LLMs
+### VVM
+
+VVM:
+
+- elections IElections: Interface to acquire and manage leadership for a given key
+- problemCtx. Closed by VVM.updateProblem(err) (e.g. leadership loss or service failure)
+- problemErrCh. Channel that receives the error describing the problem, written only once. Content is returned on Shutdown()
+- problemErrOnce. `sync.Once` to ensure problemErrCh is written only once
+- vvmShutCtx. Closed when VVM should be stopped (`Shutdown()` is called outside)
+- servicesShutCtx. Closed when VVM services should be stopped (but LeadershipMonitor) (that should be context for services: servicesShutCtx closed -> services pipeline is stopped. Closed when `Shutdown()` is called outside)
+- monitorShutCtx. Closed after all services are stopped and LeadershipMonitor should be stopped
+- shutdownedCtx. Closed after all (services and LeadershipMonitor) is stopped
+- leadershipCtx. Context for watching leadership. Closed when leadership is lost.
+- numVVM. Number of VVMs in the cluster
+- ip. IP address of the VVM
+
+The error propagation follows these principles:
+
+- Single error channel (`problemErrCh`) for reporting critical issues
+- Write-once semantics using `sync.Once`
+- Non-blocking error reads during shutdown
+- Thread-safe error updates via `updateProblem()`
+
+Goroutine hierarchy:
+
+- Main (VVMHost)
+  - Launcher
+    - LeadershipMonitor
+    - ServicePipeline
+  - Shutdowner
+
+Each goroutine's lifecycle is controlled by dedicated context cancellation.
+
+#### VVM.Provide()
+
+- Construct vvm.elections
+
+#### VVM.Shutdown()
+
+- close(VVM.vvmShutCtx)
+- Wait for `VVM.shutdownedCtx`
+- Return error from `VVM.problemErrCh`, non-blocking.
+
+#### VVM.LaunchVVM() problemCtx
+
+- vvmProblemCtx := VVM.Launch(leadershipAcquisitionDuration)
+  - err := tryToAcquireLeadership()
+  - if err != nil
+    - call `VVM.updateProblem(err)`
+    - return VVM.problemCtx
+  - pipelineErr := servicePipeline
+    - If pipelineErr != nil call `VVM.updateProblem(pipelineErr)`
+    - return VVM.problemCtx
+  - go Shutdowner
+  - Return VVM.problemCtx
+
+#### Shutdowner: go VVM.shutdowner()
+
+- Wait for `VVM.vvmShutCtx`
+- Shutdown everything but `LeadershipMonitor` and `elections`
+  - close `VVM.servicesShutCtx` and wait for services to stop
+- Shutdown `LeadershipMonitor` (close `VVM.monitorShutCtx` and wait for `LeadershipMonitor` to stop)
+- Cleanup `elections`
+  - // Note: all goroutines will be stopped and leaderships will be released
+- Close `VVM.shutdownedCtx`
+
+#### LeadershipMonitor: go VVM.leadershipMonitor()
+
+- wait for any of:
+  - `VVM.leadershipCtx` (leadership loss)
+    - go `killerRoutine`
+      - After `leadershipDuration/4` seconds kills the process
+      - // Never stoped, process must exit and goroutine must die
+      - // Yes, this is the anti-patterm "Goroutine/Task/Thread Leak"
+    - `VVM.updateProblem(leadershipLostErr)`
+    - break
+  - `VVM.monitorShutCtx`
+    - break
+
+#### VVM.tryToAcquireLeadership()
+
+- Try to acquire leadership in loop.Wait
+  - Exit if `leadershipDuration` expired
+  - Exit if `VVM.servicesShutCtx` closed
+  - Leadership key is choosen in the [1, VVM.numVVM] interval
+  - Leadership value is VVM.ip
+  - Do not wait for servicesShutCtx because Launch is blocking method
+  - During leadershipAcquisitionDuration
+- If leadership is acquired
+  - Set VVM.leadershipCtx
+  - go LeadershipMonitor
+- Else return leadershipAcquisitionErr
+
+#### VVM.updateProblem(err)
+
+- synchronized via `VVM.problemErrOnce`
+  - Close `VVM.problemCtx`
+  - Write error to `VVM.problemErrCh` using `VVM.problemErrOnce`
+
+## Experiments with LLMs
 
 - Claude
   - [Flowchart](https://claude.site/artifacts/ccefba09-b102-4179-ab59-184a7fc99122)
