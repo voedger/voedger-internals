@@ -1,8 +1,13 @@
+---
+reqmd.package: server.users
+---
 # Send Email
 
 As Application, I want to send an Email to a User.
 
-## sys.UserProfileWS.SendEmailToUser
+`~aaaaa~`
+
+## `~sys.UserProfileWS.SendEmailToUser~`
 
 - AuthZ: role.sys.Workspace.ProfileOwner
 - Params
@@ -12,3 +17,4 @@ As Application, I want to send an Email to a User.
 
 **Behavior:**
     - Update UserProfileWS.UserProfile.Email
+
