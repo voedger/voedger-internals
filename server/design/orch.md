@@ -157,7 +157,8 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 - **pkg/vvm/ttlstorage**
   - Implementation of `ITTLStorage` interface that uses `keyspace(vvmdata)` and keys prefixed with keyspace(sysvvm).VVMLeaderPrefix
   - Like we had here `~VVMLeader.def~`covered[^~VVMLeader.def~]✅
-
+- **pkg/vvm/impl_orch.go**, **pkg/vvm/impl_orch_test.go**
+  - orchestration implementation and tests
 ### Experiments with LLMs
 
 - Claude
