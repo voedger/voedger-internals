@@ -59,6 +59,6 @@ reqmd.package: server.invites
 
 ## Footnotes
 
- [^~Join.InitiateJoinWorkspace~]: `[~server.invites/Join.InitiateJoinWorkspace~impl]` [pkg/sys/invite/impl_initiatejoinworkspace.go:26:impl](https://github.com/maxim-ge/voedger/blob/3330-add-some-reqmd-coverage-labels/pkg/sys/invite/impl_initiatejoinworkspace.go#L26), [pkg/sys/it/impl_invite_test.go:172:itest](https://github.com/maxim-ge/voedger/blob/3330-add-some-reqmd-coverage-labels/pkg/sys/it/impl_invite_test.go#L172)
+[^~Join.InitiateJoinWorkspace~]: `[~server.invites/Join.InitiateJoinWorkspace~impl]` [pkg/sys/invite/impl_initiatejoinworkspace.go:26:impl](https://github.com/maxim-ge/voedger/blob/3330-add-some-reqmd-coverage-labels/pkg/sys/invite/impl_initiatejoinworkspace.go#L26), [pkg/sys/it/impl_invite_test.go:172:itest](https://github.com/maxim-ge/voedger/blob/3330-add-some-reqmd-coverage-labels/pkg/sys/it/impl_invite_test.go#L172)
 
 [^~Join.InitiateJoinWorkspace.AuthZ~]: `[~server.invites/Join.InitiateJoinWorkspace.AuthZ~impl]`
