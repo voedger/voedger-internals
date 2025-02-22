@@ -5,10 +5,13 @@ reqmd.package: server.users
 
 As Application, I want to send an Email to a User.
 
-`~aaaaa~`
+`~aaaaa~`uncvrd[^~aaaaa~]❓
 
-## `~sys.UserProfileWS.SendEmailToUser~`
+## Technical design
 
+## sys.UserProfileWS.SendEmailToUser
+
+- `~SendEMail.SendEmailToUser~`
 - AuthZ: role.sys.Workspace.ProfileOwner
 - Params
   - NewEMail
@@ -17,3 +20,5 @@ As Application, I want to send an Email to a User.
 
 **Behavior:**
     - Update UserProfileWS.UserProfile.Email
+
+[^~aaaaa~]: `[~server.users/aaaaa~impl]`

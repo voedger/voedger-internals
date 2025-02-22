@@ -1,0 +1,6 @@
+{
+  "FileURL2FileHash": {
+    "https://github.com/maxim-ge/voedger/blob/3330-add-some-reqmd-coverage-labels/pkg/sys/invite/impl_initiatejoinworkspace.go": "8a52ce7311fd7d9d242559d5db1783faa2ecd743",
+    "https://github.com/maxim-ge/voedger/blob/3330-add-some-reqmd-coverage-labels/pkg/sys/it/impl_invite_test.go": "4c9a812e0fd999bd4729182a2965a7a54219d00d"
+  }
+}
