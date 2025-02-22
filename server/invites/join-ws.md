@@ -6,9 +6,9 @@ reqmd.package: server.invites
 
 ## c.sys.InitiateJoinWorkspace()
 
-- `~InitiateJoinWorkspace~`covered[^~InitiateJoinWorkspace~]✅
+- `~Join.InitiateJoinWorkspace~`covered[^~Join.InitiateJoinWorkspace~]✅
 - AuthZ: PrincipalToken + VerificationCode
-  - `~InitiateJoinWorkspace.AuthZ~`uncvrd[^~InitiateJoinWorkspace.AuthZ~]❓
+  - `~Join.InitiateJoinWorkspace.AuthZ~`uncvrd[^~Join.InitiateJoinWorkspace.AuthZ~]❓
 - Params
   - InviteID
   - VerificationCode
@@ -59,6 +59,6 @@ reqmd.package: server.invites
 
 ## Footnotes
 
-[^~InitiateJoinWorkspace~]: `[~server.invites/InitiateJoinWorkspace~]`, [invite/impl_initiatejoinworkspace.go:26:impl](https://github.com/voedger/voedger/blob/67cb0d8e2960a0b09546bf86a986bc40a1f05584/pkg/sys/invite/impl_initiatejoinworkspace.go#L26), [it/impl_invite_test.go:173:itest](https://github.com/voedger/voedger/blob/67cb0d8e2960a0b09546bf86a986bc40a1f05584/pkg/sys/it/impl_invite_test.go#L173)
+[^~Join.InitiateJoinWorkspace~]: `[~server.invites/Join.InitiateJoinWorkspace~impl]`, [invite/impl_initiatejoinworkspace.go:26:impl](https://github.com/voedger/voedger/blob/67cb0d8e2960a0b09546bf86a986bc40a1f05584/pkg/sys/invite/impl_initiatejoinworkspace.go#L26), [it/impl_invite_test.go:173:itest](https://github.com/voedger/voedger/blob/67cb0d8e2960a0b09546bf86a986bc40a1f05584/pkg/sys/it/impl_invite_test.go#L173)
 
-[^~InitiateJoinWorkspace.AuthZ~]: `[~server.invites/InitiateJoinWorkspace.AuthZ~impl]`
+[^~Join.InitiateJoinWorkspace.AuthZ~]: `[~server.invites/Join.InitiateJoinWorkspace.AuthZ~impl]`
