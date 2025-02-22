@@ -11,7 +11,7 @@ As Application, I want to send an Email to a User.
 
 ## sys.UserProfileWS.SendEmailToUser
 
-- `~SendEMail.SendEmailToUser~`
+- `~SendEMail.SendEmailToUser~`uncvrd[^~SendEMail.SendEmailToUser~]❓
 - AuthZ: role.sys.Workspace.ProfileOwner
 - Params
   - NewEMail
@@ -20,5 +20,3 @@ As Application, I want to send an Email to a User.
 
 **Behavior:**
     - Update UserProfileWS.UserProfile.Email
-
-[^~aaaaa~]: `[~server.users/aaaaa~impl]`
