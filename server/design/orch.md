@@ -85,7 +85,7 @@ VVMHost creates a VVM instance and launches it. VVM acquires leadership and star
   - Key prefix `VVMLeaderPrefix` to keep data for elections
 - **pkg/vvm/ttlstorage**
   - Implementation of `ITTLStorage` interface that uses `keyspace(vvmdata)` and keys prefixed with keyspace(sysvvm).VVMLeaderPrefix
-  - Like we had here `~VVMLeader.def~`covered[^~VVMLeader.def~]✅
+  - Like we had here `~VVMLeader.def~`uncvrd[^~VVMLeader.def~]❓
 
 ---
 
@@ -225,4 +225,4 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 - `docker compse up -d`
 - expect 1 of 2 VVMs services are failed to start
 
-[^~VVMLeader.def~]: `[~server.design.orch/VVMLeader.def~]` [apps/app.go:80:impl](https://github.com/voedger/voedger/blob/67cb0d8e2960a0b09546bf86a986bc40a1f05584/pkg/appdef/internal/apps/app.go#L80)
+[^~VVMLeader.def~]: `[~server.design.orch/VVMLeader.def~impl]`
