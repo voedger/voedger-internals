@@ -1,18 +1,21 @@
 # Execute Command
+
+## Motivation
+Execute a command using API
+
+## Functional Design
 POST `/api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/commands/{pkg}.{command}`
 
-Executes a command 
-
-## Headers
+### Headers
 | Key | Value |
 | --- | --- |
 | Authorization | Bearer {PrincipalToken} |
 | Content-type | application/json |
 
-## Body
+### Body
 Command parameter or ODoc
 
-## Result
+### Result
 | Code | Description | Body |
 | --- | --- | --- |
 | 200 | OK | current WLog offset, see example below |

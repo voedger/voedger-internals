@@ -1,17 +1,19 @@
 # Read from CDoc collection
+## Motivation
+Read CDoc collection using API
+
+## Functional Design
 GET `/api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/cdocs/{pkg}.{table}`
 
-Reads CDoc collection
-
-## Parameters
+### Parameters
 See: [Query constraints](query-constraints.md)
 
-## Headers
+### Headers
 | Key | Value |
 | --- | --- |
 | Authorization | Bearer {PrincipalToken} |
 
-## Result
+### Result
 | Code | Description | Body |
 | --- | --- | --- |
 | 200 | OK | JSON object that contains a `results` field with a JSON array that lists the objects, [example](query-constraints.md#response). When the error happens during the read, the [error](README.md#errors) property is added in the response |

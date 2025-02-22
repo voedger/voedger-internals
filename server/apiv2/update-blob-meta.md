@@ -1,18 +1,20 @@
 # Update BLOB metadata
+## Motivation
+Update the metadata of the BLOB data using API
+
+## Functional Design
 PATCH `/api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/blobs/{blobId}`
 
-Updates the BLOB data metadata
-
-## Headers
+### Headers
 | Key | Value |
 | --- | --- |
 | Authorization | Bearer {PrincipalToken} |
 | Content-type | application/json |
 
-## Body
+### Body
 The new metadata
 
-## Result
+### Result
 | Code | Description | Body |
 | --- | --- | --- |
 | 200 | OK | the BLOB metadata |

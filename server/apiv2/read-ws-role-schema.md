@@ -1,7 +1,6 @@
 # Get workspace role schema
 ## Motivation
-Returns the schema of the resources, available to specified [published role](../authnz/published-roles.md) in a given workspace.
-
+Return the schema of the resources, available to specified [published role](../authnz/published-roles.md) in a given workspace.
 
 ## Functional Design
 GET `/api/v2/users/{owner}/apps/{app}/schemas/{pkg}.{workspace}/roles/{pkg}.{role}`

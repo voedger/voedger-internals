@@ -1,18 +1,20 @@
 # Read from Query
+## Motivation
+Read from a query function using API
+
+## Functional Design
 GET `/api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/queries/{pkg}.{query}`
 
-Reads from a query function
-
-## Parameters
+### Parameters
 - [Query constraints](query-constraints.md)
 - Optional query function argument `&arg=...`
 
-## Headers
+### Headers
 | Key | Value |
 | --- | --- |
 | Authorization | Bearer {PrincipalToken} |
 
-## Result
+### Result
 | Code | Description | Body |
 | --- | --- | --- |
 | 200 | OK | SON object that contains a `results` field with a JSON array that lists the objects, [example](query-constraints.md#response). When the error happens during the read, the [error](README.md#errors) property is added in the response |
