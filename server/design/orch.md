@@ -66,6 +66,7 @@ VVMHost creates a VVM instance and launches it. VVM acquires leadership and star
 
 - **pkg/vvm**
 
+  - `~VVMConfig~`uncvrd[^~VVMConfig~]❓
   ```golang
   type VVMConfig {
     ...
@@ -75,17 +76,16 @@ VVMHost creates a VVM instance and launches it. VVM acquires leadership and star
 
 - **pkg/elections**
   - Purpose: Describe and implement the interface to acquire and manage leadership for a given key
-  - `IELections`
+  - `~IELections~`uncvrd[^~IELections~]❓
     - Purpose: Describe the interface to acquire and manage leadership for a given key
-  - `elections`
+  - `~elections~`uncvrd[^~elections~]❓
     - Purpose: Implementation of IELections
-  - `ITTLStorage`
+  - `~ITTLStorage~`uncvrd[^~ITTLStorage~]❓
     - Purpose: interface with methods InsertIfNotExist(), CompareAndSwap(), CompareAndDelete() used to persist `view.cluster.VVMLeader`
 - **keyspace(sysvvm).VVMLeaderPrefix**
-  - Key prefix `VVMLeaderPrefix` to keep data for elections
+  - Key prefix `~VVMLeaderPrefix~`uncvrd[^~VVMLeaderPrefix~]❓ to keep data for elections
 - **pkg/vvm/ttlstorage**
   - Implementation of `ITTLStorage` interface that uses `keyspace(vvmdata)` and keys prefixed with keyspace(sysvvm).VVMLeaderPrefix
-  - Like we had here `~VVMLeader.def~`uncvrd[^~VVMLeader.def~]❓
 
 ---
 
@@ -235,14 +235,18 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 - `docker compse up -d`
 - expect 1 of 2 VVMs services are failed to start
 
-[^~LeadershipMonitor~]: `[~server.design.orch/LeadershipMonitor~impl]`
-[^~VVM.tryToAcquireLeadership~]: `[~server.design.orch/VVM.tryToAcquireLeadership~impl]`
-[^~VVM.updateProblem~]: `[~server.design.orch/VVM.updateProblem~impl]`
-[^~VVMLeader.def~]: `[~server.design.orch/VVMLeader.def~impl]`
-[^~VVM.Shutdown~]: `[~server.design.orch/VVM.Shutdown~impl]`
-[^~VVM.test.Shutdown~]: `[~server.design.orch/VVM.test.Shutdown~impl]`
 [^~VVM.Provide~]: `[~server.design.orch/VVM.Provide~impl]`
-[^~VVM.test.CancelLeadership~]: `[~server.design.orch/VVM.test.CancelLeadership~impl]`
-[^~VVM.LaunchVVM~]: `[~server.design.orch/VVM.LaunchVVM~impl]`
+[^~VVM.Shutdown~]: `[~server.design.orch/VVM.Shutdown~impl]`
 [^~VVM.test.Basic~]: `[~server.design.orch/VVM.test.Basic~impl]`
+[^~VVM.test.CancelLeadership~]: `[~server.design.orch/VVM.test.CancelLeadership~impl]`
+[^~elections~]: `[~server.design.orch/elections~impl]`
+[^~VVM.updateProblem~]: `[~server.design.orch/VVM.updateProblem~impl]`
+[^~VVMConfig~]: `[~server.design.orch/VVMConfig~impl]`
+[^~IELections~]: `[~server.design.orch/IELections~impl]`
+[^~ITTLStorage~]: `[~server.design.orch/ITTLStorage~impl]`
+[^~VVM.tryToAcquireLeadership~]: `[~server.design.orch/VVM.tryToAcquireLeadership~impl]`
+[^~VVMLeaderPrefix~]: `[~server.design.orch/VVMLeaderPrefix~impl]`
+[^~VVM.LaunchVVM~]: `[~server.design.orch/VVM.LaunchVVM~impl]`
 [^~VVM.Shutdowner~]: `[~server.design.orch/VVM.Shutdowner~impl]`
+[^~LeadershipMonitor~]: `[~server.design.orch/LeadershipMonitor~impl]`
+[^~VVM.test.Shutdown~]: `[~server.design.orch/VVM.test.Shutdown~impl]`
