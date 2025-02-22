@@ -2,7 +2,7 @@
 
 GET `/api/v2/users/{owner}/apps/{app}/schemas/{pkg}.{workspace}/roles`
 
-Returns the list of [published roles](../authnz/README.md#published-roles) in the workspace.
+Returns the list of [published roles](../authnz/published-roles.md) in the workspace.
 
 ## Headers
 | Key | Value | Description |
