@@ -52,7 +52,7 @@ type AllowedTypeCallback func(appdef.IType, []OperationKind) error
 
 type IAppPartition interface {
     /*
-        PublishedTypes lists the resources available to the published role in the workspace and ancestors:
+        PublishedTypes lists the resources available to the published role in the workspace and ancestors (including resources available to non-authenticated requests):
         - Documents
         - Views
         - Commands
