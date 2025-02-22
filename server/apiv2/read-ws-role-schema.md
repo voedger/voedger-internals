@@ -9,7 +9,7 @@ GET `/api/v2/users/{owner}/apps/{app}/schemas/{pkg}.{workspace}/roles/{pkg}.{rol
 ### Headers
 | Key | Value | Description |
 | --- | --- | --- |
-| Accept | application/json | To get the response in OpenAPI format |
+| Accept | application/json | To get the response in OpenAPI format (default) |
 
 ### Result
 | Code | Description | Body |

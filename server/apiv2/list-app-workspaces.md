@@ -7,9 +7,7 @@ Only workspaces returned which have resources available to [published roles](../
 ## Headers
 | Key | Value | Description |
 | --- | --- | --- |
-| Authorization | Bearer {PrincipalToken} | Principal Token |
-| Accept | application/json | To get the response in JSON format |
-| Accept | text/markdown | To get the response in Markdown format |
+| Accept | text/html | To get the response in HTML format (default) |
 
 ## Result
 | Code | Description | Body |
