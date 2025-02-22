@@ -2,6 +2,12 @@
 
 set -Eeuo pipefail
 
+# Parse arguments
+DRY_RUN=""
+if [[ "${1:-}" == "--dry-run" ]]; then
+    DRY_RUN="--dry-run"
+fi
+
 create_work_folder() {
     if [ ! -d ".work" ]; then
         mkdir .work
@@ -54,9 +60,7 @@ actualize_repo() {
 }
 
 tracereqs() {
-
-    go run -C ../../reqmd . -v trace ../voedger-internals ../voedger-internals/reqman/.work/repos/voedger
-
+    go run -C ../../reqmd . -v trace ${DRY_RUN} ../voedger-internals ../voedger-internals/reqman/.work/repos/voedger
 }
 
 create_work_folder
