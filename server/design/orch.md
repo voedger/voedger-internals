@@ -124,16 +124,19 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 
 #### VVM.Provide()
 
+- `~VVM.Provide~`uncvrd[^~VVM.Provide~]❓
 - Construct vvm.elections
 
 #### VVM.Shutdown()
 
+- `~VVM.Shutdown~`uncvrd[^~VVM.Shutdown~]❓
 - close(VVM.vvmShutCtx)
 - Wait for `VVM.shutdownedCtx`
 - Return error from `VVM.problemErrCh`, non-blocking.
 
 #### VVM.LaunchVVM() problemCtx
 
+- `~VVM.LaunchVVM~`uncvrd[^~VVM.LaunchVVM~]❓
 - vvmProblemCtx := VVM.Launch(leadershipAcquisitionDuration)
   - err := tryToAcquireLeadership()
   - if err != nil
@@ -147,6 +150,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 
 #### Shutdowner: go VVM.shutdowner()
 
+- `~VVM.Shutdowner~`uncvrd[^~VVM.Shutdowner~]❓
 - Wait for `VVM.vvmShutCtx`
 - Shutdown everything but `LeadershipMonitor` and `elections`
   - close `VVM.servicesShutCtx` and wait for services to stop
@@ -157,6 +161,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 
 #### LeadershipMonitor: go VVM.leadershipMonitor()
 
+- `~LeadershipMonitor~`uncvrd[^~LeadershipMonitor~]❓
 - wait for any of:
   - `VVM.leadershipCtx` (leadership loss)
     - go `killerRoutine`
@@ -170,6 +175,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 
 #### VVM.tryToAcquireLeadership()
 
+- `~VVM.tryToAcquireLeadership~`uncvrd[^~VVM.tryToAcquireLeadership~]❓
 - Try to acquire leadership in loop.Wait
   - Exit if `leadershipDuration` expired
   - Exit if `VVM.servicesShutCtx` closed
@@ -184,6 +190,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 
 #### VVM.updateProblem(err)
 
+- `~VVM.updateProblem~`uncvrd[^~VVM.updateProblem~]❓
 - synchronized via `VVM.problemErrOnce`
   - Close `VVM.problemCtx`
   - Write error to `VVM.problemErrCh` using `VVM.problemErrOnce`
@@ -203,16 +210,19 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 ### Automatic
 
 - Basic
+  - `~VVM.test.Basic~`uncvrd[^~VVM.test.Basic~]❓
   - provide and laucnh VVM1
   - wait for successful VVM1 start
   - provide and launch VVM2
   - wait for VVM2 start failure
 - Automatic shutdown on leadership loss
+  - `~VVM.test.Shutdown~`uncvrd[^~VVM.test.Shutdown~]❓
   - provide and launch a VVM
   - update `view.cluster.VVMLeader`: modify the single value
   - bump mock time
   - expect the VVM shutdown
 - Cancel the leadership on manual shutdown
+  - `~VVM.test.CancelLeadership~`uncvrd[^~VVM.test.CancelLeadership~]❓
   - provide and launch a VVM
   - shut it down on the launcher side
   - expect that the leadership in canceled
@@ -225,4 +235,14 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 - `docker compse up -d`
 - expect 1 of 2 VVMs services are failed to start
 
+[^~LeadershipMonitor~]: `[~server.design.orch/LeadershipMonitor~impl]`
+[^~VVM.tryToAcquireLeadership~]: `[~server.design.orch/VVM.tryToAcquireLeadership~impl]`
+[^~VVM.updateProblem~]: `[~server.design.orch/VVM.updateProblem~impl]`
 [^~VVMLeader.def~]: `[~server.design.orch/VVMLeader.def~impl]`
+[^~VVM.Shutdown~]: `[~server.design.orch/VVM.Shutdown~impl]`
+[^~VVM.test.Shutdown~]: `[~server.design.orch/VVM.test.Shutdown~impl]`
+[^~VVM.Provide~]: `[~server.design.orch/VVM.Provide~impl]`
+[^~VVM.test.CancelLeadership~]: `[~server.design.orch/VVM.test.CancelLeadership~impl]`
+[^~VVM.LaunchVVM~]: `[~server.design.orch/VVM.LaunchVVM~impl]`
+[^~VVM.test.Basic~]: `[~server.design.orch/VVM.test.Basic~impl]`
+[^~VVM.Shutdowner~]: `[~server.design.orch/VVM.Shutdowner~impl]`
