@@ -17,4 +17,3 @@ As Application, I want to send an Email to a User.
 
 **Behavior:**
     - Update UserProfileWS.UserProfile.Email
-
