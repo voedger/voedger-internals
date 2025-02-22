@@ -2,7 +2,7 @@
 GET `/api/v2/users/{owner}/apps/{app}/schemas`
 
 Returns the hierarchy of non-abstract workspaces in the application with WSProfile as a root.
-Only workspaces returned which have resources available to [published roles](../authnz/README.md#published-roles). 
+Only workspaces returned which have resources available to [published roles](../authnz/published-roles.md). 
 
 ## Headers
 | Key | Value | Description |
