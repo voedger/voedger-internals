@@ -6,7 +6,7 @@ Requirements management using [reqmd](https://github.com/voedger/reqmd) tool.
 
 - [Requirements management #2782](https://github.com/voedger/voedger/issues/2782)
 
-## Scripts to manage requirements tracing and coverage.
+## Scripts to manage requirements tracing and coverage
 
 ### Prerequisites
 
