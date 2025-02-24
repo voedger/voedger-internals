@@ -66,7 +66,7 @@ VVMHost creates a VVM instance and launches it. VVM acquires leadership and star
 
 - **pkg/vvm**
 
-  - `~VVMConfig~`uncvrd[^~VVMConfig~]❓
+  - `~VVMConfig~`uncvrd[^1]❓
   ```golang
   type VVMConfig {
     ...
@@ -76,14 +76,14 @@ VVMHost creates a VVM instance and launches it. VVM acquires leadership and star
 
 - **pkg/elections**
   - Purpose: Describe and implement the interface to acquire and manage leadership for a given key
-  - `~IELections~`uncvrd[^~IELections~]❓
+  - `~IELections~`uncvrd[^9]❓
     - Purpose: Describe the interface to acquire and manage leadership for a given key
-  - `~elections~`uncvrd[^~elections~]❓
+  - `~elections~`uncvrd[^2]❓
     - Purpose: Implementation of IELections
-  - `~ITTLStorage~`uncvrd[^~ITTLStorage~]❓
+  - `~ITTLStorage~`uncvrd[^13]❓
     - Purpose: interface with methods InsertIfNotExist(), CompareAndSwap(), CompareAndDelete() used to persist `view.cluster.VVMLeader`
 - **keyspace(sysvvm).VVMLeaderPrefix**
-  - Key prefix `~VVMLeaderPrefix~`uncvrd[^~VVMLeaderPrefix~]❓ to keep data for elections
+  - Key prefix `~VVMLeaderPrefix~`uncvrd[^14]❓ to keep data for elections
 - **pkg/vvm/ttlstorage**
   - Implementation of `ITTLStorage` interface that uses `keyspace(vvmdata)` and keys prefixed with keyspace(sysvvm).VVMLeaderPrefix
 
@@ -124,19 +124,19 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 
 #### VVM.Provide()
 
-- `~VVM.Provide~`uncvrd[^~VVM.Provide~]❓
+- `~VVM.Provide~`uncvrd[^3]❓
 - Construct vvm.elections
 
 #### VVM.Shutdown()
 
-- `~VVM.Shutdown~`uncvrd[^~VVM.Shutdown~]❓
+- `~VVM.Shutdown~`uncvrd[^7]❓
 - close(VVM.vvmShutCtx)
 - Wait for `VVM.shutdownedCtx`
 - Return error from `VVM.problemErrCh`, non-blocking.
 
 #### VVM.LaunchVVM() problemCtx
 
-- `~VVM.LaunchVVM~`uncvrd[^~VVM.LaunchVVM~]❓
+- `~VVM.LaunchVVM~`uncvrd[^15]❓
 - vvmProblemCtx := VVM.Launch(leadershipAcquisitionDuration)
   - err := tryToAcquireLeadership()
   - if err != nil
@@ -150,7 +150,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 
 #### Shutdowner: go VVM.shutdowner()
 
-- `~VVM.Shutdowner~`uncvrd[^~VVM.Shutdowner~]❓
+- `~VVM.Shutdowner~`uncvrd[^8]❓
 - Wait for `VVM.vvmShutCtx`
 - Shutdown everything but `LeadershipMonitor` and `elections`
   - close `VVM.servicesShutCtx` and wait for services to stop
@@ -161,7 +161,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 
 #### LeadershipMonitor: go VVM.leadershipMonitor()
 
-- `~LeadershipMonitor~`uncvrd[^~LeadershipMonitor~]❓
+- `~LeadershipMonitor~`uncvrd[^10]❓
 - wait for any of:
   - `VVM.leadershipCtx` (leadership loss)
     - go `killerRoutine`
@@ -176,7 +176,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 
 #### VVM.tryToAcquireLeadership()
 
-- `~VVM.tryToAcquireLeadership~`uncvrd[^~VVM.tryToAcquireLeadership~]❓
+- `~VVM.tryToAcquireLeadership~`uncvrd[^4]❓
 - Try to acquire leadership in loop.Wait
   - Exit if `leadershipDuration` expired
   - Exit if `VVM.servicesShutCtx` closed
@@ -191,7 +191,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 
 #### VVM.updateProblem(err)
 
-- `~VVM.updateProblem~`uncvrd[^~VVM.updateProblem~]❓
+- `~VVM.updateProblem~`uncvrd[^11]❓
 - synchronized via `VVM.problemErrOnce`
   - Close `VVM.problemCtx`
   - Write error to `VVM.problemErrCh` using `VVM.problemErrOnce`
@@ -211,19 +211,19 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 ### Automatic
 
 - Basic
-  - `~VVM.test.Basic~`uncvrd[^~VVM.test.Basic~]❓
+  - `~VVM.test.Basic~`uncvrd[^5]❓
   - provide and laucnh VVM1
   - wait for successful VVM1 start
   - provide and launch VVM2
   - wait for VVM2 start failure
 - Automatic shutdown on leadership loss
-  - `~VVM.test.Shutdown~`uncvrd[^~VVM.test.Shutdown~]❓
+  - `~VVM.test.Shutdown~`uncvrd[^12]❓
   - provide and launch a VVM
   - update `view.cluster.VVMLeader`: modify the single value
   - bump mock time
   - expect the VVM shutdown
 - Cancel the leadership on manual shutdown
-  - `~VVM.test.CancelLeadership~`uncvrd[^~VVM.test.CancelLeadership~]❓
+  - `~VVM.test.CancelLeadership~`uncvrd[^6]❓
   - provide and launch a VVM
   - shut it down on the launcher side
   - expect that the leadership in canceled
@@ -236,18 +236,18 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 - `docker compse up -d`
 - expect 1 of 2 VVMs services are failed to start
 
-[^~VVM.Provide~]: `[~server.design.orch/VVM.Provide~impl]`
-[^~VVM.Shutdown~]: `[~server.design.orch/VVM.Shutdown~impl]`
-[^~VVM.test.Basic~]: `[~server.design.orch/VVM.test.Basic~impl]`
-[^~VVM.test.CancelLeadership~]: `[~server.design.orch/VVM.test.CancelLeadership~impl]`
-[^~elections~]: `[~server.design.orch/elections~impl]`
-[^~VVM.updateProblem~]: `[~server.design.orch/VVM.updateProblem~impl]`
-[^~VVMConfig~]: `[~server.design.orch/VVMConfig~impl]`
-[^~IELections~]: `[~server.design.orch/IELections~impl]`
-[^~ITTLStorage~]: `[~server.design.orch/ITTLStorage~impl]`
-[^~VVM.tryToAcquireLeadership~]: `[~server.design.orch/VVM.tryToAcquireLeadership~impl]`
-[^~VVMLeaderPrefix~]: `[~server.design.orch/VVMLeaderPrefix~impl]`
-[^~VVM.LaunchVVM~]: `[~server.design.orch/VVM.LaunchVVM~impl]`
-[^~VVM.Shutdowner~]: `[~server.design.orch/VVM.Shutdowner~impl]`
-[^~LeadershipMonitor~]: `[~server.design.orch/LeadershipMonitor~impl]`
-[^~VVM.test.Shutdown~]: `[~server.design.orch/VVM.test.Shutdown~impl]`
+[^15]: `[~server.design.orch/VVM.LaunchVVM~impl]`
+[^8]: `[~server.design.orch/VVM.Shutdowner~impl]`
+[^11]: `[~server.design.orch/VVM.updateProblem~impl]`
+[^2]: `[~server.design.orch/elections~impl]`
+[^7]: `[~server.design.orch/VVM.Shutdown~impl]`
+[^12]: `[~server.design.orch/VVM.test.Shutdown~impl]`
+[^14]: `[~server.design.orch/VVMLeaderPrefix~impl]`
+[^3]: `[~server.design.orch/VVM.Provide~impl]`
+[^4]: `[~server.design.orch/VVM.tryToAcquireLeadership~impl]`
+[^5]: `[~server.design.orch/VVM.test.Basic~impl]`
+[^1]: `[~server.design.orch/VVMConfig~impl]`
+[^9]: `[~server.design.orch/IELections~impl]`
+[^13]: `[~server.design.orch/ITTLStorage~impl]`
+[^10]: `[~server.design.orch/LeadershipMonitor~impl]`
+[^6]: `[~server.design.orch/VVM.test.CancelLeadership~impl]`
