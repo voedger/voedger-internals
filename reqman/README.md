@@ -9,7 +9,7 @@ Requirements tracing using [reqmd](https://github.com/voedger/reqmd) tool.
 - Bash shell
 - Git
 - Go environment
-- Repos `https://github.com/voedger/reqmd` and  `https://github.com/voedger/voedger` are cloned in the same directory as `https://github.com/voedger/voedger-internals` repository
+- Repos `https://github.com/voedger/reqmd` and  `https://github.com/voedger/voedger` are cloned into the same directory as `https://github.com/voedger/voedger-internals` repository
 
 ```text
 .
