@@ -165,7 +165,8 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 - wait for any of:
   - `VVM.leadershipCtx` (leadership loss)
     - go `killerRoutine`
-      - After `leadershipDuration/4` seconds kills the process
+      - `~processKillThreshold~`: leadershipDuration/4
+      - After `processKillThreshold` seconds kills the process
       - // Never stoped, process must exit and goroutine must die
       - // Yes, this is the anti-patterm "Goroutine/Task/Thread Leak"
     - `VVM.updateProblem(leadershipLostErr)`
