@@ -106,6 +106,3 @@
 
 - [Requirements Management](reqman/README.md)
 - [Requirements Management (Overview)](reqman/reqs-overview.md)
-- [OpenFastTrace](reqman/oft.md)
-- [Examples of the tracing](reqman/tracing-examples.md)
-- [Examples of the tracing2](reqman/tracing-examples2.md)

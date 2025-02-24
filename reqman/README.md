@@ -1,66 +1,51 @@
 # Requirements Management
 
-Requirements tracing using [OpenFastTrace (OFT)](https://github.com/itsallcode/openfasttrace/blob/main/doc/user_guide.md).
+Requirements tracing using [reqmd](https://github.com/voedger/reqmd) tool.
 
-## Prerequisites
+## Scripts to manage requirements tracing and coverage.
 
-- bash
-- Java 17.0+
+### Prerequisites
 
-## Use
+- Bash shell
+- Git
+- Go environment
+- Access to voedger repository
+- Repo `https://github.com/voedger/reqmd` is cloned in the same directory as `https://github.com/voedger/voedger-internals` repository
 
-- cd reqman
-- bash ./trace.sh
-- open .work/report.html
+### Main Script
 
-### Artifact types
+- `trace.sh` - Main script with command line interface
 
-```mermaid
-flowchart TD
+```bash
+# Show help
+./trace.sh help
 
-    reqs:::G
-    subgraph reqs[Requirements]
-        nfr:::S
-        ad:::S
-        tdsn:::S
-        fdsn:::S
-        feat:::S
+# Trace requirements using remote voedger repository
+# Will be cloned automatically to .work directory
+./trace.sh trace
 
-        nfr --x ad
-        ad --x tdsn
+# Trace requirements using local voedger repository
+./trace.sh trace --local-voedger
 
-        feat --x fdsn
-        feat --x tdsn        
-    end
-
-    src:::G
-    subgraph src[Source code]
-        impl:::S
-        test:::S
-        itest:::S
-    end
-
-    reqs --x src
-    
-    classDef B fill:#FFFFB5,color:#333
-    classDef S fill:#B5FFFF,color:#333
-    classDef H fill:#C9E7B7,color:#333
-    classDef G fill:#ffffff15, stroke:#999, stroke-width:2px, stroke-dasharray: 5 5    
+# Dry run mode (shows what would be done)
+./trace.sh trace --dry-run
 ```
 
-Requirements
+### Convenience scripts
 
-- `nfr`: Non-functional Requirement
-- `ad`: Architectural Decision
-- `tdsn`: Technical Design
-- `fdsn`: Functional Design
-- `feat`: Feature
+Shorthand scripts for common operations:
 
-Source Code
-    - `impl`: Implementation
-    - `test`: Unit Test
-    - `itest`: Integration Test
+- `trace-d.sh` - Trace with dry run mode
+- `trace-l.sh` - Trace using local voedger repository
+- `trace-l-d.sh` - Trace using local voedger repository in dry run mode
+
+## Script behavior
+
+- Creates `.work` directory for temporary files
+- Clones/updates voedger repository when using remote mode
+- Traces requirements coverage between voedger-internals and voedger repositories
 
 ## History
 
 - [adsn, story...](https://github.com/voedger/voedger-internals/blob/4379075396a1fd50275c7eaf7877eb1cb23ab265/reqman/README.md#L26)
+- [OpenFastTrace (OFT)...](https://github.com/voedger/voedger-internals/blob/1c51ed06b1b6d700ce66aa21d4a68cb3504efcb9/reqman/README.md)
