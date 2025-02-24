@@ -10,9 +10,17 @@ Requirements tracing using [reqmd](https://github.com/voedger/reqmd) tool.
 - Git
 - Go environment
 - Access to voedger repository
-- Repo `https://github.com/voedger/reqmd` is cloned in the same directory as `https://github.com/voedger/voedger-internals` repository
+- Repos `https://github.com/voedger/reqmd` and  `https://github.com/voedger` are cloned in the same directory as `https://github.com/voedger/voedger-internals` repository
 
-### Main Script
+```text
+.
+└── <your-workspace>
+    ├── voedger
+    ├── voedger-internals
+    └── reqmd
+```
+
+### Main script
 
 - `trace.sh` - Main script with command line interface
 
