@@ -235,18 +235,18 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 - `docker compse up -d`
 - expect 1 of 2 VVMs services are failed to start
 
-[^1]: `[~server.design.orch/VVMConfig~impl]`
+[^15]: `[~server.design.orch/VVM.LaunchVVM~impl]`
+[^8]: `[~server.design.orch/VVM.Shutdowner~impl]`
+[^11]: `[~server.design.orch/VVM.updateProblem~impl]`
 [^2]: `[~server.design.orch/elections~impl]`
+[^7]: `[~server.design.orch/VVM.Shutdown~impl]`
+[^12]: `[~server.design.orch/VVM.test.Shutdown~impl]`
+[^14]: `[~server.design.orch/VVMLeaderPrefix~impl]`
 [^3]: `[~server.design.orch/VVM.Provide~impl]`
 [^4]: `[~server.design.orch/VVM.tryToAcquireLeadership~impl]`
 [^5]: `[~server.design.orch/VVM.test.Basic~impl]`
-[^6]: `[~server.design.orch/VVM.test.CancelLeadership~impl]`
-[^7]: `[~server.design.orch/VVM.Shutdown~impl]`
-[^8]: `[~server.design.orch/VVM.Shutdowner~impl]`
+[^1]: `[~server.design.orch/VVMConfig~impl]`
 [^9]: `[~server.design.orch/IELections~impl]`
-[^10]: `[~server.design.orch/LeadershipMonitor~impl]`
-[^11]: `[~server.design.orch/VVM.updateProblem~impl]`
-[^12]: `[~server.design.orch/VVM.test.Shutdown~impl]`
 [^13]: `[~server.design.orch/ITTLStorage~impl]`
-[^14]: `[~server.design.orch/VVMLeaderPrefix~impl]`
-[^15]: `[~server.design.orch/VVM.LaunchVVM~impl]`
+[^10]: `[~server.design.orch/LeadershipMonitor~impl]`
+[^6]: `[~server.design.orch/VVM.test.CancelLeadership~impl]`
