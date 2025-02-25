@@ -230,11 +230,27 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 
 ### Manual
 
-- docker container:
-  - scylla db
-  - 2 VVMs services
-- `docker compse up -d`
-- expect 1 of 2 VVMs services are failed to start
+- airs-bp3/airsbp3/it/orch
+
+Flow
+
+- scylla.sh
+  - Start scylla
+- bp3_1.sh
+  - Start the first bp3 instance, it takes the leadership
+  - docker pull untillpro/airs-bp:alpha
+- bp3_2.sh
+  - Start the second bp3 instance, it waits for the leadership
+- bp3_1_stop.sh
+  - bp3_1 stops
+  - bp3_2 takes the leadership
+- bp3_1.sh
+  - bp3_1 waits for the leadership
+- bp3_2_stop.sh
+  - bp3_2 stops
+  - bp3_1 takes the leadership
+
+## Footnotes
 
 [^15]: `[~server.design.orch/VVM.LaunchVVM~impl]`
 [^8]: `[~server.design.orch/VVM.Shutdowner~impl]`
