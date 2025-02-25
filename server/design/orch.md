@@ -82,14 +82,14 @@ VVMHost creates a VVM instance and launches it. VVM acquires leadership and star
     - Purpose: Describe the interface to acquire and manage leadership for a given key
   - `~elections~`uncvrd[^2]❓
     - Purpose: Implementation of IELections
+  - `~ITTLStorage~`uncvrd[^13]❓
+    - Purpose: interface with methods InsertIfNotExist(), CompareAndSwap(), CompareAndDelete(). To be injected.
 - **keyspace(sysvvm).VVMLeaderPrefix**
   - implemented as `pkg/vvm.storage/pKeyPrefix_VVMLeader` `~VVMLeaderPrefix~`uncvrd[^14]❓
 - **pkg/vvm/storage**
   - `ISysVvmStorage` interface definition
-  - `~ITTLStorage~`uncvrd[^13]❓
   - Implementations of all possible `ITTLStorage` interfaces
     - `NewElectionsTTLStorage(ISysVvmStorage) elections.ITTLStorage[TTLStorageImplKey, string]`
-      - Purpose: interface with methods InsertIfNotExist(), CompareAndSwap(), CompareAndDelete(). To be injected.`
       - uses `keyspace(sysvvm)` and keys prefixed with `pKeyPrefix_VVMLeader = 1`
   - incapsulates and guards all possible values of `pKeyPrefix`
 - **pkg/vvm/impl_orch.go**, **pkg/vvm/impl_orch_test.go**
