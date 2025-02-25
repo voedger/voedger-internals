@@ -36,8 +36,8 @@ VVMHost creates a VVM instance and launches it. VVM acquires leadership and star
   myVVM := vvm.Provide(...)
 
   // Launch VVM
-  vvmProblemCtx := myVVM.Launch(leadershipAcquisitionDuration)
-  
+  vvmProblemCtx := myVVM.Launch(leadershipDurationSecods, leadershipAcquisitionDuration)
+
   // Wait for `problemCtx` and optionally for other events like os.Interrupt, syscall.SIGTERM, syscall.SIGINT
   ...
 
@@ -68,9 +68,11 @@ VVMHost creates a VVM instance and launches it. VVM acquires leadership and star
 
   - `~VVMConfig~`uncvrd[^1]❓
   ```golang
+  type NumVVM uint32
   type VVMConfig {
     ...
-    ClusterSize int // amount of VVMs in the cluster. Default 1
+    NumVVM NumVVM // amount of VVMs in the cluster. Default 1
+    IP     net.IP // current IP of the VVM. Used as the value for leaderhsip elections
   }
   ```
 
@@ -80,30 +82,34 @@ VVMHost creates a VVM instance and launches it. VVM acquires leadership and star
     - Purpose: Describe the interface to acquire and manage leadership for a given key
   - `~elections~`uncvrd[^2]❓
     - Purpose: Implementation of IELections
-  - `~ITTLStorage~`uncvrd[^13]❓
-    - Purpose: interface with methods InsertIfNotExist(), CompareAndSwap(), CompareAndDelete(). To be injected.
 - **keyspace(sysvvm).VVMLeaderPrefix**
-  - Key prefix `~VVMLeaderPrefix~`uncvrd[^14]❓ to keep data for elections
-- **pkg/vvm/ttlstorage**
-  - Implementation of `ITTLStorage` interface that uses `keyspace(vvmdata)` and keys prefixed with keyspace(sysvvm).VVMLeaderPrefix
-
+  - implemented as `pkg/vvm.storage/pKeyPrefix_VVMLeader` `~VVMLeaderPrefix~`uncvrd[^14]❓
+- **pkg/vvm/storage**
+  - `ISysVvmStorage` interface definition
+  - `~ITTLStorage~`uncvrd[^13]❓
+  - Implementations of all possible `ITTLStorage` interfaces
+    - `NewElectionsTTLStorage(ISysVvmStorage) elections.ITTLStorage[TTLStorageImplKey, string]`
+      - Purpose: interface with methods InsertIfNotExist(), CompareAndSwap(), CompareAndDelete(). To be injected.`
+      - uses `keyspace(sysvvm)` and keys prefixed with `pKeyPrefix_VVMLeader = 1`
+  - incapsulates and guards all possible values of `pKeyPrefix`
+- **pkg/vvm/impl_orch.go**, **pkg/vvm/impl_orch_test.go**
+  - orchestration implementation and tests
 ---
 
 ### VVM
 
 VVM:
 
-- elections IElections: Interface to acquire and manage leadership for a given key
-- problemCtx. Closed by VVM.updateProblem(err) (e.g. leadership loss or service failure)
-- problemErrCh. Channel that receives the error describing the problem, written only once. Content is returned on Shutdown()
-- problemErrOnce. `sync.Once` to ensure problemErrCh is written only once
-- vvmShutCtx. Closed when VVM should be stopped (`Shutdown()` is called outside)
-- servicesShutCtx. Closed when VVM services should be stopped (but LeadershipMonitor) (that should be context for services: servicesShutCtx closed -> services pipeline is stopped. Closed when `Shutdown()` is called outside)
-- monitorShutCtx. Closed after all services are stopped and LeadershipMonitor should be stopped
-- shutdownedCtx. Closed after all (services and LeadershipMonitor) is stopped
-- leadershipCtx. Context for watching leadership. Closed when leadership is lost.
-- numVVM. Number of VVMs in the cluster
-- ip. IP address of the VVM
+- `problemCtx`. Closed by `VVM.updateProblem(err)` (e.g. leadership loss or service failure)
+- `problemErrCh`. Channel that receives the error describing the problem, written only once. Content is returned on `Shutdown()`
+- `problemErrOnce sync.Once` to ensure `problemErrCh` is written only once
+- `vvmShutCtx`. Closed when VVM should be stopped (`Shutdown()` is called outside)
+- `servicesShutCtx`. Closed when VVM services should be stopped (but `LeadershipMonitor`) (that should be context for services: `servicesShutCtx` closed -> services pipeline is stopped. Closed when `Shutdown()` is called outside)
+- `monitorShutCtx`. Closed after all services are stopped and `LeadershipMonitor` should be stopped
+- `shutdownedCtx`. Closed after all (services and `LeadershipMonitor`) is stopped
+- `leadershipCtx`. Context for watching leadership. Closed when leadership is lost.
+- `numVVM`. Number of VVMs in the cluster
+- `ip`. IP address of the VVM
 
 The error propagation follows these principles:
 
@@ -117,36 +123,39 @@ Goroutine hierarchy:
 - Main (VVMHost)
   - Launcher
     - LeadershipMonitor
+      - KillerRoutine
     - ServicePipeline
   - Shutdowner
 
-Each goroutine's lifecycle is controlled by dedicated context cancellation.
+Each goroutine's lifecycle is controlled by dedicated context cancellation. (except `killerRoutine`)
 
 #### VVM.Provide()
 
 - `~VVM.Provide~`uncvrd[^3]❓
-- Construct vvm.elections
+- wire `vvm.VVM`: consturct apps, interfaces, Service Pipeline. Do not launch anything
 
 #### VVM.Shutdown()
 
 - `~VVM.Shutdown~`uncvrd[^7]❓
+- not launched -> panic
 - close(VVM.vvmShutCtx)
 - Wait for `VVM.shutdownedCtx`
 - Return error from `VVM.problemErrCh`, non-blocking.
 
-#### VVM.LaunchVVM() problemCtx
+#### VVM.Launch() problemCtx
 
 - `~VVM.LaunchVVM~`uncvrd[^15]❓
+- launched already -> panic
 - vvmProblemCtx := VVM.Launch(leadershipAcquisitionDuration)
+  - go Shutdowner
   - err := tryToAcquireLeadership()
+    - construct `IElections` and store `electionsCleanup()` in VVM
+    - use `IElections`
+  - if err == nil
+    - err = servicePipeline
   - if err != nil
     - call `VVM.updateProblem(err)`
-    - return VVM.problemCtx
-  - pipelineErr := servicePipeline
-    - If pipelineErr != nil call `VVM.updateProblem(pipelineErr)`
-    - return VVM.problemCtx
-  - go Shutdowner
-  - Return VVM.problemCtx
+  - return VVM.problemCtx
 
 #### Shutdowner: go VVM.shutdowner()
 
@@ -156,6 +165,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
   - close `VVM.servicesShutCtx` and wait for services to stop
 - Shutdown `LeadershipMonitor` (close `VVM.monitorShutCtx` and wait for `LeadershipMonitor` to stop)
 - Cleanup `elections`
+  - `VVM.electionsCleanup()`
   - // Note: all goroutines will be stopped and leaderships will be released
 - Close `VVM.shutdownedCtx`
 
@@ -165,7 +175,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 - wait for any of:
   - `VVM.leadershipCtx` (leadership loss)
     - go `killerRoutine`
-      - `~processKillThreshold~`uncvrd[^16]❓: leadershipDuration/4
+      - `~processKillThreshold~`uncvrd[^16]❓: leadershipDurationSecods/4
       - After `processKillThreshold` seconds kills the process
       - // Never stoped, process must exit and goroutine must die
       - // Yes, this is the anti-patterm "Goroutine/Task/Thread Leak"
@@ -174,20 +184,20 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
   - `VVM.monitorShutCtx`
     - break
 
-#### VVM.tryToAcquireLeadership()
+#### VVM.tryToAcquireLeadership(leadershipDurationSecods, leadershipAquisitionDuration)
 
 - `~VVM.tryToAcquireLeadership~`uncvrd[^4]❓
-- Try to acquire leadership in loop.Wait
-  - Exit if `leadershipDuration` expired
-  - Exit if `VVM.servicesShutCtx` closed
-  - Leadership key is choosen in the [1, VVM.numVVM] interval
-  - Leadership value is VVM.ip
-  - Do not wait for servicesShutCtx because Launch is blocking method
-  - During leadershipAcquisitionDuration
+- Try to acquire leadership during `leadershipAcquisitionDuration`
+  - obtain an instance of `elections.IElections`: Interface to acquire and manage leadership for a given key
+    - store `VVM.electionsCleanup`
+  - Leadership key is choosen in the [1, `VVM.numVVM`] interval
+  - Leadership value is `VVM.ip`
+  - Do not wait for `servicesShutCtx` because Launch is blocking method
+
 - If leadership is acquired
-  - Set VVM.leadershipCtx
-  - go LeadershipMonitor
-- Else return leadershipAcquisitionErr
+  - Set `VVM.leadershipCtx`
+  - go `LeadershipMonitor`
+- Else return `leadershipAcquisitionErr`
 
 #### VVM.updateProblem(err)
 
@@ -212,7 +222,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 
 - Basic
   - `~VVM.test.Basic~`uncvrd[^5]❓
-  - provide and laucnh VVM1
+  - provide and launch VVM1
   - wait for successful VVM1 start
   - provide and launch VVM2
   - wait for VVM2 start failure
