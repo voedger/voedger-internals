@@ -89,7 +89,7 @@ VVMHost creates a VVM instance and launches it. VVM acquires leadership and star
   - `~ITTLStorage~`uncvrd[^13]❓
   - Implementations of all possible `ITTLStorage` interfaces
     - `NewElectionsTTLStorage(ISysVvmStorage) elections.ITTLStorage[TTLStorageImplKey, string]`
-      - Purpose: interface with methods InsertIfNotExist(), CompareAndSwap(), CompareAndDelete() used to persist `view.cluster.VVMLeader`
+      - Purpose: interface with methods InsertIfNotExist(), CompareAndSwap(), CompareAndDelete(). To be injected.`
       - uses `keyspace(sysvvm)` and keys prefixed with `pKeyPrefix_VVMLeader = 1`
   - incapsulates and guards all possible values of `pKeyPrefix`
 - **pkg/vvm/impl_orch.go**, **pkg/vvm/impl_orch_test.go**
@@ -227,7 +227,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation. (exc
 - Automatic shutdown on leadership loss
   - `~VVM.test.Shutdown~`uncvrd[^12]❓
   - provide and launch a VVM
-  - update `view.cluster.VVMLeader`: modify the single value
+  - update ttlstorage modify the single value
   - bump mock time
   - expect the VVM shutdown
 - Cancel the leadership on manual shutdown
@@ -238,11 +238,27 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation. (exc
 
 ### Manual
 
-- docker container:
-  - scylla db
-  - 2 VVMs services
-- `docker compse up -d`
-- expect 1 of 2 VVMs services are failed to start
+- airs-bp3/airsbp3/it/orch
+
+Flow
+
+- scylla.sh
+  - Start scylla
+- bp3_1.sh
+  - Start the first bp3 instance, it takes the leadership
+  - docker pull untillpro/airs-bp:alpha
+- bp3_2.sh
+  - Start the second bp3 instance, it waits for the leadership
+- bp3_1_stop.sh
+  - bp3_1 stops
+  - bp3_2 takes the leadership
+- bp3_1.sh
+  - bp3_1 waits for the leadership
+- bp3_2_stop.sh
+  - bp3_2 stops
+  - bp3_1 takes the leadership
+
+## Footnotes
 
 [^15]: `[~server.design.orch/VVM.LaunchVVM~impl]`
 [^8]: `[~server.design.orch/VVM.Shutdowner~impl]`
