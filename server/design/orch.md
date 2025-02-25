@@ -81,7 +81,7 @@ VVMHost creates a VVM instance and launches it. VVM acquires leadership and star
   - `~elections~`uncvrd[^2]❓
     - Purpose: Implementation of IELections
   - `~ITTLStorage~`uncvrd[^13]❓
-    - Purpose: interface with methods InsertIfNotExist(), CompareAndSwap(), CompareAndDelete() used to persist `view.cluster.VVMLeader`
+    - Purpose: interface with methods InsertIfNotExist(), CompareAndSwap(), CompareAndDelete(). To be injected.
 - **keyspace(sysvvm).VVMLeaderPrefix**
   - Key prefix `~VVMLeaderPrefix~`uncvrd[^14]❓ to keep data for elections
 - **pkg/vvm/ttlstorage**
@@ -219,7 +219,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation.
 - Automatic shutdown on leadership loss
   - `~VVM.test.Shutdown~`uncvrd[^12]❓
   - provide and launch a VVM
-  - update `view.cluster.VVMLeader`: modify the single value
+  - update ttlstorage modify the single value
   - bump mock time
   - expect the VVM shutdown
 - Cancel the leadership on manual shutdown
