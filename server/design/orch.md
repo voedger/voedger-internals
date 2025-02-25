@@ -137,6 +137,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation. (exc
 #### VVM.Shutdown()
 
 - `~VVM.Shutdown~`uncvrd[^7]❓
+- not launched -> panic
 - close(VVM.vvmShutCtx)
 - Wait for `VVM.shutdownedCtx`
 - Return error from `VVM.problemErrCh`, non-blocking.
@@ -144,6 +145,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation. (exc
 #### VVM.Launch() problemCtx
 
 - `~VVM.LaunchVVM~`uncvrd[^15]❓
+- launched already -> panic
 - vvmProblemCtx := VVM.Launch(leadershipAcquisitionDuration)
   - go Shutdowner
   - err := tryToAcquireLeadership()
