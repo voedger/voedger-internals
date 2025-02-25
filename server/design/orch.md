@@ -36,7 +36,7 @@ VVMHost creates a VVM instance and launches it. VVM acquires leadership and star
   myVVM := vvm.Provide(...)
 
   // Launch VVM
-  vvmProblemCtx := myVVM.Launch(leadershipDuration, leadershipAcquisitionDuration)
+  vvmProblemCtx := myVVM.Launch(leadershipDurationSecods, leadershipAcquisitionDuration)
 
   // Wait for `problemCtx` and optionally for other events like os.Interrupt, syscall.SIGTERM, syscall.SIGINT
   ...
@@ -82,15 +82,15 @@ VVMHost creates a VVM instance and launches it. VVM acquires leadership and star
     - Purpose: Describe the interface to acquire and manage leadership for a given key
   - `~elections~`uncvrd[^2]❓
     - Purpose: Implementation of IELections
-  - `~ITTLStorage~`uncvrd[^13]❓
-    - Purpose: interface with methods InsertIfNotExist(), CompareAndSwap(), CompareAndDelete() used to persist `view.cluster.VVMLeader`
 - **keyspace(sysvvm).VVMLeaderPrefix**
   - implemented as `pkg/vvm.storage/pKeyPrefix_VVMLeader` `~VVMLeaderPrefix~`uncvrd[^14]❓
 - **pkg/vvm/storage**
-  - `IVVMAppTTLStorage` interface definition
+  - `ISysVvmStorage` interface definition
+  - `~ITTLStorage~`uncvrd[^13]❓
   - Implementations of all possible `ITTLStorage` interfaces
-    - `NewElectionsTTLStorage() elections.ITTLStorage[TTLStorageImplKey, string]`
-      - uses `keyspace(sysvvm)` and keys prefixed with `pKeyPrefix_VVMLeader = 1` 
+    - `NewElectionsTTLStorage(ISysVvmStorage) elections.ITTLStorage[TTLStorageImplKey, string]`
+      - Purpose: interface with methods InsertIfNotExist(), CompareAndSwap(), CompareAndDelete() used to persist `view.cluster.VVMLeader`
+      - uses `keyspace(sysvvm)` and keys prefixed with `pKeyPrefix_VVMLeader = 1`
   - incapsulates and guards all possible values of `pKeyPrefix`
 - **pkg/vvm/impl_orch.go**, **pkg/vvm/impl_orch_test.go**
   - orchestration implementation and tests
@@ -100,7 +100,6 @@ VVMHost creates a VVM instance and launches it. VVM acquires leadership and star
 
 VVM:
 
-- `elections.IElections`: Interface to acquire and manage leadership for a given key
 - `problemCtx`. Closed by `VVM.updateProblem(err)` (e.g. leadership loss or service failure)
 - `problemErrCh`. Channel that receives the error describing the problem, written only once. Content is returned on `Shutdown()`
 - `problemErrOnce sync.Once` to ensure `problemErrCh` is written only once
@@ -174,7 +173,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation. (exc
 - wait for any of:
   - `VVM.leadershipCtx` (leadership loss)
     - go `killerRoutine`
-      - `~processKillThreshold~`uncvrd[^16]❓: leadershipDuration/4
+      - `~processKillThreshold~`uncvrd[^16]❓: leadershipDurationSecods/4
       - After `processKillThreshold` seconds kills the process
       - // Never stoped, process must exit and goroutine must die
       - // Yes, this is the anti-patterm "Goroutine/Task/Thread Leak"
@@ -183,10 +182,12 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation. (exc
   - `VVM.monitorShutCtx`
     - break
 
-#### VVM.tryToAcquireLeadership(leadershipDuration, leadershipAquisitionDuration)
+#### VVM.tryToAcquireLeadership(leadershipDurationSecods, leadershipAquisitionDuration)
 
 - `~VVM.tryToAcquireLeadership~`uncvrd[^4]❓
 - Try to acquire leadership during `leadershipAcquisitionDuration`
+  - obtain an instance of `elections.IElections`: Interface to acquire and manage leadership for a given key
+    - store `VVM.electionsCleanup`
   - Leadership key is choosen in the [1, `VVM.numVVM`] interval
   - Leadership value is `VVM.ip`
   - Do not wait for `servicesShutCtx` because Launch is blocking method
