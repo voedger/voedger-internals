@@ -1,15 +1,17 @@
 # Replace an existing BLOB
+## Motivation
+Replace the binary data of the BLOB and optionally metadata using API
+
+## Functional Design
 PUT `/api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/blobs/{blobId}`
 
-Replaces the binary data of the BLOB and optionally metadata
-
-## Headers
+### Headers
 | Key | Value |
 | --- | --- |
 | Authorization | Bearer {PrincipalToken} |
 | Content-type | multipart/form-data |
 
-## Result
+### Result
 | Code | Description | Body |
 | --- | --- | --- |
 | 200 | OK | the BLOB metadata |

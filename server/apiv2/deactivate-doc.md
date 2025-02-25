@@ -1,14 +1,17 @@
 # Deactivate document or record
+
+## Motivation
+Deactivate CDoc/WDoc/CRecord/WRecord using API
+
+## Functional Design
 DELETE `/api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/docs/{pkg}.{table}/{id}`
 
-Deactivates CDoc/WDoc/CRecord/WRecord
-
-## Headers
+### Headers
 | Key | Value |
 | --- | --- |
 | Authorization | Bearer {PrincipalToken} |
 
-## Result
+### Result
 | Code | Description | Body |
 | --- | --- | --- |
 | 200 | OK | current WLog offset, see example below |

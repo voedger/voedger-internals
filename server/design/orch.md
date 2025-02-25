@@ -66,6 +66,7 @@ VVMHost creates a VVM instance and launches it. VVM acquires leadership and star
 
 - **pkg/vvm**
 
+  - `~VVMConfig~`uncvrd[^1]❓
   ```golang
   type NumVVM uint32
   type VVMConfig {
@@ -77,19 +78,20 @@ VVMHost creates a VVM instance and launches it. VVM acquires leadership and star
 
 - **pkg/elections**
   - Purpose: Describe and implement the interface to acquire and manage leadership for a given key
-  - `IELections`
+  - `~IELections~`uncvrd[^9]❓
     - Purpose: Describe the interface to acquire and manage leadership for a given key
-  - `elections`
+  - `~elections~`uncvrd[^2]❓
     - Purpose: Implementation of IELections
-  - `ITTLStorage`
+  - `~ITTLStorage~`uncvrd[^13]❓
     - Purpose: interface with methods InsertIfNotExist(), CompareAndSwap(), CompareAndDelete() used to persist `view.cluster.VVMLeader`
+- **keyspace(sysvvm).VVMLeaderPrefix**
+  - implemented as `pkg/vvm.storage/pKeyPrefix_VVMLeader` `~VVMLeaderPrefix~`uncvrd[^14]❓
 - **pkg/vvm/storage**
   - `IVVMAppTTLStorage` interface definition
   - Implementations of all possible `ITTLStorage` interfaces
     - `NewElectionsTTLStorage() elections.ITTLStorage[TTLStorageImplKey, string]`
-      - uses `keyspace(sysvvm)` and keys prefixed with `pKeyPrefix_Elections = 1`
+      - uses `keyspace(sysvvm)` and keys prefixed with `pKeyPrefix_VVMLeader = 1` 
   - incapsulates and guards all possible values of `pKeyPrefix`
-  - Like we had here `~VVMLeader.def~`covered[^~VVMLeader.def~]✅
 - **pkg/vvm/impl_orch.go**, **pkg/vvm/impl_orch_test.go**
   - orchestration implementation and tests
 ---
@@ -130,16 +132,19 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation. (exc
 
 #### VVM.Provide()
 
+- `~VVM.Provide~`uncvrd[^3]❓
 - wire `vvm.VVM`: consturct apps, interfaces, Service Pipeline. Do not launch anything
 
 #### VVM.Shutdown()
 
+- `~VVM.Shutdown~`uncvrd[^7]❓
 - close(VVM.vvmShutCtx)
 - Wait for `VVM.shutdownedCtx`
 - Return error from `VVM.problemErrCh`, non-blocking.
 
 #### VVM.Launch() problemCtx
 
+- `~VVM.LaunchVVM~`uncvrd[^15]❓
 - vvmProblemCtx := VVM.Launch(leadershipAcquisitionDuration)
   - go Shutdowner
   - err := tryToAcquireLeadership()
@@ -153,6 +158,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation. (exc
 
 #### Shutdowner: go VVM.shutdowner()
 
+- `~VVM.Shutdowner~`uncvrd[^8]❓
 - Wait for `VVM.vvmShutCtx`
 - Shutdown everything but `LeadershipMonitor` and `elections`
   - close `VVM.servicesShutCtx` and wait for services to stop
@@ -164,10 +170,12 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation. (exc
 
 #### LeadershipMonitor: go VVM.leadershipMonitor()
 
+- `~LeadershipMonitor~`uncvrd[^10]❓
 - wait for any of:
   - `VVM.leadershipCtx` (leadership loss)
     - go `killerRoutine`
-      - After `leadershipDuration/4` seconds kills the process
+      - `~processKillThreshold~`uncvrd[^16]❓: leadershipDuration/4
+      - After `processKillThreshold` seconds kills the process
       - // Never stoped, process must exit and goroutine must die
       - // Yes, this is the anti-patterm "Goroutine/Task/Thread Leak"
     - `VVM.updateProblem(leadershipLostErr)`
@@ -177,11 +185,12 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation. (exc
 
 #### VVM.tryToAcquireLeadership(leadershipDuration, leadershipAquisitionDuration)
 
-- Try to acquire leadership for `leadershipDuration`
+- `~VVM.tryToAcquireLeadership~`uncvrd[^4]❓
+- Try to acquire leadership during `leadershipAcquisitionDuration`
   - Leadership key is choosen in the [1, `VVM.numVVM`] interval
   - Leadership value is `VVM.ip`
   - Do not wait for `servicesShutCtx` because Launch is blocking method
-  - During `leadershipAcquisitionDuration`
+
 - If leadership is acquired
   - Set `VVM.leadershipCtx`
   - go `LeadershipMonitor`
@@ -189,6 +198,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation. (exc
 
 #### VVM.updateProblem(err)
 
+- `~VVM.updateProblem~`uncvrd[^11]❓
 - synchronized via `VVM.problemErrOnce`
   - Close `VVM.problemCtx`
   - Write error to `VVM.problemErrCh` using `VVM.problemErrOnce`
@@ -208,16 +218,19 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation. (exc
 ### Automatic
 
 - Basic
+  - `~VVM.test.Basic~`uncvrd[^5]❓
   - provide and launch VVM1
   - wait for successful VVM1 start
   - provide and launch VVM2
   - wait for VVM2 start failure
 - Automatic shutdown on leadership loss
+  - `~VVM.test.Shutdown~`uncvrd[^12]❓
   - provide and launch a VVM
   - update `view.cluster.VVMLeader`: modify the single value
   - bump mock time
   - expect the VVM shutdown
 - Cancel the leadership on manual shutdown
+  - `~VVM.test.CancelLeadership~`uncvrd[^6]❓
   - provide and launch a VVM
   - shut it down on the launcher side
   - expect that the leadership in canceled
@@ -230,4 +243,19 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation. (exc
 - `docker compse up -d`
 - expect 1 of 2 VVMs services are failed to start
 
-[^~VVMLeader.def~]: `[~server.design.orch/VVMLeader.def~]` [apps/app.go:80:impl](https://github.com/voedger/voedger/blob/67cb0d8e2960a0b09546bf86a986bc40a1f05584/pkg/appdef/internal/apps/app.go#L80)
+[^15]: `[~server.design.orch/VVM.LaunchVVM~impl]`
+[^8]: `[~server.design.orch/VVM.Shutdowner~impl]`
+[^11]: `[~server.design.orch/VVM.updateProblem~impl]`
+[^2]: `[~server.design.orch/elections~impl]`
+[^7]: `[~server.design.orch/VVM.Shutdown~impl]`
+[^12]: `[~server.design.orch/VVM.test.Shutdown~impl]`
+[^14]: `[~server.design.orch/VVMLeaderPrefix~impl]`
+[^3]: `[~server.design.orch/VVM.Provide~impl]`
+[^4]: `[~server.design.orch/VVM.tryToAcquireLeadership~impl]`
+[^5]: `[~server.design.orch/VVM.test.Basic~impl]`
+[^1]: `[~server.design.orch/VVMConfig~impl]`
+[^9]: `[~server.design.orch/IELections~impl]`
+[^13]: `[~server.design.orch/ITTLStorage~impl]`
+[^10]: `[~server.design.orch/LeadershipMonitor~impl]`
+[^6]: `[~server.design.orch/VVM.test.CancelLeadership~impl]`
+[^16]: `[~server.design.orch/processKillThreshold~impl]`

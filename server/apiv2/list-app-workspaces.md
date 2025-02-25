@@ -1,17 +1,19 @@
 # List app workspaces
+## Motivation
+List app workspaces having published roles, using API
+
+## Functional Design
 GET `/api/v2/users/{owner}/apps/{app}/schemas`
 
 Returns the hierarchy of non-abstract workspaces in the application with WSProfile as a root.
-Only workspaces returned which have resources available to [published roles](../authnz/README.md#published-roles). 
+Only workspaces returned which have resources available to [published roles](../authnz/published-roles.md). 
 
-## Headers
+### Headers
 | Key | Value | Description |
 | --- | --- | --- |
-| Authorization | Bearer {PrincipalToken} | Principal Token |
-| Accept | application/json | To get the response in JSON format |
-| Accept | text/markdown | To get the response in Markdown format |
+| Accept | text/html | To get the response in HTML format (default) |
 
-## Result
+### Result
 | Code | Description | Body |
 | --- | --- | --- |
 | 200 | OK | app workspaces hierarchy in the selected format |

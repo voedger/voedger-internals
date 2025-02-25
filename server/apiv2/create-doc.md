@@ -1,19 +1,21 @@
 # Create document or record
+## Motivation
+Create a new CDoc, WDoc, CRecord or WRecord using API
+
+## Functional Design
 POST `/api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/docs/{pkg}.{table}`
 
-Creates CDoc, WDoc, CRecord or WRecord
-
-## Headers
+### Headers
 | Key | Value |
 | --- | --- |
 | Authorization | Bearer {PrincipalToken} |
 | Content-type | application/json |
 
-## Request
+### Request
 JSON of the CDoc/WDoc/CRecord/WRecord
 
 
-## Result
+### Result
 | Code | Description | Body
 | --- | --- | --- |
 | 201 | Created | current WLog offset and the new IDs, see below |
@@ -32,3 +34,4 @@ Example result 201:
     }
 }
 ```
+

@@ -1,18 +1,20 @@
 # Update document or record
+## Motivation
+Update a CDoc, WDoc, CRecord or WRecord using API
+
+## Functional Design
 PATCH `/api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/docs/{pkg}.{table}/{id}`
 
-Updates CDoc/WDoc/CRecord/WRecord
-
-## Headers
+### Headers
 | Key | Value |
 | --- | --- |
 | Authorization | Bearer {PrincipalToken} |
 | Content-type | application/json |
 
-## Body
+### Body
 CDoc/WDoc/CRecord/WRecord (fields to be updated)
 
-## Result
+### Result
 | Code | Description | Body |
 | --- | --- | --- |
 | 200 | OK | current WLog offset and the new IDs, see below |

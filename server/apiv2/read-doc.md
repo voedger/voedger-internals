@@ -1,14 +1,16 @@
 # Read document or record
+## Motivation
+Read CDoc/WDoc/CRecord/WRecord using API
+
+## Functional Design
 GET `/api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/docs/{pkg}.{table}/{id}`
 
-Reads CDoc/WDoc/CRecord/WRecord
-
-## Headers
+### Headers
 | Key | Value |
 | --- | --- |
 | Authorization | Bearer {PrincipalToken} |
 
-## Result
+### Result
 | Code | Description | Body 
 | --- | --- | --- |
 | 200 | OK | CDoc/WDoc/CRecord/WRecord object |

@@ -135,8 +135,10 @@ subgraph queryData
 end
 
 %% Relations ======================
-qpMessage --> |has|QName:::S
-qpMessage --> |has|Type:::S
+qpMessage --> |may have|QName:::S
+qpMessage --> |has|Type[ApiPath]:::S
+qpMessage --> |may have|WorkspaceID:::S
+qpMessage --> |may have|WorkspaceQName:::S
 qpMessage --> |may have|DocID:::S
 qpMessage --> |may have|QueryParams:::S
 objects -.-> |pushed to|rp
@@ -149,9 +151,11 @@ views -.-> |QP reads rows and <br>converts to|objects
 doc -.-> |QP reads and <br>converts to|objects
 
 QName -.-> |used to find|entity
+WorkspaceID -.-> |used to find|entity
+WorkspaceQName -.-> |used to find|entity
 Type -.-> |used to find|entity
-DocID -.-> |used to find|doc
-Argument -..-> |used by|extension
+DocID -..-> |used to find|doc
+Argument -.-> |used by|extension
 Constraints -.-> |used to build|rp
 
 %% Styles ====================

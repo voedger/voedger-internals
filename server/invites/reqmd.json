@@ -1,0 +1,6 @@
+{
+  "FileURL2FileHash": {
+    "https://github.com/maxim-ge/voedger/blob/0d4fd4409d374bfd04e11004ddc71ca936e80193/pkg/sys/invite/impl_initiatejoinworkspace.go": "9f7cb64cb172b1ac32ca988bd6bfa0dbd02b7a04",
+    "https://github.com/maxim-ge/voedger/blob/0d4fd4409d374bfd04e11004ddc71ca936e80193/pkg/sys/it/impl_invite_test.go": "5ecae5719033adc3c4c13690e4fdfd78788f431c"
+  }
+}
