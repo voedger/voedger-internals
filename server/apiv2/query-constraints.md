@@ -58,6 +58,8 @@ curl -X GET \
 }
 ```
 
+### Notes
+- the `include` parameter expects the name of the pointer field in the current class, not the name of the target class
 
 ## Technical Design
 Rows are filtered by [Rows Processor](../design/qp.md#rows-processor-1) component of the Query Processor. 
