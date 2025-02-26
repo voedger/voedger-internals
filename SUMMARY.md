@@ -54,9 +54,18 @@
     - [Secure prometheus and grafana](server/secure-prometheus-grafana.md)
     - [Alerting](server/alerting.md)
   - [VVMs](server/vvms/README.md)
-  - [Applications](server/apps/README.md)
+  - Applications
     - [Deploy Application](server/apps/deploy-app.md)
     - [Sidecar Applications](server/sidecarapps.md)
+    - [AuthNZ](server/authnz/README.md)
+      - [ACL Rules](server/authnz/aclrules.md)
+      - [Enrich token](server/authnz/enrich-token.md)
+    - Data
+      - [Types](server/vsql/types.md)
+      - [SELECT, UPDATE](server/vsql/select-update.md)
+      - [Uniques With Multiple Fields](server/vsql/uniques-multi.md)
+      - [Verifiable Fields](server/vsql/ver-fields.md)
+      - [See also (VSQL)](server/vsql/vsql-seealso.md)
   - [Workspaces](server/workspaces/README.md)
     - [Create Workspace](server/workspaces/create-workspace-v2.md)
     - [Deactivate Workspace](server/workspaces/deactivate-workspace.md)
@@ -68,9 +77,6 @@
     - [Cancel sent Invite](server/invites/cancel-sent-invite.md)
     - [Cancel accepted Invite](server/invites/cancel-accepted-invite.md)
     - [Update Invite roles](server/invites/update-invite-roles.md)
-  - [AuthNZ](server/authnz/README.md)
-    - [ACL Rules](server/authnz/aclrules.md)
-    - [Enrich token](server/authnz/enrich-token.md)
   - [Users](server/users/README.md)
     - [Send Email](server/users/send_email.md)
     - [Reset password](server/users/reset-password.md)
@@ -78,12 +84,6 @@
     - [Change Email](server/users/change-email.md)
   - [Emails](server/emails/README.md)
   - [Jobs](server/jobs.md)
-  - VSQL DATA
-    - [Types](server/vsql/types.md)
-    - [SELECT, UPDATE](server/vsql/select-update.md)
-    - [Uniques With Multiple Fields](server/vsql/uniques-multi.md)
-    - [Verifiable Fields](server/vsql/ver-fields.md)
-    - [See also (VSQL)](server/vsql/vsql-seealso.md)
   - DMBS Drivers
     - [AmazonDB Driver](server/amazondb-driver.md)
   - Frozen
