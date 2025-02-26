@@ -254,9 +254,10 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation. (exc
   - shut it down on the launcher side
   - expect that the leadership in canceled
 
-### Manual testing
+### Manual testing research
 
-- airs-bp3/rsch/20250226-orch
+- `~VVM.test.ManualResearch~`uncvrd[^27]❓
+  - airs-bp3/rsch/20250226-orch
 
 Flow
 
@@ -304,3 +305,4 @@ Flow
 [^24]: `[~server.design.orch/VVM.test.Shutdown~impl]`
 [^25]: `[~server.design.orch/VVM.test.CancelLeadership~impl]`
 [^26]: `[~server.design.orch/ttlStorageMock~impl]`
+[^27]: `[~server.design.orch/VVM.test.ManualResearch~impl]`
