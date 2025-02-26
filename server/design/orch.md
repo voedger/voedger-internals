@@ -254,9 +254,9 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation. (exc
   - shut it down on the launcher side
   - expect that the leadership in canceled
 
-### Manual
+### Manual testing
 
-- airs-bp3/airsbp3/it/orch
+- airs-bp3/rsch/20250226-orch
 
 Flow
 
