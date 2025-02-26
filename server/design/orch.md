@@ -76,24 +76,33 @@ VVMHost creates a VVM instance and launches it. VVM acquires leadership and star
   }
   ```
 
-- **pkg/elections**
+- **pkg/ielections**
   - Purpose: Describe and implement the interface to acquire and manage leadership for a given key
-  - `~IELections~`uncvrd[^9]❓
-    - Purpose: Describe the interface to acquire and manage leadership for a given key
-  - `~elections~`uncvrd[^2]❓
-    - Purpose: Implementation of IELections
-- **keyspace(sysvvm).VVMLeaderPrefix**
-  - implemented as `pkg/vvm.storage/pKeyPrefix_VVMLeader` `~VVMLeaderPrefix~`uncvrd[^14]❓
+  - `~IElections~`uncvrd[^2]❓
+  - `~ITTLStorage~`uncvrd[^3]❓
+    - Interface with methods InsertIfNotExist(), CompareAndSwap(), CompareAndDelete(). To be injected into IElection implementation.
+  - `~elections~`uncvrd[^4]❓
+    - Implementation of IELections
+  - `~ElectionsTestSuite~`uncvrd[^5]❓
+    - Single test function that runs multiple tests against IELection
+    - It will be used from the components that provide ITTLStorage (pkg/vvm/storage)
+  - `~ElectionsTest~`uncvrd[^6]❓
+    - Test that uses `ElectionTestSuite` to test `elections`
 - **pkg/vvm/storage**
-  - `ISysVvmStorage` interface definition
-  - `~ITTLStorage~`uncvrd[^13]❓
-  - Implementations of all possible `ITTLStorage` interfaces
+  - `~ISysVvmStorage~`uncvrd[^7]❓
+    - Interface to work with sysvvm keyspace
+  - `~NewElectionsTTLStorage~`uncvrd[^8]❓
+    - Implementation of ITTLStorage
     - `NewElectionsTTLStorage(ISysVvmStorage) elections.ITTLStorage[TTLStorageImplKey, string]`
-      - Purpose: interface with methods InsertIfNotExist(), CompareAndSwap(), CompareAndDelete(). To be injected.`
-      - uses `keyspace(sysvvm)` and keys prefixed with `pKeyPrefix_VVMLeader = 1`
-  - incapsulates and guards all possible values of `pKeyPrefix`
+    - uses `keyspace(sysvvm)` and keys prefixed with `pKeyPrefix_VVMLeader = 1`
+  - Incapsulates possible values of `pKeyPrefix`
+  - `~TTLImplementationTests~`uncvrd[^9]❓
+    - Suite of tests that uses ielections.ElectionsTestSuite
+  - `~KeyPrefix_VVMLeader~`uncvrd[^10]❓
+    - Prefix to store leadership data in keyspace(sysvvm)
 - **pkg/vvm/impl_orch.go**, **pkg/vvm/impl_orch_test.go**
   - orchestration implementation and tests
+
 ---
 
 ### VVM
@@ -131,12 +140,12 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation. (exc
 
 #### VVM.Provide()
 
-- `~VVM.Provide~`uncvrd[^3]❓
+- `~VVM.Provide~`uncvrd[^11]❓
 - wire `vvm.VVM`: consturct apps, interfaces, Service Pipeline. Do not launch anything
 
 #### VVM.Shutdown()
 
-- `~VVM.Shutdown~`uncvrd[^7]❓
+- `~VVM.Shutdown~`uncvrd[^12]❓
 - not launched -> panic
 - close(VVM.vvmShutCtx)
 - Wait for `VVM.shutdownedCtx`
@@ -144,7 +153,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation. (exc
 
 #### VVM.Launch() problemCtx
 
-- `~VVM.LaunchVVM~`uncvrd[^15]❓
+- `~VVM.LaunchVVM~`uncvrd[^13]❓
 - launched already -> panic
 - vvmProblemCtx := VVM.Launch(leadershipAcquisitionDuration)
   - go Shutdowner
@@ -159,7 +168,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation. (exc
 
 #### Shutdowner: go VVM.shutdowner()
 
-- `~VVM.Shutdowner~`uncvrd[^8]❓
+- `~VVM.Shutdowner~`uncvrd[^14]❓
 - Wait for `VVM.vvmShutCtx`
 - Shutdown everything but `LeadershipMonitor` and `elections`
   - close `VVM.servicesShutCtx` and wait for services to stop
@@ -171,7 +180,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation. (exc
 
 #### LeadershipMonitor: go VVM.leadershipMonitor()
 
-- `~LeadershipMonitor~`uncvrd[^10]❓
+- `~LeadershipMonitor~`uncvrd[^15]❓
 - wait for any of:
   - `VVM.leadershipCtx` (leadership loss)
     - go `killerRoutine`
@@ -186,7 +195,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation. (exc
 
 #### VVM.tryToAcquireLeadership(leadershipDurationSecods, leadershipAquisitionDuration)
 
-- `~VVM.tryToAcquireLeadership~`uncvrd[^4]❓
+- `~VVM.tryToAcquireLeadership~`uncvrd[^17]❓
 - Try to acquire leadership during `leadershipAcquisitionDuration`
   - obtain an instance of `elections.IElections`: Interface to acquire and manage leadership for a given key
     - store `VVM.electionsCleanup`
@@ -201,7 +210,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation. (exc
 
 #### VVM.updateProblem(err)
 
-- `~VVM.updateProblem~`uncvrd[^11]❓
+- `~VVM.updateProblem~`uncvrd[^18]❓
 - synchronized via `VVM.problemErrOnce`
   - Close `VVM.problemCtx`
   - Write error to `VVM.problemErrCh` using `VVM.problemErrOnce`
@@ -221,19 +230,24 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation. (exc
 ### Automatic
 
 - Basic
-  - `~VVM.test.Basic~`uncvrd[^5]❓
+  - `~VVM.test.Basic~`uncvrd[^19]❓
   - provide and launch VVM1
   - wait for successful VVM1 start
   - provide and launch VVM2
   - wait for VVM2 start failure
+- Tests for TTLStorage providers
+  - `~VVM.test.TTLStorageMem~`uncvrd[^20]❓
+  - `~VVM.test.TTLStorageCas~`uncvrd[^21]❓
+  - `~VVM.test.TTLStorageDyn~`uncvrd[^22]❓
+  - `~VVM.test.TTLStorageBbolt~`uncvrd[^23]❓
 - Automatic shutdown on leadership loss
-  - `~VVM.test.Shutdown~`uncvrd[^12]❓
+  - `~VVM.test.Shutdown~`uncvrd[^24]❓
   - provide and launch a VVM
   - update ttlstorage modify the single value
   - bump mock time
   - expect the VVM shutdown
 - Cancel the leadership on manual shutdown
-  - `~VVM.test.CancelLeadership~`uncvrd[^6]❓
+  - `~VVM.test.CancelLeadership~`uncvrd[^25]❓
   - provide and launch a VVM
   - shut it down on the launcher side
   - expect that the leadership in canceled
@@ -262,19 +276,28 @@ Flow
 
 ## Footnotes
 
-[^15]: `[~server.design.orch/VVM.LaunchVVM~impl]`
-[^8]: `[~server.design.orch/VVM.Shutdowner~impl]`
-[^11]: `[~server.design.orch/VVM.updateProblem~impl]`
-[^2]: `[~server.design.orch/elections~impl]`
-[^7]: `[~server.design.orch/VVM.Shutdown~impl]`
-[^12]: `[~server.design.orch/VVM.test.Shutdown~impl]`
-[^14]: `[~server.design.orch/VVMLeaderPrefix~impl]`
-[^3]: `[~server.design.orch/VVM.Provide~impl]`
-[^4]: `[~server.design.orch/VVM.tryToAcquireLeadership~impl]`
-[^5]: `[~server.design.orch/VVM.test.Basic~impl]`
 [^1]: `[~server.design.orch/VVMConfig~impl]`
-[^9]: `[~server.design.orch/IELections~impl]`
-[^13]: `[~server.design.orch/ITTLStorage~impl]`
-[^10]: `[~server.design.orch/LeadershipMonitor~impl]`
-[^6]: `[~server.design.orch/VVM.test.CancelLeadership~impl]`
+[^2]: `[~server.design.orch/IElections~impl]`
+[^3]: `[~server.design.orch/ITTLStorage~impl]`
+[^4]: `[~server.design.orch/elections~impl]`
+[^5]: `[~server.design.orch/ElectionsTestSuite~impl]`
+[^6]: `[~server.design.orch/ElectionsTest~impl]`
+[^7]: `[~server.design.orch/ISysVvmStorage~impl]`
+[^8]: `[~server.design.orch/NewElectionsTTLStorage~impl]`
+[^9]: `[~server.design.orch/TTLImplementationTests~impl]`
+[^10]: `[~server.design.orch/KeyPrefix_VVMLeader~impl]`
+[^11]: `[~server.design.orch/VVM.Provide~impl]`
+[^12]: `[~server.design.orch/VVM.Shutdown~impl]`
+[^13]: `[~server.design.orch/VVM.LaunchVVM~impl]`
+[^14]: `[~server.design.orch/VVM.Shutdowner~impl]`
+[^15]: `[~server.design.orch/LeadershipMonitor~impl]`
 [^16]: `[~server.design.orch/processKillThreshold~impl]`
+[^17]: `[~server.design.orch/VVM.tryToAcquireLeadership~impl]`
+[^18]: `[~server.design.orch/VVM.updateProblem~impl]`
+[^19]: `[~server.design.orch/VVM.test.Basic~impl]`
+[^20]: `[~server.design.orch/VVM.test.TTLStorageMem~impl]`
+[^21]: `[~server.design.orch/VVM.test.TTLStorageCas~impl]`
+[^22]: `[~server.design.orch/VVM.test.TTLStorageDyn~impl]`
+[^23]: `[~server.design.orch/VVM.test.TTLStorageBbolt~impl]`
+[^24]: `[~server.design.orch/VVM.test.Shutdown~impl]`
+[^25]: `[~server.design.orch/VVM.test.CancelLeadership~impl]`
