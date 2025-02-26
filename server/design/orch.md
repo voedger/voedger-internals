@@ -82,12 +82,14 @@ VVMHost creates a VVM instance and launches it. VVM acquires leadership and star
   - `~ITTLStorage~`uncvrd[^3]❓
     - Interface with methods InsertIfNotExist(), CompareAndSwap(), CompareAndDelete(). To be injected into IElection implementation.
   - `~elections~`uncvrd[^4]❓
-    - Implementation of IELections
+    - Implementation of IElections
   - `~ElectionsTestSuite~`uncvrd[^5]❓
-    - Single test function that runs multiple tests against IELection
+    - Single test function that runs multiple tests against `IElections`
     - It will be used from the components that provide ITTLStorage (pkg/vvm/storage)
+  - `~ttlStorageMock~`uncvrd[^26]❓
+    - Mock implementation of ITTLStorage
   - `~ElectionsTest~`uncvrd[^6]❓
-    - Test that uses `ElectionTestSuite` to test `elections`
+    - Test that uses `ElectionsTestSuite` and ttlStorageMock to test `elections`
 - **pkg/vvm/storage**
   - `~ISysVvmStorage~`uncvrd[^7]❓
     - Interface to work with sysvvm keyspace
@@ -235,7 +237,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation. (exc
   - wait for successful VVM1 start
   - provide and launch VVM2
   - wait for VVM2 start failure
-- Tests for TTLStorage providers
+- Tests for TTLStorage providers (using ielections.ElectionsTestSuite)
   - `~VVM.test.TTLStorageMem~`uncvrd[^20]❓
   - `~VVM.test.TTLStorageCas~`uncvrd[^21]❓
   - `~VVM.test.TTLStorageDyn~`uncvrd[^22]❓
@@ -301,3 +303,4 @@ Flow
 [^23]: `[~server.design.orch/VVM.test.TTLStorageBbolt~impl]`
 [^24]: `[~server.design.orch/VVM.test.Shutdown~impl]`
 [^25]: `[~server.design.orch/VVM.test.CancelLeadership~impl]`
+[^26]: `[~server.design.orch/ttlStorageMock~impl]`
