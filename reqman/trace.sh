@@ -2,84 +2,40 @@
 
 set -Eeuo pipefail
 
-check_java_executable() {
-    if ! command -v java &> /dev/null; then
-        echo "Error: 'java' is not installed or not in the PATH." >&2
-        exit 1
-    fi
-}
+# Default command
+COMMAND="help"
 
-check_java_version() {
-    local major="$1"
-    local minor="$2"
+# Parse command
+if [[ $# -gt 0 && ! "$1" =~ ^-- ]]; then
+    COMMAND="$1"
+    shift
+fi
 
-    # Ensure both parameters are provided
-    if [ -z "$major" ] || [ -z "$minor" ]; then
-        echo "Error: Both major and minor Java versions must be specified." >&2
-        exit 1
-    fi
+# Parse arguments
+DRY_RUN=""
+LOCAL_VOEDGER=""
 
-    # Check if 'java' is executable
-    if ! command -v java &> /dev/null; then
-        echo "Error: 'java' is not installed or not in the PATH." >&2
-        exit 1
-    fi
-
-    # Get the Java version
-    local javaVersion
-    javaVersion=$(java -version 2>&1 | awk -F '"' '/version/ {print $2}')
-    
-    # Extract major and minor versions from Java version string
-    local currentMajor currentMinor
-    currentMajor=$(echo "$javaVersion" | cut -d'.' -f1)
-    if [[ "$currentMajor" == "1" ]]; then
-        currentMajor=$(echo "$javaVersion" | cut -d'.' -f2)
-        currentMinor=$(echo "$javaVersion" | cut -d'.' -f3)
-    else
-        currentMinor=$(echo "$javaVersion" | cut -d'.' -f2)
-    fi
-
-    # Ensure numeric comparison
-    if ! [[ "$currentMajor" =~ ^[0-9]+$ ]] || ! [[ "$currentMinor" =~ ^[0-9]+$ ]]; then
-        echo "Error: Unable to parse Java version. Detected version: $javaVersion" >&2
-        exit 1
-    fi
-
-    # Check if the current version is at least the required version
-    if (( currentMajor > major )) || { (( currentMajor == major )) && (( currentMinor >= minor )); }; then
-        echo "Java version $javaVersion is sufficient (>= $major.$minor)."
-    else
-        echo "Error: Java version $javaVersion is less than the required $major.$minor." >&2
-        exit 1
-    fi
-}
-
-# Example usage
-# check_java_version 17 0
-
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --dry-run)
+            DRY_RUN="--dry-run"
+            shift
+            ;;
+        --local-voedger)
+            LOCAL_VOEDGER="true"
+            shift
+            ;;
+        *)
+            echo "Error: Unknown flag $1" >&2
+            exit 1
+            ;;
+    esac
+done
 
 create_work_folder() {
     if [ ! -d ".work" ]; then
         mkdir .work
         echo ".work folder created."
-    fi
-}
-download_openfasttrace() {
-    # Define variables
-    WORK_DIR=".work"
-    JAR_FILE="openfasttrace-4.1.0.jar"
-    JAR_URL="https://github.com/itsallcode/openfasttrace/releases/download/4.1.0/openfasttrace-4.1.0.jar"
-
-    # Check if the jar file already exists
-    if [ ! -f "$WORK_DIR/$JAR_FILE" ]; then
-        echo "Downloading $JAR_FILE to $WORK_DIR..."
-        curl -L -o "$WORK_DIR/$JAR_FILE" "$JAR_URL"
-        if [ $? -eq 0 ]; then
-            echo "$JAR_FILE downloaded successfully."
-        else
-            echo "Error: Failed to download $JAR_FILE." >&2
-            exit 1
-        fi
     fi
 }
 actualize_repo() {
@@ -128,22 +84,40 @@ actualize_repo() {
 }
 
 tracereqs() {
-
-    reportFile=".work/report.html"
-
-    java -jar ".work/openfasttrace-4.1.0.jar" trace \
-    --log-level INFO \
-    --output-file "$reportFile" \
-    --output-format html \
-    "../server" \
-    "../concepts"
-    echo "Trace successful, see report at $reportFile"
-
+    local voedger_path="../voedger"
+    if [[ -z "$LOCAL_VOEDGER" ]]; then
+        voedger_path="../voedger-internals/reqman/.work/repos/voedger"
+    fi
+    go run -C ../../reqmd . -v trace ${DRY_RUN:-} ../voedger-internals "$voedger_path"
 }
 
-check_java_version 17 0
-create_work_folder
-download_openfasttrace
-actualize_repo "https://github.com/voedger/voedger"
-tracereqs
+show_help() {
+    echo "Usage: $0 [command] [flags]"
+    echo ""
+    echo "Commands:"
+    echo "  help         Show this help message (default)"
+    echo "  trace        Trace requirements coverage"
+    echo ""
+    echo "Flags:"
+    echo "  --dry-run       Run in dry-run mode"
+    echo "  --local-voedger Use local voedger repository"
+}
+
+case "$COMMAND" in
+    help)
+        show_help
+        ;;
+    trace)
+        create_work_folder
+        if [[ -z "$LOCAL_VOEDGER" ]]; then
+            actualize_repo "https://github.com/voedger/voedger"
+        fi
+        tracereqs
+        ;;
+    *)
+        echo "Error: Unknown command $COMMAND" >&2
+        show_help
+        exit 1
+        ;;
+esac
 

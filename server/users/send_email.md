@@ -20,3 +20,6 @@ As Application, I want to send an Email to a User.
 
 **Behavior:**
     - Update UserProfileWS.UserProfile.Email
+
+[^~SendEMail.SendEmailToUser~]: `[~server.users/SendEMail.SendEmailToUser~impl]`
+[^~aaaaa~]: `[~server.users/aaaaa~impl]`

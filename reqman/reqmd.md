@@ -1,2 +1,0 @@
-# Requirements Management with reqmd
-
