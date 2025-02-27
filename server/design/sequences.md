@@ -1,9 +1,15 @@
+---
+reqmd.package: server.design.sequences
+---
+
 # Sequences
 
 Sequence is a monotonic increasing list of numbers.
+
 - PLogOffsetSequence
 - WLogOffsetSequence
-- CDocIDSequence
+- CRecordIDSequence
+- OWRecordDSequence
 
 ## Motivation
 
@@ -14,52 +20,52 @@ Sequence is a monotonic increasing list of numbers.
 ### Structs 
 
 - IDBatch
-    - PLogOffset
-    - `map[{WSID, QName}, istructs.RecordID]`
+  - PLogOffset
+  - `map[{WSID, QName}, istructs.RecordID]`
 
 ### NextPLogOffset(PartitionID, duration) Offset
 
 - Actor: CP
 - When: CP needs to process a request
 - Flow:
-    - `Status[PartitionID] == Clean && !IsRecoveryRunning(PartitionID)`):
-        - Set `Status[PartitionID]` to `InProcess`
-        - Return NextPLogOffset
-    - `IsRecoveryRunning(PartitionID)`: 
-        - Wait for duration
-        - If wait fails, return 0
-        - Repeat Flow
-    - `Status[PartitionID] == InProcess`: panic
+  - `Status[PartitionID] == Clean && !IsRecoveryRunning(PartitionID)`):
+    - Set `Status[PartitionID]` to `InProcess`
+    - Return NextPLogOffset
+  - `IsRecoveryRunning(PartitionID)`: 
+    - Wait for duration
+    - If wait fails, return 0
+    - Repeat Flow
+  - `Status[PartitionID] == InProcess`: panic
 
 ### NextInSequence(PartitionID, WSID, QName) ID
 
 - Actor: CP
 - When: CP needs the next number in a sequence.
 - Flow:
-    - `Status[PartitionID] == InProcess`: 
-        - Generate the next ID. ReadIDView through cache.
-    - panic
+  - `Status[PartitionID] == InProcess`: 
+    - Generate the next ID. ReadIDView through cache.
+  - panic
 
 ### Flush(PartitionID) IDBatch
 
 - Actor: CP
 - When: After CP saves the PLog record successfully
 - Flow
-    - `Status[PartitionID] == InProcess`:
-        - Include all generated IDs into IDBatch and send it to the flusher routine for FlushBatch
-        - `Status[PartitionID] = Clean`
-    - panic
+  - `Status[PartitionID] == InProcess`:
+    - Include all generated IDs into IDBatch and send it to the flusher routine for FlushBatch
+    - `Status[PartitionID] = Clean`
+  - panic
 
 ### Invalidate(PartitionID)
 
 - Actor: CP
 - When: After CP fails to save the PLog record
 - Flow:
-    - `Status[PartitionID] == Dirty`:
-        - ???
-        - ???
-    - panic
-    - Flow: `startRecovery(PartitionID)`
+  - `Status[PartitionID] == Dirty`:
+    - ???
+    - ???
+  - panic
+  - Flow: `startRecovery(PartitionID)`
 
 ### startRecovery(PartitionID)
 
@@ -78,18 +84,17 @@ Sequence is a monotonic increasing list of numbers.
 ### recovery(PartitionID)
 
 Flow:
+
   - Should read last saved NextPLogOffset, read all events starting from this offset and update IDView
 
 ## Architecture
 
 - pkg/isequencer
-    - ISequencer
-- pkg/isequencer/sequencer
-    - provide: Factory(PartitionID) cleanup()
-        - Start recovery
-        - cleanup should stop flush/recovery and wait
+  - ISequencer
+  - New(PartitionID???, reader ReadIDView, writer func(batch IDBatch) ISenquencer
+    - Instantiated by appparts.AppPartitions when new partition is deployed
+  - sequencer: implementation of ISequencer
 - appparts.AppPartitions
-    - IAppPqrtition.Sequencer() ISequencer
-    - On deploy starts recovery
+  - IAppPartition.Sequencer(PartitionID) ISequencer
 - QNames
-    - appdef/sys
+  - appdef/sys
