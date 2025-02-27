@@ -20,6 +20,7 @@
   - [N3 Cluster](server/design/c2.n3.md)
   - [N5 Cluster](server/design/c2.n5.md)
   - [Orchestration](server/design/orch.md)
+  - [Sequences](server/design/sequences.md)
   - Packages overview
     - [sys](server/design/pkgsys.md)
     - [registry](server/design/pkgregistry.md)
