@@ -17,7 +17,7 @@ Sequence is a monotonic increasing list of numbers.
 
 ## Use Cases
 
-### Structs 
+### Structs
 
 - IDBatch
   - PLogOffset
@@ -51,6 +51,7 @@ Sequence is a monotonic increasing list of numbers.
 - Actor: CP
 - When: After CP saves the PLog record successfully
 - Flow
+  - Fails if there are too many records to flush
   - `Status[PartitionID] == InProcess`:
     - Include all generated IDs into IDBatch and send it to the flusher routine for FlushBatch
     - `Status[PartitionID] = Clean`
@@ -59,7 +60,9 @@ Sequence is a monotonic increasing list of numbers.
 ### Invalidate(PartitionID)
 
 - Actor: CP
-- When: After CP fails to save the PLog record
+- When
+  - After CP fails to save the PLog record
+  - After Flush() fails
 - Flow:
   - `Status[PartitionID] == Dirty`:
     - ???
