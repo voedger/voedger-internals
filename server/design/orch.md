@@ -93,13 +93,20 @@ VVMHost creates a VVM instance and launches it. VVM acquires leadership and star
 - **pkg/vvm/storage**
   - `~ISysVvmStorage~`uncvrd[^7]❓
     - Interface to work with sysvvm keyspace
+  - `~TTLStorageTest~`uncvrd[^28]❓
+    - Test ITTLStorage using mem provider for IAppStorage
   - `~NewElectionsTTLStorage~`uncvrd[^8]❓
     - Implementation of ITTLStorage
     - `NewElectionsTTLStorage(ISysVvmStorage) elections.ITTLStorage[TTLStorageImplKey, string]`
     - uses `keyspace(sysvvm)` and keys prefixed with `pKeyPrefix_VVMLeader = 1`
   - Incapsulates possible values of `pKeyPrefix`
-  - `~TTLImplementationTests~`uncvrd[^9]❓
-    - Suite of tests that uses ielections.ElectionsTestSuite
+  - `~ElectionsByDriverTests~`uncvrd[^9]❓
+    - Test IELections using TTLStorage backed by different IAppStorage drivers
+    - `ielections.ElectionsTestSuite`
+    - `~VVM.test.TTLStorageMem~`uncvrd[^20]❓
+    - `~VVM.test.TTLStorageCas~`uncvrd[^21]❓
+    - `~VVM.test.TTLStorageDyn~`uncvrd[^22]❓
+    - `~VVM.test.TTLStorageBbolt~`uncvrd[^23]❓
   - `~KeyPrefix_VVMLeader~`uncvrd[^10]❓
     - Prefix to store leadership data in keyspace(sysvvm)
 - **pkg/vvm/impl_orch.go**, **pkg/vvm/impl_orch_test.go**
@@ -237,11 +244,6 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation. (exc
   - wait for successful VVM1 start
   - provide and launch VVM2
   - wait for VVM2 start failure
-- Tests for TTLStorage providers (using ielections.ElectionsTestSuite)
-  - `~VVM.test.TTLStorageMem~`uncvrd[^20]❓
-  - `~VVM.test.TTLStorageCas~`uncvrd[^21]❓
-  - `~VVM.test.TTLStorageDyn~`uncvrd[^22]❓
-  - `~VVM.test.TTLStorageBbolt~`uncvrd[^23]❓
 - Automatic shutdown on leadership loss
   - `~VVM.test.Shutdown~`uncvrd[^24]❓
   - provide and launch a VVM
@@ -306,3 +308,4 @@ Flow
 [^25]: `[~server.design.orch/VVM.test.CancelLeadership~impl]`
 [^26]: `[~server.design.orch/ttlStorageMock~impl]`
 [^27]: `[~server.design.orch/VVM.test.ManualResearch~impl]`
+[^28]: `[~server.design.orch/TTLStorageTest~impl]`
