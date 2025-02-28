@@ -1,19 +1,15 @@
 # Requirements Management
 
-Requirements management using [reqmd](https://github.com/voedger/reqmd) tool.
+Requirements tracing using [reqmd](https://github.com/voedger/reqmd) tool.
 
-## Motivation
-
-- [Requirements management #2782](https://github.com/voedger/voedger/issues/2782)
-
-## Scripts to manage requirements tracing and coverage
+## Scripts to manage requirements tracing and coverage.
 
 ### Prerequisites
 
 - Bash shell
 - Git
 - Go environment
-- Repos `https://github.com/voedger/reqmd` and  `https://github.com/voedger/voedger` are cloned into the same directory as `https://github.com/voedger/voedger-internals` repository
+- Repos `https://github.com/voedger/reqmd` and  `https://github.com/voedger/voedger` are cloned in the same directory as `https://github.com/voedger/voedger-internals` repository
 
 ```text
 .
@@ -46,10 +42,9 @@ Requirements management using [reqmd](https://github.com/voedger/reqmd) tool.
 
 Shorthand scripts for common operations:
 
-- `trace-dry.sh` - Use --dry-run mode
-- `trace-loc.sh` - Trace using the local voedger repository
-- `trace-loc-dry.sh` - Trace using the local voedger repository and --dry-run mode
-- `trace-trace.sh` - just run `bash trace.sh trace`
+- `trace-d.sh` - Trace with dry run mode
+- `trace-l.sh` - Trace using local voedger repository
+- `trace-l-d.sh` - Trace using local voedger repository in dry run mode
 
 ## Script behavior
 

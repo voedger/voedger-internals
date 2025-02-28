@@ -1,39 +1,42 @@
 ---
 reqmd.package: server.design.sequences
 ---
+
 # Sequences
 
-This document describes sequence mechanisms in the Voedger platform.
+This document outlines the design for sequence number management within the Voedger platform.
 
 ## Overview
 
-Sequence is a monotonic increasing list of numbers.
+A sequence is defined as a monotonically increasing series of numbers.
 
-We need to implement the following sequences:
+The following sequence types are to be implemented in the beginning:
 
-- PLogOffsetSequence
-- WLogOffsetSequence
-- CRecordIDSequence
-- OWRecordDSequence
+- PLog Offset Sequence
+- WLog Offset Sequence
+- CRecord ID Sequence
+- OWRecord ID Sequence
 
 ## Motivation
 
-- Currently data for all sequences is loaded into memory for all workspaces
-- Sequences data is loaded during the so called "recovery process" when the command processor is started
-- "Recovery process" is a time consuming operation since the whole PLog is read and processed to identify the last used sequence numbers
+The current implementation has the following drawbacks:
 
-The following flaws shall be addressed:
+- Sequence data for all workspaces is loaded into memory, leading to potentially high memory consumption.
+- Sequence data is loaded during the "recovery process" at command processor startup.
+- The "recovery process" can be time-consuming, as it involves reading and processing the entire PLog to determine the last used sequence numbers.
 
-- Uncontrollable memory usage (proportional to the number of workspaces)
-- Long recovery time (proportional to the number of events in the PLog)
+The following issues must be addressed:
+
+- Uncontrolled memory usage that scales with the number of workspaces.
+- Long recovery times that scale with the number of events in the PLog.
 
 ## Solution overview
 
-- For each application partition keeps sequences data in the projection (`SeqData`)
-- `SeqData` has `SeqDataOffset` attribute that specifies the offset in the PLog partion for which SeqData is actual
-- This `SeqData` is read though the MRU cache and actualized in the background when new events are saved to the PLog
+- Each application partition will maintain sequence data in a projection (`SeqData`).
+- `SeqData` will include a `SeqDataOffset` attribute, indicating the PLog partition offset for which the `SeqData` is valid.
+- `SeqData` will be accessed through an MRU cache and updated in the background as new events are written to the PLog.
 
-## Issues
+## Related Issues
 
 This document addresses the following issues:
 
@@ -55,7 +58,7 @@ This document addresses the following issues:
   - `Status[PartitionID] == Clean && !IsRecoveryRunning(PartitionID)`):
     - Set `Status[PartitionID]` to `InProcess`
     - Return NextPLogOffset
-  - `IsRecoveryRunning(PartitionID)`: 
+  - `IsRecoveryRunning(PartitionID)`:
     - Wait for duration
     - If wait fails, return 0
     - Repeat Flow
