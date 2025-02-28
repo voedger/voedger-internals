@@ -66,7 +66,7 @@ VVMHost creates a VVM instance and launches it. VVM acquires leadership and star
 
 - **pkg/vvm**
 
-  - `~VVMConfig~`covered[^1]✅
+  - `~VVMConfig.Orch~`covered[^1]✅
   ```golang
   type NumVVM uint32
   type VVMConfig {
@@ -280,7 +280,7 @@ Flow
 
 ## Footnotes
 
-[^1]: `[~server.design.orch/VVMConfig~impl]` [pkg/vvm/types.go:133:impl](https://github.com/voedger/voedger/blob/6cdaf984d07a84e3e0a24c3bfc7e5e0fc3850e78/pkg/vvm/types.go#L133)
+[^1]: `[~server.design.orch/VVMConfig.Orch~impl]` [pkg/vvm/types.go:173:impl](https://github.com/voedger/voedger/blob/c5f2d9e5b07bc7d5afba51af5df5da842d157c03/pkg/vvm/types.go#L173)
 [^2]: `[~server.design.orch/IElections~impl]` [pkg/ielections/interface.go:12:impl](https://github.com/voedger/voedger/blob/6cdaf984d07a84e3e0a24c3bfc7e5e0fc3850e78/pkg/ielections/interface.go#L12)
 [^3]: `[~server.design.orch/ITTLStorage~impl]` [pkg/ielections/interface.go:26:impl](https://github.com/voedger/voedger/blob/6cdaf984d07a84e3e0a24c3bfc7e5e0fc3850e78/pkg/ielections/interface.go#L26)
 [^4]: `[~server.design.orch/elections~impl]` [pkg/ielections/impl.go:16:impl](https://github.com/voedger/voedger/blob/6cdaf984d07a84e3e0a24c3bfc7e5e0fc3850e78/pkg/ielections/impl.go#L16)
