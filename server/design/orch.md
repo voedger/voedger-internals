@@ -289,7 +289,7 @@ Flow
 [^6]: `[~server.design.orch/ElectionsTest~impl]`
 [^7]: `[~server.design.orch/ISysVvmStorage~impl]`
 [^8]: `[~server.design.orch/NewElectionsTTLStorage~impl]`
-[^9]: `[~server.design.orch/TTLImplementationTests~impl]`
+[^9]: `[~server.design.orch/ElectionsByDriverTests~impl]`
 [^10]: `[~server.design.orch/KeyPrefix_VVMLeader~impl]`
 [^11]: `[~server.design.orch/VVM.Provide~impl]`
 [^12]: `[~server.design.orch/VVM.Shutdown~impl]`
