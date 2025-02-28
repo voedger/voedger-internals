@@ -1,6 +1,15 @@
+---
+reqmd.package: server.design.sequences
+---
 # Sequences
 
+This document describes sequence mechanisms in the Voedger platform.
+
+## Overview
+
 Sequence is a monotonic increasing list of numbers.
+
+We need to implement the following sequences:
 
 - PLogOffsetSequence
 - WLogOffsetSequence
@@ -8,6 +17,25 @@ Sequence is a monotonic increasing list of numbers.
 - OWRecordDSequence
 
 ## Motivation
+
+- Currently data for all sequences is loaded into memory for all workspaces
+- Sequences data is loaded during the so called "recovery process" when the command processor is started
+- "Recovery process" is a time consuming operation since the whole PLog is read and processed to identify the last used sequence numbers
+
+The following flaws shall be addressed:
+
+- Uncontrollable memory usage (proportional to the number of workspaces)
+- Long recovery time (proportional to the number of events in the PLog)
+
+## Solution overview
+
+- For each application partition keeps sequences data in the projection (`SeqData`)
+- `SeqData` has `SeqDataOffset` attribute that specifies the offset in the PLog partion for which SeqData is actual
+- This `SeqData` is read though the MRU cache and actualized in the background when new events are saved to the PLog
+
+## Issues
+
+This document addresses the following issues:
 
 - [Sequences #3215](https://github.com/voedger/voedger/issues/3215)
 
