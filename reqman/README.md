@@ -46,9 +46,10 @@ Requirements management using [reqmd](https://github.com/voedger/reqmd) tool.
 
 Shorthand scripts for common operations:
 
-- `trace-d.sh` - Trace with dry run mode
-- `trace-l.sh` - Trace using local voedger repository
-- `trace-l-d.sh` - Trace using local voedger repository in dry run mode
+- `trace-dry.sh` - Use --dry-run mode
+- `trace-loc.sh` - Trace using the local voedger repository
+- `trace-loc-dry.sh` - Trace using the local voedger repository and --dry-run mode
+- `trace-trace.sh` - just run `bash trace.sh trace`
 
 ## Script behavior
 
