@@ -27,7 +27,7 @@ Sequence is a monotonic increasing list of numbers.
   - `Status[PartitionID] == Clean && !IsRecoveryRunning(PartitionID)`):
     - Set `Status[PartitionID]` to `InProcess`
     - Return NextPLogOffset
-  - `IsRecoveryRunning(PartitionID)`: 
+  - `IsRecoveryRunning(PartitionID)`:
     - Wait for duration
     - If wait fails, return 0
     - Repeat Flow
