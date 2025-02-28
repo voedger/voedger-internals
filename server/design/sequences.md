@@ -42,8 +42,8 @@ Sequence is a monotonic increasing list of numbers.
 - Actor: CP
 - When: CP needs the next number in a sequence.
 - Flow:
-  - `Status[PartitionID] == InProcess`: 
-    - Generate the next ID. ReadIDView through cache.
+  - `Status[PartitionID] == InProcess`:
+    - Generate the next ID. Read IDView (using reader) through (LRU cache + flushing queue).
   - panic
 
 ### Flush(PartitionID) IDBatch
@@ -83,19 +83,23 @@ Sequence is a monotonic increasing list of numbers.
 - Actor: flusher routine
 - Flow:
   - Save IDBatch to IDView
+  - Remove items from flushing queue
 
 ### recovery(PartitionID)
 
 Flow:
 
-  - Should read last saved NextPLogOffset, read all events starting from this offset and update IDView
+- Should read last saved NextPLogOffset, read all events starting from this offset and update IDView
 
 ## Architecture
 
 - pkg/isequencer
   - ISequencer
-  - New(PartitionID???, reader ReadIDView, writer func(batch IDBatch) ISenquencer
+  - New(PartitionID???, reader ReadIDView, writer func(batch IDBatch), recoverer(offset, flusher func(ctx, b *IDBatch))) ISenquencer
     - Instantiated by appparts.AppPartitions when new partition is deployed
+    - writer is used by flusher
+    - Immediately starts recovery in a separate routine
+      - flusher()
   - sequencer: implementation of ISequencer
 - appparts.AppPartitions
   - IAppPartition.Sequencer(PartitionID) ISequencer
