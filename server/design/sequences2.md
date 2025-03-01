@@ -46,7 +46,38 @@ This approach decouples memory usage from the total number of workspaces and tra
 
 ## Functional design
 
-- Application Partitions (AP): Application deployment/undeployment
+### isequences
+
+```go
+
+type SeqID = istructs.QNameID
+type Number = istructs.IDType
+type Offset = istructs.Offset
+
+type SeqValue struct {
+  ID    SeqID
+  Value Number
+}
+
+type SeqBatch struct {
+  Values []SeqValue // Unordered, non-unique
+  Offset Offset
+}
+
+type ISeqStorage interface {
+  ReadNumber(SeqID) (SeqNumber, error)
+
+  // ID in batch.Values are unique
+  WriteValues(batch SeqBatch) error
+  
+  // La
+  ReadLastOffset() (Offset, error)
+
+  Actualize(ctx, offset Offset) error
+}
+
+```
+
 
 ### Command processing
 
@@ -99,21 +130,6 @@ Actors
   - Instantiate `seqReader func[SeqID, SeqNumber comparable](seqID SeqID) SeqNumber, error`
   - Instantiate `seqActualizer func[](ctx, offset, flusher isequences.Flusher) error`
   - Instantiate `sequencer := isequence.New(partitionID, seqReader, seqActualizer)`
-
-#### isequences types
-
-- isequence.Reader: func[SeqID, SeqNumber comparable](seqID SeqID) SeqNumber, error
-- isequence.Writer: func(isequences.SequenceID) isequences.Number, error
-- isequence.Actualizer:
-  - Scans PLog from the given offset (inclusive) and flushes the encountered sequence values
-  - Can be called multiple times for the same partition
-- isequences.Flusher: func(ctx, b *isequences.SeqBatch) error
-- isequences.SeqBatch:
-  - Offset isequences.Offset
-  - Values []isequences.SeqValue // Unordered☝️
-- isequences.SeqValue:
-  - ID isequences.SequenceID
-  - Value isequences.Number
 
 ## References
 
