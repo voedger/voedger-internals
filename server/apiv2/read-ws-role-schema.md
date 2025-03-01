@@ -24,7 +24,7 @@ flowchart
 qpMessage>Query Message]:::G
 qp[Query Processor]:::G
 queryData[Query Data]:::S
-appPartition[[App Partition]]:::S
+appdef[[IAppDef]]:::S
 object[Object]:::S
 subgraph qp
     queryData[Query Data]:::S
@@ -33,9 +33,8 @@ qpMessage --> |has to specify role|QName:::S
 qpMessage --> |has to specify workspace|WorkspaceQName:::S
 QName --> |used by|queryData
 WorkspaceQName --> |used by|queryData
-qp --> |borrows|appPartition
-queryData --> |PublishedTypes|appPartition
-appPartition -.-> |types in callback|queryData
+queryData --> |"PublishedTypes(ws,role)"|appdef
+appdef -.-> |types in callback|queryData
 queryData --> |builds schema|object
 
 
@@ -47,9 +46,9 @@ classDef G fill:#ffffff15, stroke:#999, stroke-width:2px, stroke-dasharray: 5 5
 ```
 
 ```go
-type AllowedTypeCallback func(appdef.IType, []OperationKind) error
+type PublishedTypeCallback func(appdef.IType, []OperationKind) error
 
-type IAppPartition interface {
+type IWithPublishedTypes interface {
     /*
         PublishedTypes lists the resources available to the published role in the workspace and ancestors (including resources available to non-authenticated requests):
         - Documents
@@ -57,7 +56,12 @@ type IAppPartition interface {
         - Commands
         - Queries
     */
-    PublishedTypes(ws appdef.IWorkspace, role appdef.QName, callback AllowedTypeCallback) error
+    PublishedTypes(ws appdef.IWorkspace, role appdef.QName, callback PublishedTypeCallback) error
+}
+
+type IAppDef interface {
+    ...
+    IWithPublishedTypes
 }
 ```
 
