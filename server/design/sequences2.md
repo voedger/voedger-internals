@@ -104,7 +104,7 @@ Actors
 
 - isequence.Reader: func[SeqID, SeqNumber comparable](seqID SeqID) SeqNumber, error
 - isequence.Writer: func(isequences.SequenceID) isequences.Number, error
-- isequence.Actualizer: 
+- isequence.Actualizer:
   - Scans PLog from the given offset (inclusive) and flushes the encountered sequence values
   - Can be called multiple times for the same partition
 - isequences.Flusher: func(ctx, b *isequences.SeqBatch) error
