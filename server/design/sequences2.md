@@ -46,39 +46,6 @@ This approach decouples memory usage from the total number of workspaces and tra
 
 ## Functional design
 
-### isequences
-
-```go
-
-type SeqID = istructs.QNameID
-type Number = istructs.IDType
-type Offset = istructs.Offset
-
-type SeqValue struct {
-  ID    SeqID
-  Value Number
-}
-
-type SeqBatch struct {
-  Values []SeqValue // Unordered, non-unique
-  Offset Offset
-}
-
-type ISeqStorage interface {
-  ReadNumber(SeqID) (SeqNumber, error)
-
-  // ID in batch.Values are unique
-  WriteValues(batch SeqBatch) error
-  
-  // La
-  ReadLastOffset() (Offset, error)
-
-  Actualize(ctx, offset Offset) error
-}
-
-```
-
-
 ### Command processing
 
 Actors
@@ -93,10 +60,11 @@ Actors
 - Flow:
   - partitionID := ???
   - sequencer, err := IAppPartition.Sequencer(PartitionID) err
-  - nextPLogOffest, err := sequencer.Start(WSID)
-    - switch err
-      - case SeqDataActualizationInProgress
-        - Returns 503: "partition sequences actualization in progress"
+  - nextPLogOffest, ok, err := sequencer.Start(WSID)
+    - if !ok
+      - Actualization is in progress
+      - Flushing queue is full
+      - Returns 503: "server is busy"
 
 `~GetNextSequenceNumber~`
 
@@ -126,10 +94,88 @@ Actors
 `~DeployPartition.InstantiateSequencer~`
 
 - When: Partition with the `partitionID` is deployed
-- Flow
-  - Instantiate `seqReader func[SeqID, SeqNumber comparable](seqID SeqID) SeqNumber, error`
-  - Instantiate `seqActualizer func[](ctx, offset, flusher isequences.Flusher) error`
-  - Instantiate `sequencer := isequence.New(partitionID, seqReader, seqActualizer)`
+- Flow:
+  - Instantiate the implementation of the isequencer.ISeqStorage: `seqStorage isequencer.ISeqStorage`
+  - Instantiate `sequencer := isequencer.New(partitionID, seqStorage)`
+  - Save `sequencer` to some `map[partitionID]isequencer.Sequencer`
+
+### pkg/isequences
+
+```go
+
+type SeqID = istructs.QNameID
+type Number = istructs.IDType
+type Offset = istructs.Offset
+
+type SeqValue struct {
+  ID    SeqID
+  Value Number
+}
+
+type SeqBatch struct {
+  Values []SeqValue // Normally unordered, IDs are not unique.
+  Offset Offset
+}
+
+type ISeqStorage interface {
+  ReadNumber(SeqID) (SeqNumber, error)
+
+  // ID in batch.Values are unique
+  // Values must be written first, then Offset
+  WriteValues(batch SeqBatch) error
+  
+  // Last offset successfully written by WriteValues
+  ReadLastOffset() (Offset, error)
+
+  // Scan PLog from the given offset and send values to the batcher.
+  // Values are sent per event, unordered, IDs are not unique.
+  // Batcher is responsible for batching, ordering and uniqueness and uses ISeqStorage.WriteValues.
+  // Batcher can block the execution for some time but it terminates if the ctx is done.
+  // If ctx is done, the function must return immediately.
+  ActualizePLog(ctx, offset Offset, batcher func(ctx, batch SeqBatch) error) error
+}
+
+type ISequencer interface {
+
+  // Starts new sequences generation for the given WSID.
+  // Normal flow: increase the current value of the PLogOffset, return it and `true`.
+  // If generation is already in progress, returns `false`.
+  // If actualization is in progress, returns `false`.
+  // If the flushing queue is full, returns `false`.
+  Start(WSID) (plogOffset Offset, ok bool, err error)
+
+  // Returns the next sequence number for the given SeqID.
+  // If seqID is unknown, panics.
+  Next(seqID SeqID) (Number)
+
+  // Sends the current batch to the flushing queue and closes generation.
+  Flush()
+
+  // Closes generation and starts actualization process.
+  Actualize()
+}
+```
+
+## Technical design
+
+`~IAppPartition.Sequencer`~
+
+- Returns `isequencer.Sequencer` for the given `partitionID`
+
+`~ISequencer.Start.impl~`
+
+- Signature: ISequencer.Start(WSID) (nextPLogOffest Offset, ok bool, err error)
+- Flow:
+  - If actualization is in progress, return `false`
+  - If flushing queue is full, return `false`
+  - If sequencer.WSID !=0
+  - Increase the current value of the PLogOffset, return it and `true`
+
+`~ISequencer.Next~`
+
+`~ISequencer.Next~`
+
+- If actualization is in progress, returns `false`
 
 ## References
 
