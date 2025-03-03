@@ -106,21 +106,11 @@ Actors
 ```go
 // filepath: pkg/isequencer: interface.go
 
-type SeqID uint16
-type WSID uint64
-type Number uint64
-type Offset uint64
-
-type SeqValue struct {
-  ID    SeqID
-  Value Number
-}
-
-type SeqBatch struct {
-  WSID WSID
-  Values []SeqValue // Normally unordered, IDs are not unique.
-  PLogOffset Offset
-}
+type SeqID      uint16
+type WSType     uint16
+type WSID       uint16
+type Number     uint64
+type PLogOffset uint64
 
 type ISeqStorage interface {
   ReadNumber(WSID, SeqID) (Number, error)
@@ -130,7 +120,7 @@ type ISeqStorage interface {
   WriteValues(batch SeqBatch) error
   
   // Last offset successfully written by WriteValues
-  ReadLastOffset() (Offset, error)
+  ReadLastWrittenPLogOffset() (PLogOffset, error)
 
   // Scan PLog from the given offset and send values to the batcher.
   // Values are sent per event, unordered, IDs are not unique.
@@ -149,7 +139,8 @@ type ISequencer interface {
   // Returns `false` if:
   // - Actualization is in progress
   // - The number of unflushed values exceeds the maximum threshold
-  Start(WSID WSID) (plogOffset Offset, ok bool)
+  // If ok is true, the caller must call Flush() or Actualize() to complete the event processing.
+  Start(wsType WSType, wsID WSID) (plogOffset Offset, ok bool)
 
   // Returns the next sequence number for the given SeqID.
   // If seqID is unknown, panics.
@@ -173,15 +164,11 @@ type Params struct {
   
   // Sequences and their initial values.
   // Only these sequences are managed by the sequencer (ref. ErrUnknownSeqID).
-  SeqTypes map[SeqID]Number
+  SeqTypes map[WSType]map[SeqID]Number
 
   SeqStorage  ISeqStorage
 
-  // Maximum number of SeqValues in the flushing queue.
-  FlushingQueueSize int     // 10
-  // Maximum number of SeqValues in a batch.
-  MaxFlushingBatshSize int  // 100
-  // Maximum interval between flushes.
+  MaxNumUnflushedValues  // 500
   MaxFlushingInterval time.Duration // 500 * time.Millisecond
   // Size of the LRU cache, NumKey -> Number.
   LRUCacheSize int          // 100_000
@@ -208,31 +195,36 @@ import (
 type sequencer struct {
   params *Params
 
-  //
   lru *lru.Cache
 
   // To be flushed
-  processedNumbers map[NumKey]Number
-  processedNumbersMu sync.RWMutex
+  toBeFlushed map[NumKey]Number
+  toBeFlushedOffset PLogOffset
+  // Protects toBeFlushed and toBeFlushedOffset
+  toBeFlushedMu sync.RWMutex
 
   // Written by Next()
-  inprocNumbers map[NumKey]Number
+  inproc map[NumKey]Number
+  inprocOffset PLogOffset
 
   // Initialized by Start()
-  currentWSID WSID
+  currentWSID   WSID
+  currentWSType WSType
 }
 
-// Copies inprocNumbers to processedNumbers and clears inprocNumbers.
+// Copies s.inproc to s.toBeFlushed and clears s.inproc.
 func (s *sequencer) Flush() {
   // ...
 }
 
 // Flow:
-// - 
-// - Try to read value using:
+// - Validate processing status
+// - Get initialValue from s.params.SeqTypes and ensure that SeqID is known
+// - Try to obtain values using:
 //   - Try s.lru
-//   - Try s.inprocNumbers (use s.processedNumbersMu to protect)
+//   - Try s.inprocNumbers (use s.processedNumbersMu to synchronize)
 //   - Try s.params.SeqStorage.ReadNumber()
+//   - initialValue
 // - Increment value
 // - Write value to s.lru
 // - Write value to s.inprocNumbers
