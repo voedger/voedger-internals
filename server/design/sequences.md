@@ -60,7 +60,7 @@ Actors
 - Flow:
   - partitionID := ???
   - sequencer, err := IAppPartition.Sequencer(PartitionID) err
-  - nextPLogOffest, ok, err := 
+  - nextPLogOffest, ok, err := ???
     - if !oksequencer.Start(WSID)
       - Actualization is in progress
       - Flushing queue is full
