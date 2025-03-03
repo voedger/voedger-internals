@@ -29,7 +29,7 @@ As of March 1, 2025, the sequence implementation has several critical limitation
 
 - **Prolonged Startup Times**: During command processor initialization, a resource-intensive "recovery process" must read and process the entire PLog to determine the last used sequence numbers. This causes significant startup delays that worsen as event volume grows.
 
-The proposed redesign tackles these issues through intelligent caching, background updates, and optimized storage mechanisms that maintain sequence integrity while dramatically improving resource utilization and responsiveness.
+The proposed redesign addresses these issues through intelligent caching, background updates, and optimized storage mechanisms that maintain sequence integrity while dramatically improving resource utilization and responsiveness.
 
 ## Solution overview
 
@@ -40,7 +40,7 @@ The proposed approach implements a more efficient and scalable sequence manageme
 - **MRU Cache Implementation**: Sequence data will be accessed through a Most Recently Used (MRU) cache that prioritizes frequently accessed sequences while allowing less active ones to be evicted from memory.
 - **Background Updates**: As new events are written to the PLog, sequence data will be updated in the background, ensuring that the system maintains current sequence values without blocking operations.
 - **Batched Writes**: Sequence updates will be collected and written in batches to reduce I/O operations and improve throughput.
-- **Optimized Actualization**: The actualization process will use the stored `SeqDataOffset` to only process events since the last known valid state, dramatically reducing startup times.
+- **Optimized Actualization**: The actualization process will use the stored `SeqDataOffset` to process only events since the last known valid state, dramatically reducing startup times.
 
 This approach decouples memory usage from the total number of workspaces and transforms the recovery process from a linear operation dependent on total event count to one that only needs to process recent events since the last checkpoint.
 
@@ -95,13 +95,16 @@ Actors
 
 - When: Partition with the `partitionID` is deployed
 - Flow:
-  - Instantiate the implementation of the isequencer.ISeqStorage: `seqStorage isequencer.ISeqStorage`
+  - Instantiate the implementation of the `isequencer.ISeqStorage`: `seqStorage isequencer.ISeqStorage`
   - Instantiate `sequencer := isequencer.New(partitionID, seqStorage)`
   - Save `sequencer` to some `map[partitionID]isequencer.Sequencer`
 
-### pkg/isequencer: interface.go
+### pkg/isequencer
+
+#### interface.go
 
 ```go
+// filepath: pkg/isequencer: interface.go
 
 type SeqID uint16
 type WSID uint64
@@ -109,20 +112,20 @@ type Number uint64
 type Offset uint64
 
 type SeqValue struct {
-  WSID   WSID
   ID    SeqID
   Value Number
 }
 
 type SeqBatch struct {
+  WSID WSID
   Values []SeqValue // Normally unordered, IDs are not unique.
-  Offset Offset
+  PLogOffset Offset
 }
 
 type ISeqStorage interface {
-  ReadNumber(WSID, SeqID) (SeqNumber, error)
+  ReadNumber(WSID, SeqID) (Number, error)
 
-  // ID in batch.Values are unique
+  // IDs in batch.Values are unique
   // Values must be written first, then Offset
   WriteValues(batch SeqBatch) error
   
@@ -131,10 +134,10 @@ type ISeqStorage interface {
 
   // Scan PLog from the given offset and send values to the batcher.
   // Values are sent per event, unordered, IDs are not unique.
-  // Batcher is responsible for batching, ordering and uniqueness and uses ISeqStorage.WriteValues.
-  // Batcher can block the execution for some time but it terminates if the ctx is done.
+  // Batcher is responsible for batching, ordering, and ensuring uniqueness, and uses ISeqStorage.WriteValues.
+  // Batcher can block the execution for some time, but it terminates if the ctx is done.
   // If ctx is done, the function must return immediately.
-  ActualizePLog(ctx, offset Offset, batcher func(ctx, batch SeqBatch) error) error
+  ActualizePLog(ctx context.Context, offset Offset, batcher func(ctx context.Context, batch SeqBatch) error) error
 }
 
 // ISequencer methods must not be called concurrently.
@@ -146,7 +149,7 @@ type ISequencer interface {
   // If generation is already in progress, returns `false`.
   // If actualization is in progress, returns `false`.
   // If the flushing queue is full, returns `false`.
-  Start(WSID) (plogOffset Offset, ok bool)
+  Start(WSID WSID) (plogOffset Offset, ok bool)
 
   // Returns the next sequence number for the given SeqID.
   // If seqID is unknown, panics.
@@ -158,8 +161,8 @@ type ISequencer interface {
   Flush()
 
   // Panics if actualization is already in progress.
-  // If generation is in progress closes generation.
-  // If flusher() is running stops and waits for it.
+  // Panics if generation is not in progress.
+  // If flusher() is running, stops and waits for it.
   // Starts actualizer().
   Actualize()
 }
@@ -188,47 +191,52 @@ type LRUCacheKey struct {
   ID   SeqID
 }
 
-const (
-  // Maximum number of SeqValues in the flushing queue.
-  FlushingQueueSize = 10
-  // Maximum number of SeqValues in a batch.
-  MaxFlushingBatshSize = 100
-  // Maximum interval between flushes.
-  MaxFlushingInterval = 500 * time.Millisecond
-  // Size of the LRU cache, LRUCacheKey -> Number.
-  LRUCacheSize = 100_000
-)
 ```
-
-## Technical design
-
-### pkg/isequencer: implementation
 
 #### provide.go
 
 ```go
+// filepath: pkg/isequencer: provide.go
 
-// Cleanup function stops and waits flusher and actualizer.
+// seq is returned with started actualizer().
 func New(params *Params) (seq ISequencer, cleanup func(), err error) {
   sequencer := &sequencer{params: params}
   sequencer.flushingQueue = make(chan SeqBatch, params.FlushingQueueSize)
-  return sequencer, cleanup, nil
+  return sequencer, sequencer.cleanup, nil
 }
 ```
 
 #### impl.go
 
 ```go
-import "github.com/hashicorp/golang-lru/v2"
+// filepath: pkg/isequencer: impl.go
 
-// Sequencer is accessed by a single goroutine, no synchronization is needed.
+import (
+	"context"
+	"time"
+
+	"github.com/hashicorp/golang-lru/v2"
+)
+
 type sequencer struct {
   params *Params
   flushingQueue chan SeqBatch
-  lru *lru.Cache[SeqID, Number]
+  lru *lru.Cache[LRUCacheKey, Number]
+
+
+  // Values are inserted by Next() and removed by flusher().
+  // Is cleaned up by flusher
+  maxActiveNumbers map[LRUCacheKey]Number
+  maxActiveNumbersMu sync.RWMutex
+
+  // Initialized by Start().
   currentWSID WSID
-  currentPLogOffset Offset
-  currentBatch SeqBatch
+  currentBatch *SeqBatch
+}
+
+// cleanup function stops (and waits) flusher and actualizer if they are running.
+func (s *sequencer) cleanup() {
+  // ...
 }
 
 // Reads s.params.SeqStorage.ReadNumber() through s.lru.
@@ -236,9 +244,10 @@ func (s *sequencer) Next(seqID SeqID) (num Number, err error) {
   // ...
 }
 
-// Is called by 
+// Is called by
 func (s *sequencer) submitBatch() {
-  
+	// ...
+}
 
 // Actualizes PLog using seqStorage.ActualizePLog().
 // Error handling: log and loop.
@@ -249,12 +258,14 @@ func (s *sequencer) actualizer() {
 
 // Started by sequencer.actualize().
 // Reads from flushingQueue into a temporary flushBuffer.
-// flushBuffer keeps maximum Value for each {WSID, ID} pair and track the maximum Offset.
+// flushBuffer keeps maximum Value for each {WSID, ID} pair and tracks the maximum Offset.
 // If any of s.params.MaxFlushingBatshSize or s.params.MaxFlushingInterval is reached, flushes flushBuffer.
 func (s *sequencer) flusher() {
   // ...
 }
 ```
+
+## Technical design
 
 ### Components
 
