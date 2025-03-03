@@ -8,7 +8,7 @@ This document outlines the design for sequence number management within the Voed
 
 ## Background
 
-A **Sequence** in Voedger is defined as a monotonically increasing series of numbers.
+A **Sequence** in Voedger is defined as a monotonically increasing series of numbers. The platform provides a unified mechanism for sequence generation that ensures reliable, ordered number production.
 
 As of March 1, 2025, Voedger implements four specific sequence types using this mechanism:
 
@@ -25,7 +25,7 @@ These sequences ensure consistent ordering of operations, proper transaction man
 
 As of March 1, 2025, the sequence implementation has several critical limitations that impact system performance and scalability:
 
-- **Unbounded Memory Growth**: Sequence data for all workspaces is loaded into memory simultaneously, creating a direct correlation between memory usage and the number of workspaces. This approach becomes unsustainable as applications scale.
+- **Unbound Memory Growth**: Sequence data for all workspaces is loaded into memory simultaneously, creating a direct correlation between memory usage and the number of workspaces. This approach becomes unsustainable as applications scale.
 
 - **Prolonged Startup Times**: During command processor initialization, a resource-intensive "recovery process" must read and process the entire PLog to determine the last used sequence numbers. This causes significant startup delays that worsen as event volume grows.
 
@@ -37,7 +37,7 @@ The proposed approach implements a more efficient and scalable sequence manageme
 
 - **Projection-Based Storage**: Each application partition will maintain sequence data in a dedicated projection (`SeqData`), eliminating the need to load all sequence data into memory at once.
 - **Offset Tracking**: `SeqData` will include a `SeqDataOffset` attribute that indicates the PLog partition offset for which the stored sequence data is valid, enabling precise recovery and synchronization.
-- **LRU Cache Implementation**: Sequence data will be accessed through a Most Recently Used (LRU) cache that prioritizes frequently accessed sequences while allowing less active ones to be evicted from memory.
+- **MRU Cache Implementation**: Sequence data will be accessed through a Most Recently Used (MRU) cache that prioritizes frequently accessed sequences while allowing less active ones to be evicted from memory.
 - **Background Updates**: As new events are written to the PLog, sequence data will be updated in the background, ensuring that the system maintains current sequence values without blocking operations.
 - **Batched Writes**: Sequence updates will be collected and written in batches to reduce I/O operations and improve throughput.
 - **Optimized Actualization**: The actualization process will use the stored `SeqDataOffset` to only process events since the last known valid state, dramatically reducing startup times.
@@ -60,8 +60,8 @@ Actors
 - Flow:
   - partitionID := ???
   - sequencer, err := IAppPartition.Sequencer(PartitionID) err
-  - nextPLogOffest, ok, err := ???
-    - if !oksequencer.Start(WSID)
+  - nextPLogOffest, ok, err := sequencer.Start(WSID)
+    - if !ok
       - Actualization is in progress
       - Flushing queue is full
       - Returns 503: "server is busy"
@@ -135,25 +135,51 @@ type ISeqStorage interface {
   ActualizePLog(ctx, offset Offset, batcher func(ctx, batch SeqBatch) error) error
 }
 
+// ISequencer methods must not be called concurrently.
 type ISequencer interface {
 
   // Starts new sequences generation for the given WSID.
-  // Normal flow: increase the current value of the PLogOffset, return it and `true`.
+  // Normal flow: increase the current value of the PLogOffset, return this value together with `true`.
+  // Panics if generation is already in progress.
   // If generation is already in progress, returns `false`.
   // If actualization is in progress, returns `false`.
   // If the flushing queue is full, returns `false`.
-  Start(WSID) (plogOffset Offset, ok bool, err error)
+  Start(WSID) (plogOffset Offset, ok bool)
 
   // Returns the next sequence number for the given SeqID.
   // If seqID is unknown, panics.
-  Next(seqID SeqID) (Number)
+  // err: ErrUnknownSeqID
+  Next(seqID SeqID) (num Number, err error)
 
+  // Panics if generation is not in progress.
   // Sends the current batch to the flushing queue and closes generation.
   Flush()
 
-  // Closes generation and starts actualization process.
+  // Panics if actualization is slready in progress.
+  // If generation is in progress closes generation.
+  // If Flusher is running stop and wait for it.
+  // Starts Actualizer routine.
   Actualize()
 }
+
+type Params struct {
+  
+  // Sequences and their initial values.
+  // Only these sequences are managed by the sequencer (ref. ErrUnknownSeqID).
+  SeqTypes map[SeqID]Number
+
+  SeqStorage  ISeqStorage
+  FlushingQueueSize int
+}
+
+// Factory must call Actualize() first
+type Factory func (params *Params) (seq ISequencer, cleanup func(), err error)
+
+// Actualizer is started in a seperate goroutine by ISequencer.Actualize().
+// Flow:
+//   ReadLastOffset()
+type Actualizer func(ctx context.Context, seqStg ISeqStorage)
+
 ```
 
 ## Technical design
