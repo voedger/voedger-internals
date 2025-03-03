@@ -99,15 +99,17 @@ Actors
   - Instantiate `sequencer := isequencer.New(partitionID, seqStorage)`
   - Save `sequencer` to some `map[partitionID]isequencer.Sequencer`
 
-### pkg/isequences
+### pkg/isequencer: interface.go
 
 ```go
 
-type SeqID = istructs.QNameID
-type Number = istructs.IDType
-type Offset = istructs.Offset
+type SeqID uint16
+type WSID uint64
+type Number uint64
+type Offset uint64
 
 type SeqValue struct {
+  WSID   WSID
   ID    SeqID
   Value Number
 }
@@ -118,7 +120,7 @@ type SeqBatch struct {
 }
 
 type ISeqStorage interface {
-  ReadNumber(SeqID) (SeqNumber, error)
+  ReadNumber(WSID, SeqID) (SeqNumber, error)
 
   // ID in batch.Values are unique
   // Values must be written first, then Offset
@@ -155,13 +157,14 @@ type ISequencer interface {
   // Sends the current batch to the flushing queue and closes generation.
   Flush()
 
-  // Panics if actualization is slready in progress.
+  // Panics if actualization is already in progress.
   // If generation is in progress closes generation.
-  // If Flusher is running stop and wait for it.
-  // Starts Actualizer routine.
+  // If flusher() is running stops and waits for it.
+  // Starts actualizer().
   Actualize()
 }
 
+// Params for the ISequencer implementation.
 type Params struct {
   
   // Sequences and their initial values.
@@ -169,39 +172,95 @@ type Params struct {
   SeqTypes map[SeqID]Number
 
   SeqStorage  ISeqStorage
-  FlushingQueueSize int
+
+  // Maximum number of SeqValues in the flushing queue.
+  FlushingQueueSize int     // 10
+  // Maximum number of SeqValues in a batch.
+  MaxFlushingBatshSize int  // 100
+  // Maximum interval between flushes.
+  MaxFlushingInterval time.Duration // 500 * time.Millisecond
+  // Size of the LRU cache, LRUCacheKey -> Number.
+  LRUCacheSize int          // 100_000
 }
 
-// Factory must call Actualize() first
-type Factory func (params *Params) (seq ISequencer, cleanup func(), err error)
+type LRUCacheKey struct {
+  WSID WSID
+  ID   SeqID
+}
 
-// Actualizer is started in a seperate goroutine by ISequencer.Actualize().
-// Flow:
-//   ReadLastOffset()
-type Actualizer func(ctx context.Context, seqStg ISeqStorage)
-
+const (
+  // Maximum number of SeqValues in the flushing queue.
+  FlushingQueueSize = 10
+  // Maximum number of SeqValues in a batch.
+  MaxFlushingBatshSize = 100
+  // Maximum interval between flushes.
+  MaxFlushingInterval = 500 * time.Millisecond
+  // Size of the LRU cache, LRUCacheKey -> Number.
+  LRUCacheSize = 100_000
+)
 ```
 
 ## Technical design
 
+### pkg/isequencer: implementation
+
+#### provide.go
+
+```go
+
+// Cleanup function stops and waits flusher and actualizer.
+func New(params *Params) (seq ISequencer, cleanup func(), err error) {
+  sequencer := &sequencer{params: params}
+  sequencer.flushingQueue = make(chan SeqBatch, params.FlushingQueueSize)
+  return sequencer, cleanup, nil
+}
+```
+
+#### impl.go
+
+```go
+import "github.com/hashicorp/golang-lru/v2"
+
+// Sequencer is accessed by a single goroutine, no synchronization is needed.
+type sequencer struct {
+  params *Params
+  flushingQueue chan SeqBatch
+  lru *lru.Cache[SeqID, Number]
+  currentWSID WSID
+  currentPLogOffset Offset
+  currentBatch SeqBatch
+}
+
+// Reads s.params.SeqStorage.ReadNumber() through s.lru.
+func (s *sequencer) Next(seqID SeqID) (num Number, err error) {
+  // ...
+}
+
+// Is called by 
+func (s *sequencer) submitBatch() {
+  
+
+// Actualizes PLog using seqStorage.ActualizePLog().
+// Error handling: log and loop.
+// Starts flusher() routine.
+func (s *sequencer) actualizer() {
+  // ...
+}
+
+// Started by sequencer.actualize().
+// Reads from flushingQueue into a temporary flushBuffer.
+// flushBuffer keeps maximum Value for each {WSID, ID} pair and track the maximum Offset.
+// If any of s.params.MaxFlushingBatshSize or s.params.MaxFlushingInterval is reached, flushes flushBuffer.
+func (s *sequencer) flusher() {
+  // ...
+}
+```
+
+### Components
+
 `~IAppPartition.Sequencer`~
 
 - Returns `isequencer.Sequencer` for the given `partitionID`
-
-`~ISequencer.Start.impl~`
-
-- Signature: ISequencer.Start(WSID) (nextPLogOffest Offset, ok bool, err error)
-- Flow:
-  - If actualization is in progress, return `false`
-  - If flushing queue is full, return `false`
-  - If sequencer.WSID !=0
-  - Increase the current value of the PLogOffset, return it and `true`
-
-`~ISequencer.Next~`
-
-`~ISequencer.Next~`
-
-- If actualization is in progress, returns `false`
 
 ## References
 
