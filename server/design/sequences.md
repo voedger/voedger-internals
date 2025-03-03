@@ -8,7 +8,7 @@ This document outlines the design for sequence number management within the Voed
 
 ## Background
 
-A **Sequence** in Voedger is defined as a monotonically increasing series of numbers. The platform provides a unified mechanism for sequence generation that ensures reliable, ordered number production.
+A **Sequence** in Voedger is defined as a monotonically increasing series of numbers.
 
 As of March 1, 2025, Voedger implements four specific sequence types using this mechanism:
 
@@ -25,7 +25,7 @@ These sequences ensure consistent ordering of operations, proper transaction man
 
 As of March 1, 2025, the sequence implementation has several critical limitations that impact system performance and scalability:
 
-- **Unbound Memory Growth**: Sequence data for all workspaces is loaded into memory simultaneously, creating a direct correlation between memory usage and the number of workspaces. This approach becomes unsustainable as applications scale.
+- **Unbounded Memory Growth**: Sequence data for all workspaces is loaded into memory simultaneously, creating a direct correlation between memory usage and the number of workspaces. This approach becomes unsustainable as applications scale.
 
 - **Prolonged Startup Times**: During command processor initialization, a resource-intensive "recovery process" must read and process the entire PLog to determine the last used sequence numbers. This causes significant startup delays that worsen as event volume grows.
 
