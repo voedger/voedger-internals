@@ -37,7 +37,7 @@ The proposed approach implements a more efficient and scalable sequence manageme
 
 - **Projection-Based Storage**: Each application partition will maintain sequence data in a dedicated projection (`SeqData`), eliminating the need to load all sequence data into memory at once.
 - **Offset Tracking**: `SeqData` will include a `SeqDataOffset` attribute that indicates the PLog partition offset for which the stored sequence data is valid, enabling precise recovery and synchronization.
-- **MRU Cache Implementation**: Sequence data will be accessed through a Most Recently Used (MRU) cache that prioritizes frequently accessed sequences while allowing less active ones to be evicted from memory.
+- **LRU Cache Implementation**: Sequence data will be accessed through a Most Recently Used (LRU) cache that prioritizes frequently accessed sequences while allowing less active ones to be evicted from memory.
 - **Background Updates**: As new events are written to the PLog, sequence data will be updated in the background, ensuring that the system maintains current sequence values without blocking operations.
 - **Batched Writes**: Sequence updates will be collected and written in batches to reduce I/O operations and improve throughput.
 - **Optimized Actualization**: The actualization process will use the stored `SeqDataOffset` to only process events since the last known valid state, dramatically reducing startup times.
@@ -60,8 +60,8 @@ Actors
 - Flow:
   - partitionID := ???
   - sequencer, err := IAppPartition.Sequencer(PartitionID) err
-  - nextPLogOffest, ok, err := sequencer.Start(WSID)
-    - if !ok
+  - nextPLogOffest, ok, err := 
+    - if !oksequencer.Start(WSID)
       - Actualization is in progress
       - Flushing queue is full
       - Returns 503: "server is busy"
@@ -189,4 +189,4 @@ type ISequencer interface {
 
 ### History
 
-- [sequences initial design](https://github.com/voedger/voedger-internals/blob/2475814f7caa1d2d400a62a788ceda9b16d8de2a/server/design/sequences.md#L51)
+- [Initial design](https://github.com/voedger/voedger-internals/blob/2475814f7caa1d2d400a62a788ceda9b16d8de2a/server/design/sequences.md)
