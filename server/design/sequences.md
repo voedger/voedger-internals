@@ -143,12 +143,12 @@ type ISeqStorage interface {
 // ISequencer methods must not be called concurrently.
 type ISequencer interface {
 
-  // Starts new sequences generation for the given WSID.
-  // Normal flow: increase the current value of the PLogOffset, return this value together with `true`.
-  // Panics if generation is already in progress.
-  // If generation is already in progress, returns `false`.
-  // If actualization is in progress, returns `false`.
-  // If the flushing queue is full, returns `false`.
+  // Starts event processing for the given WSID.
+  // Normal flow: increments the current PLogOffset value and returns this value with `true`.
+  // Panics if event processing is already started.
+  // Returns `false` if:
+  // - Actualization is in progress
+  // - The number of unflushed values exceeds the maximum threshold
   Start(WSID WSID) (plogOffset Offset, ok bool)
 
   // Returns the next sequence number for the given SeqID.
@@ -156,12 +156,13 @@ type ISequencer interface {
   // err: ErrUnknownSeqID
   Next(seqID SeqID) (num Number, err error)
 
-  // Panics if generation is not in progress.
-  // Sends the current batch to the flushing queue and closes generation.
+  // Panics if event processing is not in progress.
+  // Sends the current batch to the flushing queue and completes the event processing.
   Flush()
 
   // Panics if actualization is already in progress.
-  // Panics if generation is not in progress.
+  // Panics if event processing is not in progress.
+  // Completes event processing.
   // If flusher() is running, stops and waits for it.
   // Starts actualizer().
   Actualize()
@@ -182,31 +183,17 @@ type Params struct {
   MaxFlushingBatshSize int  // 100
   // Maximum interval between flushes.
   MaxFlushingInterval time.Duration // 500 * time.Millisecond
-  // Size of the LRU cache, LRUCacheKey -> Number.
+  // Size of the LRU cache, NumKey -> Number.
   LRUCacheSize int          // 100_000
 }
 
-type LRUCacheKey struct {
-  WSID WSID
-  ID   SeqID
-}
-
-```
-
-#### provide.go
-
-```go
-// filepath: pkg/isequencer: provide.go
-
-// seq is returned with started actualizer().
-func New(params *Params) (seq ISequencer, cleanup func(), err error) {
-  sequencer := &sequencer{params: params}
-  sequencer.flushingQueue = make(chan SeqBatch, params.FlushingQueueSize)
-  return sequencer, sequencer.cleanup, nil
+type NumKey struct {
+  WSID    WSID
+  SeqID   SeqID
 }
 ```
 
-#### impl.go
+#### Implementation requirements
 
 ```go
 // filepath: pkg/isequencer: impl.go
@@ -220,49 +207,40 @@ import (
 
 type sequencer struct {
   params *Params
-  flushingQueue chan SeqBatch
-  lru *lru.Cache[LRUCacheKey, Number]
 
+  //
+  lru *lru.Cache
 
-  // Values are inserted by Next() and removed by flusher().
-  // Is cleaned up by flusher
-  maxActiveNumbers map[LRUCacheKey]Number
-  maxActiveNumbersMu sync.RWMutex
+  // To be flushed
+  processedNumbers map[NumKey]Number
+  processedNumbersMu sync.RWMutex
 
-  // Initialized by Start().
+  // Written by Next()
+  inprocNumbers map[NumKey]Number
+
+  // Initialized by Start()
   currentWSID WSID
-  currentBatch *SeqBatch
 }
 
-// cleanup function stops (and waits) flusher and actualizer if they are running.
-func (s *sequencer) cleanup() {
+// Copies inprocNumbers to processedNumbers and clears inprocNumbers.
+func (s *sequencer) Flush() {
   // ...
 }
 
-// Reads s.params.SeqStorage.ReadNumber() through s.lru.
+// Flow:
+// - 
+// - Try to read value using:
+//   - Try s.lru
+//   - Try s.inprocNumbers (use s.processedNumbersMu to protect)
+//   - Try s.params.SeqStorage.ReadNumber()
+// - Increment value
+// - Write value to s.lru
+// - Write value to s.inprocNumbers
 func (s *sequencer) Next(seqID SeqID) (num Number, err error) {
   // ...
 }
 
-// Is called by
-func (s *sequencer) submitBatch() {
-	// ...
-}
 
-// Actualizes PLog using seqStorage.ActualizePLog().
-// Error handling: log and loop.
-// Starts flusher() routine.
-func (s *sequencer) actualizer() {
-  // ...
-}
-
-// Started by sequencer.actualize().
-// Reads from flushingQueue into a temporary flushBuffer.
-// flushBuffer keeps maximum Value for each {WSID, ID} pair and tracks the maximum Offset.
-// If any of s.params.MaxFlushingBatshSize or s.params.MaxFlushingInterval is reached, flushes flushBuffer.
-func (s *sequencer) flusher() {
-  // ...
-}
 ```
 
 ## Technical design
