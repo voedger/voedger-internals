@@ -46,6 +46,34 @@ This approach decouples memory usage from the total number of workspaces and tra
 
 ## Functional design
 
+### TrustedSequences mode
+
+- If TrustedSequences then Put is used for new key/values pairs. Otherwise InsertIfNotExists is used to ensure that the sequence number is unique to avoid potential bugs.
+  - Performance impact: InsertIfNotExists is a few times slower than Put.
+- By default TrustedSequences is false
+
+### TrustedSequences mode: Use cases
+
+Actors:
+
+- CP
+
+`~VVMConfig.TrustedSequences~`
+
+- VVMConfig.TrustedSequences
+
+`~SavePLogInUntrustedMode~`
+
+- ???
+
+`~SaveWLogInUntrustedMode~`
+
+- ???
+
+`~SaveRecordInUntrustedMode~`
+
+- ???
+
 ### Command processing
 
 Actors
@@ -60,7 +88,7 @@ Actors
 - Flow:
   - partitionID := ???
   - sequencer, err := IAppPartition.Sequencer(PartitionID) err
-  - nextPLogOffest, ok, err := sequencer.Start(WSID)
+  - nextPLogOffest, ok, err := sequencer.Start(wsKind, WSID)
     - if !ok
       - Actualization is in progress
       - Flushing queue is full
@@ -104,79 +132,100 @@ Actors
 #### interface.go
 
 ```go
-// filepath: pkg/isequencer: interface.go
+/*
+ * Copyright (c) 2025-present unTill Software Development Group B. V.
+ * @author Maxim Geraskin
+ */
 
-type SeqID      uint16
-type WSType     uint16
-type WSID       uint16
-type Number     uint64
+package isequencer
+
+import (
+	"context"
+	"time"
+)
+
+type SeqID uint16
+type WSKind uint16
+type WSID uint16
+type Number uint64
 type PLogOffset uint64
 
+type NumberKey struct {
+	WSID  WSID
+	SeqID SeqID
+}
+
+type SeqValue struct {
+	Key    NumberKey
+	Value  Number
+}
+
 type ISeqStorage interface {
-  ReadNumber(WSID, SeqID) (Number, error)
 
-  // IDs in batch.Values are unique
-  // Values must be written first, then Offset
-  WriteValues(batch SeqBatch) error
-  
-  // Last offset successfully written by WriteValues
-  ReadLastWrittenPLogOffset() (PLogOffset, error)
+  // If number is not found, returns 0
+	ReadNumbers(WSID, []SeqID) ([]Numbers, error)
 
-  // Scan PLog from the given offset and send values to the batcher.
-  // Values are sent per event, unordered, IDs are not unique.
-  // Batcher is responsible for batching, ordering, and ensuring uniqueness, and uses ISeqStorage.WriteValues.
-  // Batcher can block the execution for some time, but it terminates if the ctx is done.
-  // If ctx is done, the function must return immediately.
-  ActualizePLog(ctx context.Context, offset Offset, batcher func(ctx context.Context, batch SeqBatch) error) error
+	// IDs in batch.Values are unique
+	// Values must be written first, then Offset
+	WriteValues(batch []SeqValue) error
+
+	WritePLogOffset(offset PLogOffset) error
+
+	// Last offset successfully written by WriteValues
+	ReadLastWrittenPLogOffset() (PLogOffset, error)
+
+	// Scan PLog from the given offset and send values to the batcher.
+	// Values are sent per event, unordered, IDs are not unique.
+	// Batcher is responsible for batching, ordering, and ensuring uniqueness, and uses ISeqStorage.WriteValues.
+	// Batcher can block the execution for some time, but it terminates if the ctx is done.
+		ActualizePLog(ctx context.Context, offset PLogOffset, batcher func(batch []SeqValue, offset PLogOffset) error) error
 }
 
 // ISequencer methods must not be called concurrently.
+// Use: { Start {Next} ( Flush | Actualize ) }
 type ISequencer interface {
 
-  // Starts event processing for the given WSID.
-  // Normal flow: increments the current PLogOffset value and returns this value with `true`.
-  // Panics if event processing is already started.
-  // Returns `false` if:
-  // - Actualization is in progress
-  // - The number of unflushed values exceeds the maximum threshold
-  // If ok is true, the caller must call Flush() or Actualize() to complete the event processing.
-  Start(wsType WSType, wsID WSID) (plogOffset Offset, ok bool)
+	// Starts event processing for the given WSID.
+	// Normal flow: increments the current PLogOffset value and returns this value with `true`.
+	// Panics if event processing is already started.
+	// Returns `false` if:
+	// - Actualization is in progress
+	// - The number of unflushed values exceeds the maximum threshold
+	// If ok is true, the caller must call Flush() or Actualize() to complete the event processing.
+	Start(wsKind WSKind, wsID WSID) (plogOffset PLogOffset, ok bool)
 
-  // Returns the next sequence number for the given SeqID.
-  // If seqID is unknown, panics.
-  // err: ErrUnknownSeqID
-  Next(seqID SeqID) (num Number, err error)
+	// Returns the next sequence number for the given SeqID.
+	// If seqID is unknown, panics.
+	// err: ErrUnknownSeqID
+	Next(seqID SeqID) (num Number, err error)
 
+	// Finishes event processing.
   // Panics if event processing is not in progress.
-  // Sends the current batch to the flushing queue and completes the event processing.
-  Flush()
+	// Sends the current batch to the flushing queue and completes the event processing.
+	Flush()
 
+	// Finishes event processing.
   // Panics if actualization is already in progress.
-  // Panics if event processing is not in progress.
-  // Completes event processing.
-  // If flusher() is running, stops and waits for it.
-  // Starts actualizer().
-  Actualize()
+	// Panics if event processing is not in progress.
+	// Completes event processing.
+	// If flusher() is running, stops and waits for it.
+	// Starts actualizer().
+	Actualize()
 }
 
 // Params for the ISequencer implementation.
 type Params struct {
-  
-  // Sequences and their initial values.
-  // Only these sequences are managed by the sequencer (ref. ErrUnknownSeqID).
-  SeqTypes map[WSType]map[SeqID]Number
 
-  SeqStorage  ISeqStorage
+	// Sequences and their initial values.
+	// Only these sequences are managed by the sequencer (ref. ErrUnknownSeqID).
+	SeqTypes map[WSKind]map[SeqID]Number
 
-  MaxNumUnflushedValues  // 500
-  MaxFlushingInterval time.Duration // 500 * time.Millisecond
-  // Size of the LRU cache, NumKey -> Number.
-  LRUCacheSize int          // 100_000
-}
+	SeqStorage ISeqStorage
 
-type NumKey struct {
-  WSID    WSID
-  SeqID   SeqID
+	MaxNumUnflushedValues int           // 500
+	MaxFlushingInterval   time.Duration // 500 * time.Millisecond
+	// Size of the LRU cache, NumberKey -> Number.
+	LRUCacheSize int // 100_000
 }
 ```
 
@@ -195,21 +244,24 @@ import (
 type sequencer struct {
   params *Params
 
+  cleanupCtx context.Context
+  flusherCtx context.Context
+
   lru *lru.Cache
 
   // To be flushed
-  toBeFlushed map[NumKey]Number
+  toBeFlushed map[NumberKey]Number
   toBeFlushedOffset PLogOffset
   // Protects toBeFlushed and toBeFlushedOffset
   toBeFlushedMu sync.RWMutex
 
   // Written by Next()
-  inproc map[NumKey]Number
+  inproc map[NumberKey]Number
   inprocOffset PLogOffset
 
   // Initialized by Start()
   currentWSID   WSID
-  currentWSType WSType
+  currentWSKind WSKind
 }
 
 // Copies s.inproc to s.toBeFlushed and clears s.inproc.
@@ -220,18 +272,35 @@ func (s *sequencer) Flush() {
 // Flow:
 // - Validate processing status
 // - Get initialValue from s.params.SeqTypes and ensure that SeqID is known
-// - Try to obtain values using:
-//   - Try s.lru
-//   - Try s.inprocNumbers (use s.processedNumbersMu to synchronize)
+// - Try to obtain next value using:
+//   - Try s.lru (can be evicted)
+//   - Try s.inproc
+//   - Try s.toBeFlushed (use s.toBeFlushedMu to synchronize)
 //   - Try s.params.SeqStorage.ReadNumber()
-//   - initialValue
-// - Increment value
-// - Write value to s.lru
-// - Write value to s.inprocNumbers
+//      - Read all numbers for wsKind, wsID
+//        - If number is 0 then initial value is used
+//      - Write all numbers to s.lru
+// - Write value+1 to s.lru
+// - Write value+1 to s.inproc
 func (s *sequencer) Next(seqID SeqID) (num Number, err error) {
   // ...
 }
 
+// Flow:
+// - Build maxValues: max Number for each SeqValue.Key
+// - Write maxValues using s.params.SeqStorage.WriteValues()
+func (s *sequencer) batcher(values []SeqValue) (err error) {
+  // ...
+}
+
+// Started in goroutine by Actualize()
+// Uses s.params.SeqStorage.ActualizePLog() and s.batcher()
+// If cleanupCtx is closed, stops the actualization process.
+// Error handling: wait (500 ms) and loop
+// When actualization is finished, starts flusher()
+func (s *sequencer) actualize() {
+  // ...
+}
 
 ```
 
@@ -242,6 +311,20 @@ func (s *sequencer) Next(seqID SeqID) (num Number, err error) {
 `~IAppPartition.Sequencer`~
 
 - Returns `isequencer.Sequencer` for the given `partitionID`
+
+## Test design
+
+### isequencer
+
+`~isequencer.test.mockISeqStorage~`
+
+- Mock implementation of `isequencer.ISeqStorage` for testing purposes
+
+### TrustedSequences mode: Tests
+
+`~it.UntrustedSequences~`
+
+- ???
 
 ## References
 
