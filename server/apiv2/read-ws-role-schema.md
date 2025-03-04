@@ -24,7 +24,7 @@ flowchart
 qpMessage>Query Message]:::G
 qp[Query Processor]:::G
 queryData[Query Data]:::S
-appdef[[IAppDef]]:::S
+appdef[[appdef]]:::S
 object[Object]:::S
 subgraph qp
     queryData[Query Data]:::S
@@ -46,23 +46,22 @@ classDef G fill:#ffffff15, stroke:#999, stroke-width:2px, stroke-dasharray: 5 5
 ```
 
 ```go
-type PublishedTypeCallback func(appdef.IType, []OperationKind) error
+package appdef
 
-type IWithPublishedTypes interface {
-    /*
-        PublishedTypes lists the resources available to the published role in the workspace and ancestors (including resources available to non-authenticated requests):
-        - Documents
-        - Views
-        - Commands
-        - Queries
-    */
-    PublishedTypes(ws appdef.IWorkspace, role appdef.QName, callback PublishedTypeCallback) error
-}
+/*
+    when fieldNames is empty, it means all fields are allowed
+*/
+type PublishedTypeCallback func(resource appdef.IType, fieldNames []string, operations []OperationKind) error
 
-type IAppDef interface {
-    ...
-    IWithPublishedTypes
-}
+
+/*
+    PublishedTypes lists the resources allowed to the published role in the workspace and ancestors (including resources available to non-authenticated requests):
+    - Documents
+    - Views
+    - Commands
+    - Queries
+*/
+func PublishedTypes(appDef IAppDef,  ws appdef.IWorkspace, role appdef.QName, callback PublishedTypeCallback) error 
 ```
 
 ## See Also
