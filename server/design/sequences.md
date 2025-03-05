@@ -86,7 +86,7 @@ Actors
 
 - When: CP starts processing a request
 - Flow:
-  - partitionID := ???
+  - `partitionID` is calcluated using request WSID and amount of partitions declared in AppDeploymentDescriptor [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/vvm/impl_requesthandler.go#L61)
   - sequencer, err := IAppPartition.Sequencer(PartitionID) err
   - nextPLogOffest, ok, err := sequencer.Start(wsKind, WSID)
     - if !ok
@@ -96,8 +96,19 @@ Actors
 
 `~GetNextSequenceNumber~`
 
-- ??? When it happens now?
--Flow
+- current ID generation flow
+  - recovery on the first request into the workspace
+    - CP creates new `istructs.IIDGenerator` instance [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/processors/command/impl.go#L136)
+    - the `istructs.IIDGenerator` instance is kept for the WSID
+    - `istructs.IIDGenerator` instance is tuned with the data from the each event of the PLog:
+	  - for each CUD:
+	    - CUD.ID is set as the current RecordID
+          - `IIDGenerator.UpdateOnSync` is called [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/processors/command/impl.go#L253)
+  - save the event after cmd exec:
+    - `istructs.IIDGenerator` instance instance is provided to `IEvents.PutPlog()` [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/processors/command/impl.go#L307)
+    - `istructs.IIDGenerator.Next()` is called to convert rawID->realID for ODoc in arguments and each resulting CUD [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/istructsmem/event-types.go#L189)
+
+- Flow
   - sequencer.Next(sequenceId)
 
 `~FlushSequenceNumbers~`
@@ -324,7 +335,16 @@ func (s *sequencer) actualize() {
 
 `~it.UntrustedSequences~`
 
-- ???
+- Test for Record
+  - create a new VIT instance on an owned config with `VVMConfig.TrustedSequences = false`
+  - insert a doc to get the last recordID: simply exec `c.sys.CUD` and get the ID of the new record
+  - sabotage the storage: insert a key that would be used on creating the next record:
+    - `VIT.IAppStorageProvider.AppStorage(test1/app1).Put()`
+	  - manually build `pKey`, `cCols` for the record, use just inserted recordID+1
+	  - value does not matter, let it be `[]byte{1}`
+  - try to insert one more record using `c.sys.CUD`
+  - expect panic
+- Test for PLog, WLog offsets - the same tests but sabotage the storage building keys for the event
 
 ## References
 
