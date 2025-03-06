@@ -44,43 +44,42 @@ The proposed approach implements a more efficient and scalable sequence manageme
 
 This approach decouples memory usage from the total number of workspaces and transforms the recovery process from a linear operation dependent on total event count to one that only needs to process recent events since the last checkpoint.
 
-## Functional design
+## Definitions
 
-### TrustedSequences mode
+**APs**: Applcation Partitions
 
-- If TrustedSequences then Put is used for new key/values pairs. Otherwise InsertIfNotExists is used to ensure that the sequence number is unique to avoid potential bugs.
-  - Performance impact: InsertIfNotExists is a few times slower than Put.
-- By default TrustedSequences is false
+**SequencesTrustLevel**:
 
-### TrustedSequences mode: Use cases
+The `SequencesTrustLevel` setting determines how events and table records are written.
 
-Actors:
+| Level | Events            | Table Records     |
+|-------|-------------------|-------------------|
+| 0     | InsertIfNotExists | InsertIfNotExists |
+| 1     | InsertIfNotExists | Put               |
+| 2     | Put               | Put               |
 
-- CP
+## Functional design: Use cases
 
-`~VVMConfig.TrustedSequences~`
+### VVMHost: Configure the `TrustedSequences` mode for the VVM
 
-- VVMConfig.TrustedSequences
+`~VVMConfig.ConfigureTrustedSequences~`
 
-`~SavePLogInUntrustedMode~`
+- Data
+  - VVMConfig.TrustedSequences
+
+### CP: Handling SequencesTrustLevel for Events
+
+`~PLogSequencesTrustLevel~`
 
 - ???
 
-`~SaveWLogInUntrustedMode~`
+### CP: Handling SequencesTrustLevel for Table Records
+
+`~TableSequencesTrustLevel~`
 
 - ???
 
-`~SaveRecordInUntrustedMode~`
-
-- ???
-
-### Command processing
-
-Actors
-
-- Command Processor (CP)
-
-### Command processing: Use cases
+### CP: Command processing
 
 `~StartSequencesGeneration~`
 
@@ -96,20 +95,19 @@ Actors
 
 `~GetNextSequenceNumber~`
 
-- current ID generation flow
+- Flow
+  - sequencer.Next(sequenceId)
+- Previous flow
   - recovery on the first request into the workspace
     - CP creates new `istructs.IIDGenerator` instance [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/processors/command/impl.go#L136)
     - the `istructs.IIDGenerator` instance is kept for the WSID
     - `istructs.IIDGenerator` instance is tuned with the data from the each event of the PLog:
-	  - for each CUD:
-	    - CUD.ID is set as the current RecordID
+   	  - for each CUD:
+   	    - CUD.ID is set as the current RecordID
           - `IIDGenerator.UpdateOnSync` is called [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/processors/command/impl.go#L253)
   - save the event after cmd exec:
     - `istructs.IIDGenerator` instance is provided to `IEvents.PutPlog()` [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/processors/command/impl.go#L307)
     - `istructs.IIDGenerator.Next()` is called to convert rawID->realID for ODoc in arguments and each resulting CUD [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/istructsmem/event-types.go#L189)
-
-- Flow
-  - sequencer.Next(sequenceId)
 
 `~FlushSequenceNumbers~`
 
@@ -122,13 +120,7 @@ Actors
 - Flow
   - sequencer.Actualize()
 
-### Application deployment
-
-Actors
-
-- IApplicationPartitions (AP)
-
-#### Application deployment: Use cases
+### APs: Application deployment: Use cases
 
 `~DeployPartition.InstantiateSequencer~`
 
@@ -138,9 +130,9 @@ Actors
   - Instantiate `sequencer := isequencer.New(*isequencer.Params)`
   - Save `sequencer` to some `map[partitionID]isequencer.Sequencer`
 
-### pkg/isequencer
+## Functional design: pkg/isequencer
 
-#### interface.go
+### interface.go
 
 ```go
 /*
@@ -241,7 +233,7 @@ type Params struct {
 }
 ```
 
-#### Implementation requirements
+### Implementation requirements
 
 ```go
 // filepath: pkg/isequencer: impl.go
@@ -331,7 +323,7 @@ func (s *sequencer) actualize() {
 
 ### Components
 
-`~IAppPartition.Sequencer`~
+`~IAppPartition.Sequencer~`
 
 - Returns `isequencer.Sequencer` for the given `partitionID`
 
@@ -343,20 +335,24 @@ func (s *sequencer) actualize() {
 
 - Mock implementation of `isequencer.ISeqStorage` for testing purposes
 
-### TrustedSequences mode: Tests
+### SequencesTrustLevel mode: Tests
 
-`~it.UntrustedSequences~`
+Method:
 
 - Test for Record
-  - create a new VIT instance on an owned config with `VVMConfig.TrustedSequences = false`
-  - insert a doc to get the last recordID: simply exec `c.sys.CUD` and get the ID of the new record
-  - sabotage the storage: insert a key that would be used on creating the next record:
+  - Create a new VIT instance on an owned config with `VVMConfig.TrustedSequences = false`
+  - Insert a doc to get the last recordID: simply exec `c.sys.CUD` and get the ID of the new record
+  - Corrupt the storage: Insert a conflicting key that will be used on creating the next record:
     - `VIT.IAppStorageProvider.AppStorage(test1/app1).Put()`
-	  - manually build `pKey`, `cCols` for the record, use just inserted recordID+1
-	  - value does not matter, let it be `[]byte{1}`
-  - try to insert one more record using `c.sys.CUD`
-  - expect panic
+   	- Build `pKey`, `cCols` for the record, use just inserted recordID+1
+   	- Value does not matter, let it be `[]byte{1}`
+  - Try to insert one more record using `c.sys.CUD`
+  - Expect panic
 - Test for PLog, WLog offsets - the same tests but sabotage the storage building keys for the event
+
+- `~it.SequencesTrustLevel0~`
+- `~it.SequencesTrustLevel1~`
+- `~it.SequencesTrustLevel2~`
 
 ## References
 
