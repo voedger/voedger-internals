@@ -86,7 +86,7 @@ Actors
 
 - When: CP starts processing a request
 - Flow:
-  - `partitionID` is calcluated using request WSID and amount of partitions declared in AppDeploymentDescriptor [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/vvm/impl_requesthandler.go#L61)
+  - `partitionID` is calculated using request WSID and amount of partitions declared in AppDeploymentDescriptor [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/vvm/impl_requesthandler.go#L61)
   - sequencer, err := IAppPartition.Sequencer(PartitionID) err
   - nextPLogOffest, ok, err := sequencer.Start(wsKind, WSID)
     - if !ok
