@@ -124,7 +124,7 @@ Actors
 - When: Partition with the `partitionID` is deployed
 - Flow:
   - Instantiate the implementation of the `isequencer.ISeqStorage`: `seqStorage isequencer.ISeqStorage`
-  - Instantiate `sequencer := isequencer.New(partitionID, seqStorage)`
+  - Instantiate `sequencer := isequencer.New(partitionID, *isequencer.Params)`
   - Save `sequencer` to some `map[partitionID]isequencer.Sequencer`
 
 ### pkg/isequencer
@@ -205,7 +205,7 @@ type ISequencer interface {
 	Flush()
 
 	// Finishes event processing.
-  // Panics if actualization is already in progress.
+    // Panics if actualization is already in progress.
 	// Panics if event processing is not in progress.
 	// Completes event processing.
 	// If flusher() is running, stops and waits for it.
@@ -241,11 +241,16 @@ import (
 	"github.com/hashicorp/golang-lru/v2"
 )
 
+// Implements isequencer.ISequencer
 type sequencer struct {
   params *Params
 
+  // cleanupCtx is created by New() and used by cleanup() function as a signal for all goroutines to exit.
   cleanupCtx context.Context
+  // Closed when flusher needs to be stopped
   flusherCtx context.Context
+
+  actualizerInProgress atomic.Bool
 
   lru *lru.Cache
 
@@ -262,6 +267,11 @@ type sequencer struct {
   // Initialized by Start()
   currentWSID   WSID
   currentWSKind WSKind
+}
+
+// Copies s.inproc to s.toBeFlushed and clears s.inproc.
+func New(partitionID, *isequencer.Params) isequencer.ISequencer, cleanup(), error	{
+	// ...
 }
 
 // Copies s.inproc to s.toBeFlushed and clears s.inproc.
@@ -295,7 +305,7 @@ func (s *sequencer) batcher(values []SeqValue) (err error) {
 
 // Started in goroutine by Actualize()
 // Uses s.params.SeqStorage.ActualizePLog() and s.batcher()
-// If cleanupCtx is closed, stops the actualization process.
+// If cleanupCtx is closed, actualize() shall exit immediately.
 // Error handling: wait (500 ms) and loop
 // When actualization is finished, starts flusher()
 func (s *sequencer) actualize() {
