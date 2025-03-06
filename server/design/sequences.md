@@ -124,7 +124,7 @@ Actors
 - When: Partition with the `partitionID` is deployed
 - Flow:
   - Instantiate the implementation of the `isequencer.ISeqStorage`: `seqStorage isequencer.ISeqStorage`
-  - Instantiate `sequencer := isequencer.New(partitionID, *isequencer.Params)`
+  - Instantiate `sequencer := isequencer.New(*isequencer.Params)`
   - Save `sequencer` to some `map[partitionID]isequencer.Sequencer`
 
 ### pkg/isequencer
@@ -160,6 +160,7 @@ type SeqValue struct {
 	Value  Number
 }
 
+// To be injected into the ISequencer implementation.
 type ISeqStorage interface {
 
   // If number is not found, returns 0
@@ -178,7 +179,7 @@ type ISeqStorage interface {
 	// Values are sent per event, unordered, IDs are not unique.
 	// Batcher is responsible for batching, ordering, and ensuring uniqueness, and uses ISeqStorage.WriteValues.
 	// Batcher can block the execution for some time, but it terminates if the ctx is done.
-		ActualizePLog(ctx context.Context, offset PLogOffset, batcher func(batch []SeqValue, offset PLogOffset) error) error
+	ActualizePLog(ctx context.Context, offset PLogOffset, batcher func(batch []SeqValue, offset PLogOffset) error) error
 }
 
 // ISequencer methods must not be called concurrently.
@@ -249,6 +250,8 @@ type sequencer struct {
   cleanupCtx context.Context
   // Closed when flusher needs to be stopped
   flusherCtx context.Context
+  // Used to wait for flusher goroutine to exit
+  flusherWG  sync.WaitGroup
 
   actualizerInProgress atomic.Bool
 
@@ -270,7 +273,7 @@ type sequencer struct {
 }
 
 // Copies s.inproc to s.toBeFlushed and clears s.inproc.
-func New(partitionID, *isequencer.Params) isequencer.ISequencer, cleanup(), error	{
+func New(*isequencer.Params) isequencer.ISequencer, cleanup(), error	{
 	// ...
 }
 
@@ -311,7 +314,6 @@ func (s *sequencer) batcher(values []SeqValue) (err error) {
 func (s *sequencer) actualize() {
   // ...
 }
-
 ```
 
 ## Technical design
