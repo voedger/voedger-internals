@@ -62,26 +62,26 @@ The `SequencesTrustLevel` setting determines how events and table records are wr
 
 ### VVMHost: Configure the `TrustedSequences` mode for the VVM
 
-`~VVMConfig.ConfigureTrustedSequences~`
+`~tuc.VVMConfig.ConfigureTrustedSequences~`
 
 - Data
   - VVMConfig.TrustedSequences
 
 ### CP: Handling SequencesTrustLevel for Events
 
-`~PLogSequencesTrustLevel~`
+`~tuc.PLogSequencesTrustLevel~`
 
 - ???
 
 ### CP: Handling SequencesTrustLevel for Table Records
 
-`~TableSequencesTrustLevel~`
+`~tuc.TableSequencesTrustLevel~`
 
 - ???
 
 ### CP: Command processing
 
-`~StartSequencesGeneration~`
+`~tuc.StartSequencesGeneration~`
 
 - When: CP starts processing a request
 - Flow:
@@ -93,7 +93,7 @@ The `SequencesTrustLevel` setting determines how events and table records are wr
       - Flushing queue is full
       - Returns 503: "server is busy"
 
-`~GetNextSequenceNumber~`
+`~tuc.GetNextSequenceNumber~`
 
 - Flow
   - sequencer.Next(sequenceId)
@@ -109,12 +109,12 @@ The `SequencesTrustLevel` setting determines how events and table records are wr
     - `istructs.IIDGenerator` instance is provided to `IEvents.PutPlog()` [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/processors/command/impl.go#L307)
     - `istructs.IIDGenerator.Next()` is called to convert rawID->realID for ODoc in arguments and each resulting CUD [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/istructsmem/event-types.go#L189)
 
-`~FlushSequenceNumbers~`
+`~tuc.FlushSequenceNumbers~`
 
 - When: After CP saves the PLog record successfully
   - sequencer.Flush()
 
-`~ReactualizeSequences~`
+`~tuc.ReactualizeSequences~`
 
 - When: After CP fails to save the PLog record
 - Flow
@@ -122,7 +122,7 @@ The `SequencesTrustLevel` setting determines how events and table records are wr
 
 ### APs: Application deployment: Use cases
 
-`~DeployPartition.InstantiateSequencer~`
+`~tuc.DeployPartition.InstantiateSequencer~`
 
 - When: Partition with the `partitionID` is deployed
 - Flow:
@@ -323,7 +323,7 @@ func (s *sequencer) actualize() {
 
 ### Components
 
-`~IAppPartition.Sequencer~`
+`~cmp.IAppPartition.Sequencer~`
 
 - Returns `isequencer.Sequencer` for the given `partitionID`
 
@@ -331,7 +331,7 @@ func (s *sequencer) actualize() {
 
 ### isequencer
 
-`~isequencer.test.mockISeqStorage~`
+`~cpm.isequencer.test.mockISeqStorage~`
 
 - Mock implementation of `isequencer.ISeqStorage` for testing purposes
 
@@ -350,9 +350,11 @@ Method:
   - Expect panic
 - Test for PLog, WLog offsets - the same tests but sabotage the storage building keys for the event
 
-- `~it.SequencesTrustLevel0~`
-- `~it.SequencesTrustLevel1~`
-- `~it.SequencesTrustLevel2~`
+System tests:
+
+- `~syst.SequencesTrustLevel0~`
+- `~syst.SequencesTrustLevel1~`
+- `~syst.SequencesTrustLevel2~`
 
 ## References
 
