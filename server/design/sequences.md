@@ -182,7 +182,7 @@ type ISeqStorage interface {
 	// Values are sent per event, unordered, IDs are not unique.
 	// Batcher is responsible for batching, ordering, and ensuring uniqueness, and uses ISeqStorage.WriteValues.
 	// Batcher can block the execution for some time, but it terminates if the ctx is done.
-	ActualizePLog(ctx context.Context, offset PLogOffset, batcher func(batch []SeqValue, offset PLogOffset) error) error
+	ActualizeSequencesFromPLog(ctx context.Context, offset PLogOffset, batcher func(batch []SeqValue, offset PLogOffset) error) error
 }
 
 // ISequencer methods must not be called concurrently.
@@ -310,7 +310,7 @@ func (s *sequencer) batcher(values []SeqValue) (err error) {
 }
 
 // Started in goroutine by Actualize()
-// Uses s.params.SeqStorage.ActualizePLog() and s.batcher()
+// Uses s.params.SeqStorage.ActualizeSequencesFromPLog() and s.batcher()
 // If cleanupCtx is closed, actualize() shall exit immediately.
 // Error handling: wait (500 ms) and loop
 // When actualization is finished, starts flusher()
