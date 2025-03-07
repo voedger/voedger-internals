@@ -60,7 +60,7 @@ The `SequencesTrustLevel` setting determines how events and table records are wr
 
 ## Functional design: Use cases
 
-### VVMHost: Configure the `TrustedSequences` mode for the VVM
+### VVMHost: Configure TrustedSequences mode for VVM
 
 `~tuc.VVMConfig.ConfigureTrustedSequences~`
 
@@ -122,7 +122,7 @@ The `SequencesTrustLevel` setting determines how events and table records are wr
 
 ### APs: Application deployment: Use cases
 
-`~tuc.DeployPartition.InstantiateSequencer~`
+`~tuc.InstantiateSequencer~`
 
 - When: Partition with the `partitionID` is deployed
 - Flow:
@@ -189,32 +189,31 @@ type ISeqStorage interface {
 // Use: { Start {Next} ( Flush | Actualize ) }
 type ISequencer interface {
 
-	// Starts event processing for the given WSID.
+  // Panics if event processing is already started.
+  // Starts event processing for the given WSID.
 	// Normal flow: increments the current PLogOffset value and returns this value with `true`.
-	// Panics if event processing is already started.
 	// Returns `false` if:
 	// - Actualization is in progress
 	// - The number of unflushed values exceeds the maximum threshold
 	// If ok is true, the caller must call Flush() or Actualize() to complete the event processing.
 	Start(wsKind WSKind, wsID WSID) (plogOffset PLogOffset, ok bool)
 
-	// Returns the next sequence number for the given SeqID.
-	// If seqID is unknown, panics.
+	// Generates the next sequence number for the given SeqID and saves it to the `inproc` buffer.
 	// err: ErrUnknownSeqID
 	Next(seqID SeqID) (num Number, err error)
 
-	// Finishes event processing.
   // Panics if event processing is not in progress.
+  // Completes event processing.
+  // Copies `inproc` buffer to the `toBeFlushed` buffer and clears `inproc`.
 	// Sends the current batch to the flushing queue and completes the event processing.
 	Flush()
 
-	// Finishes event processing.
-    // Panics if actualization is already in progress.
+  // Panics if actualization is already in progress.
 	// Panics if event processing is not in progress.
 	// Completes event processing.
-	// If flusher() is running, stops and waits for it.
-	// Starts actualizer().
+  // Starts actualizer() goroutine.
 	Actualize()
+
 }
 
 // Params for the ISequencer implementation.
@@ -309,12 +308,18 @@ func (s *sequencer) batcher(values []SeqValue) (err error) {
   // ...
 }
 
+// Starts actualizer() goroutine
+func (s *sequencer) Actualize() {
+  // ...
+}
+
 // Started in goroutine by Actualize()
+// Shutdowns flusher() goroutine if it is running
 // Uses s.params.SeqStorage.ActualizeSequencesFromPLog() and s.batcher()
 // If cleanupCtx is closed, actualize() shall exit immediately.
 // Error handling: wait (500 ms) and loop
 // When actualization is finished, starts flusher() goroutine
-func (s *sequencer) actualize() {
+func (s *sequencer) actualizer() {
   // ...
 }
 ```
