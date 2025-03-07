@@ -275,7 +275,7 @@ type sequencer struct {
   currentWSKind WSKind
 }
 
-// Copies s.inproc to s.toBeFlushed and clears s.inproc.
+// Starts actualizer() goroutine
 func New(*isequencer.Params) isequencer.ISequencer, cleanup(), error	{
 	// ...
 }
@@ -313,7 +313,7 @@ func (s *sequencer) batcher(values []SeqValue) (err error) {
 // Uses s.params.SeqStorage.ActualizeSequencesFromPLog() and s.batcher()
 // If cleanupCtx is closed, actualize() shall exit immediately.
 // Error handling: wait (500 ms) and loop
-// When actualization is finished, starts flusher()
+// When actualization is finished, starts flusher() goroutine
 func (s *sequencer) actualize() {
   // ...
 }
