@@ -241,10 +241,10 @@ type Params struct {
 // filepath: pkg/isequencer: impl.go
 
 import (
-	"context"
-	"time"
+  "context"
+  "time"
 
-	"github.com/hashicorp/golang-lru/v2"
+  "github.com/hashicorp/golang-lru/v2"
 )
 
 // Implements isequencer.ISequencer
@@ -277,16 +277,22 @@ type sequencer struct {
   currentWSKind WSKind
 }
 
-// Starts actualizer() goroutine
-func New(*isequencer.Params) isequencer.ISequencer, cleanup(), error	{
-	// ...
+// New creates a new instance of the Sequencer type.
+// Instance has actualizer() goroutine started.
+// cleanup: function to stop the actualizer.
+func New(*isequencer.Params) (isequencer.ISequencer, cleanup func(), error) {
+  // ...
 }
 
+// Flush implements isequencer.ISequencer.Flush.
 // Copies s.inproc to s.toBeFlushed and clears s.inproc.
 func (s *sequencer) Flush() {
   // ...
 }
 
+// Next implements isequencer.ISequencer.Next.
+// It ensures thread-safe access to sequence values and handles various caching layers.
+// 
 // Flow:
 // - Validate processing status
 // - Get initialValue from s.params.SeqTypes and ensure that SeqID is known
@@ -304,6 +310,8 @@ func (s *sequencer) Next(seqID SeqID) (num Number, err error) {
   // ...
 }
 
+// batcher processes a batch of sequence values and writes maximum values to storage.
+// 
 // Flow:
 // - Build maxValues: max Number for each SeqValue.Key
 // - Write maxValues using s.params.SeqStorage.WriteValues()
@@ -311,17 +319,21 @@ func (s *sequencer) batcher(values []SeqValue) (err error) {
   // ...
 }
 
-// Starts actualizer() goroutine
+// Actualize implements isequencer.ISequencer.Actualize.
 func (s *sequencer) Actualize() {
   // ...
 }
 
-// Started in goroutine by Actualize()
-// Shutdowns flusher() goroutine if it is running
-// Uses s.params.SeqStorage.ActualizeSequencesFromPLog() and s.batcher()
-// If cleanupCtx is closed, actualize() shall exit immediately.
-// Error handling: wait (500 ms) and loop
-// When actualization is finished, starts flusher() goroutine
+// actualizer is started in goroutine by Actualize().
+// Exits immediately if cleanupCtx is closed
+//
+// Flow:
+// - Shutdown flusher() goroutine if running
+// - Use s.params.SeqStorage.ActualizeSequencesFromPLog() and s.batcher()
+// - Start flusher() goroutine
+//
+// Error handling:
+// -  Handle errors with retry mechanism (500ms wait)
 func (s *sequencer) actualizer() {
   // ...
 }
