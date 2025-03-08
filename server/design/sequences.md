@@ -185,37 +185,37 @@ type ISeqStorage interface {
 	ActualizeSequencesFromPLog(ctx context.Context, offset PLogOffset, batcher func(batch []SeqValue, offset PLogOffset) error) error
 }
 
+// ISequencer defines the interface for working with sequences.
 // ISequencer methods must not be called concurrently.
 // Use: { Start {Next} ( Flush | Actualize ) }
 //
-// Definitions:
-//
+// Definitions
 // - Event Processing: Start -> Next -> (Flush | Actualize)
 // - Actualization: Making the persistent state of the sequences consistent with the PLog.
 type ISequencer interface {
 
   // Start starts Event Processing for the given WSID.
   // Panics if Event Processing is already started.
-	// Normal flow: increments the current PLogOffset value and returns this value with `true`.
-	// Returns `false` if:
-	// - Actualization is in progress
-	// - The number of unflushed values exceeds the maximum threshold
-	// If ok is true, the caller must call Flush() or Actualize() to complete the event processing.
-	Start(wsKind WSKind, wsID WSID) (plogOffset PLogOffset, ok bool)
+  // Normal flow: increments the current PLogOffset value and returns this value with `true`.
+  // Returns `false` if:
+  // - Actualization is in progress
+  // - The number of unflushed values exceeds the maximum threshold
+  // If ok is true, the caller must call Flush() or Actualize() to complete the Event Processing.
+  Start(wsKind WSKind, wsID WSID) (plogOffset PLogOffset, ok bool)
 
-	// Generates the next sequence number for the given SeqID and saves it to the `inproc` buffer.
-	// err: ErrUnknownSeqID
-	Next(seqID SeqID) (num Number, err error)
+  // Next generates the next sequence number for the given SeqID.
+  // Returns ErrUnknownSeqID if the sequence is not defined in Params.SeqTypes.
+  Next(seqID SeqID) (num Number, err error)
 
   // Flush completes Event Processing.
   // Panics if Event Processing is not in progress.
   // Copies `inproc` buffer to the `toBeFlushed` buffer and clears `inproc`.
-	// Sends the current batch to the flushing queue and completes the event processing.
-	Flush()
+  // Sends the current batch to the flushing queue and completes the Event Processing.
+  Flush()
 
   // Actualize completes Event Processing and starts Actualization.
   // Panics if Actualization is already in progress.
-	// Panics if Event Processing is not in progress.
+  // Panics if Event Processing is not in progress.
   Actualize()
 }
 
