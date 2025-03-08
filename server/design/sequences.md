@@ -187,10 +187,15 @@ type ISeqStorage interface {
 
 // ISequencer methods must not be called concurrently.
 // Use: { Start {Next} ( Flush | Actualize ) }
+//
+// Definitions:
+//
+// - Event Processing: Start -> Next -> (Flush | Actualize)
+// - Actualization: Making the persistent state of the sequences consistent with the PLog.
 type ISequencer interface {
 
-  // Panics if event processing is already started.
-  // Starts event processing for the given WSID.
+  // Start starts Event Processing for the given WSID.
+  // Panics if Event Processing is already started.
 	// Normal flow: increments the current PLogOffset value and returns this value with `true`.
 	// Returns `false` if:
 	// - Actualization is in progress
@@ -202,18 +207,16 @@ type ISequencer interface {
 	// err: ErrUnknownSeqID
 	Next(seqID SeqID) (num Number, err error)
 
-  // Panics if event processing is not in progress.
-  // Completes event processing.
+  // Flush completes Event Processing.
+  // Panics if Event Processing is not in progress.
   // Copies `inproc` buffer to the `toBeFlushed` buffer and clears `inproc`.
 	// Sends the current batch to the flushing queue and completes the event processing.
 	Flush()
 
-  // Panics if actualization is already in progress.
-	// Panics if event processing is not in progress.
-	// Completes event processing.
-  // Starts actualizer() goroutine.
-	Actualize()
-
+  // Actualize completes Event Processing and starts Actualization.
+  // Panics if Actualization is already in progress.
+	// Panics if Event Processing is not in progress.
+  Actualize()
 }
 
 // Params for the ISequencer implementation.

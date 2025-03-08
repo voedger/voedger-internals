@@ -29,9 +29,9 @@ Additional Information
 
 ## Principles
 
-- AppWorkspaces are created by system when an App is deployed to a Cluster
-- Workspaces of other kinds must be explicitely created (and initialized)
-  - It is not possible to work with uninitialized workspaces
+- AppWorkspaces are created by system when an App is deployed to a Cluster.
+- Workspaces of other kinds must be explicitely created (and initialized).
+  - It is not possible to work with uninitialized workspaces.
 - Client calls `c.registry.CreateLogin` using pseudo WS calculated as (main cluster, crc16(login))
 - If router sees that baseWSID of WSID is < MaxPseudoBaseWSID then it replaces that pseudo base WSID with app base WSID:
   - (main cluser, (baseWSID %% numAppWorkspaces) + FirstBaseAppWSID)
