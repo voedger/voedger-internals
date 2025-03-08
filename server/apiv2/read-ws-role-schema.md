@@ -14,7 +14,7 @@ GET `/api/v2/users/{owner}/apps/{app}/schemas/{pkg}.{workspace}/roles/{pkg}.{rol
 | Code | Description | Body |
 | --- | --- | --- |
 | 200 | OK | role schema in the selected format |
-| 400 | Bad Request | [error object](README.md#errors) |
+| 400 | Bad Request | [error object](conventions.md#errors) |
 
 ## Technical Design
 - WorkspaceQName and QName of the role are provided to QPv2 in [QueryMessage](../design/qp.md#qpMessage)
