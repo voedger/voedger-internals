@@ -4,32 +4,34 @@ Create User/Login/App Workspaces
 
 ## Content
 
-- [Principles](#solution-principles)
-- [Create Login](#create-login)
-- [Create ChildWorkspace](#create-childworkspace)
-- [Related commits](#related-commits)
-- [Notes](#notes)
-- [See also](#see-also)
+Principles and Processes
 
-Commands:
+- [Principles](#principles)
+- [Create Login Process](#create-login)
+- [Create ChildWorkspace Process](#create-childworkspace)
+
+Commands
 
 - [c.sys.InitChildWorkspace()](#csysinitchildworkspace)
 - [c.sys.CreateWorkspaceID()](#csyscreateworkspaceid)
 - [c.sys.CreateWorkspace()](#csyscreateworkspace)
-- [UpdateOwner()](#updateownerwsparams-newwsid-wsdescriniterror)
 
-Projectors:
+Projectors
 
 - [aproj.sys.InvokeCreateWorkspaceID()](#aprojsysinvokecreateworkspaceid)
 - [aproj.sys.InvokeCreateWorkspace()](#aprojsysinvokecreateworkspace)
-- [aproj.sys.InitiateWorkspace()](#aprojsysinitiateworkspace)
+- [aproj.sys.InitiateWorkspace()](#aprojsysinitializeworkspace)
 
+Additional Information
+
+- [Implementation Notes](#notes)
+- [See Also](#see-also)
 
 ## Principles
 
 - AppWorkspaces are created by system when an App is deployed to a Cluster
 - Workspaces of other kinds must be explicitely created (and initialized)
-    - It is not possible to work with uninitialized workspaces
+  - It is not possible to work with uninitialized workspaces
 - Client calls `c.registry.CreateLogin` using pseudo WS calculated as (main cluster, crc16(login))
 - If router sees that baseWSID of WSID is < MaxPseudoBaseWSID then it replaces that pseudo base WSID with app base WSID:
   - (main cluser, (baseWSID %% numAppWorkspaces) + FirstBaseAppWSID)
@@ -38,10 +40,10 @@ Projectors:
 
 ## Create Login
 
-// FIXME: cdoc.sys.WorkspaceID is a large collection, must be wdoc.sys.WorkspaceID
+- FIXME: cdoc.sys.WorkspaceID is a large collection, must be wdoc.sys.WorkspaceID
 
 |entity|app|ws|cluster
-|---|---|---|---|
+|---|---|---|---
 |c.registry.CreateLogin()|sys/registry|pseudoWS|main
 |cdoc.registry.Login (owner)<br/>aproj.sys.InvokeCreateWorkspaceID|sys/registry|app ws|main
 |c.sys.CreateWorkspaceID()<br/>cdoc.sys.WorkspaceID<br/>aproj.sys.InvokeCreateWorkspace()|Target App|(Target Cluster, base App WSID)|Target Cluster
@@ -49,14 +51,13 @@ Projectors:
 
 ## Create ChildWorkspace
 
-|entity|app|ws|cluster|
-|---|---|---|---|
+|entity|app|ws|cluster
+|---|---|---|---
 |c.sys.InitChildWorkspace()<br/>cdoc.sys.ChildWorkspace (owner)<br/>aproj.sys.InvokeCreateWorkspaceID()|Tagret App|Profile|Profile Cluster
 |c.sys.CreateWorkspaceID()<br/>cdoc.sys.WorkspaceID<br/>aproj.sys.InvokeCreateWorkspace()|Target App|(Target Cluster, CRC16(ownerWSID+"/"+wsName))|Target Cluster
 |c.sys.CreateWorkspace()<br/>cdoc.sys.WorkspaceDescriptor<br/>cdoc.$wsKind (air.Restaurant)<br/>aproj.sys.InitializeWorkspace()|Target App|new WSID|Target Cluster
 
 ## c.sys.InitChildWorkspace()
-
 
 - AuthZ: Owner
   - PrincipalToken in header
@@ -64,11 +65,12 @@ Projectors:
 - Params: wsName, wsKind, wsKindInitializationData, templateName, templateParams (JSON), wsClusterID
 - Check that wsName does not exist yet: View<ChildWorkspaceIdx>{pk: dummy, cc: wsName, value: idOfChildWorkspace}
   - 409 conflict
-- Create CDoc<ChildWorkspace> {wsName, wsKind, wsKindInitializationData, templateName, templateParams, wsClusterID, /* Updated aftewards by UpdateOwner*/ WSID, wsError}
+- Create CDoc<ChildWorkspace> {wsName, wsKind, wsKindInitializationData, templateName, templateParams, wsClusterID, `/* Updated aftewards by UpdateOwner*/` WSID, wsError}
   - Trigger Projector<A, InvokeCreateWorkspaceID>
   - Trigger Projector<ChildWorkspaceIdx>
 
 Subject:
+
 - Call WS[Subject.ProfileWSID].InitChildWorkspace()
   - wsName
   - wsKind
@@ -101,7 +103,6 @@ Subject:
   - Triggers Projector[A, InvokeCreateWorkspace]
   - Triggers Projector[WorkspaceIDIdx]
 
-
 ## aproj.sys.InvokeCreateWorkspace()
 
 - Triggered by WDoc<WorkspaceID>
@@ -117,7 +118,7 @@ Subject:
   - return ok otherwise
 - if wsKindInitializationData is not valid
   - error = "Invalid workspaced descriptor data: ???"
-- Create CDoc<sys.WorkspaceDescriptor>{wsParams, WSID, createError: error, createdAtMs int64,  /* Updated aftewards */ initStartedAtMs int64, initError, initCompletedAtMs int64}
+- Create CDoc<sys.WorkspaceDescriptor>{wsParams, WSID, createError: error, createdAtMs int64,  `/* Updated aftewards */` initStartedAtMs int64, initError, initCompletedAtMs int64}
   - Trigger Projector<A, InitializeWorkspace>
 - if not error
   - Create CDoc<wsKind>{wsKindInitializationData}
@@ -187,4 +188,4 @@ Subject:
 
 ## See also
 
-- Originated from launchpad: [Create Workspace v2](21010)
+- Originated from launchpad: Create Workspace v2, 21010
