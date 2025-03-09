@@ -44,38 +44,8 @@ classDef S fill:#B5FFFF,color:#333
 classDef H fill:#C9E7B7,color:#333
 classDef G fill:#ffffff15, stroke:#999, stroke-width:2px, stroke-dasharray: 5 5
 ```
-### PublishedTypes
-```go
-package acl
-
-/*
-    PublishedTypes lists the resources allowed to the published role in the workspace and ancestors (including resources available to non-authenticated requests):
-    - Documents
-    - Views
-    - Commands
-    - Queries
-
-    When fieldNames is empty, it means all fields are allowed
-
-*/
-func PublishedTypes(ws appdef.IWorkspace, role appdef.QName) iter.Seq2[appdef.IType,
-  iter.Seq2[appdef.OperationKind, *[]appdef.FieldName]]
-```
-
-Usage:
-```go
-import "github.com/voedger/voedger/pkg/appdef/acl"
-
-for t, ops := range acl.PublishedTypes(ws, role) {
-  for op, fields := range ops {
-    if fields == nil {
-      fmt.Println(t, op, "all fields")
-    } else {
-      fmt.Println(t, op, *fields...)
-    }
-  }
-}
-```
+### Components
+- [PublishedTypes - list published role resources](https://github.com/voedger/voedger/issues/3337)
 
 ## See Also
 - [design: QPv2](../design/qp.md#query-processor-v2-apiv2)
