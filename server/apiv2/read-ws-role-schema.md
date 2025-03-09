@@ -32,7 +32,7 @@ flowchart
 qpMessage>Query Message]:::G
 qp[Query Processor]:::G
 queryData[Query Data]:::S
-appdef[[pkg appdef/acl]]:::S
+appdef[[pkg appdef]]:::S
 object[Object]:::S
 subgraph qp
     queryData[Query Data]:::S
@@ -41,7 +41,7 @@ qpMessage --> |has to specify role|QName:::S
 qpMessage --> |has to specify workspace|WorkspaceQName:::S
 QName --> |used by|queryData
 WorkspaceQName --> |used by|queryData
-queryData --> |"PublishedTypes(ws,role)"|appdef
+queryData --> |"PublishedTypes(ws,role)<br>CreateOpenApiSchema"|appdef
 appdef -.-> |types in callback|queryData
 queryData --> |builds schema|object
 
@@ -54,6 +54,7 @@ classDef G fill:#ffffff15, stroke:#999, stroke-width:2px, stroke-dasharray: 5 5
 ```
 ### Components
 - [PublishedTypes - list published role resources](https://github.com/voedger/voedger/issues/3337)
+- [CreateOpenApiSchema - generate OpenApi for a workspace published](https://github.com/voedger/voedger/issues/3423)
 
 ## See Also
 - [design: QPv2](../design/qp.md#query-processor-v2-apiv2)
