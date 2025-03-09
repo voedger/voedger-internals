@@ -24,7 +24,7 @@ flowchart
 qpMessage>Query Message]:::G
 qp[Query Processor]:::G
 queryData[Query Data]:::S
-appdef[[appdef]]:::S
+appdef[[pkg appdef/acl]]:::S
 object[Object]:::S
 subgraph qp
     queryData[Query Data]:::S
@@ -44,15 +44,9 @@ classDef S fill:#B5FFFF,color:#333
 classDef H fill:#C9E7B7,color:#333
 classDef G fill:#ffffff15, stroke:#999, stroke-width:2px, stroke-dasharray: 5 5
 ```
-
+### PublishedTypes
 ```go
-package appdef
-
-/*
-    when fieldNames is empty, it means all fields are allowed
-*/
-type PublishedTypeCallback func(resource appdef.IType, fieldNames []string, operations []OperationKind) error
-
+package acl
 
 /*
     PublishedTypes lists the resources allowed to the published role in the workspace and ancestors (including resources available to non-authenticated requests):
@@ -60,8 +54,27 @@ type PublishedTypeCallback func(resource appdef.IType, fieldNames []string, oper
     - Views
     - Commands
     - Queries
+
+    When fieldNames is empty, it means all fields are allowed
+
 */
-func PublishedTypes(appDef IAppDef,  ws appdef.IWorkspace, role appdef.QName, callback PublishedTypeCallback) error 
+func PublishedTypes(ws appdef.IWorkspace, role appdef.QName) iter.Seq2[appdef.IType,
+  iter.Seq2[appdef.OperationKind, *[]appdef.FieldName]]
+```
+
+Usage:
+```go
+import "github.com/voedger/voedger/pkg/appdef/acl"
+
+for t, ops := range acl.PublishedTypes(ws, role) {
+  for op, fields := range ops {
+    if fields == nil {
+      fmt.Println(t, op, "all fields")
+    } else {
+      fmt.Println(t, op, *fields...)
+    }
+  }
+}
 ```
 
 ## See Also
