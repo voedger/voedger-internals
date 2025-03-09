@@ -13,6 +13,14 @@ See: [Query constraints](query-constraints.md)
 | --- | --- |
 | Authorization | Bearer {PrincipalToken} |
 
+### Parameters
+| Parameter | Type | Description |
+| --- | --- | --- |
+| owner | string | name of a user who owns the application |
+| app | string | name of an application |
+| wsid | int64 | the ID of workspace |
+| pkg, table | string | identifies a table |
+
 ### Result
 | Code | Description | Body |
 | --- | --- | --- |

@@ -13,6 +13,12 @@ Only workspaces returned which have resources available to [published roles](../
 | --- | --- | --- |
 | Accept | text/html | To get the response in HTML format (default) |
 
+### Parameters
+| Parameter | Type | Description |
+| --- | --- | --- |
+| owner | string | name of a user who owns the application |
+| app | string | name of an application |
+
 ### Result
 | Code | Description | Body |
 | --- | --- | --- |

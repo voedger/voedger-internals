@@ -14,6 +14,14 @@ GET `/api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/queries/{pkg}.{query}`
 | --- | --- |
 | Authorization | Bearer {PrincipalToken} |
 
+### Parameters
+| Parameter | Type | Description |
+| --- | --- | --- |
+| owner | string | name of a user who owns the application |
+| app | string | name of an application |
+| wsid | int64 | the ID of workspace |
+| pkg, query | string | identifies a query |
+
 ### Result
 | Code | Description | Body |
 | --- | --- | --- |

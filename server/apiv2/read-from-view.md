@@ -13,6 +13,14 @@ GET `/api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/views/{pkg}.{view}`
 | --- | --- |
 | Authorization | Bearer {PrincipalToken} |
 
+### Parameters
+| Parameter | Type | Description |
+| --- | --- | --- |
+| owner | string | name of a user who owns the application |
+| app | string | name of an application |
+| wsid | int64 | the ID of workspace |
+| pkg, view | string | identifies a view |
+
 ### Limitations
 -  "where" must contain "eq" or "in" condition for PK fields
 

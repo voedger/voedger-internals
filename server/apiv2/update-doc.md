@@ -11,6 +11,15 @@ PATCH `/api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/docs/{pkg}.{table}/{id
 | Authorization | Bearer {PrincipalToken} |
 | Content-type | application/json |
 
+### Parameters
+| Parameter | Type | Description |
+| --- | --- | --- |
+| owner | string | name of a user who owns the application |
+| app | string | name of an application |
+| wsid | int64 | the ID of workspace |
+| pkg, table | string | identifies a table (document or record) |
+| id | int64 | ID of a document or record |
+
 ### Body
 CDoc/WDoc/CRecord/WRecord (fields to be updated)
 

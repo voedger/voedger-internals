@@ -11,6 +11,14 @@ PATCH `/api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/blobs/{blobId}`
 | Authorization | Bearer {PrincipalToken} |
 | Content-type | application/json |
 
+### Parameters
+| Parameter | Type | Description |
+| --- | --- | --- |
+| owner | string | name of a user who owns the application |
+| app | string | name of an application |
+| wsid | int64 | the ID of workspace |
+| blobId | int64 | ID of a BLOB |
+
 ### Body
 The new metadata
 

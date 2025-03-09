@@ -10,6 +10,14 @@ GET `/api/v2/users/{owner}/apps/{app}/schemas/{pkg}.{workspace}/roles/{pkg}.{rol
 | --- | --- | --- |
 | Accept | application/json | To get the response in OpenAPI format (default) |
 
+### Parameters
+| Parameter | Type | Description |
+| --- | --- | --- |
+| owner | string | name of a user who owns the application |
+| app | string | name of an application |
+| pkg.workspace | string | identifies a workspace |
+| pkg.role | string | identifies a published role |
+
 ### Result
 | Code | Description | Body |
 | --- | --- | --- |

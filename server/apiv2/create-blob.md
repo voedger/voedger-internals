@@ -9,6 +9,13 @@ Creates a new BLOB with the uploaded binary data and metadata.
 | Authorization | Bearer {PrincipalToken} |
 | Content-type | multipart/form-data |
 
+### Parameters
+| Parameter | Type | Description |
+| --- | --- | --- |
+| owner | string | name of a user who owns the application |
+| app | string | name of an application |
+| wsid | int64 | the ID of workspace |
+
 ## Body
 BLOB and metadata.
 

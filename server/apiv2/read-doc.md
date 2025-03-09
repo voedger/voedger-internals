@@ -15,6 +15,15 @@ The following [query constraints](query-constraints.md) can be used:
 | --- | --- |
 | Authorization | Bearer {PrincipalToken} |
 
+### Parameters
+| Parameter | Type | Description |
+| --- | --- | --- |
+| owner | string | name of a user who owns the application |
+| app | string | name of an application |
+| wsid | int64 | the ID of workspace |
+| pkg, table | string | identifies a table (document or record) |
+| id | int64 | ID of a document or record |
+
 ### Result
 | Code | Description | Body 
 | --- | --- | --- |

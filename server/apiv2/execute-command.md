@@ -12,6 +12,14 @@ POST `/api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/commands/{pkg}.{command
 | Authorization | Bearer {PrincipalToken} |
 | Content-type | application/json |
 
+### Parameters
+| Parameter | Type | Description |
+| --- | --- | --- |
+| owner | string | name of a user who owns the application |
+| app | string | name of an application |
+| wsid | int64 | the ID of workspace |
+| pkg, command | string | identifies a command |
+
 ### Body
 Command parameter or ODoc
 
