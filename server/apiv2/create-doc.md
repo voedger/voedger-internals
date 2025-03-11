@@ -11,9 +11,16 @@ POST `/api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/docs/{pkg}.{table}`
 | Authorization | Bearer {PrincipalToken} |
 | Content-type | application/json |
 
-### Request
-JSON of the CDoc/WDoc/CRecord/WRecord
+### Parameters
+| Parameter | Type | Description |
+| --- | --- | --- |
+| owner | string | name of a user who owns the application |
+| app | string | name of an application |
+| wsid | int64 | the ID of workspace |
+| pkg, table | string | identifies a table (document or record) |
 
+### Body
+JSON object: CDoc/WDoc/CRecord/WRecord
 
 ### Result
 | Code | Description | Body

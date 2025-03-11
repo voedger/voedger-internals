@@ -10,6 +10,13 @@ GET `/api/v2/users/{owner}/apps/{app}/schemas/{pkg}.{workspace}/roles`
 | --- | --- | --- |
 | Accept | text/html | To get the response in HTML format (default) |
 
+### Parameters
+| Parameter | Type | Description |
+| --- | --- | --- |
+| owner | string | name of a user who owns the application |
+| app | string | name of an application |
+| pkg.workspace | string | identifies a workspace |
+
 ### Result
 | Code | Description | Body |
 | --- | --- | --- |

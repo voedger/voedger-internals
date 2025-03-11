@@ -10,11 +10,19 @@ GET `/api/v2/users/{owner}/apps/{app}/schemas/{pkg}.{workspace}/roles/{pkg}.{rol
 | --- | --- | --- |
 | Accept | application/json | To get the response in OpenAPI format (default) |
 
+### Parameters
+| Parameter | Type | Description |
+| --- | --- | --- |
+| owner | string | name of a user who owns the application |
+| app | string | name of an application |
+| pkg.workspace | string | identifies a workspace |
+| pkg.role | string | identifies a published role |
+
 ### Result
 | Code | Description | Body |
 | --- | --- | --- |
 | 200 | OK | role schema in the selected format |
-| 400 | Bad Request | [error object](README.md#errors) |
+| 400 | Bad Request | [error object](conventions.md#errors) |
 
 ## Technical Design
 - WorkspaceQName and QName of the role are provided to QPv2 in [QueryMessage](../design/qp.md#qpMessage)
@@ -24,7 +32,7 @@ flowchart
 qpMessage>Query Message]:::G
 qp[Query Processor]:::G
 queryData[Query Data]:::S
-appdef[[appdef]]:::S
+appdef[[pkg appdef]]:::S
 object[Object]:::S
 subgraph qp
     queryData[Query Data]:::S
@@ -33,7 +41,7 @@ qpMessage --> |has to specify role|QName:::S
 qpMessage --> |has to specify workspace|WorkspaceQName:::S
 QName --> |used by|queryData
 WorkspaceQName --> |used by|queryData
-queryData --> |"PublishedTypes(ws,role)"|appdef
+queryData --> |"PublishedTypes(ws,role)<br>CreateOpenApiSchema"|appdef
 appdef -.-> |types in callback|queryData
 queryData --> |builds schema|object
 
@@ -44,25 +52,9 @@ classDef S fill:#B5FFFF,color:#333
 classDef H fill:#C9E7B7,color:#333
 classDef G fill:#ffffff15, stroke:#999, stroke-width:2px, stroke-dasharray: 5 5
 ```
-
-```go
-package appdef
-
-/*
-    when fieldNames is empty, it means all fields are allowed
-*/
-type PublishedTypeCallback func(resource appdef.IType, fieldNames []string, operations []OperationKind) error
-
-
-/*
-    PublishedTypes lists the resources allowed to the published role in the workspace and ancestors (including resources available to non-authenticated requests):
-    - Documents
-    - Views
-    - Commands
-    - Queries
-*/
-func PublishedTypes(appDef IAppDef,  ws appdef.IWorkspace, role appdef.QName, callback PublishedTypeCallback) error 
-```
+### Components
+- [PublishedTypes - list published role resources](https://github.com/voedger/voedger/issues/3337)
+- [CreateOpenApiSchema - generate OpenApi for a workspace published](https://github.com/voedger/voedger/issues/3423)
 
 ## See Also
 - [design: QPv2](../design/qp.md#query-processor-v2-apiv2)
