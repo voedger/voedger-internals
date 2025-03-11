@@ -258,11 +258,11 @@ import (
 type sequencer struct {
   params *Params
 
-  // cleanupCtx is created by New() and used by cleanup() function as a signal for all goroutines to exit.
-  cleanupCtx context.Context
-  cleanupCtxCancel context.CancelFunc
-
   actualizerInProgress atomic.Bool
+  // actualizerCtxCancel is used by cleanup() function
+  actualizerCtxCancel context.CancelFunc
+  actualizerWG  *sync.WaitGroup
+
 
   lru *lru.Cache
 
@@ -278,7 +278,7 @@ type sequencer struct {
   currentWSKind WSKind
 
   // Closed when flusher needs to be stopped
-  flusherCtx context.Context
+  flusherCtxCancel context.CancelFunc
   // Used to wait for flusher goroutine to exit
   // Set to nil when flusher is not running
   // Is not accessed concurrently since 
@@ -360,7 +360,10 @@ func (s *sequencer) Actualize() {
 
 // actualizer is started in goroutine by Actualize().
 // Flow:
-// - Cancel and wait flusher() goroutine if running
+// - if s.flusherWG is not nil
+//   - s.cancelFlusherCtx()
+//   - Wait for s.flusherWG
+//   - s.flusherWG = nil
 // - Read nextPLogOffset from s.params.SeqStorage.ReadNextPLogOffset()
 // - Use s.params.SeqStorage.ActualizeSequencesFromPLog() and s.batcher()
 // - Increment s.nextOffset
@@ -368,7 +371,8 @@ func (s *sequencer) Actualize() {
 //   - Write toBeFlushed using s.params.SeqStorage.WriteValues()
 //   - s.params.SeqStorage.WriteNextPLogOffset(s.nextOffset)
 //   - Clean s.toBeFlushed
-// - Start flusher() goroutine
+// - s.flusherWG, s.flusherCtxCancel + start flusher() goroutine
+//
 // Error handling:
 // -  Handle errors with retry mechanism (500ms wait)
 // cleanupCtx handling:
@@ -391,6 +395,19 @@ func (s *sequencer) actualizer() {
 //     - delete(s.toBeFlushed, fv.Key)
 // - Unlock s.toBeFlushedMu
 func (s *sequencer) flusher() {
+  // ...
+}
+
+// cleanup stops the actualizer() and flusher() goroutines.
+// Flow:
+// - if s.actualizerInProgress
+//   - s.cancelActualizerCtx()
+//   - Wait for s.actualizerWG
+// - if s.flusherWG is not nil
+//   - s.cancelFlusherCtx()
+//   - Wait for s.flusherWG
+//   - s.flusherWG = nil
+func (s *sequencer) cleanup() {
   // ...
 }
 
