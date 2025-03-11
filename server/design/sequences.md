@@ -147,10 +147,10 @@ import (
 	"time"
 )
 
-type SeqID uint16
-type WSKind uint16
-type WSID uint16
-type Number uint64
+type SeqID      uint16
+type WSKind     uint16
+type WSID       uint64
+type Number     uint64
 type PLogOffset uint64
 
 type NumberKey struct {
@@ -170,18 +170,15 @@ type ISeqStorage interface {
 	ReadNumbers(WSID, []SeqID) ([]Numbers, error)
 
 	// IDs in batch.Values are unique
-	// Values must be written first, then Offset
+  // len(batch) may be 0
 	WriteValues(batch []SeqValue) error
 
-	WritePLogOffset(offset PLogOffset) error
+  // Next offset to be used
+	WriteNextPLogOffset(offset PLogOffset) error
+	ReadNextPLogOffset() (PLogOffset, error)
 
-	// Last offset successfully written by WriteValues
-	ReadLastWrittenPLogOffset() (PLogOffset, error)
-
-	// Scan PLog from the given offset and send values to the batcher.
-	// Values are sent per event, unordered, IDs are not unique.
-	// Batcher is responsible for batching, ordering, and ensuring uniqueness, and uses ISeqStorage.WriteValues.
-	// Batcher can block the execution for some time, but it terminates if the ctx is done.
+	// ActualizeSequencesFromPLog scans PLog from the given offset and send values to the batcher.
+	// Values are sent per event, unordered, ISeqValue.Keys are not unique.
 	ActualizeSequencesFromPLog(ctx context.Context, offset PLogOffset, batcher func(batch []SeqValue, offset PLogOffset) error) error
 }
 
@@ -190,33 +187,42 @@ type ISeqStorage interface {
 // Use: { Start {Next} ( Flush | Actualize ) }
 //
 // Definitions
-// - Event Processing: Start -> Next -> (Flush | Actualize)
+// - Sequencing Transaction: Start -> Next -> (Flush | Actualize)
 // - Actualization: Making the persistent state of the sequences consistent with the PLog.
+// - Flushing: Writing the accumulated sequence values to the storage.
+// - LRU: Least Recently Used cache that keep the most recent next sequence values in memory.
 type ISequencer interface {
 
-  // Start starts Event Processing for the given WSID.
-  // Panics if Event Processing is already started.
-  // Normal flow: increments the current PLogOffset value and returns this value with `true`.
-  // Returns `false` if:
+  // Start starts Sequencing Transaction for the given WSID.
+  // Marks Sequencing Transaction as in progress.
+  // Panics if Sequencing Transaction is already started.
+  // Normally returns the next PLogOffset, true
+  // Returns `0, false` if:
   // - Actualization is in progress
   // - The number of unflushed values exceeds the maximum threshold
-  // If ok is true, the caller must call Flush() or Actualize() to complete the Event Processing.
+  // If ok is true, the caller must call Flush() or Actualize() to complete the Sequencing Transaction.
   Start(wsKind WSKind, wsID WSID) (plogOffset PLogOffset, ok bool)
 
-  // Next generates the next sequence number for the given SeqID.
-  // Returns ErrUnknownSeqID if the sequence is not defined in Params.SeqTypes.
+  // Next returns the next sequence number for the given SeqID.
+  // Panics if Sequencing Transaction is not in progress.
+  // err: ErrUnknownSeqID if the sequence is not defined in Params.SeqTypes.
   Next(seqID SeqID) (num Number, err error)
 
-  // Flush completes Event Processing.
-  // Panics if Event Processing is not in progress.
-  // Copies `inproc` buffer to the `toBeFlushed` buffer and clears `inproc`.
-  // Sends the current batch to the flushing queue and completes the Event Processing.
+  // Flush completes Sequencing Transaction.
+  // Panics if Sequencing Transaction is not in progress.
   Flush()
 
-  // Actualize completes Event Processing and starts Actualization.
+  // Actualize cancels Sequencing Transaction and starts the Actualization process.
   // Panics if Actualization is already in progress.
-  // Panics if Event Processing is not in progress.
+  // Panics if Sequencing Transaction is not in progress.
+  // Flow:
+  // - Mark Sequencing Transaction as not in progress
+  // - Cancel and wait Flushing
+  // - Empty LRU
+  // - Do Actualization process
+  // - Write next PLogOffset
   Actualize()
+
 }
 
 // Params for the ISequencer implementation.
@@ -248,33 +254,48 @@ import (
 )
 
 // Implements isequencer.ISequencer
+// Keeps next (not current) values in LRU and type ISeqStorage interface
 type sequencer struct {
   params *Params
 
   // cleanupCtx is created by New() and used by cleanup() function as a signal for all goroutines to exit.
   cleanupCtx context.Context
-  // Closed when flusher needs to be stopped
-  flusherCtx context.Context
-  // Used to wait for flusher goroutine to exit
-  flusherWG  sync.WaitGroup
+  cleanupCtxCancel context.CancelFunc
 
   actualizerInProgress atomic.Bool
 
   lru *lru.Cache
 
+  // Initialized by Start()
+  // Example:
+  // - 4 is the last processed event
+  // - nextOffset keeps 5
+  // - Start() returns 5 and increments nextOffset to 6
+  nextOffset PLogOffset
+
+  // If Sequencing Transaction is in progress then currentWSID has non-zero value.
+  currentWSID   WSID
+  currentWSKind WSKind
+
+  // Closed when flusher needs to be stopped
+  flusherCtx context.Context
+  // Used to wait for flusher goroutine to exit
+  // Set to nil when flusher is not running
+  // Is not accessed concurrently since 
+  // - Is accessed by actualizer() and cleanup()
+  // - cleanup() first shutdowns the actualizer() then flusher()
+  flusherWG  *sync.WaitGroup
+
   // To be flushed
   toBeFlushed map[NumberKey]Number
+  // Will be 6 if the offset of the last processed event is 4
   toBeFlushedOffset PLogOffset
   // Protects toBeFlushed and toBeFlushedOffset
   toBeFlushedMu sync.RWMutex
 
   // Written by Next()
   inproc map[NumberKey]Number
-  inprocOffset PLogOffset
 
-  // Initialized by Start()
-  currentWSID   WSID
-  currentWSKind WSKind
 }
 
 // New creates a new instance of the Sequencer type.
@@ -285,7 +306,10 @@ func New(*isequencer.Params) (isequencer.ISequencer, cleanup func(), error) {
 }
 
 // Flush implements isequencer.ISequencer.Flush.
-// Copies s.inproc to s.toBeFlushed and clears s.inproc.
+// Flow:
+//   Copy s.inproc and s.nextOffset to s.toBeFlushed and s.toBeFlushedOffset
+//   Clear s.inproc
+//   Increase s.nextOffset
 func (s *sequencer) Flush() {
   // ...
 }
@@ -294,49 +318,82 @@ func (s *sequencer) Flush() {
 // It ensures thread-safe access to sequence values and handles various caching layers.
 // 
 // Flow:
-// - Validate processing status
+// - Validate equencing Transaction status
 // - Get initialValue from s.params.SeqTypes and ensure that SeqID is known
-// - Try to obtain next value using:
+// - Try to obtain the next value using:
 //   - Try s.lru (can be evicted)
 //   - Try s.inproc
 //   - Try s.toBeFlushed (use s.toBeFlushedMu to synchronize)
 //   - Try s.params.SeqStorage.ReadNumber()
-//      - Read all numbers for wsKind, wsID
+//      - Read all known numbers for wsKind, wsID
 //        - If number is 0 then initial value is used
 //      - Write all numbers to s.lru
 // - Write value+1 to s.lru
 // - Write value+1 to s.inproc
+// - Return value
 func (s *sequencer) Next(seqID SeqID) (num Number, err error) {
   // ...
 }
 
 // batcher processes a batch of sequence values and writes maximum values to storage.
-// 
 // Flow:
-// - Build maxValues: max Number for each SeqValue.Key
-// - Write maxValues using s.params.SeqStorage.WriteValues()
-func (s *sequencer) batcher(values []SeqValue) (err error) {
+// - Copy offset to s.nextOffset
+// - Store maxValues in s.toBeFlushed: max Number for each SeqValue.Key
+// - If s.params.MaxNumUnflushedValues is reached
+//   - Flush s.toBeFlushed using s.params.SeqStorage.WriteValues()
+//   - s.params.SeqStorage.WriteNextPLogOffset(s.nextOffset + 1)
+//   - Clean s.toBeFlushed
+func (s *sequencer) batcher(values []SeqValue, offset PLogOffset) (err error) {
   // ...
 }
 
 // Actualize implements isequencer.ISequencer.Actualize.
+// Flow:
+// - Validate Sequencing Transaction status (s.currentWSID != 0)
+// - Validate Actualization status (s.actualizerInProgress is false)
+// - Set s.actualizerInProgress to true
+// - Clean s.lru, s.nextOffset, s.currentWSID, s.currentWSKind, s.toBeFlushed, s.inproc, s.toBeFlushedOffset
+// - Start the actualizer() goroutine
 func (s *sequencer) Actualize() {
   // ...
 }
 
 // actualizer is started in goroutine by Actualize().
-// Exits immediately if cleanupCtx is closed
-//
 // Flow:
-// - Shutdown flusher() goroutine if running
+// - Cancel and wait flusher() goroutine if running
+// - Read nextPLogOffset from s.params.SeqStorage.ReadNextPLogOffset()
 // - Use s.params.SeqStorage.ActualizeSequencesFromPLog() and s.batcher()
+// - Increment s.nextOffset
+// - If s.toBeFlushed is not empty
+//   - Write toBeFlushed using s.params.SeqStorage.WriteValues()
+//   - s.params.SeqStorage.WriteNextPLogOffset(s.nextOffset)
+//   - Clean s.toBeFlushed
 // - Start flusher() goroutine
-//
 // Error handling:
 // -  Handle errors with retry mechanism (500ms wait)
+// cleanupCtx handling:
+// - if cleanupCtx exit
 func (s *sequencer) actualizer() {
   // ...
 }
+
+// flusher is started in goroutine by actualizer().
+// Flow:
+// - Lock s.toBeFlushedMu
+// - Copy s.toBeFlushedOffset to flushOffset (local variable)
+// - Copy s.toBeFlushed to flushValues []SeqValue (local variable)
+// - Unlock s.toBeFlushedMu
+// - s.params.SeqStorage.WriteValues(flushValues)
+// - s.params.SeqStorage.WriteNextPLogOffset(flushOffset)
+// - Lock s.toBeFlushedMu
+// - for each fv in flushValues
+//   - if s.toBeFlushed[fv.Key] == fv.Value
+//     - delete(s.toBeFlushed, fv.Key)
+// - Unlock s.toBeFlushedMu
+func (s *sequencer) flusher() {
+  // ...
+}
+
 ```
 
 ## Technical design
