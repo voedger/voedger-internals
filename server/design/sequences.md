@@ -268,7 +268,7 @@ type sequencer struct {
 
   // Initialized by Start()
   // Example:
-  // - 4 is the last processed event
+  // - 4 is the offset ofthe last event in the PLog
   // - nextOffset keeps 5
   // - Start() returns 5 and increments nextOffset to 6
   nextOffset PLogOffset
@@ -285,6 +285,9 @@ type sequencer struct {
   // - Is accessed by actualizer() and cleanup()
   // - cleanup() first shutdowns the actualizer() then flusher()
   flusherWG  *sync.WaitGroup
+  // Buffered channel [1] to signal flusher to flush
+  // Written (non-blocking) by Flush()
+  flusherSig chan struct{}
 
   // To be flushed
   toBeFlushed map[NumberKey]Number
@@ -310,6 +313,7 @@ func New(*isequencer.Params) (isequencer.ISequencer, cleanup func(), error) {
 //   Copy s.inproc and s.nextOffset to s.toBeFlushed and s.toBeFlushedOffset
 //   Clear s.inproc
 //   Increase s.nextOffset
+//   Non-blocking write to s.flusherSig
 func (s *sequencer) Flush() {
   // ...
 }
@@ -375,14 +379,15 @@ func (s *sequencer) Actualize() {
 //
 // Error handling:
 // -  Handle errors with retry mechanism (500ms wait)
-// cleanupCtx handling:
-// - if cleanupCtx exit
-func (s *sequencer) actualizer() {
+// ctx handling:
+// - if ctx is closed exit
+func (s *sequencer) actualizer(ctx context.Context) {
   // ...
 }
 
 // flusher is started in goroutine by actualizer().
 // Flow:
+// - Wait for s.flusherSig
 // - Lock s.toBeFlushedMu
 // - Copy s.toBeFlushedOffset to flushOffset (local variable)
 // - Copy s.toBeFlushed to flushValues []SeqValue (local variable)
@@ -394,7 +399,11 @@ func (s *sequencer) actualizer() {
 //   - if s.toBeFlushed[fv.Key] == fv.Value
 //     - delete(s.toBeFlushed, fv.Key)
 // - Unlock s.toBeFlushedMu
-func (s *sequencer) flusher() {
+// Error handling:
+// -  Handle errors with retry mechanism (500ms wait)
+// ctx handling:
+// - if ctx is closed exit
+func (s *sequencer) flusher(ctx context.Context) {
   // ...
 }
 
@@ -425,10 +434,20 @@ func (s *sequencer) cleanup() {
 
 ### isequencer
 
-`~cpm.isequencer.test.mockISeqStorage~`
+- `~test.isequencer.mockISeqStorage~`
+  - Mock implementation of `isequencer.ISeqStorage` for testing purposes
 
-- Mock implementation of `isequencer.ISeqStorage` for testing purposes
+Edge cases:
 
+- `~test.isequencer.LongRecovery~`
+  - Params.MaxNumUnflushedValues = 5 // Just a guess
+  - For numOfEvents in [0, 10*Params.MaxNumUnflushedValues]
+    - Create a new ISequencer instance
+    - Check that Next() returns correct values after recovery
+- `~test.isequencer.MultipleActualizes~`
+  - Repeat { Start {Next} randomly( Flush | Actualize ) } cycle 100 times
+  - Check that the system recovers well
+  
 ### SequencesTrustLevel mode: Tests
 
 Method:
