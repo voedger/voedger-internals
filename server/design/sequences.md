@@ -385,24 +385,25 @@ func (s *sequencer) actualizer(ctx context.Context) {
   // ...
 }
 
-// flusher is started in goroutine by actualizer().
-// Flow:
-// - Wait for s.flusherSig
-// - Lock s.toBeFlushedMu
-// - Copy s.toBeFlushedOffset to flushOffset (local variable)
-// - Copy s.toBeFlushed to flushValues []SeqValue (local variable)
-// - Unlock s.toBeFlushedMu
-// - s.params.SeqStorage.WriteValues(flushValues)
-// - s.params.SeqStorage.WriteNextPLogOffset(flushOffset)
-// - Lock s.toBeFlushedMu
-// - for each fv in flushValues
-//   - if s.toBeFlushed[fv.Key] == fv.Value
-//     - delete(s.toBeFlushed, fv.Key)
-// - Unlock s.toBeFlushedMu
-// Error handling:
-// -  Handle errors with retry mechanism (500ms wait)
-// ctx handling:
-// - if ctx is closed exit
+/*
+flusher is started in goroutine by actualizer().
+
+Flow:
+
+- Wait for ctx.Done() or s.flusherSig or s.params.MaxFlushingInterval
+- if ctx.Done() exit
+- Lock s.toBeFlushedMu
+- Copy s.toBeFlushedOffset to flushOffset (local variable)
+- Copy s.toBeFlushed to flushValues []SeqValue (local variable)
+- Unlock s.toBeFlushedMu
+- s.params.SeqStorage.WriteValues(flushValues)
+- s.params.SeqStorage.WriteNextPLogOffset(flushOffset)
+- Lock s.toBeFlushedMu
+- for each key in flushValues remove key from s.toBeFlushed if values are the same
+- Unlock s.toBeFlushedMu
+
+Error handling: Handle errors with retry mechanism (500ms wait)
+*/
 func (s *sequencer) flusher(ctx context.Context) {
   // ...
 }
