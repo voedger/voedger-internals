@@ -62,26 +62,26 @@ The `SequencesTrustLevel` setting determines how events and table records are wr
 
 ### VVMHost: Configure TrustedSequences mode for VVM
 
-`~tuc.VVMConfig.ConfigureTrustedSequences~`
+`~tuc.VVMConfig.ConfigureTrustedSequences~`uncvrd[^1]❓
 
 - Data
   - VVMConfig.TrustedSequences
 
 ### CP: Handling SequencesTrustLevel for Events
 
-`~tuc.PLogSequencesTrustLevel~`
+`~tuc.PLogSequencesTrustLevel~`uncvrd[^2]❓
 
 - ???
 
 ### CP: Handling SequencesTrustLevel for Table Records
 
-`~tuc.TableSequencesTrustLevel~`
+`~tuc.TableSequencesTrustLevel~`uncvrd[^3]❓
 
 - ???
 
 ### CP: Command processing
 
-`~tuc.StartSequencesGeneration~`
+`~tuc.StartSequencesGeneration~`uncvrd[^4]❓
 
 - When: CP starts processing a request
 - Flow:
@@ -93,7 +93,7 @@ The `SequencesTrustLevel` setting determines how events and table records are wr
       - Flushing queue is full
       - Returns 503: "server is busy"
 
-`~tuc.GetNextSequenceNumber~`
+`~tuc.GetNextSequenceNumber~`uncvrd[^5]❓
 
 - Flow
   - sequencer.Next(sequenceId)
@@ -109,12 +109,12 @@ The `SequencesTrustLevel` setting determines how events and table records are wr
     - `istructs.IIDGenerator` instance is provided to `IEvents.PutPlog()` [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/processors/command/impl.go#L307)
     - `istructs.IIDGenerator.Next()` is called to convert rawID->realID for ODoc in arguments and each resulting CUD [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/istructsmem/event-types.go#L189)
 
-`~tuc.FlushSequenceNumbers~`
+`~tuc.FlushSequenceNumbers~`uncvrd[^6]❓
 
 - When: After CP saves the PLog record successfully
   - sequencer.Flush()
 
-`~tuc.ReactualizeSequences~`
+`~tuc.ReactualizeSequences~`uncvrd[^7]❓
 
 - When: After CP fails to save the PLog record
 - Flow
@@ -122,7 +122,7 @@ The `SequencesTrustLevel` setting determines how events and table records are wr
 
 ### APs: Application deployment: Use cases
 
-`~tuc.InstantiateSequencer~`
+`~tuc.InstantiateSequencer~`uncvrd[^8]❓
 
 - When: Partition with the `partitionID` is deployed
 - Flow:
@@ -442,7 +442,7 @@ func (s *sequencer) cleanup() {
 
 ### Components
 
-`~cmp.IAppPartition.Sequencer~`
+`~cmp.IAppPartition.Sequencer~`uncvrd[^9]❓
 
 - Returns `isequencer.Sequencer` for the given `partitionID`
 
@@ -450,17 +450,17 @@ func (s *sequencer) cleanup() {
 
 ### isequencer
 
-- `~test.isequencer.mockISeqStorage~`
+- `~test.isequencer.mockISeqStorage~`uncvrd[^10]❓
   - Mock implementation of `isequencer.ISeqStorage` for testing purposes
 
 Edge cases:
 
-- `~test.isequencer.LongRecovery~`
+- `~test.isequencer.LongRecovery~`uncvrd[^11]❓
   - Params.MaxNumUnflushedValues = 5 // Just a guess
   - For numOfEvents in [0, 10*Params.MaxNumUnflushedValues]
     - Create a new ISequencer instance
     - Check that Next() returns correct values after recovery
-- `~test.isequencer.MultipleActualizes~`
+- `~test.isequencer.MultipleActualizes~`uncvrd[^12]❓
   - Repeat { Start {Next} randomly( Flush | Actualize ) } cycle 100 times
   - Check that the system recovers well
   - Check that the sequence values are increased monotonically
@@ -482,9 +482,9 @@ Method:
 
 System tests:
 
-- `~syst.SequencesTrustLevel0~`
-- `~syst.SequencesTrustLevel1~`
-- `~syst.SequencesTrustLevel2~`
+- `~syst.SequencesTrustLevel0~`uncvrd[^13]❓
+- `~syst.SequencesTrustLevel1~`uncvrd[^14]❓
+- `~syst.SequencesTrustLevel2~`uncvrd[^15]❓
 
 ## References
 
@@ -499,3 +499,19 @@ System tests:
 ### History
 
 - [Initial design](https://github.com/voedger/voedger-internals/blob/2475814f7caa1d2d400a62a788ceda9b16d8de2a/server/design/sequences.md)
+
+[^1]: `[~server.design.sequences/tuc.VVMConfig.ConfigureTrustedSequences~impl]`
+[^2]: `[~server.design.sequences/tuc.PLogSequencesTrustLevel~impl]`
+[^3]: `[~server.design.sequences/tuc.TableSequencesTrustLevel~impl]`
+[^4]: `[~server.design.sequences/tuc.StartSequencesGeneration~impl]`
+[^5]: `[~server.design.sequences/tuc.GetNextSequenceNumber~impl]`
+[^6]: `[~server.design.sequences/tuc.FlushSequenceNumbers~impl]`
+[^7]: `[~server.design.sequences/tuc.ReactualizeSequences~impl]`
+[^8]: `[~server.design.sequences/tuc.InstantiateSequencer~impl]`
+[^9]: `[~server.design.sequences/cmp.IAppPartition.Sequencer~impl]`
+[^10]: `[~server.design.sequences/test.isequencer.mockISeqStorage~impl]`
+[^11]: `[~server.design.sequences/test.isequencer.LongRecovery~impl]`
+[^12]: `[~server.design.sequences/test.isequencer.MultipleActualizes~impl]`
+[^13]: `[~server.design.sequences/syst.SequencesTrustLevel0~impl]`
+[^14]: `[~server.design.sequences/syst.SequencesTrustLevel1~impl]`
+[^15]: `[~server.design.sequences/syst.SequencesTrustLevel2~impl]`
