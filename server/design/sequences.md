@@ -259,11 +259,14 @@ type sequencer struct {
   params *Params
 
   actualizerInProgress atomic.Bool
-  // actualizerCtxCancel is used by cleanup() function
+
+  // Set by s.Actualize(), never cleared (zeroed).
+  // Used by s.cleanup().
   actualizerCtxCancel context.CancelFunc
   actualizerWG  *sync.WaitGroup
 
 
+  // Cleared by s.Actualize()
   lru *lru.Cache
 
   // Initialized by Start()
@@ -274,9 +277,11 @@ type sequencer struct {
   nextOffset PLogOffset
 
   // If Sequencing Transaction is in progress then currentWSID has non-zero value.
+  // Cleared by s.Actualize()
   currentWSID   WSID
   currentWSKind WSKind
 
+  // Set by s.actualizer()
   // Closed when flusher needs to be stopped
   flusherCtxCancel context.CancelFunc
   // Used to wait for flusher goroutine to exit
@@ -356,31 +361,38 @@ func (s *sequencer) batcher(values []SeqValue, offset PLogOffset) (err error) {
 // - Validate Sequencing Transaction status (s.currentWSID != 0)
 // - Validate Actualization status (s.actualizerInProgress is false)
 // - Set s.actualizerInProgress to true
+// - Set s.actualizerCtxCancel, s.actualizerWG
 // - Clean s.lru, s.nextOffset, s.currentWSID, s.currentWSKind, s.toBeFlushed, s.inproc, s.toBeFlushedOffset
 // - Start the actualizer() goroutine
 func (s *sequencer) Actualize() {
   // ...
 }
 
-// actualizer is started in goroutine by Actualize().
-// Flow:
-// - if s.flusherWG is not nil
-//   - s.cancelFlusherCtx()
-//   - Wait for s.flusherWG
-//   - s.flusherWG = nil
-// - Read nextPLogOffset from s.params.SeqStorage.ReadNextPLogOffset()
-// - Use s.params.SeqStorage.ActualizeSequencesFromPLog() and s.batcher()
-// - Increment s.nextOffset
-// - If s.toBeFlushed is not empty
-//   - Write toBeFlushed using s.params.SeqStorage.WriteValues()
-//   - s.params.SeqStorage.WriteNextPLogOffset(s.nextOffset)
-//   - Clean s.toBeFlushed
-// - s.flusherWG, s.flusherCtxCancel + start flusher() goroutine
-//
-// Error handling:
-// -  Handle errors with retry mechanism (500ms wait)
-// ctx handling:
-// - if ctx is closed exit
+/*
+actualizer is started in goroutine by Actualize().
+
+Flow:
+
+- if s.flusherWG is not nil
+  - s.cancelFlusherCtx()
+  - Wait for s.flusherWG
+  - s.flusherWG = nil
+- Read nextPLogOffset from s.params.SeqStorage.ReadNextPLogOffset()
+- Use s.params.SeqStorage.ActualizeSequencesFromPLog() and s.batcher()
+- Increment s.nextOffset
+- If s.toBeFlushed is not empty
+  - Write toBeFlushed using s.params.SeqStorage.WriteValues()
+  - s.params.SeqStorage.WriteNextPLogOffset(s.nextOffset)
+  - Clean s.toBeFlushed
+- s.flusherWG, s.flusherCtxCancel + start flusher() goroutine
+
+ctx handling:
+ - if ctx is closed exit
+
+Error handling:
+- Handle errors with retry mechanism (500ms wait)
+- Retry mechanism must check `ctx` parameter, if exists 
+*/
 func (s *sequencer) actualizer(ctx context.Context) {
   // ...
 }
@@ -402,7 +414,10 @@ Flow:
 - for each key in flushValues remove key from s.toBeFlushed if values are the same
 - Unlock s.toBeFlushedMu
 
-Error handling: Handle errors with retry mechanism (500ms wait)
+Error handling:
+
+- Handle errors with retry mechanism (500ms wait)
+- Retry mechanism must check `ctx` parameter, if exists 
 */
 func (s *sequencer) flusher(ctx context.Context) {
   // ...
