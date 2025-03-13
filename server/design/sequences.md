@@ -463,6 +463,7 @@ Edge cases:
 - `~test.isequencer.MultipleActualizes~`
   - Repeat { Start {Next} randomly( Flush | Actualize ) } cycle 100 times
   - Check that the system recovers well
+  - Check that the sequence values are increased monotonically
   
 ### SequencesTrustLevel mode: Tests
 
