@@ -30,17 +30,23 @@ Not declared in ISO/IEC 9075, but used in SQL servers:
 
 ## Technical design
 
-- `~comp.AppDef~`: Support new data types
-- `~comp.Parser~`: Support new data types
-- `~comp.istructs~`: Add new members to `IRowReader` and `IRowWriter` interfaces
-- `~comp.istructsmem~`: Implement new members of `IRowReader` and `IRowWriter` interfaces
+- `~comp.AppDef~`uncvrd[^1]❓: Support new data types
+- `~comp.Parser~`uncvrd[^2]❓: Support new data types
+- `~comp.istructs~`uncvrd[^3]❓: Add new members to `IRowReader` and `IRowWriter` interfaces
+- `~comp.istructsmem~`uncvrd[^4]❓: Implement new members of `IRowReader` and `IRowWriter` interfaces
 
 ## Test plan
 
-- `~it.SmallIntegers~`
+- `~it.SmallIntegers~`uncvrd[^5]❓
 
 ## References
 
 ### Addressed issues
 
 - [SMALLINT & TINYINT #3430](https://github.com/voedger/voedger/issues/3430)
+
+[^1]: `[~server.vsql.small/comp.AppDef~impl]`
+[^2]: `[~server.vsql.small/comp.Parser~impl]`
+[^3]: `[~server.vsql.small/comp.istructs~impl]`
+[^4]: `[~server.vsql.small/comp.istructsmem~impl]`
+[^5]: `[~server.vsql.small/it.SmallIntegers~impl]`

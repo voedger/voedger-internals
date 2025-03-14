@@ -1,19 +1,20 @@
 {
   "FileUrl2FileHash": {
-    "https://github.com/voedger/voedger/blob/6cdaf984d07a84e3e0a24c3bfc7e5e0fc3850e78/pkg/ielections/impl.go": "70d5b5f02fc92418bf9f9c4519b785a3a21046df",
     "https://github.com/voedger/voedger/blob/6cdaf984d07a84e3e0a24c3bfc7e5e0fc3850e78/pkg/ielections/impl_mockstorage.go": "a6a7717812ecf0e76991bd6e287ab64da5115c58",
     "https://github.com/voedger/voedger/blob/6cdaf984d07a84e3e0a24c3bfc7e5e0fc3850e78/pkg/ielections/impl_test.go": "80c867796f11a560dbaf61f8c6885853bc30da32",
     "https://github.com/voedger/voedger/blob/6cdaf984d07a84e3e0a24c3bfc7e5e0fc3850e78/pkg/ielections/impl_testsuite.go": "f17bd49cec7688cf0fdc6abac5a5d272419f207c",
     "https://github.com/voedger/voedger/blob/6cdaf984d07a84e3e0a24c3bfc7e5e0fc3850e78/pkg/ielections/interface.go": "cf6fb21e9a9074402b423d267feed9b1af8703dd",
-    "https://github.com/voedger/voedger/blob/6cdaf984d07a84e3e0a24c3bfc7e5e0fc3850e78/pkg/vvm/provide.go": "d6a83f327c4cc0516cf06bcdf23fd2d6f1b93a37",
     "https://github.com/voedger/voedger/blob/6cdaf984d07a84e3e0a24c3bfc7e5e0fc3850e78/pkg/vvm/storage/consts.go": "d34adfd84ff60f690bf25fad5e795f6c29f1d0fe",
     "https://github.com/voedger/voedger/blob/6cdaf984d07a84e3e0a24c3bfc7e5e0fc3850e78/pkg/vvm/storage/impl_elections_test.go": "2d99731995c1a11fc2ff91f83e390e1736802217",
     "https://github.com/voedger/voedger/blob/6cdaf984d07a84e3e0a24c3bfc7e5e0fc3850e78/pkg/vvm/storage/impl_electionsbydrivers_test.go": "5b35ab1438fbd31db9624404cf22588ab0c77652",
     "https://github.com/voedger/voedger/blob/6cdaf984d07a84e3e0a24c3bfc7e5e0fc3850e78/pkg/vvm/storage/interface.go": "5689642b52d623fbcb4e06d9081b231df9a145e9",
     "https://github.com/voedger/voedger/blob/6cdaf984d07a84e3e0a24c3bfc7e5e0fc3850e78/pkg/vvm/storage/provide.go": "c48200f32b3a3ff3c5875e446b351469d117d2d7",
-    "https://github.com/voedger/voedger/blob/945a6f1ffe8fce2a27dad0358e7dd5a2ae207f23/pkg/vvm/impl_orch.go": "4d1330eebe979daa1e83e2db8bab32f3f75a89b5",
-    "https://github.com/voedger/voedger/blob/c5f2d9e5b07bc7d5afba51af5df5da842d157c03/pkg/vvm/types.go": "6895fb6ff663283d0808cc14d215a9f7e9fbc254",
-    "https://github.com/voedger/voedger/blob/e81fd33926adedebd9eb832d9940e3b8acaac578/pkg/vvm/impl_orch_test.go": "517fd82edf8cd682b7a10f4309b69d07be2744d0",
+    "https://github.com/voedger/voedger/blob/d10452dae8a296059137b1d44fb7a411f90aa52f/pkg/ielections/impl.go": "49819ab4346b93e0fd6e1ee5b7a619eca1166a26",
+    "https://github.com/voedger/voedger/blob/d10452dae8a296059137b1d44fb7a411f90aa52f/pkg/vvm/impl_orch.go": "ea306cca0574f40a3b6185449e50a00c09cb9d11",
+    "https://github.com/voedger/voedger/blob/d10452dae8a296059137b1d44fb7a411f90aa52f/pkg/vvm/impl_orch_test.go": "f611104092ae87457c1d2ab6e79afc7c70d1c1b9",
+    "https://github.com/voedger/voedger/blob/d10452dae8a296059137b1d44fb7a411f90aa52f/pkg/vvm/provide.go": "f8e9fbea2d3e4cb81cb35e2815fa992f913c17f5",
+    "https://github.com/voedger/voedger/blob/d10452dae8a296059137b1d44fb7a411f90aa52f/pkg/vvm/types.go": "95cff54c54c73743d83f588f98b92a130e2bc1af",
+    "https://github.com/voedger/voedger/blob/d10452dae8a296059137b1d44fb7a411f90aa52f/pkg/vvm/wire_gen.go": "0ee06d229a6508ef5f1e68d708023a85714171e8",
     "https://github.com/voedger/voedger/blob/e81fd33926adedebd9eb832d9940e3b8acaac578/pkg/vvm/shutdowntest/iml_shutdown_test.go": "08958c61cc34f6a28e90571a8c676a3ce5cfe761"
   }
 }
