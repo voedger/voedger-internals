@@ -1,5 +1,5 @@
 ---
-reqmd.package: server.vsql.small
+reqmd.package: server.vsql.smallints
 ---
 
 # SMALLINT & TINYINT
@@ -45,8 +45,8 @@ Not declared in ISO/IEC 9075, but used in SQL servers:
 
 - [SMALLINT & TINYINT #3430](https://github.com/voedger/voedger/issues/3430)
 
-[^1]: `[~server.vsql.small/comp.AppDef~impl]`
-[^2]: `[~server.vsql.small/comp.Parser~impl]`
-[^3]: `[~server.vsql.small/comp.istructs~impl]`
-[^4]: `[~server.vsql.small/comp.istructsmem~impl]`
-[^5]: `[~server.vsql.small/it.SmallIntegers~impl]`
+[^1]: `[~server.vsql.smallints/comp.AppDef~impl]`
+[^2]: `[~server.vsql.smallints/comp.Parser~impl]`
+[^3]: `[~server.vsql.smallints/comp.istructs~impl]`
+[^4]: `[~server.vsql.smallints/comp.istructsmem~impl]`
+[^5]: `[~server.vsql.smallints/it.SmallIntegers~impl]`
