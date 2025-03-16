@@ -486,19 +486,21 @@ System tests:
 - `~syst.SequencesTrustLevel1~`uncvrd[^14]❓
 - `~syst.SequencesTrustLevel2~`uncvrd[^15]❓
 
-## References
-
-### Addressed issues
+## Addressed issues
 
 - [Original Issue #3215: Sequences](https://github.com/voedger/voedger/issues/3215) - Initial requirements and discussion
 
-### Design process
+## References
+
+Design process:
 
 - [Voedger Sequence Management Design (Claude 3.7 Sonnet, March 1, 2025)](https://claude.ai/chat/f1a8492a-8e8a-4229-ac79-ecc3655732d3)
 
-### History
+History:
 
 - [Initial design](https://github.com/voedger/voedger-internals/blob/2475814f7caa1d2d400a62a788ceda9b16d8de2a/server/design/sequences.md)
+
+## Footnotes
 
 [^1]: `[~server.design.sequences/tuc.VVMConfig.ConfigureTrustedSequences~impl]`
 [^2]: `[~server.design.sequences/tuc.PLogSequencesTrustLevel~impl]`
