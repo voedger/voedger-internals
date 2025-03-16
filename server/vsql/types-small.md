@@ -63,10 +63,10 @@ VIEW MeasurementAggr (
 
 ## Technical design
 
-- `~comp.AppDef~`uncvrd[^1]❓: Support new data types
-- `~comp.Parser~`uncvrd[^2]❓: Support new data types
-- `~comp.istructs~`uncvrd[^3]❓: Add new members to `IRowReader` and `IRowWriter` interfaces
-- `~comp.istructsmem~`uncvrd[^4]❓: Implement new members of `IRowReader` and `IRowWriter` interfaces
+- `~cmp.AppDef~`uncvrd[^1]❓: Support new data types
+- `~cmp.Parser~`uncvrd[^2]❓: Support new data types
+- `~cmp.istructs~`uncvrd[^3]❓: Add new members to `IRowReader` and `IRowWriter` interfaces
+- `~cmp.istructsmem~`uncvrd[^4]❓: Implement new members of `IRowReader` and `IRowWriter` interfaces
 
 ## Test plan
 
@@ -78,8 +78,8 @@ VIEW MeasurementAggr (
 
 ## Footnotes
 
-[^1]: `[~server.vsql.smallints/comp.AppDef~impl]`
-[^2]: `[~server.vsql.smallints/comp.Parser~impl]`
-[^3]: `[~server.vsql.smallints/comp.istructs~impl]`
-[^4]: `[~server.vsql.smallints/comp.istructsmem~impl]`
+[^1]: `[~server.vsql.smallints/cmp.AppDef~impl]`
+[^2]: `[~server.vsql.smallints/cmp.Parser~impl]`
+[^3]: `[~server.vsql.smallints/cmp.istructs~impl]`
+[^4]: `[~server.vsql.smallints/cmp.istructsmem~impl]`
 [^5]: `[~server.vsql.smallints/it.SmallIntegers~impl]`

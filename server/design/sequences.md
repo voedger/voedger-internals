@@ -482,9 +482,9 @@ Method:
 
 System tests:
 
-- `~syst.SequencesTrustLevel0~`uncvrd[^13]❓
-- `~syst.SequencesTrustLevel1~`uncvrd[^14]❓
-- `~syst.SequencesTrustLevel2~`uncvrd[^15]❓
+- `~it.SequencesTrustLevel0~`uncvrd[^13]❓
+- `~it.SequencesTrustLevel1~`uncvrd[^14]❓
+- `~it.SequencesTrustLevel2~`uncvrd[^15]❓
 
 ## Addressed issues
 
@@ -514,6 +514,6 @@ History:
 [^10]: `[~server.design.sequences/test.isequencer.mockISeqStorage~impl]`
 [^11]: `[~server.design.sequences/test.isequencer.LongRecovery~impl]`
 [^12]: `[~server.design.sequences/test.isequencer.MultipleActualizes~impl]`
-[^13]: `[~server.design.sequences/syst.SequencesTrustLevel0~impl]`
-[^14]: `[~server.design.sequences/syst.SequencesTrustLevel1~impl]`
-[^15]: `[~server.design.sequences/syst.SequencesTrustLevel2~impl]`
+[^13]: `[~server.design.sequences/it.SequencesTrustLevel0~impl]`
+[^14]: `[~server.design.sequences/it.SequencesTrustLevel1~impl]`
+[^15]: `[~server.design.sequences/it.SequencesTrustLevel2~impl]`
