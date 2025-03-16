@@ -16,8 +16,8 @@ Declared in ISO/IEC 9075, supported by popular SQL servers:
 
 - MySQL: [SMALLINT](https://dev.mysql.com/doc/refman/8.4/en/integer-types.html)
 - MariaDB: [SMALLINT](https://mariadb.com/kb/en/smallint/)
-- Microsoft SQL Server: [SMALLINT](https://learn.microsoft.com/en-us/sql/t-sql/data-types/int-bigint-smallint-and-tinyint-transact-sql?view=sql-server-ver16)
-- PostgreSQL: [SMALLINT](https://www.postgresql.org/docs/current/datatype-numeric.html)
+- Microsoft SQL Server: [smallint](https://learn.microsoft.com/en-us/sql/t-sql/data-types/int-bigint-smallint-and-tinyint-transact-sql?view=sql-server-ver16)
+- PostgreSQL: [smallint](https://www.postgresql.org/docs/current/datatype-numeric.html)
 - IBM Db2: [SMALLINT](https://www.ibm.com/docs/en/db2/11.5?topic=list-numbers)
 
 ### tinyint
@@ -26,7 +26,7 @@ Not declared in ISO/IEC 9075, but used in SQL servers:
 
 - MySQL: [TINYINT](https://dev.mysql.com/doc/refman/8.4/en/integer-types.html)
 - MariaDB: [TINYINT](https://mariadb.com/kb/en/tinyint/)
-- Microsoft SQL Server: [TINYINT](https://learn.microsoft.com/en-us/sql/t-sql/data-types/int-bigint-smallint-and-tinyint-transact-sql?view=sql-server-ver16)
+- Microsoft SQL Server: [tinyint](https://learn.microsoft.com/en-us/sql/t-sql/data-types/int-bigint-smallint-and-tinyint-transact-sql?view=sql-server-ver16)
 
 ## Functional design
 
