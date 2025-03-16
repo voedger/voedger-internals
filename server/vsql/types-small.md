@@ -6,27 +6,33 @@ reqmd.package: server.vsql.smallints
 
 ## Motivation
 
-As of March 2025 Voedger does not support 2-byte and 1-byte integers. It causes unnecessary storage and processing overhead.
+As of March 2025, Voedger does not support 2-byte and 1-byte integers. This limitation causes unnecessary storage and processing overhead, particularly for data types that don't require the full range of 4-byte integers.
 
 ## Introduction
 
+This document outlines the implementation of two smaller integer data types in Voedger: `smallint` (2 bytes) and `tinyint` (1 byte). Adding these types will optimize storage utilization and processing efficiency for appropriate use cases.
+
 ### smallint
 
-Declared in ISO/IEC 9075, supported by popular SQL servers:
+A 2-byte integer type with range from -32,768 to 32,767.
 
-- MySQL: [SMALLINT](https://dev.mysql.com/doc/refman/8.4/en/integer-types.html)
-- MariaDB: [SMALLINT](https://mariadb.com/kb/en/smallint/)
-- Microsoft SQL Server: [smallint](https://learn.microsoft.com/en-us/sql/t-sql/data-types/int-bigint-smallint-and-tinyint-transact-sql?view=sql-server-ver16)
-- PostgreSQL: [smallint](https://www.postgresql.org/docs/current/datatype-numeric.html)
-- IBM Db2: [SMALLINT](https://www.ibm.com/docs/en/db2/11.5?topic=list-numbers)
+`smallint` is declared in ISO/IEC 9075 standard and is widely supported by popular SQL database systems:
+
+- MySQL: [SMALLINT](https://dev.mysql.com/doc/refman/8.4/en/integer-types.html) (signed: -32,768 to 32,767; unsigned: 0 to 65,535)
+- MariaDB: [SMALLINT](https://mariadb.com/kb/en/smallint/) (signed: -32,768 to 32,767; unsigned: 0 to 65,535)
+- Microsoft SQL Server: [smallint](https://learn.microsoft.com/en-us/sql/t-sql/data-types/int-bigint-smallint-and-tinyint-transact-sql?view=sql-server-ver16) (-32,768 to 32,767)
+- PostgreSQL: [smallint](https://www.postgresql.org/docs/current/datatype-numeric.html) (-32,768 to 32,767)
+- IBM Db2: [SMALLINT](https://www.ibm.com/docs/en/db2/11.5?topic=list-numbers) (-32,768 to 32,767)
 
 ### tinyint
 
-Not declared in ISO/IEC 9075, but used in SQL servers:
+A 1-byte integer type with range from -128 to 127 (signed) or 0 to 255 (unsigned).
 
-- MySQL: [TINYINT](https://dev.mysql.com/doc/refman/8.4/en/integer-types.html)
-- MariaDB: [TINYINT](https://mariadb.com/kb/en/tinyint/)
-- Microsoft SQL Server: [tinyint](https://learn.microsoft.com/en-us/sql/t-sql/data-types/int-bigint-smallint-and-tinyint-transact-sql?view=sql-server-ver16)
+While not declared in the ISO/IEC 9075 standard, `tinyint` is implemented by several major SQL database systems:
+
+- MySQL: [TINYINT](https://dev.mysql.com/doc/refman/8.4/en/integer-types.html) (signed: -128 to 127; unsigned: 0 to 255)
+- MariaDB: [TINYINT](https://mariadb.com/kb/en/tinyint/) (signed: -128 to 127; unsigned: 0 to 255)
+- Microsoft SQL Server: [tinyint](https://learn.microsoft.com/en-us/sql/t-sql/data-types/int-bigint-smallint-and-tinyint-transact-sql?view=sql-server-ver16) (0 to 255, unsigned only)
 
 ## Functional design
 
