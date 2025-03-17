@@ -14,7 +14,7 @@ This document outlines the implementation of two smaller integer data types in V
 
 ### smallint
 
-A 2-byte integer type with range from -32,768 to 32,767.
+A 2-byte signed integer type with range from -32,768 to 32,767.
 
 `smallint` is declared in ISO/IEC 9075 standard and is widely supported by popular SQL database systems:
 
@@ -26,7 +26,7 @@ A 2-byte integer type with range from -32,768 to 32,767.
 
 ### tinyint
 
-A 1-byte integer type with range from -128 to 127 (signed) or 0 to 255 (unsigned).
+A 1-byte signed integer type with range from -128 to 127
 
 While not declared in the ISO/IEC 9075 standard, `tinyint` is implemented by several major SQL database systems:
 
