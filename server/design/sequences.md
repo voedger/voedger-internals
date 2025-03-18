@@ -4,9 +4,9 @@ reqmd.package: server.design.sequences
 
 # Sequences
 
-This document outlines the design for sequence number management within the Voedger platform.
+## Introduction
 
-## Background
+This document outlines the design for sequence number management within the Voedger platform.
 
 A **Sequence** in Voedger is defined as a monotonically increasing series of numbers. The platform provides a unified mechanism for sequence generation that ensures reliable, ordered number production.
 
@@ -31,19 +31,6 @@ As of March 1, 2025, the sequence implementation has several critical limitation
 
 The proposed redesign addresses these issues through intelligent caching, background updates, and optimized storage mechanisms that maintain sequence integrity while dramatically improving resource utilization and responsiveness.
 
-## Solution overview
-
-The proposed approach implements a more efficient and scalable sequence management system through the following key components:
-
-- **Projection-Based Storage**: Each application partition will maintain sequence data in a dedicated projection (`SeqData`), eliminating the need to load all sequence data into memory at once.
-- **Offset Tracking**: `SeqData` will include a `SeqDataOffset` attribute that indicates the PLog partition offset for which the stored sequence data is valid, enabling precise recovery and synchronization.
-- **MRU Cache Implementation**: Sequence data will be accessed through a Most Recently Used (MRU) cache that prioritizes frequently accessed sequences while allowing less active ones to be evicted from memory.
-- **Background Updates**: As new events are written to the PLog, sequence data will be updated in the background, ensuring that the system maintains current sequence values without blocking operations.
-- **Batched Writes**: Sequence updates will be collected and written in batches to reduce I/O operations and improve throughput.
-- **Optimized Actualization**: The actualization process will use the stored `SeqDataOffset` to process only events since the last known valid state, dramatically reducing startup times.
-
-This approach decouples memory usage from the total number of workspaces and transforms the recovery process from a linear operation dependent on total event count to one that only needs to process recent events since the last checkpoint.
-
 ## Definitions
 
 **APs**: Applcation Partitions
@@ -57,6 +44,19 @@ The `SequencesTrustLevel` setting determines how events and table records are wr
 | 0     | InsertIfNotExists | InsertIfNotExists |
 | 1     | InsertIfNotExists | Put               |
 | 2     | Put               | Put               |
+
+## Solution overview
+
+The proposed approach implements a more efficient and scalable sequence management system through the following key components:
+
+- **Projection-Based Storage**: Each application partition will maintain sequence data in a dedicated projection (`SeqData`), eliminating the need to load all sequence data into memory at once.
+- **Offset Tracking**: `SeqData` will include a `SeqDataOffset` attribute that indicates the PLog partition offset for which the stored sequence data is valid, enabling precise recovery and synchronization.
+- **MRU Cache Implementation**: Sequence data will be accessed through a Most Recently Used (MRU) cache that prioritizes frequently accessed sequences while allowing less active ones to be evicted from memory.
+- **Background Updates**: As new events are written to the PLog, sequence data will be updated in the background, ensuring that the system maintains current sequence values without blocking operations.
+- **Batched Writes**: Sequence updates will be collected and written in batches to reduce I/O operations and improve throughput.
+- **Optimized Actualization**: The actualization process will use the stored `SeqDataOffset` to process only events since the last known valid state, dramatically reducing startup times.
+
+This approach decouples memory usage from the total number of workspaces and transforms the recovery process from a linear operation dependent on total event count to one that only needs to process recent events since the last checkpoint.
 
 ## Functional design: Use cases
 
@@ -486,23 +486,25 @@ Method:
 
 System tests:
 
-- `~syst.SequencesTrustLevel0~`uncvrd[^13]❓
-- `~syst.SequencesTrustLevel1~`uncvrd[^14]❓
-- `~syst.SequencesTrustLevel2~`uncvrd[^15]❓
+- `~it.SequencesTrustLevel0~`uncvrd[^13]❓
+- `~it.SequencesTrustLevel1~`uncvrd[^14]❓
+- `~it.SequencesTrustLevel2~`uncvrd[^15]❓
 
-## References
-
-### Addressed issues
+## Addressed issues
 
 - [Original Issue #3215: Sequences](https://github.com/voedger/voedger/issues/3215) - Initial requirements and discussion
 
-### Design process
+## References
+
+Design process:
 
 - [Voedger Sequence Management Design (Claude 3.7 Sonnet, March 1, 2025)](https://claude.ai/chat/f1a8492a-8e8a-4229-ac79-ecc3655732d3)
 
-### History
+History:
 
 - [Initial design](https://github.com/voedger/voedger-internals/blob/2475814f7caa1d2d400a62a788ceda9b16d8de2a/server/design/sequences.md)
+
+## Footnotes
 
 [^1]: `[~server.design.sequences/tuc.VVMConfig.ConfigureTrustedSequences~impl]`
 [^2]: `[~server.design.sequences/tuc.PLogSequencesTrustLevel~impl]`
@@ -516,6 +518,6 @@ System tests:
 [^10]: `[~server.design.sequences/test.isequencer.mockISeqStorage~impl]`
 [^11]: `[~server.design.sequences/test.isequencer.LongRecovery~impl]`
 [^12]: `[~server.design.sequences/test.isequencer.MultipleActualizes~impl]`
-[^13]: `[~server.design.sequences/syst.SequencesTrustLevel0~impl]`
-[^14]: `[~server.design.sequences/syst.SequencesTrustLevel1~impl]`
-[^15]: `[~server.design.sequences/syst.SequencesTrustLevel2~impl]`
+[^13]: `[~server.design.sequences/it.SequencesTrustLevel0~impl]`
+[^14]: `[~server.design.sequences/it.SequencesTrustLevel1~impl]`
+[^15]: `[~server.design.sequences/it.SequencesTrustLevel2~impl]`

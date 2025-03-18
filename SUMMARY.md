@@ -63,7 +63,7 @@
       - [Enrich token](server/authnz/enrich-token.md)
   - VSQL
     - [Types](server/vsql/types.md)
-      - [SMALLINT & TINYINT](server/vsql/types-small.md)
+      - [Small integers](server/vsql/types-small.md)
     - [SELECT, UPDATE](server/vsql/select-update.md)
     - [Uniques With Multiple Fields](server/vsql/uniques-multi.md)
     - [Verifiable Fields](server/vsql/ver-fields.md)
