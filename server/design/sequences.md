@@ -453,7 +453,11 @@ func (s *sequencer) cleanup() {
 - `~test.isequencer.mockISeqStorage~`uncvrd[^10]❓
   - Mock implementation of `isequencer.ISeqStorage` for testing purposes
 
-Edge cases:
+Core functionality tests:
+
+- ???
+
+Edge case tests:
 
 - `~test.isequencer.LongRecovery~`uncvrd[^11]❓
   - Params.MaxNumUnflushedValues = 5 // Just a guess
