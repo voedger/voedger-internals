@@ -29,7 +29,5 @@ The following [query constraints](query-constraints.md) can be used:
 | --- | --- | --- |
 | 200 | OK | CDoc/WDoc/CRecord/WRecord object |
 | 400 | Bad requeset | [error object](conventions.md#errors) |
-| 401 | Unauthorized | [error object](conventions.md#errors) |
 | 403 | Forbidden | [error object](conventions.md#errors) |
-| 404 | Table Not Found | [error object](conventions.md#errors) |
-| 405 | Method Not Allowed, table is an ODoc/ORecord | [error object](conventions.md#errors) |
+| 404 | Document not found | [error object](conventions.md#errors) |
