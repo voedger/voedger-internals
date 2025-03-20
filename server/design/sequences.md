@@ -164,20 +164,20 @@ type SeqValue struct {
 }
 
 // To be injected into the ISequencer implementation.
+// 
 type ISeqStorage interface {
 
   // If number is not found, returns 0
 	ReadNumbers(WSID, []SeqID) ([]Numbers, error)
+  ReadNextPLogOffset() (PLogOffset, error)
 
 	// IDs in batch.Values are unique
   // len(batch) may be 0
-	WriteValues(batch []SeqValue) error
+  // offset: Next offset to be used
+  // batch MUST be written first, then offset
+	WriteValuesAndOffset(batch []SeqValue, offset PLogOffset) error
 
-  // Next offset to be used
-	WriteNextPLogOffset(offset PLogOffset) error
-	ReadNextPLogOffset() (PLogOffset, error)
-
-	// ActualizeSequencesFromPLog scans PLog from the given offset and send values to the batcher.
+  // ActualizeSequencesFromPLog scans PLog from the given offset and send values to the batcher.
 	// Values are sent per event, unordered, ISeqValue.Keys are not unique.
 	ActualizeSequencesFromPLog(ctx context.Context, offset PLogOffset, batcher func(batch []SeqValue, offset PLogOffset) error) error
 }
@@ -349,8 +349,7 @@ func (s *sequencer) Next(seqID SeqID) (num Number, err error) {
 // - Copy offset to s.nextOffset
 // - Store maxValues in s.toBeFlushed: max Number for each SeqValue.Key
 // - If s.params.MaxNumUnflushedValues is reached
-//   - Flush s.toBeFlushed using s.params.SeqStorage.WriteValues()
-//   - s.params.SeqStorage.WriteNextPLogOffset(s.nextOffset + 1)
+//   - Flush s.toBeFlushed using s.params.SeqStorage.WriteValues(s.nextOffset + 1)
 //   - Clean s.toBeFlushed
 func (s *sequencer) batcher(values []SeqValue, offset PLogOffset) (err error) {
   // ...
@@ -381,8 +380,7 @@ Flow:
 - Use s.params.SeqStorage.ActualizeSequencesFromPLog() and s.batcher()
 - Increment s.nextOffset
 - If s.toBeFlushed is not empty
-  - Write toBeFlushed using s.params.SeqStorage.WriteValues()
-  - s.params.SeqStorage.WriteNextPLogOffset(s.nextOffset)
+  - Write toBeFlushed using s.params.SeqStorage.WriteValues(s.nextOffset)
   - Clean s.toBeFlushed
 - s.flusherWG, s.flusherCtxCancel + start flusher() goroutine
 
@@ -408,8 +406,7 @@ Flow:
 - Copy s.toBeFlushedOffset to flushOffset (local variable)
 - Copy s.toBeFlushed to flushValues []SeqValue (local variable)
 - Unlock s.toBeFlushedMu
-- s.params.SeqStorage.WriteValues(flushValues)
-- s.params.SeqStorage.WriteNextPLogOffset(flushOffset)
+- s.params.SeqStorage.WriteValues(flushValues, flushOffset)
 - Lock s.toBeFlushedMu
 - for each key in flushValues remove key from s.toBeFlushed if values are the same
 - Unlock s.toBeFlushedMu
@@ -453,11 +450,12 @@ func (s *sequencer) cleanup() {
 - `~test.isequencer.mockISeqStorage~`uncvrd[^10]❓
   - Mock implementation of `isequencer.ISeqStorage` for testing purposes
 
-Core functionality tests:
+Some core functionality tests:
 
-- ???
+- `~test.isequencer.FlushByTimer~`
+- `~test.isequencer.FlushBySize~`
 
-Edge case tests:
+Some edge case tests:
 
 - `~test.isequencer.LongRecovery~`uncvrd[^11]❓
   - Params.MaxNumUnflushedValues = 5 // Just a guess
@@ -468,6 +466,8 @@ Edge case tests:
   - Repeat { Start {Next} randomly( Flush | Actualize ) } cycle 100 times
   - Check that the system recovers well
   - Check that the sequence values are increased monotonically
+- `~test.isequencer.FlushPermanentlyFails~`
+  - Recovery has worked but ISeqStorage.WriteValues() fails permanently so flusher() will be waiting
   
 ### SequencesTrustLevel mode: Tests
 
