@@ -75,7 +75,7 @@ curl -X GET \
 ### Include
 - the `include` parameter expects comma-separated list, where each entry is either:
     - the name of the pointer field 
-    - the name of the cotainer field
+    - the name of the cotainer
 - the names can be nested, e.g. `include=department.group,article_prices`
 
 ## Technical Design
