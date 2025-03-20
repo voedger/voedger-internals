@@ -72,8 +72,11 @@ curl -X GET \
 }
 ```
 
-### Notes
-- the `include` parameter expects the name of the pointer field in the current class, not the name of the target class
+### Include
+- the `include` parameter expects comma-separated list, where each entry is either:
+    - the name of the pointer field 
+    - the name of the cotainer field
+- the names can be nested, e.g. `include=department.group,article_prices`
 
 ## Technical Design
 Rows are filtered by [Rows Processor](../design/qp.md#rows-processor-1) component of the Query Processor. 
