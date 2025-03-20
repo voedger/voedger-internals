@@ -168,7 +168,7 @@ type SeqValue struct {
 type ISeqStorage interface {
 
   // If number is not found, returns 0
-	ReadNumbers(WSID, []SeqID) ([]Numbers, error)
+	ReadNumbers(WSID, []SeqID) ([]Number, error)
   ReadNextPLogOffset() (PLogOffset, error)
 
 	// IDs in batch.Values are unique
