@@ -9,7 +9,7 @@ Supported constraints:
 - order (string) - order by field
 - limit (int) - limit number of records
 - skip (int) skip number of records
-- include (string) - include referenced objects
+- include (string) - include referenced objects and/or containers
 - keys (string) - select only some field(s)
 - where (object) - filter records
 
@@ -22,7 +22,7 @@ curl -X GET \
 --data-urlencode 'order=name'
 --data-urlencode 'limit=10'
 --data-urlencode 'skip=30'
---data-urlencode 'include=department.group'  #include both department and group
+--data-urlencode 'include=department.group,article_prices'  #include both department and group; include article_prices container
 --data-urlencode 'keys=id,name,department.name,department.group.name' #select only some fields
 --data-urlencode 'where={"id_department":123456,"number":{"$gte": 100, "$lte": 200}}'
 
@@ -41,25 +41,42 @@ curl -X GET \
                 "group": {
                     "name": "Drinks"
                 }
-            }
+            },
+            "article_prices": [
+                {
+                    "id": 125,
+                    "price": 1.5,
+                    "currency": "EUR"
+                }
+            ]
         },
         {
             "id": 124,
-            "name": "Fant 0.5l",
+            "name": "Fanta 0.5l",
             "department": {
                 "name": "Fresh Drinks",
                 "group": {
                     "name": "Drinks"
                 }
-            }
+            },
+            "article_prices": [
+                {
+                    "id": 126,
+                    "price": 1.4,
+                    "currency": "EUR"
+                }
+            ]
         }
     ]
 
 }
 ```
 
-### Notes
-- the `include` parameter expects the name of the pointer field in the current class, not the name of the target class
+### Include
+- the `include` parameter expects comma-separated list, where each entry is either:
+    - the name of the pointer field 
+    - the name of the cotainer
+- the names can be nested, e.g. `include=department.group,article_prices`
 
 ## Technical Design
 Rows are filtered by [Rows Processor](../design/qp.md#rows-processor-1) component of the Query Processor. 
