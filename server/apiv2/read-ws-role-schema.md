@@ -9,6 +9,7 @@ GET `/api/v2/users/{owner}/apps/{app}/schemas/{pkg}.{workspace}/roles/{pkg}.{rol
 | Key | Value | Description |
 | --- | --- | --- |
 | Accept | application/json | To get the response in OpenAPI format (default) |
+| Accept | text/html | Shows schema in Swagger UI |
 
 ### Parameters
 | Parameter | Type | Description |
