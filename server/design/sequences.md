@@ -274,7 +274,6 @@ type Params struct {
 	SeqStorage ISeqStorage
 
 	MaxNumUnflushedValues int           // 500
-	MaxFlushingInterval   time.Duration // 500 * time.Millisecond
 	// Size of the LRU cache, NumberKey -> Number.
 	LRUCacheSize int // 100_000
 
@@ -441,7 +440,7 @@ flusher is started in goroutine by actualizer().
 
 Flow:
 
-- Wait for ctx.Done() or s.flusherSig or s.params.MaxFlushingInterval
+- Wait for ctx.Done() or s.flusherSig
 - if ctx.Done() exit
 - Lock s.toBeFlushedMu
 - Copy s.toBeFlushedOffset to flushOffset (local variable)
