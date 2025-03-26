@@ -217,7 +217,8 @@ type ISeqStorage interface {
 
   // ActualizeSequencesFromPLog scans PLog from the given offset and send values to the batcher.
 	// Values are sent per event, unordered, ISeqValue.Keys are not unique.
-	ActualizeSequencesFromPLog(ctx context.Context, offset PLogOffset, batcher func(batch []SeqValue, offset PLogOffset) error) error
+  // err: ctx.Err() if ctx is closed
+	ActualizeSequencesFromPLog(ctx context.Context, offset PLogOffset, batcher func(batch []SeqValue, offset PLogOffset) error) (err error)
 }
 
 // ISequencer defines the interface for working with sequences.
@@ -276,6 +277,8 @@ type Params struct {
 	MaxFlushingInterval   time.Duration // 500 * time.Millisecond
 	// Size of the LRU cache, NumberKey -> Number.
 	LRUCacheSize int // 100_000
+
+  BatcherDelay time.Duration // 5 * time.Millisecond
 }
 ```
 
@@ -383,13 +386,17 @@ func (s *sequencer) Next(seqID SeqID) (num Number, err error) {
 }
 
 // batcher processes a batch of sequence values and writes maximum values to storage.
+// 
 // Flow:
-// - Copy offset to s.nextOffset
+// - Wait until len(s.toBeFlushed) < s.params.MaxNumUnflushedValues
+//   - Lock/Unlock
+//   - Wait s.params.BatcherDelay
+//   - check ctx (return ctx.Err())
+// - s.nextOffset = offset + 1
 // - Store maxValues in s.toBeFlushed: max Number for each SeqValue.Key
-// - If s.params.MaxNumUnflushedValues is reached
-//   - Flush s.toBeFlushed using s.params.SeqStorage.WriteValues(s.nextOffset + 1)
-//   - Clean s.toBeFlushed
-func (s *sequencer) batcher(values []SeqValue, offset PLogOffset) (err error) {
+// - s.toBeFlushedOffset = offset + 1
+// 
+func (s *sequencer) batcher(ctx ctx.Context, values []SeqValue, offset PLogOffset) (err error) {
   // ...
 }
 
@@ -414,14 +421,10 @@ Flow:
   - s.cancelFlusherCtx()
   - Wait for s.flusherWG
   - s.flusherWG = nil
+- Clean s.toBeFlushed, toBeFlushedOffset
+- s.flusherWG, s.flusherCtxCancel + start flusher() goroutine
 - Read nextPLogOffset from s.params.SeqStorage.ReadNextPLogOffset()
 - Use s.params.SeqStorage.ActualizeSequencesFromPLog() and s.batcher()
-- Increment s.nextOffset
-- If s.toBeFlushed is not empty
-  - Write toBeFlushed using s.params.SeqStorage.WriteValues(s.nextOffset)
-  - Clean s.toBeFlushed
-- s.flusherWG, s.flusherCtxCancel + start flusher() goroutine
-
 ctx handling:
  - if ctx is closed exit
 
