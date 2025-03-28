@@ -15,11 +15,28 @@ As of March 1, 2025, Voedger implements four specific sequence types using this 
 - **PLogOffsetSequence**: Tracks write positions in the PLog
 - **WLogOffsetSequence**: Manages offsets in the WLog
 - **CRecordIDSequence**: Generates unique identifiers for CRecords
+  - To read all CRecords by SELECT
 - **OWRecordIDSequence**: Provides sequential IDs for O/W- Records
+  - There are a potentially lot of such records, so it is not possible to use SELECT to read all of them
 
 As the Voedger platform evolves, the number of sequence types is expected to expand. Future development will enable applications to define their own custom sequence types, extending the platform's flexibility to meet diverse business requirements beyond the initially implemented system sequences.
 
 These sequences ensure consistent ordering of operations, proper transaction management, and unique identification across the platform's distributed architecture. The design prioritizes performance and scalability by implementing an efficient caching strategy and background updates that minimize memory usage and recovery time.
+
+### Background
+
+- [#688: record ID leads to different tables](https://github.com/voedger/voedger/issues/688)
+- [VIEW RecordsRegistry](https://github.com/voedger/voedger/blob/ec85a5fed968e455eb98983cd12a0163effdc096/pkg/sys/sys.vsql#L260)
+- [Singleton IDs]https://github.com/voedger/voedger/blob/ec85a5fed968e455eb98983cd12a0163effdc096/pkg/istructs/consts.go#L101
+
+Existing design
+
+- [cmdProc.appsPartitions](https://github.com/voedger/voedger/blob/b7fa6fa9e260eac4f1de80312c14ad4250f400a3/pkg/processors/command/provide.go#L32)
+- [command/impl.go/getIDGenerator](https://github.com/voedger/voedger/blob/b7fa6fa9e260eac4f1de80312c14ad4250f400a3/pkg/processors/command/impl.go#L299)
+- [command/impl.go: Put IDs to response](https://github.com/voedger/voedger/blob/b7fa6fa9e260eac4f1de80312c14ad4250f400a3/pkg/processors/command/impl.go#L790)
+- [command/impl.go: (idGen *implIDGenerator) NextID](https://github.com/voedger/voedger/blob/b7fa6fa9e260eac4f1de80312c14ad4250f400a3/pkg/processors/command/impl.go#L816)
+- [istructmem/idgenerator.go: (g *implIIDGenerator) NextID](https://github.com/voedger/voedger/blob/b7fa6fa9e260eac4f1de80312c14ad4250f400a3/pkg/istructsmem/idgenerator.go#L32)
+  - [onNewID???](https://github.com/voedger/voedger/blob/b7fa6fa9e260eac4f1de80312c14ad4250f400a3/pkg/istructsmem/idgenerator.go#L16)
 
 ## Motivation
 
@@ -39,11 +56,11 @@ The proposed redesign addresses these issues through intelligent caching, backgr
 
 The `SequencesTrustLevel` setting determines how events and table records are written.
 
-| Level | Events            | Table Records     |
-|-------|-------------------|-------------------|
-| 0     | InsertIfNotExists | InsertIfNotExists |
-| 1     | InsertIfNotExists | Put               |
-| 2     | Put               | Put               |
+| Level | Events, write mode | Table Records, write mode |
+|-------|--------------------|---------------------------|
+| 0     | InsertIfNotExists  | InsertIfNotExists         |
+| 1     | InsertIfNotExists  | Put                       |
+| 2     | Put                | Put                       |
 
 ## Solution overview
 
@@ -58,28 +75,29 @@ The proposed approach implements a more efficient and scalable sequence manageme
 
 This approach decouples memory usage from the total number of workspaces and transforms the recovery process from a linear operation dependent on total event count to one that only needs to process recent events since the last checkpoint.
 
-## Functional design: Use cases
+## Use cases
 
-### VVMHost: Configure TrustedSequences mode for VVM
+### VVMHost: Configure SequencesTrustLevel mode for VVM
 
-`~tuc.VVMConfig.ConfigureTrustedSequences~`uncvrd[^1]❓
+`~tuc.VVMConfig.ConfigureSequencesTrustLevel~`uncvrd[^1]❓
 
-- Data
-  - VVMConfig.TrustedSequences
+- Components:
+  - `~cmp.VVMConfig.SequencesTrustLevel~`
 
 ### CP: Handling SequencesTrustLevel for Events
 
-`~tuc.PLogSequencesTrustLevel~`uncvrd[^2]❓
-
-- ???
+- `~tuc.SequencesTrustLevelForPLog~`uncvrd[^2]❓
+  - When PLog is written SequencesTrustLevel is used to determine the write mode
+- `~tuc.SequencesTrustLevelForWLog~`
+  - When WLog is written SequencesTrustLevel is used to determine the write mode
 
 ### CP: Handling SequencesTrustLevel for Table Records
 
-`~tuc.TableSequencesTrustLevel~`uncvrd[^3]❓
+- `~tuc.SequencesTrustLevelForRecords~`uncvrd[^3]❓
+  - When a record is inserted SequencesTrustLevel is used to determine the write mode
+  - When a record is updated - nothing is done in connection with SequencesTrustLevel
 
-- ???
-
-### CP: Command processing
+### CP: Command processing: Start sequences generation
 
 `~tuc.StartSequencesGeneration~`uncvrd[^4]❓
 
@@ -92,22 +110,36 @@ This approach decouples memory usage from the total number of workspaces and tra
       - Actualization is in progress
       - Flushing queue is full
       - Returns 503: "server is busy"
+- Components:
+  - `~cmp.IAppPartition.Sequencer~`
+    - Returns `isequencer.ISequencer` for the given `partitionID`
+  - `~cmp.ISequencer.Start~`
+
+### CP: Command processing: Next sequence number
 
 `~tuc.GetNextSequenceNumber~`uncvrd[^5]❓
 
 - Flow
   - sequencer.Next(sequenceId)
-- Previous flow
-  - recovery on the first request into the workspace
-    - CP creates new `istructs.IIDGenerator` instance [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/processors/command/impl.go#L136)
-    - the `istructs.IIDGenerator` instance is kept for the WSID
-    - `istructs.IIDGenerator` instance is tuned with the data from the each event of the PLog:
-   	  - for each CUD:
-   	    - CUD.ID is set as the current RecordID
-          - `IIDGenerator.UpdateOnSync` is called [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/processors/command/impl.go#L253)
-  - save the event after cmd exec:
-    - `istructs.IIDGenerator` instance is provided to `IEvents.PutPlog()` [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/processors/command/impl.go#L307)
-    - `istructs.IIDGenerator.Next()` is called to convert rawID->realID for ODoc in arguments and each resulting CUD [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/istructsmem/event-types.go#L189)
+
+Components:
+
+- `~cmp.ISequencer.Next~`
+
+#### Previous flow
+
+- recovery on the first request into the workspace
+  - CP creates new `istructs.IIDGenerator` instance [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/processors/command/impl.go#L136)
+  - the `istructs.IIDGenerator` instance is kept for the WSID
+  - `istructs.IIDGenerator` instance is tuned with the data from the each event of the PLog:
+    - for each CUD:
+      - CUD.ID is set as the current RecordID
+        - `IIDGenerator.UpdateOnSync` is called [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/processors/command/impl.go#L253)
+- save the event after cmd exec:
+  - `istructs.IIDGenerator` instance is provided to `IEvents.PutPlog()` [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/processors/command/impl.go#L307)
+  - `istructs.IIDGenerator.Next()` is called to convert rawID->realID for ODoc in arguments and each resulting CUD [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/istructsmem/event-types.go#L189)
+
+### CP: Command processing: Flush sequence numbers
 
 `~tuc.FlushSequenceNumbers~`uncvrd[^6]❓
 
@@ -120,15 +152,21 @@ This approach decouples memory usage from the total number of workspaces and tra
 - Flow
   - sequencer.Actualize()
 
-### APs: Application deployment: Use cases
+### AppParts: Application deployment: Use cases
 
 `~tuc.InstantiateSequencer~`uncvrd[^8]❓
 
 - When: Partition with the `partitionID` is deployed
 - Flow:
-  - Instantiate the implementation of the `isequencer.ISeqStorage`: `seqStorage isequencer.ISeqStorage`
+  - Instantiate the implementation of the `isequencer.ISeqStorage` (internal.seqStorage, see below)
   - Instantiate `sequencer := isequencer.New(*isequencer.Params)`
   - Save `sequencer` to some `map[partitionID]isequencer.Sequencer`
+
+Components:
+
+- `~cmp.appparts.internal.seqStorage~`
+  - `~cmp.appparts.internal.seqStorage.688~`
+    - Handle [#688: record ID leads to different tables](https://github.com/voedger/voedger/issues/688)
 
 ## Functional design: pkg/isequencer
 
@@ -179,7 +217,8 @@ type ISeqStorage interface {
 
   // ActualizeSequencesFromPLog scans PLog from the given offset and send values to the batcher.
 	// Values are sent per event, unordered, ISeqValue.Keys are not unique.
-	ActualizeSequencesFromPLog(ctx context.Context, offset PLogOffset, batcher func(batch []SeqValue, offset PLogOffset) error) error
+  // err: ctx.Err() if ctx is closed
+	ActualizeSequencesFromPLog(ctx context.Context, offset PLogOffset, batcher func(batch []SeqValue, offset PLogOffset) error) (err error)
 }
 
 // ISequencer defines the interface for working with sequences.
@@ -235,9 +274,10 @@ type Params struct {
 	SeqStorage ISeqStorage
 
 	MaxNumUnflushedValues int           // 500
-	MaxFlushingInterval   time.Duration // 500 * time.Millisecond
 	// Size of the LRU cache, NumberKey -> Number.
 	LRUCacheSize int // 100_000
+
+  BatcherDelay time.Duration // 5 * time.Millisecond
 }
 ```
 
@@ -345,13 +385,17 @@ func (s *sequencer) Next(seqID SeqID) (num Number, err error) {
 }
 
 // batcher processes a batch of sequence values and writes maximum values to storage.
+// 
 // Flow:
-// - Copy offset to s.nextOffset
+// - Wait until len(s.toBeFlushed) < s.params.MaxNumUnflushedValues
+//   - Lock/Unlock
+//   - Wait s.params.BatcherDelay
+//   - check ctx (return ctx.Err())
+// - s.nextOffset = offset + 1
 // - Store maxValues in s.toBeFlushed: max Number for each SeqValue.Key
-// - If s.params.MaxNumUnflushedValues is reached
-//   - Flush s.toBeFlushed using s.params.SeqStorage.WriteValues(s.nextOffset + 1)
-//   - Clean s.toBeFlushed
-func (s *sequencer) batcher(values []SeqValue, offset PLogOffset) (err error) {
+// - s.toBeFlushedOffset = offset + 1
+// 
+func (s *sequencer) batcher(ctx ctx.Context, values []SeqValue, offset PLogOffset) (err error) {
   // ...
 }
 
@@ -376,14 +420,10 @@ Flow:
   - s.cancelFlusherCtx()
   - Wait for s.flusherWG
   - s.flusherWG = nil
+- Clean s.toBeFlushed, toBeFlushedOffset
+- s.flusherWG, s.flusherCtxCancel + start flusher() goroutine
 - Read nextPLogOffset from s.params.SeqStorage.ReadNextPLogOffset()
 - Use s.params.SeqStorage.ActualizeSequencesFromPLog() and s.batcher()
-- Increment s.nextOffset
-- If s.toBeFlushed is not empty
-  - Write toBeFlushed using s.params.SeqStorage.WriteValues(s.nextOffset)
-  - Clean s.toBeFlushed
-- s.flusherWG, s.flusherCtxCancel + start flusher() goroutine
-
 ctx handling:
  - if ctx is closed exit
 
@@ -400,7 +440,7 @@ flusher is started in goroutine by actualizer().
 
 Flow:
 
-- Wait for ctx.Done() or s.flusherSig or s.params.MaxFlushingInterval
+- Wait for ctx.Done() or s.flusherSig
 - if ctx.Done() exit
 - Lock s.toBeFlushedMu
 - Copy s.toBeFlushedOffset to flushOffset (local variable)
@@ -492,7 +532,7 @@ System tests:
 
 ## Addressed issues
 
-- [Original Issue #3215: Sequences](https://github.com/voedger/voedger/issues/3215) - Initial requirements and discussion
+- [#3215: Sequences](https://github.com/voedger/voedger/issues/3215) - Initial requirements and discussion
 
 ## References
 
