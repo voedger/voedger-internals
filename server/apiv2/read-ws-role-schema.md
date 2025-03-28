@@ -27,7 +27,7 @@ GET `/api/v2/users/{owner}/apps/{app}/schemas/{pkg}.{workspace}/roles/{pkg}.{rol
 
 ## Technical Design
 - WorkspaceQName and QName of the role are provided to QPv2 in [QueryMessage](../design/qp.md#qpMessage)
-- QPv2 reads the schema of the resources available to the role and returns it in the OpenAPI format
+- QPv2 reads the schema of the resources available to the role and generates OpenAPI schema for this role
 ```mermaid
 flowchart
 qpMessage>Query Message]:::G
