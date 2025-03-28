@@ -82,24 +82,24 @@ This approach decouples memory usage from the total number of workspaces and tra
 `~tuc.VVMConfig.ConfigureSequencesTrustLevel~`uncvrd[^1]❓
 
 - Components:
-  - `~cmp.VVMConfig.SequencesTrustLevel~`
+  - `~cmp.VVMConfig.SequencesTrustLevel~`uncvrd[^2]❓
 
 ### CP: Handling SequencesTrustLevel for Events
 
-- `~tuc.SequencesTrustLevelForPLog~`uncvrd[^2]❓
+- `~tuc.SequencesTrustLevelForPLog~`uncvrd[^3]❓
   - When PLog is written SequencesTrustLevel is used to determine the write mode
-- `~tuc.SequencesTrustLevelForWLog~`
+- `~tuc.SequencesTrustLevelForWLog~`uncvrd[^4]❓
   - When WLog is written SequencesTrustLevel is used to determine the write mode
 
 ### CP: Handling SequencesTrustLevel for Table Records
 
-- `~tuc.SequencesTrustLevelForRecords~`uncvrd[^3]❓
+- `~tuc.SequencesTrustLevelForRecords~`uncvrd[^5]❓
   - When a record is inserted SequencesTrustLevel is used to determine the write mode
   - When a record is updated - nothing is done in connection with SequencesTrustLevel
 
 ### CP: Command processing: Start sequences generation
 
-`~tuc.StartSequencesGeneration~`uncvrd[^4]❓
+`~tuc.StartSequencesGeneration~`uncvrd[^6]❓
 
 - When: CP starts processing a request
 - Flow:
@@ -111,20 +111,20 @@ This approach decouples memory usage from the total number of workspaces and tra
       - Flushing queue is full
       - Returns 503: "server is busy"
 - Components:
-  - `~cmp.IAppPartition.Sequencer~`
+  - `~cmp.IAppPartition.Sequencer~`uncvrd[^7]❓
     - Returns `isequencer.ISequencer` for the given `partitionID`
-  - `~cmp.ISequencer.Start~`
+  - `~cmp.ISequencer.Start~`uncvrd[^8]❓
 
 ### CP: Command processing: Next sequence number
 
-`~tuc.GetNextSequenceNumber~`uncvrd[^5]❓
+`~tuc.GetNextSequenceNumber~`uncvrd[^9]❓
 
 - Flow
   - sequencer.Next(sequenceId)
 
 Components:
 
-- `~cmp.ISequencer.Next~`
+- `~cmp.ISequencer.Next~`uncvrd[^10]❓
 
 #### Previous flow
 
@@ -141,12 +141,12 @@ Components:
 
 ### CP: Command processing: Flush sequence numbers
 
-`~tuc.FlushSequenceNumbers~`uncvrd[^6]❓
+`~tuc.FlushSequenceNumbers~`uncvrd[^11]❓
 
 - When: After CP saves the PLog record successfully
   - sequencer.Flush()
 
-`~tuc.ReactualizeSequences~`uncvrd[^7]❓
+`~tuc.ReactualizeSequences~`uncvrd[^12]❓
 
 - When: After CP fails to save the PLog record
 - Flow
@@ -154,7 +154,7 @@ Components:
 
 ### AppParts: Application deployment: Use cases
 
-`~tuc.InstantiateSequencer~`uncvrd[^8]❓
+`~tuc.InstantiateSequencer~`uncvrd[^13]❓
 
 - When: Partition with the `partitionID` is deployed
 - Flow:
@@ -164,8 +164,8 @@ Components:
 
 Components:
 
-- `~cmp.appparts.internal.seqStorage~`
-  - `~cmp.appparts.internal.seqStorage.688~`
+- `~cmp.appparts.internal.seqStorage~`uncvrd[^14]❓
+  - `~cmp.appparts.internal.seqStorage.i688~`uncvrd[^15]❓
     - Handle [#688: record ID leads to different tables](https://github.com/voedger/voedger/issues/688)
 
 ## Functional design: pkg/isequencer
@@ -477,36 +477,30 @@ func (s *sequencer) cleanup() {
 
 ## Technical design
 
-### Components
-
-`~cmp.IAppPartition.Sequencer~`uncvrd[^9]❓
-
-- Returns `isequencer.Sequencer` for the given `partitionID`
-
 ## Test design
 
 ### isequencer
 
-- `~test.isequencer.mockISeqStorage~`uncvrd[^10]❓
+- `~test.isequencer.mockISeqStorage~`uncvrd[^16]❓
   - Mock implementation of `isequencer.ISeqStorage` for testing purposes
 
 Some core functionality tests:
 
-- `~test.isequencer.FlushByTimer~`
-- `~test.isequencer.FlushBySize~`
+- `~test.isequencer.FlushByTimer~`uncvrd[^17]❓
+- `~test.isequencer.FlushBySize~`uncvrd[^18]❓
 
 Some edge case tests:
 
-- `~test.isequencer.LongRecovery~`uncvrd[^11]❓
+- `~test.isequencer.LongRecovery~`uncvrd[^19]❓
   - Params.MaxNumUnflushedValues = 5 // Just a guess
   - For numOfEvents in [0, 10*Params.MaxNumUnflushedValues]
     - Create a new ISequencer instance
     - Check that Next() returns correct values after recovery
-- `~test.isequencer.MultipleActualizes~`uncvrd[^12]❓
+- `~test.isequencer.MultipleActualizes~`uncvrd[^20]❓
   - Repeat { Start {Next} randomly( Flush | Actualize ) } cycle 100 times
   - Check that the system recovers well
   - Check that the sequence values are increased monotonically
-- `~test.isequencer.FlushPermanentlyFails~`
+- `~test.isequencer.FlushPermanentlyFails~`uncvrd[^21]❓
   - Recovery has worked but ISeqStorage.WriteValues() fails permanently so flusher() will be waiting
   
 ### SequencesTrustLevel mode: Tests
@@ -526,9 +520,9 @@ Method:
 
 System tests:
 
-- `~it.SequencesTrustLevel0~`uncvrd[^13]❓
-- `~it.SequencesTrustLevel1~`uncvrd[^14]❓
-- `~it.SequencesTrustLevel2~`uncvrd[^15]❓
+- `~it.SequencesTrustLevel0~`uncvrd[^22]❓
+- `~it.SequencesTrustLevel1~`uncvrd[^23]❓
+- `~it.SequencesTrustLevel2~`uncvrd[^24]❓
 
 ## Addressed issues
 
@@ -546,18 +540,27 @@ History:
 
 ## Footnotes
 
-[^1]: `[~server.design.sequences/tuc.VVMConfig.ConfigureTrustedSequences~impl]`
-[^2]: `[~server.design.sequences/tuc.PLogSequencesTrustLevel~impl]`
-[^3]: `[~server.design.sequences/tuc.TableSequencesTrustLevel~impl]`
-[^4]: `[~server.design.sequences/tuc.StartSequencesGeneration~impl]`
-[^5]: `[~server.design.sequences/tuc.GetNextSequenceNumber~impl]`
-[^6]: `[~server.design.sequences/tuc.FlushSequenceNumbers~impl]`
-[^7]: `[~server.design.sequences/tuc.ReactualizeSequences~impl]`
-[^8]: `[~server.design.sequences/tuc.InstantiateSequencer~impl]`
-[^9]: `[~server.design.sequences/cmp.IAppPartition.Sequencer~impl]`
-[^10]: `[~server.design.sequences/test.isequencer.mockISeqStorage~impl]`
-[^11]: `[~server.design.sequences/test.isequencer.LongRecovery~impl]`
-[^12]: `[~server.design.sequences/test.isequencer.MultipleActualizes~impl]`
-[^13]: `[~server.design.sequences/it.SequencesTrustLevel0~impl]`
-[^14]: `[~server.design.sequences/it.SequencesTrustLevel1~impl]`
-[^15]: `[~server.design.sequences/it.SequencesTrustLevel2~impl]`
+[^1]: `[~server.design.sequences/tuc.VVMConfig.ConfigureSequencesTrustLevel~impl]`
+[^2]: `[~server.design.sequences/cmp.VVMConfig.SequencesTrustLevel~impl]`
+[^3]: `[~server.design.sequences/tuc.SequencesTrustLevelForPLog~impl]`
+[^4]: `[~server.design.sequences/tuc.SequencesTrustLevelForWLog~impl]`
+[^5]: `[~server.design.sequences/tuc.SequencesTrustLevelForRecords~impl]`
+[^6]: `[~server.design.sequences/tuc.StartSequencesGeneration~impl]`
+[^7]: `[~server.design.sequences/cmp.IAppPartition.Sequencer~impl]`
+[^8]: `[~server.design.sequences/cmp.ISequencer.Start~impl]`
+[^9]: `[~server.design.sequences/tuc.GetNextSequenceNumber~impl]`
+[^10]: `[~server.design.sequences/cmp.ISequencer.Next~impl]`
+[^11]: `[~server.design.sequences/tuc.FlushSequenceNumbers~impl]`
+[^12]: `[~server.design.sequences/tuc.ReactualizeSequences~impl]`
+[^13]: `[~server.design.sequences/tuc.InstantiateSequencer~impl]`
+[^14]: `[~server.design.sequences/cmp.appparts.internal.seqStorage~impl]`
+[^15]: `[~server.design.sequences/cmp.appparts.internal.seqStorage.i688~impl]`
+[^16]: `[~server.design.sequences/test.isequencer.mockISeqStorage~impl]`
+[^17]: `[~server.design.sequences/test.isequencer.FlushByTimer~impl]`
+[^18]: `[~server.design.sequences/test.isequencer.FlushBySize~impl]`
+[^19]: `[~server.design.sequences/test.isequencer.LongRecovery~impl]`
+[^20]: `[~server.design.sequences/test.isequencer.MultipleActualizes~impl]`
+[^21]: `[~server.design.sequences/test.isequencer.FlushPermanentlyFails~impl]`
+[^22]: `[~server.design.sequences/it.SequencesTrustLevel0~impl]`
+[^23]: `[~server.design.sequences/it.SequencesTrustLevel1~impl]`
+[^24]: `[~server.design.sequences/it.SequencesTrustLevel2~impl]`
