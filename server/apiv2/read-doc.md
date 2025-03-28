@@ -1,5 +1,5 @@
 ---
-reqmd.package: server.features.apiv2.docs
+reqmd.package: server.apiv2.docs
 ---
 
 # Read document or record
