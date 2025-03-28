@@ -42,9 +42,13 @@ The following [query constraints](query-constraints.md) can be used:
 
 - pkg/processors/query2
     - `IApiPathHandler` implementation for handling `ApiPath_Docs`
-        - `~docsHandler~`
+        - `~cmp.docsHandler~`uncvrd[^1]❓
     - `newQueryProcessorPipeline`: provide API handler for `ApiPath_Docs`
-        - `~provideDocsHandler~`
+        - `~cmp.provideDocsHandler~`uncvrd[^2]❓
 - pkg/sys/it
     - integration test for /docs/
-        - `~TestQueryProcessor2_Docs~`
+        - `~it.TestQueryProcessor2_Docs~`uncvrd[^3]❓
+
+[^1]: `[~server.apiv2.docs/cmp.docsHandler~impl]`
+[^2]: `[~server.apiv2.docs/cmp.provideDocsHandler~impl]`
+[^3]: `[~server.apiv2.docs/it.TestQueryProcessor2_Docs~impl]`
