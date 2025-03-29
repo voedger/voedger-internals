@@ -1,5 +1,5 @@
 ---
-reqmd.package: server.apiv2.docs
+reqmd.package: server.apiv2.role
 ---
 
 # Get workspace role schema
@@ -123,8 +123,8 @@ integration test `~it.TestQueryProcessor2_SchemasRole~`uncvrd[^5]❓
 - [List workspace roles](list-ws-roles.md)
 - [List app workspaces](list-app-workspaces.md)
 
-[^1]: `[~server.apiv2.docs/cmp.publishedTypes~impl]`
-[^2]: `[~server.apiv2.docs/cmp.schemasRoleHandler~impl]`
-[^3]: `[~server.apiv2.docs/cmp.provideSchemasRoleHandler~impl]`
-[^4]: `[~server.apiv2.docs/cmp.CreateOpenApiSchema~impl]`
-[^5]: `[~server.apiv2.docs/it.TestQueryProcessor2_SchemasRole~impl]`
+[^1]: `[~server.apiv2.role/cmp.publishedTypes~impl]`
+[^2]: `[~server.apiv2.role/cmp.schemasRoleHandler~impl]`
+[^3]: `[~server.apiv2.role/cmp.provideSchemasRoleHandler~impl]`
+[^4]: `[~server.apiv2.role/cmp.CreateOpenApiSchema~impl]`
+[^5]: `[~server.apiv2.role/it.TestQueryProcessor2_SchemasRole~impl]`
