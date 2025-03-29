@@ -1,8 +1,12 @@
+---
+reqmd.package: server.apiv2.docs
+---
+
 # Read from CDoc collection
 ## Motivation
 Read CDoc collection using API
 
-## Functional Design
+## Functional design
 GET `/api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/cdocs/{pkg}.{table}`
 
 ### Parameters
@@ -29,3 +33,19 @@ See: [Query constraints](query-constraints.md)
 | 403 | Forbidden | [error object](conventions.md#errors) |
 | 404 | Table Not Found | [error object](conventions.md#errors) |
 
+## Technical design
+
+### Components
+
+- pkg/processors/query2
+    - `IApiPathHandler` implementation for handling `ApiPath_CDocs`
+        - `~cmp.cdocsHandler~`uncvrd[^1]❓
+    - `newQueryProcessorPipeline`: provide API handler for `ApiPath_CDocs`
+        - `~cmp.provideCDocsHandler~`uncvrd[^2]❓
+- pkg/sys/it
+    - integration test for /cdocs/
+        - `~it.TestQueryProcessor2_CDocs~`uncvrd[^3]❓
+
+[^1]: `[~server.apiv2.docs/cmp.cdocsHandler~impl]`
+[^2]: `[~server.apiv2.docs/cmp.provideCDocsHandler~impl]`
+[^3]: `[~server.apiv2.docs/it.TestQueryProcessor2_CDocs~impl]`
