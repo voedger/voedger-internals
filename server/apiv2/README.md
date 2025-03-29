@@ -15,16 +15,19 @@
 | **Authentication** |
 | [Creates a new principal token](login.md)                 | `POST /api/v2/users/{owner}/apps/{app}/auth/login` |
 | [Refreshes a valid principal token](refresh.md)           | `POST /api/v2/users/{owner}/apps/{app}/auth/refresh` |
-| **Docs and records**
+| **Users** |
+| Create(register) new user | `POST /api/v2/users` |
+| Change password | `POST /api/v2/users/{user}/changepassword` |
+| **Docs and records** |
 | [Create document or record](create-doc.md)                | `POST /api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/docs/{pkg}.{table}`      |
 | [Update document or record](update-doc.md)                | `PATCH /api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/docs/{pkg}.{table}/{id}` |
 | [Deactivate document or record](deactivate-doc.md)        | `DELETE /api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/docs/{pkg}.{table}/{id}` |
 | [Read document or record](read-doc.md)                    | `GET /api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/docs/{pkg}.{table}/{id}` |
 | [Read from CDoc Collection](read-cdocs.md)                | `GET /api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/cdocs/{pkg}.{table}`     |
-| **Extensions**
+| **Extensions** |
 | [Execute Command](execute-command.md)                     | `POST /api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/commands/{pkg}.{command}`|
 | [Read from Query](read-from-query.md)                     | `GET /api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/queries/{pkg}.{query}`   |
-| **Views**
+| **Views** |
 | [Read from View](read-from-view.md)                       | `GET /api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/views/{pkg}.{view}`      |
 | **BLOBs**
 | [Create/upload a new BLOB](create-blob.md)                | `POST /api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/blobs`                   |
