@@ -3,7 +3,7 @@
 Issue (create) a new token in exchange for valid credentials.
 
 ## Functional Design
-POST `/api/v2/users/{owner}/apps/{app}/auth/login`
+POST `/api/v2/apps/{owner}/{app}/auth/login`
 
 ### Headers
 | Key | Value |

@@ -4,7 +4,7 @@
 Execute a command using API
 
 ## Functional Design
-POST `/api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/commands/{pkg}.{command}`
+POST `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/commands/{pkg}.{command}`
 
 ### Headers
 | Key | Value |

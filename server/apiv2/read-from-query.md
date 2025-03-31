@@ -3,7 +3,7 @@
 Read from a query function using API
 
 ## Functional Design
-GET `/api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/queries/{pkg}.{query}`
+GET `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/queries/{pkg}.{query}`
 
 ### Parameters
 - [Query constraints](query-constraints.md)

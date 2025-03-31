@@ -3,7 +3,7 @@
 Refreshes a valid principal token
 
 ## Functional Design
-POST `/api/v2/users/{owner}/apps/{app}/auth/refresh`
+POST `/api/v2/apps/{owner}/{app}/auth/refresh`
 
 ### Headers
 | Key | Value |

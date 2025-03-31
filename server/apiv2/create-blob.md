@@ -1,5 +1,5 @@
 # # Create/upload a new BLOB
-POST `/api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/blobs`
+POST `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/blobs`
 
 Creates a new BLOB with the uploaded binary data and metadata.
 
@@ -21,7 +21,7 @@ BLOB and metadata.
 
 Example request:
  ```
- POST /api/v2/users/untill/apps/airsbp3/workspaces/12344566789/blobs HTTP/1.1
+ POST /api/v2/apps/untill/airsbp3/workspaces/12344566789/blobs HTTP/1.1
 Content-Type: multipart/form-data
 
 --boundary

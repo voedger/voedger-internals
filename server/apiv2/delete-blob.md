@@ -1,5 +1,5 @@
 # Delete the existing BLOB
-DELETE `/api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/blobs/{blobId}`
+DELETE `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/blobs/{blobId}`
 
 Deletes the BLOB and its metadata
 

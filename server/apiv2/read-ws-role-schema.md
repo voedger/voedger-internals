@@ -7,7 +7,7 @@ reqmd.package: server.apiv2.role
 Return the schema of the resources, available to specified [published role](../authnz/published-roles.md) in a given workspace.
 
 ## Functional Design
-GET `/api/v2/users/{owner}/apps/{app}/schemas/{pkg}.{workspace}/roles/{pkg}.{role}`
+GET `/api/v2/apps/{owner}/{app}/schemas/{pkg}.{workspace}/roles/{pkg}.{role}`
 
 ### Headers
 | Key | Value | Description |

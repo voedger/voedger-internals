@@ -3,7 +3,7 @@
 Update the metadata of the BLOB data using API
 
 ## Functional Design
-PATCH `/api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/blobs/{blobId}`
+PATCH `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/blobs/{blobId}`
 
 ### Headers
 | Key | Value |

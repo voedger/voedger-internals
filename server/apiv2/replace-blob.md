@@ -3,7 +3,7 @@
 Replace the binary data of the BLOB and optionally metadata using API
 
 ## Functional Design
-PUT `/api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/blobs/{blobId}`
+PUT `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/blobs/{blobId}`
 
 ### Headers
 | Key | Value |

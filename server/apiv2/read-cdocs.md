@@ -7,7 +7,7 @@ reqmd.package: server.apiv2.docs
 Read CDoc collection using API
 
 ## Functional design
-GET `/api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/cdocs/{pkg}.{table}`
+GET `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/cdocs/{pkg}.{table}`
 
 ### Parameters
 See: [Query constraints](query-constraints.md)

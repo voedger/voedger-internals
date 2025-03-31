@@ -3,7 +3,7 @@
 Read from a view using API
 
 ## Functional Design
-GET `/api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/views/{pkg}.{view}`
+GET `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/views/{pkg}.{view}`
 
 ### Parameters
 - [Query constraints](request.md)
@@ -33,4 +33,4 @@ GET `/api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/views/{pkg}.{view}`
 | 404 | View Not Found | [error object](conventions.md#errors) |
 
 ### Example
-`GET /api/v2/users/untill/apps/airs-bp3/workspaces/12313123123/views/air.SalesMetrics?where={"Year":2024, "Month":{"$in":[1,2,3]}}`
+`GET /api/v2/apps/untill/airs-bp3/workspaces/12313123123/views/air.SalesMetrics?where={"Year":2024, "Month":{"$in":[1,2,3]}}`

@@ -7,7 +7,7 @@ reqmd.package: server.apiv2.docs
 Read CDoc/WDoc/CRecord/WRecord using API
 
 ## Functional design
-GET `/api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/docs/{pkg}.{table}/{id}`
+GET `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/docs/{pkg}.{table}/{id}`
 
 ### Parameters
 The following [query constraints](query-constraints.md) can be used:
