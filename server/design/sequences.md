@@ -22,7 +22,7 @@ As of March 1, 2025, Voedger implements four specific sequence types using this 
     - [https://github.com/voedger/voedger/blob/ae787d43bf313f8e3119b8b2ce73ea43969eaaa3/pkg/istructs/utils.go#L35](https://github.com/voedger/voedger/blob/ae787d43bf313f8e3119b8b2ce73ea43969eaaa3/pkg/istructs/utils.go#L35)
   - To read all CRecords by SELECT
 - **OWRecordIDSequence**: Provides sequential IDs for O/W- Records
-  - Starts from 322680000131072  + 
+  - Starts from 322680000131072
   - There are a potentially lot of such records, so it is not possible to use SELECT to read all of them
 
 As the Voedger platform evolves, the number of sequence types is expected to expand. Future development will enable applications to define their own custom sequence types, extending the platform's flexibility to meet diverse business requirements beyond the initially implemented system sequences.
@@ -482,20 +482,20 @@ func (s *sequencer) cleanup() {
 `~cmp.ISeqStorageImplementation~`uncvrd[^14]❓: Implementation of the `isequencer.ISeqStorage` interface
 
 - Package: cmp.appparts.internal.seqStorage
-- `~cmp.ISeqStorageImplementation.New~`
+- `~cmp.ISeqStorageImplementation.New~`uncvrd[^25]❓
   - Per App per Partition by AppParts
   - PartitionID is not passed to the constructor
 - `~cmp.ISeqStorageImplementation.i688~`uncvrd[^15]❓
   - Handle [#688: record ID leads to different tables](https://github.com/voedger/voedger/issues/688)
-    - If existing number is less than 322_680_000_000_000 - then it is ignored
+  - If existing number is less than ??? 322_680_000_000_000 - do not send it to the batcher
 - Uses VVMStorage Adapter
 
 ### VVMStorage Adapter
 
-`~cmp.VVMStorageAdapter~`: Adapter that reads and writes sequence data to the VVMStorage
+`~cmp.VVMStorageAdapter~`uncvrd[^26]❓: Adapter that reads and writes sequence data to the VVMStorage
 
 - Key: ((KeyPrefixSeqStorage, AppID), WSID, SeqID)
-  - `~cmp.VVMStorageAdapter.KeyPrefixSeqStorage~`: Prefix for the keys in the storage
+  - `~cmp.VVMStorageAdapter.KeyPrefixSeqStorage~`uncvrd[^27]❓: Prefix for the keys in the storage
 
 ### isequencer
 
@@ -594,3 +594,6 @@ History:
 [^22]: `[~server.design.sequences/it.SequencesTrustLevel0~impl]`
 [^23]: `[~server.design.sequences/it.SequencesTrustLevel1~impl]`
 [^24]: `[~server.design.sequences/it.SequencesTrustLevel2~impl]`
+[^25]: `[~server.design.sequences/cmp.ISeqStorageImplementation.New~impl]`
+[^26]: `[~server.design.sequences/cmp.VVMStorageAdapter~impl]`
+[^27]: `[~server.design.sequences/cmp.VVMStorageAdapter.KeyPrefixSeqStorage~impl]`
