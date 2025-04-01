@@ -13,10 +13,16 @@ A **Sequence** in Voedger is defined as a monotonically increasing series of num
 As of March 1, 2025, Voedger implements four specific sequence types using this mechanism:
 
 - **PLogOffsetSequence**: Tracks write positions in the PLog
+  - Starts from 1
 - **WLogOffsetSequence**: Manages offsets in the WLog
+  - Starts from 1
+  - To read all events by SELECT
 - **CRecordIDSequence**: Generates unique identifiers for CRecords
+  - Starts from 322685000131072
+    - [https://github.com/voedger/voedger/blob/ae787d43bf313f8e3119b8b2ce73ea43969eaaa3/pkg/istructs/utils.go#L35](https://github.com/voedger/voedger/blob/ae787d43bf313f8e3119b8b2ce73ea43969eaaa3/pkg/istructs/utils.go#L35)
   - To read all CRecords by SELECT
 - **OWRecordIDSequence**: Provides sequential IDs for O/W- Records
+  - Starts from 322680000131072  + 
   - There are a potentially lot of such records, so it is not possible to use SELECT to read all of them
 
 As the Voedger platform evolves, the number of sequence types is expected to expand. Future development will enable applications to define their own custom sequence types, extending the platform's flexibility to meet diverse business requirements beyond the initially implemented system sequences.
@@ -481,6 +487,7 @@ func (s *sequencer) cleanup() {
   - PartitionID is not passed to the constructor
 - `~cmp.ISeqStorageImplementation.i688~`uncvrd[^15]❓
   - Handle [#688: record ID leads to different tables](https://github.com/voedger/voedger/issues/688)
+    - If existing number is less than 322_680_000_000_000 - then it is ignored
 - Uses VVMStorage Adapter
 
 ### VVMStorage Adapter
