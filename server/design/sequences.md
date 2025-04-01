@@ -152,21 +152,16 @@ Components:
 - Flow
   - sequencer.Actualize()
 
-### AppParts: Application deployment: Use cases
+### AppParts: Instantiate sequencer on Application deployment
 
 `~tuc.InstantiateSequencer~`uncvrd[^13]❓
 
 - When: Partition with the `partitionID` is deployed
 - Flow:
-  - Instantiate the implementation of the `isequencer.ISeqStorage` (internal.seqStorage, see below)
+  - Instantiate the implementation of the `isequencer.ISeqStorage` (appparts.internal.seqStorage, see below)
   - Instantiate `sequencer := isequencer.New(*isequencer.Params)`
   - Save `sequencer` to some `map[partitionID]isequencer.Sequencer`
 
-Components:
-
-- `~cmp.appparts.internal.seqStorage~`uncvrd[^14]❓
-  - `~cmp.appparts.internal.seqStorage.i688~`uncvrd[^15]❓
-    - Handle [#688: record ID leads to different tables](https://github.com/voedger/voedger/issues/688)
 
 ## Functional design: pkg/isequencer
 
@@ -477,7 +472,18 @@ func (s *sequencer) cleanup() {
 
 ## Technical design
 
-## Test design
+### appparts.internal.seqStorage
+
+`~cmp.appparts.internal.seqStorage~`uncvrd[^14]❓: Implementation of the `isequencer.ISeqStorage` interface
+
+- `~cmp.appparts.internal.seqStorage.i688~`uncvrd[^15]❓
+  - Handle [#688: record ID leads to different tables](https://github.com/voedger/voedger/issues/688)
+- Key: ((KeyPrefixSeqStorage, AppID), WSID, SeqID)
+  - `~vvm.storage.KeyPrefixSeqStorage~`: Prefix for the keys in the storage
+
+### appparts.???
+
+???
 
 ### isequencer
 
@@ -511,7 +517,7 @@ Some edge case tests:
       - Start/Next/Flush must be ok
       - loop Start/Next/Flush until Start() is not ok (the 6th times till unflushed values exceed the limit)
   
-### SequencesTrustLevel mode: Tests
+### Intergation tests for SequencesTrustLevel mode
 
 Method:
 
@@ -528,9 +534,13 @@ Method:
 
 System tests:
 
-- `~it.SequencesTrustLevel0~`uncvrd[^22]❓
-- `~it.SequencesTrustLevel1~`uncvrd[^23]❓
-- `~it.SequencesTrustLevel2~`uncvrd[^24]❓
+- `~it.SequencesTrustLevel0~`uncvrd[^22]❓: Test for `SequencesTrustLevel = 0`
+- `~it.SequencesTrustLevel1~`uncvrd[^23]❓: Test for `SequencesTrustLevel = 1`
+- `~it.SequencesTrustLevel2~`uncvrd[^24]❓: Test for `SequencesTrustLevel = 2`
+
+### Intergation tests for built-in sequences
+
+- `~it.BuildInSequences~: Test for initial values: WLogOffsetSequence, WLogOffsetSequence, CRecordIDSequence, OWRecordIDSequence
 
 ## Addressed issues
 
