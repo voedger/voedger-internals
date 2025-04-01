@@ -4,7 +4,7 @@
 Deactivate CDoc/WDoc/CRecord/WRecord using API
 
 ## Functional Design
-DELETE `/api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/docs/{pkg}.{table}/{id}`
+DELETE `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/docs/{pkg}.{table}/{id}`
 
 ### Headers
 | Key | Value |

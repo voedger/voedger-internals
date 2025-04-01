@@ -1,0 +1,11 @@
+{
+  "FileUrl2FileHash": {
+    "https://github.com/voedger/voedger/blob/1e910b11ddf1e3613b2637fbc9628fdea812bc14/pkg/processors/query2/impl_docs_handler.go": "ef5e8613bf3d8daa6a18c76c59ee03c773b13289",
+    "https://github.com/voedger/voedger/blob/965d3b9049d21235163ca2693e0143da2bc247fd/pkg/appdef/acl/provide.go": "afcb36e78375b50c83eaf7ad3b80ec5af6e38eed",
+    "https://github.com/voedger/voedger/blob/965d3b9049d21235163ca2693e0143da2bc247fd/pkg/appdef/acl/provide_test.go": "bc549781451f726313f8e8234eb1030b7011b68d",
+    "https://github.com/voedger/voedger/blob/965d3b9049d21235163ca2693e0143da2bc247fd/pkg/processors/query2/impl.go": "850ecd0ed58236bed6965217fb56c1cc4f48800f",
+    "https://github.com/voedger/voedger/blob/965d3b9049d21235163ca2693e0143da2bc247fd/pkg/processors/query2/impl_openapi.go": "d1471a6eaa64daff4f85691189f05e9dbc01b847",
+    "https://github.com/voedger/voedger/blob/965d3b9049d21235163ca2693e0143da2bc247fd/pkg/processors/query2/impl_schemas_role_handler.go": "745c9e85e34ac57d7113702d93493a6b18812912",
+    "https://github.com/voedger/voedger/blob/965d3b9049d21235163ca2693e0143da2bc247fd/pkg/sys/it/impl_qpv2_test.go": "b261ada49c1e97e6c7556b83c1f761b9798e84e6"
+  }
+}

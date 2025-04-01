@@ -3,7 +3,7 @@
 Return the list of [published roles](../authnz/published-roles.md) in the workspace, using API
 
 ## Functional Design
-GET `/api/v2/users/{owner}/apps/{app}/schemas/{pkg}.{workspace}/roles`
+GET `/api/v2/apps/{owner}/{app}/schemas/{pkg}.{workspace}/roles`
 
 ### Headers
 | Key | Value | Description |

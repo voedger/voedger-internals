@@ -3,7 +3,7 @@
 List app workspaces having published roles, using API
 
 ## Functional Design
-GET `/api/v2/users/{owner}/apps/{app}/schemas`
+GET `/api/v2/apps/{owner}/{app}/schemas`
 
 Returns the hierarchy of non-abstract workspaces in the application with WSProfile as a root.
 Only workspaces returned which have resources available to [published roles](../authnz/published-roles.md). 

@@ -3,7 +3,7 @@
 Retrieve the BLOB data or metadata using API
 
 ## Functional Design
-GET `/api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/blobs/{blobId}`
+GET `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/blobs/{blobId}`
 
 ### Headers
 | Key | Value | Description

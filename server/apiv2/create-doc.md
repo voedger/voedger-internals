@@ -3,7 +3,7 @@
 Create a new CDoc, WDoc, CRecord or WRecord using API
 
 ## Functional Design
-POST `/api/v2/users/{owner}/apps/{app}/workspaces/{wsid}/docs/{pkg}.{table}`
+POST `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/docs/{pkg}.{table}`
 
 ### Headers
 | Key | Value |
