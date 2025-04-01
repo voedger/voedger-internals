@@ -162,7 +162,6 @@ Components:
   - Instantiate `sequencer := isequencer.New(*isequencer.Params)`
   - Save `sequencer` to some `map[partitionID]isequencer.Sequencer`
 
-
 ## Functional design: pkg/isequencer
 
 ### interface.go
@@ -472,18 +471,24 @@ func (s *sequencer) cleanup() {
 
 ## Technical design
 
-### appparts.internal.seqStorage
+### ISeqStorage implementation
 
-`~cmp.appparts.internal.seqStorage~`uncvrd[^14]❓: Implementation of the `isequencer.ISeqStorage` interface
+`~cmp.ISeqStorageImplementation~`uncvrd[^14]❓: Implementation of the `isequencer.ISeqStorage` interface
 
-- `~cmp.appparts.internal.seqStorage.i688~`uncvrd[^15]❓
+- Package: cmp.appparts.internal.seqStorage
+- `~cmp.ISeqStorageImplementation.New~`
+  - Per App per Partition by AppParts
+  - PartitionID is not passed to the constructor
+- `~cmp.ISeqStorageImplementation.i688~`uncvrd[^15]❓
   - Handle [#688: record ID leads to different tables](https://github.com/voedger/voedger/issues/688)
+- Uses VVMStorage Adapter
+
+### VVMStorage Adapter
+
+`~cmp.VVMStorageAdapter~`: Adapter that reads and writes sequence data to the VVMStorage
+
 - Key: ((KeyPrefixSeqStorage, AppID), WSID, SeqID)
-  - `~vvm.storage.KeyPrefixSeqStorage~`: Prefix for the keys in the storage
-
-### appparts.???
-
-???
+  - `~cmp.VVMStorageAdapter.KeyPrefixSeqStorage~`: Prefix for the keys in the storage
 
 ### isequencer
 
