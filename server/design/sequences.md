@@ -501,7 +501,15 @@ Some edge case tests:
   - Check that the system recovers well
   - Check that the sequence values are increased monotonically
 - `~test.isequencer.FlushPermanentlyFails~`uncvrd[^21]❓
-  - Recovery has worked but ISeqStorage.WriteValues() fails permanently so flusher() will be waiting
+  - Recovery has worked but then ISeqStorage.WriteValuesAndOffset() fails permanently
+    - First Start/Flush must be ok
+    - Some of the next Start must not be ok
+    - Flow:
+      - MaxNumUnflushedValues = 5
+      - Recover
+      - Mock error on WriteValuesAndOffset
+      - Start/Next/Flush must be ok
+      - loop Start/Next/Flush until Start() is not ok (the 6th times till unflushed values exceed the limit)
   
 ### SequencesTrustLevel mode: Tests
 
