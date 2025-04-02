@@ -30,8 +30,9 @@ POST `/api/v2/apps/{owner}/{app}/auth/refresh`
 Example result 200:
 ```json
 {
-  "token": "abc.def.ghi",
-  "expires_in": 3600
+  "principal_token": "abc.def.ghi",
+  "expires_in": 3600,
+  "wsid": 1234567890,
 }
 ```
 

@@ -20,8 +20,8 @@ POST `/api/v2/apps/{owner}/{app}/auth/login`
 JSON object: 
 ```json
 {
-  "username": "someusername",
-  "password": "yourpassword"
+  "login": "login",
+  "password": "password"
 }
 ```
 
@@ -38,8 +38,9 @@ JSON object:
 Example result 200:
 ```json
 {
-  "token": "abc.def.ghi",
-  "expires_in": 3600
+  "principal_token": "abc.def.ghi",
+  "expires_in": 3600,
+  "wsid": 1234567890
 }
 ```
 
