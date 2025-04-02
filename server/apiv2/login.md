@@ -1,6 +1,10 @@
+---
+reqmd.package: server.apiv2.auth
+---
+
 # Create document or record
 ## Motivation
-Issue (create) a new token in exchange for valid credentials.
+Issue (create) a new principal token in exchange for valid credentials.
 
 ## Functional Design
 POST `/api/v2/apps/{owner}/{app}/auth/login`
@@ -44,3 +48,17 @@ Example result 200:
 }
 ```
 
+## Technical design
+### Components
+- pkg/router
+  - URL path handler `~cmp.routerLoginPathHandler~`uncvrd[^1]❓:
+    - parses the request Body and URL parameters; calculates pseudo-wsid;
+    - makes federation query to `registry` app by calling IssuePrincipalToken function;
+    - returns the result, or error, to the client.
+
+- pkg/sys/it
+    - integration test for /login
+        - `~it.TestQueryProcessor2_Login~`uncvrd[^2]❓
+
+[^1]: `[~server.apiv2.auth/cmp.routerLoginPathHandler~impl]`
+[^2]: `[~server.apiv2.auth/it.TestQueryProcessor2_Login~impl]`
