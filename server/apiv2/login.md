@@ -2,7 +2,7 @@
 reqmd.package: server.apiv2.auth
 ---
 
-# Create document or record
+# Issue Principal Token (Login)
 ## Motivation
 Issue (create) a new principal token in exchange for valid credentials.
 
