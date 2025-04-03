@@ -535,7 +535,7 @@ Some edge case tests:
   
 ## Technical design: Tests
 
-### Intergation tests for SequencesTrustLevel mode
+### Integration tests for SequencesTrustLevel mode
 
 Method:
 
@@ -550,15 +550,15 @@ Method:
   - Expect panic
 - Test for PLog, WLog offsets - the same tests but sabotage the storage building keys for the event
 
-System tests:
+Tests:
 
-- `~it.SequencesTrustLevel0~`uncvrd[^27]❓: Test for `SequencesTrustLevel = 0`
-- `~it.SequencesTrustLevel1~`uncvrd[^28]❓: Test for `SequencesTrustLevel = 1`
-- `~it.SequencesTrustLevel2~`uncvrd[^29]❓: Test for `SequencesTrustLevel = 2`
+- `~it.SequencesTrustLevel0~`uncvrd[^27]❓: Intergation test for `SequencesTrustLevel = 0`
+- `~it.SequencesTrustLevel1~`uncvrd[^28]❓: Intergation test for `SequencesTrustLevel = 1`
+- `~it.SequencesTrustLevel2~`uncvrd[^29]❓: Intergation test for `SequencesTrustLevel = 2`
 
 ### Intergation tests for built-in sequences
 
-- `~it.BuildInSequences~: Test for initial values: WLogOffsetSequence, WLogOffsetSequence, CRecordIDSequence, OWRecordIDSequence
+- `~it.BuiltInSequences~`: Test for initial values: WLogOffsetSequence, WLogOffsetSequence, CRecordIDSequence, OWRecordIDSequence
 
 ## Addressed issues
 
