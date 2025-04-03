@@ -21,7 +21,18 @@ POST `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/commands/{pkg}.{command}`
 | pkg, command | string | identifies a command |
 
 ### Body
-Command parameter or ODoc
+Command arguments in JSON format, with optional "args" and "unloggedArgs" fields:
+```json
+{
+    "args": {
+        "key1": "value1",
+        "key2": "value2"
+    },
+    "unloggedArgs": {
+        "password": "myPassword",
+    }
+}
+```
 
 ### Result
 | Code | Description | Body |

@@ -1,0 +1,13 @@
+{
+  "FileUrl2FileHash": {
+    "https://github.com/voedger/voedger/blob/84babc48d63107e29fcec28eefb0a461b5a34474/pkg/appdef/constraints/constraint.go": "c23258a50375beec826efca9b1186e1efbd04bca",
+    "https://github.com/voedger/voedger/blob/84babc48d63107e29fcec28eefb0a461b5a34474/pkg/appdef/consts.go": "b604080c3edfe862cfb307a7dd00268dbda4b1ad",
+    "https://github.com/voedger/voedger/blob/84babc48d63107e29fcec28eefb0a461b5a34474/pkg/appdef/examples/example_field_test.go": "03b123a5c87713ca37f0756341a78a7155392af6",
+    "https://github.com/voedger/voedger/blob/84babc48d63107e29fcec28eefb0a461b5a34474/pkg/appdef/interface_data.go": "5a6158d3c06e08dfe4119e5fd2c5a824e50cbd96",
+    "https://github.com/voedger/voedger/blob/84babc48d63107e29fcec28eefb0a461b5a34474/pkg/appdef/internal/datas/data.go": "f708f85058bc4683b71a06bc00e61ff323a8d050",
+    "https://github.com/voedger/voedger/blob/84babc48d63107e29fcec28eefb0a461b5a34474/pkg/appdef/internal/datas/data_test.go": "6a838104e251199188dc4b4881d816326d3e3291",
+    "https://github.com/voedger/voedger/blob/84babc48d63107e29fcec28eefb0a461b5a34474/pkg/appdef/utils_data.go": "25bb47f93df656dc46fc1a9ee073285a33ca65de",
+    "https://github.com/voedger/voedger/blob/84babc48d63107e29fcec28eefb0a461b5a34474/pkg/appdef/utils_data_test.go": "7adeb106e96c0ec6fce32813c218d722620f4361",
+    "https://github.com/voedger/voedger/blob/84babc48d63107e29fcec28eefb0a461b5a34474/pkg/appdef/utils_type.go": "66b5ad6337fb2a5446e44aedd5c367fddd89a7cf"
+  }
+}
