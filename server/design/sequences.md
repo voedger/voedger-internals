@@ -175,12 +175,41 @@ VVMHost uses cmp.VVMConfig.SequencesTrustLevel.
 
 ### pkg/isequencer
 
+Core:
+
 - `~cmp.ISequencer~`uncvrd[^12]❓: Interface for working with sequences
 - `~cmp.sequencer~`uncvrd[^13]❓: Implementation of the `isequencer.ISequencer` interface
   - `~cmp.sequencer.Start~`uncvrd[^14]❓: Starts Sequencing Transaction for the given WSID
   - `~cmp.sequencer.Next~`uncvrd[^15]❓: Returns the next sequence number for the given SeqID
   - `~cmp.sequencer.Flush~`uncvrd[^16]❓: Completes Sequencing Transaction
   - `~cmp.sequencer.Actualize~`uncvrd[^17]❓: Cancels Sequencing Transaction and starts the Actualization process
+
+Tests:
+
+- `~test.isequencer.mockISeqStorage~`uncvrd[^23]❓
+  - Mock implementation of `isequencer.ISeqStorage` for testing purposes
+
+Some edge case tests:
+
+- `~test.isequencer.LongRecovery~`uncvrd[^24]❓
+  - Params.MaxNumUnflushedValues = 5 // Just a guess
+  - For numOfEvents in [0, 10*Params.MaxNumUnflushedValues]
+    - Create a new ISequencer instance
+    - Check that Next() returns correct values after recovery
+- `~test.isequencer.MultipleActualizes~`uncvrd[^25]❓
+  - Repeat { Start {Next} randomly( Flush | Actualize ) } cycle 100 times
+  - Check that the system recovers well
+  - Check that the sequence values are increased monotonically
+- `~test.isequencer.FlushPermanentlyFails~`uncvrd[^26]❓
+  - Recovery has worked but then ISeqStorage.WriteValuesAndOffset() fails permanently
+    - First Start/Flush must be ok
+    - Some of the next Start must not be ok
+    - Flow:
+      - MaxNumUnflushedValues = 5
+      - Recover
+      - Mock error on WriteValuesAndOffset
+      - Start/Next/Flush must be ok
+      - loop Start/Next/Flush until Start() is not ok (the 6th times till unflushed values exceed the limit)  
 
 #### interface.go
 
@@ -486,6 +515,8 @@ func (s *sequencer) cleanup() {
 }
 ```
 
+---
+
 ### ISeqStorage implementation
 
 `~cmp.ISeqStorageImplementation~`uncvrd[^18]❓: Implementation of the `isequencer.ISeqStorage` interface
@@ -506,33 +537,8 @@ func (s *sequencer) cleanup() {
 - Key: ((KeyPrefixSeqStorage, AppID), WSID, SeqID)
   - `~cmp.VVMStorageAdapter.KeyPrefixSeqStorage~`uncvrd[^22]❓: Prefix for the keys in the storage
 
-### isequencer
+---
 
-- `~test.isequencer.mockISeqStorage~`uncvrd[^23]❓
-  - Mock implementation of `isequencer.ISeqStorage` for testing purposes
-
-Some edge case tests:
-
-- `~test.isequencer.LongRecovery~`uncvrd[^24]❓
-  - Params.MaxNumUnflushedValues = 5 // Just a guess
-  - For numOfEvents in [0, 10*Params.MaxNumUnflushedValues]
-    - Create a new ISequencer instance
-    - Check that Next() returns correct values after recovery
-- `~test.isequencer.MultipleActualizes~`uncvrd[^25]❓
-  - Repeat { Start {Next} randomly( Flush | Actualize ) } cycle 100 times
-  - Check that the system recovers well
-  - Check that the sequence values are increased monotonically
-- `~test.isequencer.FlushPermanentlyFails~`uncvrd[^26]❓
-  - Recovery has worked but then ISeqStorage.WriteValuesAndOffset() fails permanently
-    - First Start/Flush must be ok
-    - Some of the next Start must not be ok
-    - Flow:
-      - MaxNumUnflushedValues = 5
-      - Recover
-      - Mock error on WriteValuesAndOffset
-      - Start/Next/Flush must be ok
-      - loop Start/Next/Flush until Start() is not ok (the 6th times till unflushed values exceed the limit)
-  
 ## Technical design: Tests
 
 ### Integration tests for SequencesTrustLevel mode
@@ -559,6 +565,8 @@ Tests:
 ### Intergation tests for built-in sequences
 
 - `~it.BuiltInSequences~`: Test for initial values: WLogOffsetSequence, WLogOffsetSequence, CRecordIDSequence, OWRecordIDSequence
+
+---
 
 ## Addressed issues
 
