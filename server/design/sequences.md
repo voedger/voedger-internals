@@ -584,7 +584,6 @@ History:
 
 ## Footnotes
 
-
 [^1]: `[~server.design.sequences/tuc.VVMConfig.ConfigureSequencesTrustLevel~impl]`
 [^2]: `[~server.design.sequences/tuc.SequencesTrustLevelForPLog~impl]`
 [^3]: `[~server.design.sequences/tuc.SequencesTrustLevelForWLog~impl]`
