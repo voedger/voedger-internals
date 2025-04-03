@@ -37,12 +37,31 @@ These sequences ensure consistent ordering of operations, proper transaction man
 
 Existing design
 
+- [const MinReservedBaseRecordID = MaxRawRecordID + 1](https://github.com/voedger/voedger/blob/84babc48d63107e29fcec28eefb0a461b5a34474/pkg/istructs/consts.go#L96)
+  - 65535 + 1
+  - const MaxReservedBaseRecordID = MinReservedBaseRecordID + 0xffff // 131071
+  - const FirstSingletonID = MinReservedBaseRecordID // 65538
+  - const MaxSingletonID = MaxReservedBaseRecordID // 66047, 512 singletons
+- [const FirstSingletonID](https://github.com/voedger/voedger/blob/84babc48d63107e29fcec28eefb0a461b5a34474/pkg/istructs/consts.go#L101)
 - [cmdProc.appsPartitions](https://github.com/voedger/voedger/blob/b7fa6fa9e260eac4f1de80312c14ad4250f400a3/pkg/processors/command/provide.go#L32)
 - [command/impl.go/getIDGenerator](https://github.com/voedger/voedger/blob/b7fa6fa9e260eac4f1de80312c14ad4250f400a3/pkg/processors/command/impl.go#L299)
 - [command/impl.go: Put IDs to response](https://github.com/voedger/voedger/blob/b7fa6fa9e260eac4f1de80312c14ad4250f400a3/pkg/processors/command/impl.go#L790)
 - [command/impl.go: (idGen *implIDGenerator) NextID](https://github.com/voedger/voedger/blob/b7fa6fa9e260eac4f1de80312c14ad4250f400a3/pkg/processors/command/impl.go#L816)
 - [istructmem/idgenerator.go: (g *implIIDGenerator) NextID](https://github.com/voedger/voedger/blob/b7fa6fa9e260eac4f1de80312c14ad4250f400a3/pkg/istructsmem/idgenerator.go#L32)
   - [onNewID???](https://github.com/voedger/voedger/blob/b7fa6fa9e260eac4f1de80312c14ad4250f400a3/pkg/istructsmem/idgenerator.go#L16)
+
+#### Previous flow
+
+- Recovery on the first request into the workspace
+  - CP creates new `istructs.IIDGenerator` instance [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/processors/command/impl.go#L136)
+  - the `istructs.IIDGenerator` instance is kept for the WSID
+  - `istructs.IIDGenerator` instance is tuned with the data from the each event of the PLog:
+    - for each CUD:
+      - CUD.ID is set as the current RecordID
+        - `IIDGenerator.UpdateOnSync` is called [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/processors/command/impl.go#L253)
+- save the event after cmd exec:
+  - `istructs.IIDGenerator` instance is provided to `IEvents.PutPlog()` [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/processors/command/impl.go#L307)
+  - `istructs.IIDGenerator.Next()` is called to convert rawID->realID for ODoc in arguments and each resulting CUD [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/istructsmem/event-types.go#L189)
 
 ## Motivation
 
@@ -85,82 +104,51 @@ This approach decouples memory usage from the total number of workspaces and tra
 
 ### VVMHost: Configure SequencesTrustLevel mode for VVM
 
-`~tuc.VVMConfig.ConfigureSequencesTrustLevel~`uncvrd[^1]❓
+`~tuc.VVMConfig.ConfigureSequencesTrustLevel~`
 
-- Components:
-  - `~cmp.VVMConfig.SequencesTrustLevel~`uncvrd[^2]❓
+VVMHost uses cmp.VVMConfig.SequencesTrustLevel.
 
 ### CP: Handling SequencesTrustLevel for Events
 
-- `~tuc.SequencesTrustLevelForPLog~`uncvrd[^3]❓
-  - When PLog is written SequencesTrustLevel is used to determine the write mode
-- `~tuc.SequencesTrustLevelForWLog~`uncvrd[^4]❓
-  - When WLog is written SequencesTrustLevel is used to determine the write mode
+- `~tuc.SequencesTrustLevelForPLog~`
+  - When PLog is written then SequencesTrustLevel is used to determine the write mode
+- `~tuc.SequencesTrustLevelForWLog~`
+  - When WLog is written then SequencesTrustLevel is used to determine the write mode
 
 ### CP: Handling SequencesTrustLevel for Table Records
 
-- `~tuc.SequencesTrustLevelForRecords~`uncvrd[^5]❓
+- `~tuc.SequencesTrustLevelForRecords~`
   - When a record is inserted SequencesTrustLevel is used to determine the write mode
   - When a record is updated - nothing is done in connection with SequencesTrustLevel
 
-### CP: Command processing: Start sequences generation
+### CP: Command processing
 
-`~tuc.StartSequencesGeneration~`uncvrd[^6]❓
-
-- When: CP starts processing a request
-- Flow:
-  - `partitionID` is calculated using request WSID and amount of partitions declared in AppDeploymentDescriptor [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/vvm/impl_requesthandler.go#L61)
-  - sequencer, err := IAppPartition.Sequencer(PartitionID) err
-  - nextPLogOffest, ok, err := sequencer.Start(wsKind, WSID)
-    - if !ok
-      - Actualization is in progress
-      - Flushing queue is full
-      - Returns 503: "server is busy"
-- Components:
-  - `~cmp.IAppPartition.Sequencer~`uncvrd[^7]❓
-    - Returns `isequencer.ISequencer` for the given `partitionID`
-  - `~cmp.ISequencer.Start~`uncvrd[^8]❓
-
-### CP: Command processing: Next sequence number
-
-`~tuc.GetNextSequenceNumber~`uncvrd[^9]❓
-
-- Flow
-  - sequencer.Next(sequenceId)
-
-Components:
-
-- `~cmp.ISequencer.Next~`uncvrd[^10]❓
-
-#### Previous flow
-
-- recovery on the first request into the workspace
-  - CP creates new `istructs.IIDGenerator` instance [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/processors/command/impl.go#L136)
-  - the `istructs.IIDGenerator` instance is kept for the WSID
-  - `istructs.IIDGenerator` instance is tuned with the data from the each event of the PLog:
-    - for each CUD:
-      - CUD.ID is set as the current RecordID
-        - `IIDGenerator.UpdateOnSync` is called [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/processors/command/impl.go#L253)
-- save the event after cmd exec:
-  - `istructs.IIDGenerator` instance is provided to `IEvents.PutPlog()` [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/processors/command/impl.go#L307)
-  - `istructs.IIDGenerator.Next()` is called to convert rawID->realID for ODoc in arguments and each resulting CUD [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/istructsmem/event-types.go#L189)
-
-### CP: Command processing: Flush sequence numbers
-
-`~tuc.FlushSequenceNumbers~`uncvrd[^11]❓
-
-- When: After CP saves the PLog record successfully
-  - sequencer.Flush()
-
-`~tuc.ReactualizeSequences~`uncvrd[^12]❓
-
-- When: After CP fails to save the PLog record
-- Flow
-  - sequencer.Actualize()
+- `~tuc.StartSequencesGeneration~`
+  - When: CP starts processing a request
+  - Flow:
+    - `partitionID` is calculated using request WSID and amount of partitions declared in AppDeploymentDescriptor [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/vvm/impl_requesthandler.go#L61)
+    - sequencer, err := IAppPartition.Sequencer(PartitionID) err
+    - nextPLogOffest, ok, err := sequencer.Start(wsKind, WSID)
+      - if !ok
+        - Actualization is in progress
+        - Flushing queue is full
+        - Returns 503: "server is busy"
+- `~tuc.NextSequenceNumber~`
+  - When: After CP starts sequences generation
+  - Flow:
+    - sequencer.Next(sequenceId)
+- `~tuc.FlushSequenceNumbers~`
+  - When: After CP saves the PLog record successfully
+  - Flow:
+    - sequencer.Flush()
+- `~tuc.ReactualizeSequences~`
+  - When: After CP fails to save the PLog record
+  - Flow:
+    - sequencer.Actualize()
 
 ### AppParts: Instantiate sequencer on Application deployment
 
-`~tuc.InstantiateSequencer~`uncvrd[^13]❓
+`~tuc.InstantiateSequencer~`
 
 - When: Partition with the `partitionID` is deployed
 - Flow:
@@ -168,9 +156,33 @@ Components:
   - Instantiate `sequencer := isequencer.New(*isequencer.Params)`
   - Save `sequencer` to some `map[partitionID]isequencer.Sequencer`
 
-## Functional design: pkg/isequencer
+---
 
-### interface.go
+## Technical design: Components
+
+### IAppPartition.Sequencer
+
+- `~cmp.IAppPartition.Sequencer~`
+  - Description: Returns `isequencer.ISequencer` for the given `partitionID`
+  - Covers: `tuc.StartSequencesGeneration`
+
+### VVMConfig.SequencesTrustLevel
+
+- `~cmp.VVMConfig.SequencesTrustLevel~`
+  - Covers: tuc.VVMConfig.ConfigureSequencesTrustLevel
+
+---
+
+### pkg/isequencer
+
+- `~cmp.ISequencer~`: Interface for working with sequences
+- `~cmp.sequencer~`: Implementation of the `isequencer.ISequencer` interface
+  - `~cmp.sequencer.Start~`: Starts Sequencing Transaction for the given WSID
+  - `~cmp.sequencer.Next~`: Returns the next sequence number for the given SeqID
+  - `~cmp.sequencer.Flush~`: Completes Sequencing Transaction
+  - `~cmp.sequencer.Actualize~`: Cancels Sequencing Transaction and starts the Actualization process
+
+#### interface.go
 
 ```go
 /*
@@ -281,7 +293,7 @@ type Params struct {
 }
 ```
 
-### Implementation requirements
+#### Implementation requirements
 
 ```go
 // filepath: pkg/isequencer: impl.go
@@ -472,48 +484,45 @@ func (s *sequencer) flusher(ctx context.Context) {
 func (s *sequencer) cleanup() {
   // ...
 }
-
 ```
-
-## Technical design
 
 ### ISeqStorage implementation
 
-`~cmp.ISeqStorageImplementation~`uncvrd[^14]❓: Implementation of the `isequencer.ISeqStorage` interface
+`~cmp.ISeqStorageImplementation~`: Implementation of the `isequencer.ISeqStorage` interface
 
 - Package: cmp.appparts.internal.seqStorage
-- `~cmp.ISeqStorageImplementation.New~`uncvrd[^25]❓
+- `~cmp.ISeqStorageImplementation.New~`
   - Per App per Partition by AppParts
   - PartitionID is not passed to the constructor
-- `~cmp.ISeqStorageImplementation.i688~`uncvrd[^15]❓
+- `~cmp.ISeqStorageImplementation.i688~`
   - Handle [#688: record ID leads to different tables](https://github.com/voedger/voedger/issues/688)
   - If existing number is less than ??? 322_680_000_000_000 - do not send it to the batcher
 - Uses VVMStorage Adapter
 
 ### VVMStorage Adapter
 
-`~cmp.VVMStorageAdapter~`uncvrd[^26]❓: Adapter that reads and writes sequence data to the VVMStorage
+`~cmp.VVMStorageAdapter~`: Adapter that reads and writes sequence data to the VVMStorage
 
 - Key: ((KeyPrefixSeqStorage, AppID), WSID, SeqID)
-  - `~cmp.VVMStorageAdapter.KeyPrefixSeqStorage~`uncvrd[^27]❓: Prefix for the keys in the storage
+  - `~cmp.VVMStorageAdapter.KeyPrefixSeqStorage~`: Prefix for the keys in the storage
 
 ### isequencer
 
-- `~test.isequencer.mockISeqStorage~`uncvrd[^16]❓
+- `~test.isequencer.mockISeqStorage~`
   - Mock implementation of `isequencer.ISeqStorage` for testing purposes
 
 Some edge case tests:
 
-- `~test.isequencer.LongRecovery~`uncvrd[^19]❓
+- `~test.isequencer.LongRecovery~`
   - Params.MaxNumUnflushedValues = 5 // Just a guess
   - For numOfEvents in [0, 10*Params.MaxNumUnflushedValues]
     - Create a new ISequencer instance
     - Check that Next() returns correct values after recovery
-- `~test.isequencer.MultipleActualizes~`uncvrd[^20]❓
+- `~test.isequencer.MultipleActualizes~`
   - Repeat { Start {Next} randomly( Flush | Actualize ) } cycle 100 times
   - Check that the system recovers well
   - Check that the sequence values are increased monotonically
-- `~test.isequencer.FlushPermanentlyFails~`uncvrd[^21]❓
+- `~test.isequencer.FlushPermanentlyFails~`
   - Recovery has worked but then ISeqStorage.WriteValuesAndOffset() fails permanently
     - First Start/Flush must be ok
     - Some of the next Start must not be ok
@@ -524,6 +533,8 @@ Some edge case tests:
       - Start/Next/Flush must be ok
       - loop Start/Next/Flush until Start() is not ok (the 6th times till unflushed values exceed the limit)
   
+## Technical design: Tests
+
 ### Intergation tests for SequencesTrustLevel mode
 
 Method:
@@ -541,9 +552,9 @@ Method:
 
 System tests:
 
-- `~it.SequencesTrustLevel0~`uncvrd[^22]❓: Test for `SequencesTrustLevel = 0`
-- `~it.SequencesTrustLevel1~`uncvrd[^23]❓: Test for `SequencesTrustLevel = 1`
-- `~it.SequencesTrustLevel2~`uncvrd[^24]❓: Test for `SequencesTrustLevel = 2`
+- `~it.SequencesTrustLevel0~`: Test for `SequencesTrustLevel = 0`
+- `~it.SequencesTrustLevel1~`: Test for `SequencesTrustLevel = 1`
+- `~it.SequencesTrustLevel2~`: Test for `SequencesTrustLevel = 2`
 
 ### Intergation tests for built-in sequences
 
@@ -565,28 +576,3 @@ History:
 
 ## Footnotes
 
-[^1]: `[~server.design.sequences/tuc.VVMConfig.ConfigureSequencesTrustLevel~impl]`
-[^2]: `[~server.design.sequences/cmp.VVMConfig.SequencesTrustLevel~impl]`
-[^3]: `[~server.design.sequences/tuc.SequencesTrustLevelForPLog~impl]`
-[^4]: `[~server.design.sequences/tuc.SequencesTrustLevelForWLog~impl]`
-[^5]: `[~server.design.sequences/tuc.SequencesTrustLevelForRecords~impl]`
-[^6]: `[~server.design.sequences/tuc.StartSequencesGeneration~impl]`
-[^7]: `[~server.design.sequences/cmp.IAppPartition.Sequencer~impl]`
-[^8]: `[~server.design.sequences/cmp.ISequencer.Start~impl]`
-[^9]: `[~server.design.sequences/tuc.GetNextSequenceNumber~impl]`
-[^10]: `[~server.design.sequences/cmp.ISequencer.Next~impl]`
-[^11]: `[~server.design.sequences/tuc.FlushSequenceNumbers~impl]`
-[^12]: `[~server.design.sequences/tuc.ReactualizeSequences~impl]`
-[^13]: `[~server.design.sequences/tuc.InstantiateSequencer~impl]`
-[^14]: `[~server.design.sequences/cmp.appparts.internal.seqStorage~impl]`
-[^15]: `[~server.design.sequences/cmp.appparts.internal.seqStorage.i688~impl]`
-[^16]: `[~server.design.sequences/test.isequencer.mockISeqStorage~impl]`
-[^19]: `[~server.design.sequences/test.isequencer.LongRecovery~impl]`
-[^20]: `[~server.design.sequences/test.isequencer.MultipleActualizes~impl]`
-[^21]: `[~server.design.sequences/test.isequencer.FlushPermanentlyFails~impl]`
-[^22]: `[~server.design.sequences/it.SequencesTrustLevel0~impl]`
-[^23]: `[~server.design.sequences/it.SequencesTrustLevel1~impl]`
-[^24]: `[~server.design.sequences/it.SequencesTrustLevel2~impl]`
-[^25]: `[~server.design.sequences/cmp.ISeqStorageImplementation.New~impl]`
-[^26]: `[~server.design.sequences/cmp.VVMStorageAdapter~impl]`
-[^27]: `[~server.design.sequences/cmp.VVMStorageAdapter.KeyPrefixSeqStorage~impl]`
