@@ -1,3 +1,7 @@
+---
+reqmd.package: server.apiv2.schemas
+---
+
 # List app workspaces
 ## Motivation
 List app workspaces having published roles, using API
@@ -28,3 +32,18 @@ Only workspaces returned which have resources available to [published roles](../
 ## See Also
 - [List workspace roles](list-ws-roles.md)
 - [Read workspace role schema](read-ws-role-schema.md)
+
+## Technical design
+### Components
+#### pkg/processors/query2
+##### `IApiPathHandler` implementation for handling `ApiPath_Schemas`
+- `~cmp.schemasHandler~`uncvrd[^1]❓
+
+##### `newQueryProcessorPipeline`: provide API handler for `ApiPath_Schemas`
+- `~cmp.provideSchemasHandler~
+
+##### pkg/sys/it
+- integration test `~it.TestQueryProcessor2_Schemas~`uncvrd[^2]❓
+
+[^1]: `[~server.apiv2.schemas/cmp.schemasHandler~impl]`
+[^2]: `[~server.apiv2.schemas/it.TestQueryProcessor2_Schemas~impl]`
