@@ -104,26 +104,26 @@ This approach decouples memory usage from the total number of workspaces and tra
 
 ### VVMHost: Configure SequencesTrustLevel mode for VVM
 
-`~tuc.VVMConfig.ConfigureSequencesTrustLevel~`
+`~tuc.VVMConfig.ConfigureSequencesTrustLevel~`uncvrd[^1]❓
 
 VVMHost uses cmp.VVMConfig.SequencesTrustLevel.
 
 ### CP: Handling SequencesTrustLevel for Events
 
-- `~tuc.SequencesTrustLevelForPLog~`
+- `~tuc.SequencesTrustLevelForPLog~`uncvrd[^2]❓
   - When PLog is written then SequencesTrustLevel is used to determine the write mode
-- `~tuc.SequencesTrustLevelForWLog~`
+- `~tuc.SequencesTrustLevelForWLog~`uncvrd[^3]❓
   - When WLog is written then SequencesTrustLevel is used to determine the write mode
 
 ### CP: Handling SequencesTrustLevel for Table Records
 
-- `~tuc.SequencesTrustLevelForRecords~`
+- `~tuc.SequencesTrustLevelForRecords~`uncvrd[^4]❓
   - When a record is inserted SequencesTrustLevel is used to determine the write mode
   - When a record is updated - nothing is done in connection with SequencesTrustLevel
 
 ### CP: Command processing
 
-- `~tuc.StartSequencesGeneration~`
+- `~tuc.StartSequencesGeneration~`uncvrd[^5]❓
   - When: CP starts processing a request
   - Flow:
     - `partitionID` is calculated using request WSID and amount of partitions declared in AppDeploymentDescriptor [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/vvm/impl_requesthandler.go#L61)
@@ -133,22 +133,22 @@ VVMHost uses cmp.VVMConfig.SequencesTrustLevel.
         - Actualization is in progress
         - Flushing queue is full
         - Returns 503: "server is busy"
-- `~tuc.NextSequenceNumber~`
+- `~tuc.NextSequenceNumber~`uncvrd[^6]❓
   - When: After CP starts sequences generation
   - Flow:
     - sequencer.Next(sequenceId)
-- `~tuc.FlushSequenceNumbers~`
+- `~tuc.FlushSequenceNumbers~`uncvrd[^7]❓
   - When: After CP saves the PLog record successfully
   - Flow:
     - sequencer.Flush()
-- `~tuc.ReactualizeSequences~`
+- `~tuc.ReactualizeSequences~`uncvrd[^8]❓
   - When: After CP fails to save the PLog record
   - Flow:
     - sequencer.Actualize()
 
 ### AppParts: Instantiate sequencer on Application deployment
 
-`~tuc.InstantiateSequencer~`
+`~tuc.InstantiateSequencer~`uncvrd[^9]❓
 
 - When: Partition with the `partitionID` is deployed
 - Flow:
@@ -162,25 +162,25 @@ VVMHost uses cmp.VVMConfig.SequencesTrustLevel.
 
 ### IAppPartition.Sequencer
 
-- `~cmp.IAppPartition.Sequencer~`
+- `~cmp.IAppPartition.Sequencer~`uncvrd[^10]❓
   - Description: Returns `isequencer.ISequencer` for the given `partitionID`
   - Covers: `tuc.StartSequencesGeneration`
 
 ### VVMConfig.SequencesTrustLevel
 
-- `~cmp.VVMConfig.SequencesTrustLevel~`
+- `~cmp.VVMConfig.SequencesTrustLevel~`uncvrd[^11]❓
   - Covers: tuc.VVMConfig.ConfigureSequencesTrustLevel
 
 ---
 
 ### pkg/isequencer
 
-- `~cmp.ISequencer~`: Interface for working with sequences
-- `~cmp.sequencer~`: Implementation of the `isequencer.ISequencer` interface
-  - `~cmp.sequencer.Start~`: Starts Sequencing Transaction for the given WSID
-  - `~cmp.sequencer.Next~`: Returns the next sequence number for the given SeqID
-  - `~cmp.sequencer.Flush~`: Completes Sequencing Transaction
-  - `~cmp.sequencer.Actualize~`: Cancels Sequencing Transaction and starts the Actualization process
+- `~cmp.ISequencer~`uncvrd[^12]❓: Interface for working with sequences
+- `~cmp.sequencer~`uncvrd[^13]❓: Implementation of the `isequencer.ISequencer` interface
+  - `~cmp.sequencer.Start~`uncvrd[^14]❓: Starts Sequencing Transaction for the given WSID
+  - `~cmp.sequencer.Next~`uncvrd[^15]❓: Returns the next sequence number for the given SeqID
+  - `~cmp.sequencer.Flush~`uncvrd[^16]❓: Completes Sequencing Transaction
+  - `~cmp.sequencer.Actualize~`uncvrd[^17]❓: Cancels Sequencing Transaction and starts the Actualization process
 
 #### interface.go
 
@@ -488,41 +488,41 @@ func (s *sequencer) cleanup() {
 
 ### ISeqStorage implementation
 
-`~cmp.ISeqStorageImplementation~`: Implementation of the `isequencer.ISeqStorage` interface
+`~cmp.ISeqStorageImplementation~`uncvrd[^18]❓: Implementation of the `isequencer.ISeqStorage` interface
 
 - Package: cmp.appparts.internal.seqStorage
-- `~cmp.ISeqStorageImplementation.New~`
+- `~cmp.ISeqStorageImplementation.New~`uncvrd[^19]❓
   - Per App per Partition by AppParts
   - PartitionID is not passed to the constructor
-- `~cmp.ISeqStorageImplementation.i688~`
+- `~cmp.ISeqStorageImplementation.i688~`uncvrd[^20]❓
   - Handle [#688: record ID leads to different tables](https://github.com/voedger/voedger/issues/688)
   - If existing number is less than ??? 322_680_000_000_000 - do not send it to the batcher
 - Uses VVMStorage Adapter
 
 ### VVMStorage Adapter
 
-`~cmp.VVMStorageAdapter~`: Adapter that reads and writes sequence data to the VVMStorage
+`~cmp.VVMStorageAdapter~`uncvrd[^21]❓: Adapter that reads and writes sequence data to the VVMStorage
 
 - Key: ((KeyPrefixSeqStorage, AppID), WSID, SeqID)
-  - `~cmp.VVMStorageAdapter.KeyPrefixSeqStorage~`: Prefix for the keys in the storage
+  - `~cmp.VVMStorageAdapter.KeyPrefixSeqStorage~`uncvrd[^22]❓: Prefix for the keys in the storage
 
 ### isequencer
 
-- `~test.isequencer.mockISeqStorage~`
+- `~test.isequencer.mockISeqStorage~`uncvrd[^23]❓
   - Mock implementation of `isequencer.ISeqStorage` for testing purposes
 
 Some edge case tests:
 
-- `~test.isequencer.LongRecovery~`
+- `~test.isequencer.LongRecovery~`uncvrd[^24]❓
   - Params.MaxNumUnflushedValues = 5 // Just a guess
   - For numOfEvents in [0, 10*Params.MaxNumUnflushedValues]
     - Create a new ISequencer instance
     - Check that Next() returns correct values after recovery
-- `~test.isequencer.MultipleActualizes~`
+- `~test.isequencer.MultipleActualizes~`uncvrd[^25]❓
   - Repeat { Start {Next} randomly( Flush | Actualize ) } cycle 100 times
   - Check that the system recovers well
   - Check that the sequence values are increased monotonically
-- `~test.isequencer.FlushPermanentlyFails~`
+- `~test.isequencer.FlushPermanentlyFails~`uncvrd[^26]❓
   - Recovery has worked but then ISeqStorage.WriteValuesAndOffset() fails permanently
     - First Start/Flush must be ok
     - Some of the next Start must not be ok
@@ -552,9 +552,9 @@ Method:
 
 System tests:
 
-- `~it.SequencesTrustLevel0~`: Test for `SequencesTrustLevel = 0`
-- `~it.SequencesTrustLevel1~`: Test for `SequencesTrustLevel = 1`
-- `~it.SequencesTrustLevel2~`: Test for `SequencesTrustLevel = 2`
+- `~it.SequencesTrustLevel0~`uncvrd[^27]❓: Test for `SequencesTrustLevel = 0`
+- `~it.SequencesTrustLevel1~`uncvrd[^28]❓: Test for `SequencesTrustLevel = 1`
+- `~it.SequencesTrustLevel2~`uncvrd[^29]❓: Test for `SequencesTrustLevel = 2`
 
 ### Intergation tests for built-in sequences
 
@@ -576,3 +576,33 @@ History:
 
 ## Footnotes
 
+
+[^1]: `[~server.design.sequences/tuc.VVMConfig.ConfigureSequencesTrustLevel~impl]`
+[^2]: `[~server.design.sequences/tuc.SequencesTrustLevelForPLog~impl]`
+[^3]: `[~server.design.sequences/tuc.SequencesTrustLevelForWLog~impl]`
+[^4]: `[~server.design.sequences/tuc.SequencesTrustLevelForRecords~impl]`
+[^5]: `[~server.design.sequences/tuc.StartSequencesGeneration~impl]`
+[^6]: `[~server.design.sequences/tuc.NextSequenceNumber~impl]`
+[^7]: `[~server.design.sequences/tuc.FlushSequenceNumbers~impl]`
+[^8]: `[~server.design.sequences/tuc.ReactualizeSequences~impl]`
+[^9]: `[~server.design.sequences/tuc.InstantiateSequencer~impl]`
+[^10]: `[~server.design.sequences/cmp.IAppPartition.Sequencer~impl]`
+[^11]: `[~server.design.sequences/cmp.VVMConfig.SequencesTrustLevel~impl]`
+[^12]: `[~server.design.sequences/cmp.ISequencer~impl]`
+[^13]: `[~server.design.sequences/cmp.sequencer~impl]`
+[^14]: `[~server.design.sequences/cmp.sequencer.Start~impl]`
+[^15]: `[~server.design.sequences/cmp.sequencer.Next~impl]`
+[^16]: `[~server.design.sequences/cmp.sequencer.Flush~impl]`
+[^17]: `[~server.design.sequences/cmp.sequencer.Actualize~impl]`
+[^18]: `[~server.design.sequences/cmp.ISeqStorageImplementation~impl]`
+[^19]: `[~server.design.sequences/cmp.ISeqStorageImplementation.New~impl]`
+[^20]: `[~server.design.sequences/cmp.ISeqStorageImplementation.i688~impl]`
+[^21]: `[~server.design.sequences/cmp.VVMStorageAdapter~impl]`
+[^22]: `[~server.design.sequences/cmp.VVMStorageAdapter.KeyPrefixSeqStorage~impl]`
+[^23]: `[~server.design.sequences/test.isequencer.mockISeqStorage~impl]`
+[^24]: `[~server.design.sequences/test.isequencer.LongRecovery~impl]`
+[^25]: `[~server.design.sequences/test.isequencer.MultipleActualizes~impl]`
+[^26]: `[~server.design.sequences/test.isequencer.FlushPermanentlyFails~impl]`
+[^27]: `[~server.design.sequences/it.SequencesTrustLevel0~impl]`
+[^28]: `[~server.design.sequences/it.SequencesTrustLevel1~impl]`
+[^29]: `[~server.design.sequences/it.SequencesTrustLevel2~impl]`
