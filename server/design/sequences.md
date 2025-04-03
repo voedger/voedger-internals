@@ -213,7 +213,7 @@ type ISeqStorage interface {
   // len(batch) may be 0
   // offset: Next offset to be used
   // batch MUST be written first, then offset
-	WriteValuesAndOffset(batch []SeqValue, offset PLogOffset) error
+	WriteValuesAndNextPLogOffset(batch []SeqValue, nextPLogOffset PLogOffset) error
 
   // ActualizeSequencesFromPLog scans PLog from the given offset and send values to the batcher.
 	// Values are sent per event, unordered, ISeqValue.Keys are not unique.
@@ -502,11 +502,6 @@ func (s *sequencer) cleanup() {
 - `~test.isequencer.mockISeqStorage~`uncvrd[^16]❓
   - Mock implementation of `isequencer.ISeqStorage` for testing purposes
 
-Some core functionality tests:
-
-- `~test.isequencer.FlushByTimer~`uncvrd[^17]❓
-- `~test.isequencer.FlushBySize~`uncvrd[^18]❓
-
 Some edge case tests:
 
 - `~test.isequencer.LongRecovery~`uncvrd[^19]❓
@@ -586,8 +581,6 @@ History:
 [^14]: `[~server.design.sequences/cmp.appparts.internal.seqStorage~impl]`
 [^15]: `[~server.design.sequences/cmp.appparts.internal.seqStorage.i688~impl]`
 [^16]: `[~server.design.sequences/test.isequencer.mockISeqStorage~impl]`
-[^17]: `[~server.design.sequences/test.isequencer.FlushByTimer~impl]`
-[^18]: `[~server.design.sequences/test.isequencer.FlushBySize~impl]`
 [^19]: `[~server.design.sequences/test.isequencer.LongRecovery~impl]`
 [^20]: `[~server.design.sequences/test.isequencer.MultipleActualizes~impl]`
 [^21]: `[~server.design.sequences/test.isequencer.FlushPermanentlyFails~impl]`
