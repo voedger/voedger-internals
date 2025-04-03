@@ -564,7 +564,7 @@ Tests:
 
 ### Intergation tests for built-in sequences
 
-- `~it.BuiltInSequences~`: Test for initial values: WLogOffsetSequence, WLogOffsetSequence, CRecordIDSequence, OWRecordIDSequence
+- `~it.BuiltInSequences~`uncvrd[^30]❓: Test for initial values: WLogOffsetSequence, WLogOffsetSequence, CRecordIDSequence, OWRecordIDSequence
 
 ---
 
@@ -614,3 +614,4 @@ History:
 [^27]: `[~server.design.sequences/it.SequencesTrustLevel0~impl]`
 [^28]: `[~server.design.sequences/it.SequencesTrustLevel1~impl]`
 [^29]: `[~server.design.sequences/it.SequencesTrustLevel2~impl]`
+[^30]: `[~server.design.sequences/it.BuiltInSequences~impl]`
