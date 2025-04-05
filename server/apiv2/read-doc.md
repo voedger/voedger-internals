@@ -49,6 +49,6 @@ The following [query constraints](query-constraints.md) can be used:
     - integration test for /docs/
         - `~it.TestQueryProcessor2_Docs~`covered[^3]✅
 
-[^1]: `[~server.apiv2.docs/cmp.docsHandler~impl]` [pkg/processors/query2/impl_docs_handler.go:21:impl](https://github.com/voedger/voedger/blob/1e910b11ddf1e3613b2637fbc9628fdea812bc14/pkg/processors/query2/impl_docs_handler.go#L21)
-[^2]: `[~server.apiv2.docs/cmp.provideDocsHandler~impl]` [pkg/processors/query2/impl.go:122:impl](https://github.com/voedger/voedger/blob/965d3b9049d21235163ca2693e0143da2bc247fd/pkg/processors/query2/impl.go#L122)
-[^3]: `[~server.apiv2.docs/it.TestQueryProcessor2_Docs~impl]` [pkg/sys/it/impl_qpv2_test.go:1427:impl](https://github.com/voedger/voedger/blob/965d3b9049d21235163ca2693e0143da2bc247fd/pkg/sys/it/impl_qpv2_test.go#L1427)
+[^1]: `[~server.apiv2.docs/cmp.docsHandler~impl]` [pkg/processors/query2/impl_docs_handler.go:21:impl](https://github.com/voedger/voedger/blob/9deb1fd8797c53d383ebed091961ecef39d045f2/pkg/processors/query2/impl_docs_handler.go#L21)
+[^2]: `[~server.apiv2.docs/cmp.provideDocsHandler~impl]` [pkg/processors/query2/impl.go:126:impl](https://github.com/voedger/voedger/blob/9deb1fd8797c53d383ebed091961ecef39d045f2/pkg/processors/query2/impl.go#L126)
+[^3]: `[~server.apiv2.docs/it.TestQueryProcessor2_Docs~impl]` [pkg/sys/it/impl_qpv2_test.go:1427:impl](https://github.com/voedger/voedger/blob/9deb1fd8797c53d383ebed091961ecef39d045f2/pkg/sys/it/impl_qpv2_test.go#L1427)

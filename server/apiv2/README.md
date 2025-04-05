@@ -15,9 +15,9 @@
 | **Authentication** |
 | [Creates a new principal token](login.md)                 | `POST /api/v2/apps/{owner}/{app}/auth/login` |
 | [Refreshes a valid principal token](refresh.md)           | `POST /api/v2/apps/{owner}/{app}/auth/refresh` |
-| **Users** |
-| Create(register) new user                                 | `POST /api/v2/apps/{owner}/{app}/users` |
-| Change password                                           | `POST /api/v2/apps/{owner}/{app}/users/change-password` |
+| **Logins** |
+| [Create(register) a new user](create-user.md)             | `POST /api/v2/apps/{owner}/{app}/users` |
+| [Change user password](change-password.md)                | `POST /api/v2/apps/{owner}/{app}/users/change-password` |
 | **Devices** |
 | [Create(register) a new device](create-device.md)         | `POST /api/v2/apps/{owner}/{app}/devices`                               |
 | **Docs and records** |
