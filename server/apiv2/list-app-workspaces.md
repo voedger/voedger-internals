@@ -4,17 +4,19 @@ reqmd.package: server.apiv2.schemas
 
 # List app workspaces
 ## Motivation
-List app workspaces having published roles, using API
+List app workspaces, using API
 
 ## Functional Design
 GET `/api/v2/apps/{owner}/{app}/schemas`
 
 Returns the hierarchy of non-abstract workspaces in the application with WSProfile as a root.
-Only workspaces returned which have resources available to [published roles](../authnz/published-roles.md). 
+If Authorization header is provided, and user has `sys.Developer` role, the hierarchy of all workspaces in the application is returned.
+Otherwise, only workspaces returned which have resources available to [published roles](../authnz/published-roles.md). 
 
 ### Headers
 | Key | Value | Description |
 | --- | --- | --- |
+| Authorization | Bearer {PrincipalToken} | optional |
 | Accept | text/html | To get the response in HTML format (default) |
 
 ### Parameters

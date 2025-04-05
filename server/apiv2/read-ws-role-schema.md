@@ -4,14 +4,17 @@ reqmd.package: server.apiv2.role
 
 # Get workspace role schema
 ## Motivation
-Return the schema of the resources, available to specified [published role](../authnz/published-roles.md) in a given workspace.
+Return the schema of the resources, available to specified role in a given workspace.
 
 ## Functional Design
 GET `/api/v2/apps/{owner}/{app}/schemas/{pkg}.{workspace}/roles/{pkg}.{role}`
 
+If [non-published role](../authnz/published-roles.md) is specified, the user must have `sys.Developer` role in the workspace to see the schema.
+
 ### Headers
 | Key | Value | Description |
 | --- | --- | --- |
+| Authorization | Bearer {PrincipalToken} | optional |
 | Accept | application/json | To get the response in OpenAPI format (default) |
 | Accept | text/html | Shows schema in Swagger UI |
 
