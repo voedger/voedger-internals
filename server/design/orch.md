@@ -280,7 +280,7 @@ Flow
 
 ## Footnotes
 
-[^1]: `[~server.design.orch/VVMConfig.Orch~impl]` [pkg/vvm/types.go:176:impl](https://github.com/voedger/voedger/blob/d10452dae8a296059137b1d44fb7a411f90aa52f/pkg/vvm/types.go#L176)
+[^1]: `[~server.design.orch/VVMConfig.Orch~impl]` [pkg/vvm/types.go:176:impl](https://github.com/voedger/voedger/blob/9deb1fd8797c53d383ebed091961ecef39d045f2/pkg/vvm/types.go#L176)
 [^2]: `[~server.design.orch/IElections~impl]` [pkg/ielections/interface.go:12:impl](https://github.com/voedger/voedger/blob/6cdaf984d07a84e3e0a24c3bfc7e5e0fc3850e78/pkg/ielections/interface.go#L12)
 [^3]: `[~server.design.orch/ITTLStorage~impl]` [pkg/ielections/interface.go:26:impl](https://github.com/voedger/voedger/blob/6cdaf984d07a84e3e0a24c3bfc7e5e0fc3850e78/pkg/ielections/interface.go#L26)
 [^4]: `[~server.design.orch/elections~impl]` [pkg/ielections/impl.go:16:impl](https://github.com/voedger/voedger/blob/d10452dae8a296059137b1d44fb7a411f90aa52f/pkg/ielections/impl.go#L16)
@@ -290,7 +290,7 @@ Flow
 [^8]: `[~server.design.orch/NewElectionsTTLStorage~impl]` [pkg/vvm/storage/provide.go:9:impl](https://github.com/voedger/voedger/blob/6cdaf984d07a84e3e0a24c3bfc7e5e0fc3850e78/pkg/vvm/storage/provide.go#L9)
 [^9]: `[~server.design.orch/ElectionsByDriverTests~impl]` [pkg/vvm/storage/impl_electionsbydrivers_test.go:25:impl](https://github.com/voedger/voedger/blob/6cdaf984d07a84e3e0a24c3bfc7e5e0fc3850e78/pkg/vvm/storage/impl_electionsbydrivers_test.go#L25)
 [^10]: `[~server.design.orch/KeyPrefix_VVMLeader~impl]` [pkg/vvm/storage/consts.go:12:impl](https://github.com/voedger/voedger/blob/6cdaf984d07a84e3e0a24c3bfc7e5e0fc3850e78/pkg/vvm/storage/consts.go#L12)
-[^11]: `[~server.design.orch/VVM.Provide~impl]` [pkg/vvm/provide.go:79:impl](https://github.com/voedger/voedger/blob/d10452dae8a296059137b1d44fb7a411f90aa52f/pkg/vvm/provide.go#L79), [pkg/vvm/wire_gen.go:250:impl](https://github.com/voedger/voedger/blob/d10452dae8a296059137b1d44fb7a411f90aa52f/pkg/vvm/wire_gen.go#L250)
+[^11]: `[~server.design.orch/VVM.Provide~impl]` [pkg/vvm/provide.go:79:impl](https://github.com/voedger/voedger/blob/9deb1fd8797c53d383ebed091961ecef39d045f2/pkg/vvm/provide.go#L79), [pkg/vvm/wire_gen.go:250:impl](https://github.com/voedger/voedger/blob/9deb1fd8797c53d383ebed091961ecef39d045f2/pkg/vvm/wire_gen.go#L250)
 [^12]: `[~server.design.orch/VVM.Shutdown~impl]` [pkg/vvm/impl_orch.go:39:impl](https://github.com/voedger/voedger/blob/d10452dae8a296059137b1d44fb7a411f90aa52f/pkg/vvm/impl_orch.go#L39)
 [^13]: `[~server.design.orch/VVM.LaunchVVM~impl]` [pkg/vvm/impl_orch.go:19:impl](https://github.com/voedger/voedger/blob/d10452dae8a296059137b1d44fb7a411f90aa52f/pkg/vvm/impl_orch.go#L19)
 [^14]: `[~server.design.orch/VVM.Shutdowner~impl]` [pkg/vvm/impl_orch.go:66:impl](https://github.com/voedger/voedger/blob/d10452dae8a296059137b1d44fb7a411f90aa52f/pkg/vvm/impl_orch.go#L66)

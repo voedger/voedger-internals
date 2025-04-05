@@ -9,12 +9,12 @@
     "https://github.com/voedger/voedger/blob/6cdaf984d07a84e3e0a24c3bfc7e5e0fc3850e78/pkg/vvm/storage/impl_electionsbydrivers_test.go": "5b35ab1438fbd31db9624404cf22588ab0c77652",
     "https://github.com/voedger/voedger/blob/6cdaf984d07a84e3e0a24c3bfc7e5e0fc3850e78/pkg/vvm/storage/interface.go": "5689642b52d623fbcb4e06d9081b231df9a145e9",
     "https://github.com/voedger/voedger/blob/6cdaf984d07a84e3e0a24c3bfc7e5e0fc3850e78/pkg/vvm/storage/provide.go": "c48200f32b3a3ff3c5875e446b351469d117d2d7",
+    "https://github.com/voedger/voedger/blob/9deb1fd8797c53d383ebed091961ecef39d045f2/pkg/vvm/provide.go": "52ef1108753005fe0ea1a54dbaf0bf0a8beb1fc0",
+    "https://github.com/voedger/voedger/blob/9deb1fd8797c53d383ebed091961ecef39d045f2/pkg/vvm/types.go": "4c134e1a48f83dea0286cd59018c813e6fcbc261",
+    "https://github.com/voedger/voedger/blob/9deb1fd8797c53d383ebed091961ecef39d045f2/pkg/vvm/wire_gen.go": "53c0f00ebcb79549b11231d0130fe9c3558c1896",
     "https://github.com/voedger/voedger/blob/d10452dae8a296059137b1d44fb7a411f90aa52f/pkg/ielections/impl.go": "49819ab4346b93e0fd6e1ee5b7a619eca1166a26",
     "https://github.com/voedger/voedger/blob/d10452dae8a296059137b1d44fb7a411f90aa52f/pkg/vvm/impl_orch.go": "ea306cca0574f40a3b6185449e50a00c09cb9d11",
     "https://github.com/voedger/voedger/blob/d10452dae8a296059137b1d44fb7a411f90aa52f/pkg/vvm/impl_orch_test.go": "f611104092ae87457c1d2ab6e79afc7c70d1c1b9",
-    "https://github.com/voedger/voedger/blob/d10452dae8a296059137b1d44fb7a411f90aa52f/pkg/vvm/provide.go": "f8e9fbea2d3e4cb81cb35e2815fa992f913c17f5",
-    "https://github.com/voedger/voedger/blob/d10452dae8a296059137b1d44fb7a411f90aa52f/pkg/vvm/types.go": "95cff54c54c73743d83f588f98b92a130e2bc1af",
-    "https://github.com/voedger/voedger/blob/d10452dae8a296059137b1d44fb7a411f90aa52f/pkg/vvm/wire_gen.go": "0ee06d229a6508ef5f1e68d708023a85714171e8",
     "https://github.com/voedger/voedger/blob/e81fd33926adedebd9eb832d9940e3b8acaac578/pkg/vvm/shutdowntest/iml_shutdown_test.go": "08958c61cc34f6a28e90571a8c676a3ce5cfe761"
   }
 }
