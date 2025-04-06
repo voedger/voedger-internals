@@ -34,7 +34,6 @@
 | **BLOBs**
 | [Create/upload a new BLOB](create-blob.md)                | `POST /api/v2/apps/{owner}/{app}/workspaces/{wsid}/blobs`                   |
 | [Retrieve/download the BLOB](read-blob.md)                | `GET /api/v2/apps/{owner}/{app}/workspaces/{wsid}/blobs/{blobId}`          |
-| [Update an existing BLOB's metadata](update-blob-meta.md) | `PATCH /api/v2/apps/{owner}/{app}/workspaces/{wsid}/blobs/{blobId}`          |
 | [Replace an existing BLOB](replace-blob.md)               | `PUT /api/v2/apps/{owner}/{app}/workspaces/{wsid}/blobs/{blobId}`          |
 | [Delete a BLOB](delete-blob.md)                           | `DELETE /api/v2/apps/{owner}/{app}/workspaces/{wsid}/blobs/{blobId}`          |
 | **Schemas**
