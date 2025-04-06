@@ -1,9 +1,15 @@
+---
+reqmd.package: server.apiv2.blobs
+---
+
 # Delete the existing BLOB
+
+## Functional design
 DELETE `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/blobs/{blobId}`
 
-Deletes the BLOB and its metadata
+Deletes the BLOB
 
-## Headers
+### Headers
 | Key | Value |
 | --- | --- |
 | Authorization | Bearer {PrincipalToken} |
@@ -16,9 +22,20 @@ Deletes the BLOB and its metadata
 | wsid | int64 | the ID of workspace |
 | blobId | int64 | ID of a BLOB
 
-## Result
+### Result
 | Code | Description | Body |
 | --- | --- | --- |
 | 204 | No Content |  |
 | 401 | Unauthorized | [error object](conventions.md#errors) |
 | 404 | Not Found | [error object](conventions.md#errors) |
+
+## Technical design
+### Components
+- pkg/router
+  - URL path handler `~cmp.routerBlobsDeletePathHandler~`uncvrd[^1]❓:
+- pkg/sys/it
+    - integration test for deleting BLOBs
+        - `~it.TestBlobsDelete~`uncvrd[^2]❓
+
+[^1]: `[~server.apiv2.blobs/cmp.routerBlobsDeletePathHandler~impl]`
+[^2]: `[~server.apiv2.blobs/it.TestBlobsDelete~impl]`
