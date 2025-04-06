@@ -1,7 +1,6 @@
 # APIv2
 
 # Motivation
-- [API Gateway (APIv2) #1162](https://github.com/voedger/voedger/issues/1162)
 - We need good REST API for Voedger
 - Old API must still be available until the new one is fully developed, so we can continue with AIR
 
@@ -42,7 +41,12 @@
 | [Read workspace role schema](read-ws-role-schema.md)      | `GET /api/v2/apps/{owner}/{app}/schemas/{pkg}.{workspace}/roles/{pkg}.{role}` |
 
 # Limitations
-- sys.CUD function cannot be called directly
+- The following functions should not be calle directly:
+    - c.sys.CUD
+    - q.sys.Collection
+
+# Addressed issues
+- [API Gateway (APIv2) #1162](https://github.com/voedger/voedger/issues/1162)
 
 # See Also
 - [Query Processor](/server/design/qp.md)
