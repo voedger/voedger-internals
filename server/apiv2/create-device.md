@@ -56,7 +56,7 @@ JSON object:
 
 - pkg/sys/it
     - integration test for /users
-        - `~it.TestQueryProcessor2_DevicesCreate~`uncvrd[^2]❓
+        - `~it.TestDevicesCreate~`uncvrd[^2]❓
 
 [^1]: `[~server.apiv2.devices/cmp.routerDevicesCreatePathHandler~impl]`
-[^2]: `[~server.apiv2.devices/it.TestQueryProcessor2_DevicesCreate~impl]`
+[^2]: `[~server.apiv2.devices/it.TestDevicesCreate~impl]`

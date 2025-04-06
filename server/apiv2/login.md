@@ -58,7 +58,7 @@ Example result 200:
 
 - pkg/sys/it
     - integration test for /login
-        - `~it.TestQueryProcessor2_Login~`uncvrd[^2]❓
+        - `~it.TestLogin~`uncvrd[^2]❓
 
 [^1]: `[~server.apiv2.auth/cmp.routerLoginPathHandler~impl]`
-[^2]: `[~server.apiv2.auth/it.TestQueryProcessor2_Login~impl]`
+[^2]: `[~server.apiv2.auth/it.TestLogin~impl]`
