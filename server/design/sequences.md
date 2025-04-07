@@ -177,30 +177,30 @@ VVMHost uses cmp.VVMConfig.SequencesTrustLevel.
 
 Core:
 
-- `~cmp.ISequencer~`uncvrd[^12]❓: Interface for working with sequences
-- `~cmp.sequencer~`uncvrd[^13]❓: Implementation of the `isequencer.ISequencer` interface
-  - `~cmp.sequencer.Start~`uncvrd[^14]❓: Starts Sequencing Transaction for the given WSID
-  - `~cmp.sequencer.Next~`uncvrd[^15]❓: Returns the next sequence number for the given SeqID
-  - `~cmp.sequencer.Flush~`uncvrd[^16]❓: Completes Sequencing Transaction
-  - `~cmp.sequencer.Actualize~`uncvrd[^17]❓: Cancels Sequencing Transaction and starts the Actualization process
+- `~cmp.ISequencer~`covered[^12]✅: Interface for working with sequences
+- `~cmp.sequencer~`covered[^13]✅: Implementation of the `isequencer.ISequencer` interface
+  - `~cmp.sequencer.Start~`covered[^14]✅: Starts Sequencing Transaction for the given WSID
+  - `~cmp.sequencer.Next~`covered[^15]✅: Returns the next sequence number for the given SeqID
+  - `~cmp.sequencer.Flush~`covered[^16]✅: Completes Sequencing Transaction
+  - `~cmp.sequencer.Actualize~`covered[^17]✅: Cancels Sequencing Transaction and starts the Actualization process
 
 Tests:
 
-- `~test.isequencer.mockISeqStorage~`uncvrd[^23]❓
+- `~test.isequencer.mockISeqStorage~`covered[^23]✅
   - Mock implementation of `isequencer.ISeqStorage` for testing purposes
 
 Some edge case tests:
 
-- `~test.isequencer.LongRecovery~`uncvrd[^24]❓
+- `~test.isequencer.LongRecovery~`covered[^24]✅
   - Params.MaxNumUnflushedValues = 5 // Just a guess
   - For numOfEvents in [0, 10*Params.MaxNumUnflushedValues]
     - Create a new ISequencer instance
     - Check that Next() returns correct values after recovery
-- `~test.isequencer.MultipleActualizes~`uncvrd[^25]❓
+- `~test.isequencer.MultipleActualizes~`covered[^25]✅
   - Repeat { Start {Next} randomly( Flush | Actualize ) } cycle 100 times
   - Check that the system recovers well
   - Check that the sequence values are increased monotonically
-- `~test.isequencer.FlushPermanentlyFails~`uncvrd[^26]❓
+- `~test.isequencer.FlushPermanentlyFails~`covered[^26]✅
   - Recovery has worked but then ISeqStorage.WriteValuesAndOffset() fails permanently
     - First Start/Flush must be ok
     - Some of the next Start must not be ok
@@ -519,23 +519,23 @@ func (s *sequencer) cleanup() {
 
 ### ISeqStorage implementation
 
-`~cmp.ISeqStorageImplementation~`uncvrd[^18]❓: Implementation of the `isequencer.ISeqStorage` interface
+`~cmp.ISeqStorageImplementation~`covered[^18]✅: Implementation of the `isequencer.ISeqStorage` interface
 
 - Package: cmp.appparts.internal.seqStorage
-- `~cmp.ISeqStorageImplementation.New~`uncvrd[^19]❓
+- `~cmp.ISeqStorageImplementation.New~`covered[^19]✅
   - Per App per Partition by AppParts
   - PartitionID is not passed to the constructor
-- `~cmp.ISeqStorageImplementation.i688~`uncvrd[^20]❓
+- `~cmp.ISeqStorageImplementation.i688~`covered[^20]✅
   - Handle [#688: record ID leads to different tables](https://github.com/voedger/voedger/issues/688)
   - If existing number is less than ??? 322_680_000_000_000 - do not send it to the batcher
 - Uses VVMStorage Adapter
 
 ### VVMStorage Adapter
 
-`~cmp.VVMStorageAdapter~`uncvrd[^21]❓: Adapter that reads and writes sequence data to the VVMStorage
+`~cmp.VVMStorageAdapter~`covered[^21]✅: Adapter that reads and writes sequence data to the VVMStorage
 
 - Key: ((KeyPrefixSeqStorage, AppID), WSID, SeqID)
-  - `~cmp.VVMStorageAdapter.KeyPrefixSeqStorage~`uncvrd[^22]❓: Prefix for the keys in the storage
+  - `~cmp.VVMStorageAdapter.KeyPrefixSeqStorage~`covered[^22]✅: Prefix for the keys in the storage
 
 ---
 
@@ -595,21 +595,21 @@ History:
 [^9]: `[~server.design.sequences/tuc.InstantiateSequencer~impl]`
 [^10]: `[~server.design.sequences/cmp.IAppPartition.Sequencer~impl]`
 [^11]: `[~server.design.sequences/cmp.VVMConfig.SequencesTrustLevel~impl]`
-[^12]: `[~server.design.sequences/cmp.ISequencer~impl]`
-[^13]: `[~server.design.sequences/cmp.sequencer~impl]`
-[^14]: `[~server.design.sequences/cmp.sequencer.Start~impl]`
-[^15]: `[~server.design.sequences/cmp.sequencer.Next~impl]`
-[^16]: `[~server.design.sequences/cmp.sequencer.Flush~impl]`
-[^17]: `[~server.design.sequences/cmp.sequencer.Actualize~impl]`
-[^18]: `[~server.design.sequences/cmp.ISeqStorageImplementation~impl]`
-[^19]: `[~server.design.sequences/cmp.ISeqStorageImplementation.New~impl]`
-[^20]: `[~server.design.sequences/cmp.ISeqStorageImplementation.i688~impl]`
-[^21]: `[~server.design.sequences/cmp.VVMStorageAdapter~impl]`
-[^22]: `[~server.design.sequences/cmp.VVMStorageAdapter.KeyPrefixSeqStorage~impl]`
-[^23]: `[~server.design.sequences/test.isequencer.mockISeqStorage~impl]`
-[^24]: `[~server.design.sequences/test.isequencer.LongRecovery~impl]`
-[^25]: `[~server.design.sequences/test.isequencer.MultipleActualizes~impl]`
-[^26]: `[~server.design.sequences/test.isequencer.FlushPermanentlyFails~impl]`
+[^12]: `[~server.design.sequences/cmp.ISequencer~impl]` [pkg/isequencer/interface.go:47:impl](https://github.com/voedger/voedger/blob/c4f8d35a83e78109e387041aed83a4183eb01166/pkg/isequencer/interface.go#L47)
+[^13]: `[~server.design.sequences/cmp.sequencer~impl]` [pkg/isequencer/types.go:50:impl](https://github.com/voedger/voedger/blob/c4f8d35a83e78109e387041aed83a4183eb01166/pkg/isequencer/types.go#L50)
+[^14]: `[~server.design.sequences/cmp.sequencer.Start~impl]` [pkg/isequencer/impl.go:26:impl](https://github.com/voedger/voedger/blob/c4f8d35a83e78109e387041aed83a4183eb01166/pkg/isequencer/impl.go#L26)
+[^15]: `[~server.design.sequences/cmp.sequencer.Next~impl]` [pkg/isequencer/impl.go:179:impl](https://github.com/voedger/voedger/blob/c4f8d35a83e78109e387041aed83a4183eb01166/pkg/isequencer/impl.go#L179)
+[^16]: `[~server.design.sequences/cmp.sequencer.Flush~impl]` [pkg/isequencer/impl.go:273:impl](https://github.com/voedger/voedger/blob/c4f8d35a83e78109e387041aed83a4183eb01166/pkg/isequencer/impl.go#L273)
+[^17]: `[~server.design.sequences/cmp.sequencer.Actualize~impl]` [pkg/isequencer/impl.go:492:impl](https://github.com/voedger/voedger/blob/c4f8d35a83e78109e387041aed83a4183eb01166/pkg/isequencer/impl.go#L492)
+[^18]: `[~server.design.sequences/cmp.ISeqStorageImplementation~impl]` [pkg/appparts/internal/seqstorage/type.go:14:impl](https://github.com/voedger/voedger/blob/c4f8d35a83e78109e387041aed83a4183eb01166/pkg/appparts/internal/seqstorage/type.go#L14)
+[^19]: `[~server.design.sequences/cmp.ISeqStorageImplementation.New~impl]` [pkg/appparts/internal/seqstorage/provide.go:14:impl](https://github.com/voedger/voedger/blob/c4f8d35a83e78109e387041aed83a4183eb01166/pkg/appparts/internal/seqstorage/provide.go#L14)
+[^20]: `[~server.design.sequences/cmp.ISeqStorageImplementation.i688~impl]` [pkg/appparts/internal/seqstorage/impl.go:101:impl](https://github.com/voedger/voedger/blob/c4f8d35a83e78109e387041aed83a4183eb01166/pkg/appparts/internal/seqstorage/impl.go#L101)
+[^21]: `[~server.design.sequences/cmp.VVMStorageAdapter~impl]` [pkg/vvm/storage/impl_seqstorage.go:15:impl](https://github.com/voedger/voedger/blob/c4f8d35a83e78109e387041aed83a4183eb01166/pkg/vvm/storage/impl_seqstorage.go#L15)
+[^22]: `[~server.design.sequences/cmp.VVMStorageAdapter.KeyPrefixSeqStorage~impl]` [pkg/vvm/storage/consts.go:15:impl](https://github.com/voedger/voedger/blob/c4f8d35a83e78109e387041aed83a4183eb01166/pkg/vvm/storage/consts.go#L15)
+[^23]: `[~server.design.sequences/test.isequencer.mockISeqStorage~impl]` [pkg/isequencer/types.go:109:impl](https://github.com/voedger/voedger/blob/c4f8d35a83e78109e387041aed83a4183eb01166/pkg/isequencer/types.go#L109)
+[^24]: `[~server.design.sequences/test.isequencer.LongRecovery~impl]` [pkg/isequencer/isequencer_test.go:877:impl](https://github.com/voedger/voedger/blob/c4f8d35a83e78109e387041aed83a4183eb01166/pkg/isequencer/isequencer_test.go#L877)
+[^25]: `[~server.design.sequences/test.isequencer.MultipleActualizes~impl]` [pkg/isequencer/isequencer_test.go:737:impl](https://github.com/voedger/voedger/blob/c4f8d35a83e78109e387041aed83a4183eb01166/pkg/isequencer/isequencer_test.go#L737)
+[^26]: `[~server.design.sequences/test.isequencer.FlushPermanentlyFails~impl]` [pkg/isequencer/isequencer_test.go:807:impl](https://github.com/voedger/voedger/blob/c4f8d35a83e78109e387041aed83a4183eb01166/pkg/isequencer/isequencer_test.go#L807)
 [^27]: `[~server.design.sequences/it.SequencesTrustLevel0~impl]`
 [^28]: `[~server.design.sequences/it.SequencesTrustLevel1~impl]`
 [^29]: `[~server.design.sequences/it.SequencesTrustLevel2~impl]`
