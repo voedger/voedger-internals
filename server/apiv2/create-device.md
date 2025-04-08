@@ -12,7 +12,6 @@ POST `/api/v2/apps/{owner}/{app}/devices`
 | Key | Value |
 | --- | --- |
 | Content-type | application/json |
-| Authorization | Bearer {PrincipalToken} |
 
 ### Parameters
 | Parameter | Type | Description |

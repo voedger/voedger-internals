@@ -23,7 +23,7 @@ POST `/api/v2/apps/{owner}/{app}/users`
 JSON object: 
 ```json
 {
-  "Login": "login",
+  "VerifiedEmailToken": "token",
   "Password": "password",
   "DisplayName": "name"
 }
@@ -42,15 +42,40 @@ JSON object:
 
 ## Technical design
 ### Components
-- pkg/router
-  - URL path handler `~cmp.routerUsersCreatePathHandler~`uncvrd[^1]❓:
-    - parses the request Body and URL parameters; calculates pseudo-wsid;
-    - makes federation query to `registry` app by calling `CreateLogin` function;
-    - returns the result, or error, to the client.
+#### pkg/registry
+ 
+1) `CreateEmailLogin` function:
+```sql
+TYPE CreateEmailLoginParams (
+  Email varchar VERIFIABLE,
+  AppName text NOT NULL,
+  SubjectKind int32 NOT NULL,
+  WSKindInitializationData text(1024) NOT NULL,
+  ProfileCluster int32 NOT NULL
+);
 
-- pkg/sys/it
-    - integration test for /users
-        - `~it.TestUsersCreate~`uncvrd[^2]❓
+COMMAND CreateEmailLogin (CreateEmailLoginParams, UNLOGGED CreateLoginUnloggedParams);
+GRANT EXECUTE ON COMMAND CreateEmailLogin TO sys.Anonymous;
+```
 
-[^1]: `[~server.apiv2.users/cmp.routerUsersCreatePathHandler~impl]`
-[^2]: `[~server.apiv2.users/it.TestUsersCreate~impl]`
+- declaration in VSQL: `~cmp.registry.CreateEmailLogin.vsql~`uncvrd[^1]❓
+- the extension code: `~cmp.registry.CreateEmailLogin.go~`uncvrd[^2]❓
+
+
+2) Mark `CreateLogin` as deprecated `~cmp.registry.CreateLogin.vsql~`uncvrd[^3]❓
+
+#### pkg/router
+- URL path handler `~cmp.router.UsersCreatePathHandler~`uncvrd[^4]❓:
+  - parses the request Body and URL parameters; calculates pseudo-wsid;
+  - makes federation query to `registry` app by calling `CreateEmailLogin` function;
+  - returns the result, or error, to the client.
+
+#### pkg/sys/it
+- integration test for /users
+    - `~it.TestUsersCreate~`uncvrd[^5]❓
+
+[^1]: `[~server.apiv2.users/cmp.registry.CreateEmailLogin.vsql~impl]`
+[^2]: `[~server.apiv2.users/cmp.registry.CreateEmailLogin.go~impl]`
+[^3]: `[~server.apiv2.users/cmp.registry.CreateLogin.vsql~impl]`
+[^4]: `[~server.apiv2.users/cmp.router.UsersCreatePathHandler~impl]`
+[^5]: `[~server.apiv2.users/it.TestUsersCreate~impl]`
