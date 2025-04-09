@@ -1,14 +1,18 @@
 # APIv2
 
-# Motivation
+## Motivation
+
 - We need good REST API for Voedger
 - Old API must still be available until the new one is fully developed, so we can continue with AIR
 
-# Functional Design
-## API Conventions
+## Functional design
+
+### API Conventions
+
 - see: [API URL](conventions.md)
 
-## REST API Paths
+### REST API Paths
+
 | Action                                                    | REST API Path                                                                |
 |-----------------------------------------------------------|------------------------------------------------------------------------------|
 | **Authentication** |
@@ -40,14 +44,17 @@
 | [List workspace roles](list-ws-roles.md)                  | `GET /api/v2/apps/{owner}/{app}/schemas/{pkg}.{workspace}/roles`              |
 | [Read workspace role schema](read-ws-role-schema.md)      | `GET /api/v2/apps/{owner}/{app}/schemas/{pkg}.{workspace}/roles/{pkg}.{role}` |
 
-# Limitations
-- The following functions should not be calle directly:
-    - c.sys.CUD
-    - q.sys.Collection
+## Limitations
 
-# Addressed issues
+- The following functions should not be calle directly:
+  - c.sys.CUD
+  - q.sys.Collection
+
+## Addressed issues
+
 - [API Gateway (APIv2) #1162](https://github.com/voedger/voedger/issues/1162)
 
-# See Also
+## See Also
+
 - [Query Processor](/server/design/qp.md)
 - [API Gateway Implementation](/server/design/agw.md)
