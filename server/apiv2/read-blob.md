@@ -32,13 +32,13 @@ GET `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/blobs/{blobId}`
 | Code | Description | Body |
 | --- | --- | --- |
 | 200 | OK | BLOB binary data |
-| 400 | Bad Request | [error object](conventions.md#errors) |
-| 401 | Unauthorized | [error object](conventions.md#errors) |
-| 403 | Forbidden | [error object](conventions.md#errors) |
-| 404 | Not Found | [error object](conventions.md#errors) |
-| 429 | Too Many Requests | [error object](conventions.md#errors) |
-| 500 | Internal Server Error | [error object](conventions.md#errors) |
-| 503 | Service Unavailable | [error object](conventions.md#errors) |
+| 400 | Bad Request | [error object](errors.md) |
+| 401 | Unauthorized | [error object](errors.md) |
+| 403 | Forbidden | [error object](errors.md) |
+| 404 | Not Found | [error object](errors.md) |
+| 429 | Too Many Requests | [error object](errors.md) |
+| 500 | Internal Server Error | [error object](errors.md) |
+| 503 | Service Unavailable | [error object](errors.md) |
 
 ## Technical design
 ### Components  

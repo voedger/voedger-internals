@@ -9,7 +9,11 @@
 
 ### API Conventions
 
-- see: [API URL](conventions.md)
+- [API URL](api-url.md)
+- [HTTP methods and processors](http-methods-and-processors.md)
+- [Naming conventions](naming-conventions.md)
+- [Query constraints](query-constraints.md)
+- [Error handling](errors.md)
 
 ### REST API Paths
 

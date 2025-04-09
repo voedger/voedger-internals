@@ -27,11 +27,11 @@ CDoc/WDoc/CRecord/WRecord (fields to be updated)
 | Code | Description | Body |
 | --- | --- | --- |
 | 200 | OK | current WLog offset and the new IDs, see below |
-| 400 | Bad Request, e.g. Record requires sys.ParentID | [error object](conventions.md#errors) |
-| 401 | Unauthorized | [error object](conventions.md#errors) |
-| 403 | Forbidden | [error object](conventions.md#errors) |
-| 404 | Table Not Found | [error object](conventions.md#errors) |
-| 405 | Method Not Allowed, table is an ODoc/ORecord | [error object](conventions.md#errors) |
+| 400 | Bad Request, e.g. Record requires sys.ParentID | [error object](errors.md) |
+| 401 | Unauthorized | [error object](errors.md) |
+| 403 | Forbidden | [error object](errors.md) |
+| 404 | Table Not Found | [error object](errors.md) |
+| 405 | Method Not Allowed, table is an ODoc/ORecord | [error object](errors.md) |
 
 Example Result 200:
 ```json

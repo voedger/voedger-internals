@@ -26,8 +26,8 @@ Deletes the BLOB
 | Code | Description | Body |
 | --- | --- | --- |
 | 204 | No Content |  |
-| 401 | Unauthorized | [error object](conventions.md#errors) |
-| 404 | Not Found | [error object](conventions.md#errors) |
+| 401 | Unauthorized | [error object](errors.md) |
+| 404 | Not Found | [error object](errors.md) |
 
 ## Technical design
 ### Components

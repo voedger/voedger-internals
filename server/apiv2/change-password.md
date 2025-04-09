@@ -34,11 +34,11 @@ JSON object:
 | Code | Description | Body
 | --- | --- | --- |
 | 200 | OK  |
-| 400 | Bad Request | [error object](conventions.md#errors) |
-| 401 | Unauthorized | [error object](conventions.md#errors) |
-| 403 | Forbidden | [error object](conventions.md#errors) |
-| 429 | Too may requests, rate limiting | [error object](conventions.md#errors) |
-| 500+ | Server errors / service unavailable | [error object](conventions.md#errors) |
+| 400 | Bad Request | [error object](errors.md) |
+| 401 | Unauthorized | [error object](errors.md) |
+| 403 | Forbidden | [error object](errors.md) |
+| 429 | Too may requests, rate limiting | [error object](errors.md) |
+| 500+ | Server errors / service unavailable | [error object](errors.md) |
 
 ## Technical design
 ### Components

@@ -27,8 +27,12 @@
 - Features  
   - API Gateway
     - [API v2](server/apiv2/README.md)
-      - [API conventions](server/apiv2/conventions.md)
-      - [Query constraints](server/apiv2/query-constraints.md)
+      - Conventions
+        - [API URL](server/apiv2/api-url.md)
+        - [HTTP methods and processors](server/apiv2/http-methods-and-processors.md)
+        - [Naming conventions](server/apiv2/naming-conventions.md)
+        - [Query constraints](server/apiv2/query-constraints.md)
+        - [Error handling](server/apiv2/errors.md)
       - Authentication
         - [Create a new principal token](server/apiv2/login.md)
         - [Refresh a valid principal token](server/apiv2/refresh.md)

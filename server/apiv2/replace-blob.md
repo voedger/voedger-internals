@@ -30,14 +30,14 @@ BLOB data
 | Code | Description | Body |
 | --- | --- | --- |
 | 200 | OK | see example below |
-| 400 | Bad Request | [error object](conventions.md#errors) |
-| 401 | Unauthorized | [error object](conventions.md#errors) |
-| 403 | Forbidden | [error object](conventions.md#errors) |
-| 413 | Payload Too Large | [error object](conventions.md#errors) |
-| 415 | Unsupported Media Type | [error object](conventions.md#errors) |
-| 429 | Too Many Requests | [error object](conventions.md#errors) |
-| 500 | Internal Server Error | [error object](conventions.md#errors) |
-| 503 | Service Unavailable | [error object](conventions.md#errors) |
+| 400 | Bad Request | [error object](errors.md) |
+| 401 | Unauthorized | [error object](errors.md) |
+| 403 | Forbidden | [error object](errors.md) |
+| 413 | Payload Too Large | [error object](errors.md) |
+| 415 | Unsupported Media Type | [error object](errors.md) |
+| 429 | Too Many Requests | [error object](errors.md) |
+| 500 | Internal Server Error | [error object](errors.md) |
+| 503 | Service Unavailable | [error object](errors.md) |
 
 Example response 200:
 ```

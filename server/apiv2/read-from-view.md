@@ -27,10 +27,10 @@ GET `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/views/{pkg}.{view}`
 ### Result
 | Code | Description | Body |
 | --- | --- | --- |
-| 200 | OK | SON object that contains a `results` field with a JSON array that lists the objects, [example](query-constraints.md#response). When the error happens during the read, the [error](conventions.md#errors) property is added in the response |
-| 401 | Unauthorized | [error object](conventions.md#errors) |
-| 403 | Forbidden | [error object](conventions.md#errors) |
-| 404 | View Not Found | [error object](conventions.md#errors) |
+| 200 | OK | SON object that contains a `results` field with a JSON array that lists the objects, [example](query-constraints.md#response). When the error happens during the read, the [error](errors.md) property is added in the response |
+| 401 | Unauthorized | [error object](errors.md) |
+| 403 | Forbidden | [error object](errors.md) |
+| 404 | View Not Found | [error object](errors.md) |
 
 ### Example
 `GET /api/v2/apps/untill/airs-bp3/workspaces/12313123123/views/air.SalesMetrics?where={"Year":2024, "Month":{"$in":[1,2,3]}}`
