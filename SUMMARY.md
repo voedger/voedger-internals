@@ -28,23 +28,37 @@
   - API Gateway
     - [API v2](server/apiv2/README.md)
       - [API conventions](server/apiv2/conventions.md)
-      - [Create document or record](server/apiv2/create-doc.md)
-      - [Update document or record](server/apiv2/update-doc.md)
-      - [Deactivate document or record](server/apiv2/deactivate-doc.md)
-      - [Read document or record](server/apiv2/read-doc.md)
-      - [Read from CDoc collection](server/apiv2/read-cdocs.md)
-      - [Read from query](server/apiv2/read-from-query.md)
-      - [Read from view](server/apiv2/read-from-view.md)
       - [Query constraints](server/apiv2/query-constraints.md)
-      - [Execute command](server/apiv2/execute-command.md)
-      - [Create BLOB](server/apiv2/create-blob.md)
-      - [Read BLOB](server/apiv2/read-blob.md)
-      - [Update BLOB metadata](server/apiv2/update-blob-meta.md)
-      - [Replace BLOB](server/apiv2/replace-blob.md)
-      - [Delete BLOB](server/apiv2/delete-blob.md)
-      - [List app workspaces](server/apiv2/list-app-workspaces.md)
-      - [List workspace roles](server/apiv2/list-ws-roles.md)
-      - [Read workspace role schema](server/apiv2/read-ws-role-schema.md)
+      - Authentication
+        - [Create a new principal token](server/apiv2/login.md)
+        - [Refresh a valid principal token](server/apiv2/refresh.md)
+      - Users
+        - [Create a new user](server/apiv2/create-user.md)
+        - [Change user password](server/apiv2/change-password.md)
+      - Devices
+        - [Create a new device](server/apiv2/create-device.md)
+      - Documents and records  
+        - [Create document or record](server/apiv2/create-doc.md)
+        - [Update document or record](server/apiv2/update-doc.md)
+        - [Deactivate document or record](server/apiv2/deactivate-doc.md)
+        - [Read document or record](server/apiv2/read-doc.md)
+        - [Read from CDoc collection](server/apiv2/read-cdocs.md)
+      - Queries
+        - [Read from query](server/apiv2/read-from-query.md)
+      - Views
+        - [Read from view](server/apiv2/read-from-view.md)
+      - Commands
+        - [Execute command](server/apiv2/execute-command.md)
+      - BLOBs
+        - [Create BLOB](server/apiv2/create-blob.md)
+        - [Read BLOB](server/apiv2/read-blob.md)
+        - [Update BLOB metadata](server/apiv2/update-blob-meta.md)
+        - [Replace BLOB](server/apiv2/replace-blob.md)
+        - [Delete BLOB](server/apiv2/delete-blob.md)
+      - Schemas
+        - [List app workspaces](server/apiv2/list-app-workspaces.md)
+        - [List workspace roles](server/apiv2/list-ws-roles.md)
+        - [Read workspace role schema](server/apiv2/read-ws-role-schema.md)
     - [API v1](server/api-gateway.md)
       - [API Conventions](server/api-conventions.md)
       - [BLOBs](server/blobs.md)
