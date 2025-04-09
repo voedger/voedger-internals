@@ -1,11 +1,15 @@
 # Query Constraints
+
 ## Motivation
-When a list of objects is queried, the API must provide a way to apply constraints: filter, order, etc. 
+
+In API operations which return the list of objects, the API must provide a way to apply constraints: filter, order, etc.
 
 ## Functional Design
-The API must support basic [Parse API](https://docs.parseplatform.org/rest/guide/#queries) request syntax.
+
+Support basic [Parse API](https://docs.parseplatform.org/rest/guide/#queries) request syntax in the API.
 
 Supported constraints:
+
 - order (string) - order by field
 - limit (int) - limit number of records
 - skip (int) skip number of records
@@ -16,6 +20,7 @@ Supported constraints:
 ## Example
 
 ### Request
+
 ```bash
 curl -X GET \
 -H "AccessToken: ${ACCESS_TOKEN}"
@@ -26,10 +31,11 @@ curl -X GET \
 --data-urlencode 'keys=id,name,department.name,department.group.name' #select only some fields
 --data-urlencode 'where={"id_department":123456,"number":{"$gte": 100, "$lte": 200}}'
 
-  https://air.untill.com/api/rest/untill/airs-bp/140737488486431/untill.articles
+  https://air.untill.com/api/v2/apps/untill/airs-bp/workspaces/140737488486431/cdocs/untill.articles
 ```
 
 ### Response
+
 ```json
 {
     "results": [
@@ -73,12 +79,14 @@ curl -X GET \
 ```
 
 ### Include
+
 - the `include` parameter expects comma-separated list, where each entry is either:
-    - the name of the pointer field 
-    - the name of the cotainer
+  - the name of the pointer field 
+  - the name of the cotainer
 - the names can be nested, e.g. `include=department.group,article_prices`
 
 ## Technical Design
+
 Rows are filtered by [Rows Processor](../design/qp.md#rows-processor-1) component of the Query Processor. 
 
 ## Misc
@@ -96,7 +104,8 @@ curl -X GET \
 ```
 
 ## See Also
+
 - [Parse API: select only some fields](http://parseplatform.org/Parse-SDK-JS/api/3.4.2/Parse.Query.html#select)
-    - [see also: Stack overflow](https://stackoverflow.com/questions/61100282/parse-server-select-a-few-fields-from-included-object)
+  - [see also: Stack overflow](https://stackoverflow.com/questions/61100282/parse-server-select-a-few-fields-from-included-object)
 - [Launchpad: Schemas: Describe Heeus Functions with OpenAPI Standard](https://dev.heeus.io/launchpad/#!19069)
 - [Launchpad: API v2](https://dev.heeus.io/launchpad/#!23905)
