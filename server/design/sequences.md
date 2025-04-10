@@ -42,6 +42,8 @@ Existing design
   - const MaxReservedBaseRecordID = MinReservedBaseRecordID + 0xffff // 131071
   - const FirstSingletonID = MinReservedBaseRecordID // 65538
   - const MaxSingletonID = MaxReservedBaseRecordID // 66047, 512 singletons
+- [ClusterAsRegisterID = 0xFFFF - 1000 + iota](https://github.com/voedger/voedger/blob/84babc48d63107e29fcec28eefb0a461b5a34474/pkg/istructs/consts.go#L69)
+  - ClusterAsCRecordRegisterID
 - [const FirstSingletonID](https://github.com/voedger/voedger/blob/84babc48d63107e29fcec28eefb0a461b5a34474/pkg/istructs/consts.go#L101)
 - [cmdProc.appsPartitions](https://github.com/voedger/voedger/blob/b7fa6fa9e260eac4f1de80312c14ad4250f400a3/pkg/processors/command/provide.go#L32)
 - [command/impl.go/getIDGenerator](https://github.com/voedger/voedger/blob/b7fa6fa9e260eac4f1de80312c14ad4250f400a3/pkg/processors/command/impl.go#L299)
@@ -87,6 +89,26 @@ The `SequencesTrustLevel` setting determines how events and table records are wr
 | 1     | InsertIfNotExists  | Put                       |
 | 2     | Put                | Put                       |
 
+## Analysis
+
+Options:
+
+- **One sequence for all records**
+  - Pros:
+    - ✔️Clean for app developers
+    - ✔️IDs are easy to read
+    - ✔️Simpler CP
+  - ❌Cons: CDocs are not cached effectively
+    - Solution: State should read CDocs from sys.Collection and may from something else (to handle big CDoc data)
+      - ❌Cons: If there are a lot of CDocs then why to keep CRecords?
+- **Keep as is**
+  - Pros
+    - ✔️Easy to implement
+  - Cons
+    - ❌Only 5 billions of OWRecords () (ClusterAsRegisterID < ClusterAsCRecordRegisterID)
+    - Solution: Configure sequencer to use multiple ranges to avoid collisions
+      - ✔️Pros: Better control over sequences
+  
 ## Solution overview
 
 The proposed approach implements a more efficient and scalable sequence management system through the following key components:
@@ -595,21 +617,21 @@ History:
 [^9]: `[~server.design.sequences/tuc.InstantiateSequencer~impl]`
 [^10]: `[~server.design.sequences/cmp.IAppPartition.Sequencer~impl]`
 [^11]: `[~server.design.sequences/cmp.VVMConfig.SequencesTrustLevel~impl]`
-[^12]: `[~server.design.sequences/cmp.ISequencer~impl]` [pkg/isequencer/interface.go:47:impl](https://github.com/voedger/voedger/blob/c53190919e5ba6407e6e997ea31cfc106aeaa87b/pkg/isequencer/interface.go#L47)
-[^13]: `[~server.design.sequences/cmp.sequencer~impl]` [pkg/isequencer/types.go:50:impl](https://github.com/voedger/voedger/blob/c53190919e5ba6407e6e997ea31cfc106aeaa87b/pkg/isequencer/types.go#L50)
-[^14]: `[~server.design.sequences/cmp.sequencer.Start~impl]` [pkg/isequencer/impl.go:26:impl](https://github.com/voedger/voedger/blob/c53190919e5ba6407e6e997ea31cfc106aeaa87b/pkg/isequencer/impl.go#L26)
-[^15]: `[~server.design.sequences/cmp.sequencer.Next~impl]` [pkg/isequencer/impl.go:179:impl](https://github.com/voedger/voedger/blob/c53190919e5ba6407e6e997ea31cfc106aeaa87b/pkg/isequencer/impl.go#L179)
-[^16]: `[~server.design.sequences/cmp.sequencer.Flush~impl]` [pkg/isequencer/impl.go:273:impl](https://github.com/voedger/voedger/blob/c53190919e5ba6407e6e997ea31cfc106aeaa87b/pkg/isequencer/impl.go#L273)
-[^17]: `[~server.design.sequences/cmp.sequencer.Actualize~impl]` [pkg/isequencer/impl.go:492:impl](https://github.com/voedger/voedger/blob/c53190919e5ba6407e6e997ea31cfc106aeaa87b/pkg/isequencer/impl.go#L492)
-[^18]: `[~server.design.sequences/cmp.ISeqStorageImplementation~impl]` [pkg/appparts/internal/seqstorage/type.go:14:impl](https://github.com/voedger/voedger/blob/c53190919e5ba6407e6e997ea31cfc106aeaa87b/pkg/appparts/internal/seqstorage/type.go#L14)
-[^19]: `[~server.design.sequences/cmp.ISeqStorageImplementation.New~impl]` [pkg/appparts/internal/seqstorage/provide.go:14:impl](https://github.com/voedger/voedger/blob/c53190919e5ba6407e6e997ea31cfc106aeaa87b/pkg/appparts/internal/seqstorage/provide.go#L14)
-[^20]: `[~server.design.sequences/cmp.ISeqStorageImplementation.i688~impl]` [pkg/appparts/internal/seqstorage/impl.go:101:impl](https://github.com/voedger/voedger/blob/c53190919e5ba6407e6e997ea31cfc106aeaa87b/pkg/appparts/internal/seqstorage/impl.go#L101)
-[^21]: `[~server.design.sequences/cmp.VVMStorageAdapter~impl]` [pkg/vvm/storage/impl_seqstorage.go:15:impl](https://github.com/voedger/voedger/blob/c53190919e5ba6407e6e997ea31cfc106aeaa87b/pkg/vvm/storage/impl_seqstorage.go#L15)
-[^22]: `[~server.design.sequences/cmp.VVMStorageAdapter.KeyPrefixSeqStorage~impl]` [pkg/vvm/storage/consts.go:15:impl](https://github.com/voedger/voedger/blob/c53190919e5ba6407e6e997ea31cfc106aeaa87b/pkg/vvm/storage/consts.go#L15)
-[^23]: `[~server.design.sequences/test.isequencer.mockISeqStorage~impl]` [pkg/isequencer/types.go:109:impl](https://github.com/voedger/voedger/blob/c53190919e5ba6407e6e997ea31cfc106aeaa87b/pkg/isequencer/types.go#L109)
-[^24]: `[~server.design.sequences/test.isequencer.LongRecovery~impl]` [pkg/isequencer/isequencer_test.go:877:impl](https://github.com/voedger/voedger/blob/c53190919e5ba6407e6e997ea31cfc106aeaa87b/pkg/isequencer/isequencer_test.go#L877)
-[^25]: `[~server.design.sequences/test.isequencer.MultipleActualizes~impl]` [pkg/isequencer/isequencer_test.go:737:impl](https://github.com/voedger/voedger/blob/c53190919e5ba6407e6e997ea31cfc106aeaa87b/pkg/isequencer/isequencer_test.go#L737)
-[^26]: `[~server.design.sequences/test.isequencer.FlushPermanentlyFails~impl]` [pkg/isequencer/isequencer_test.go:807:impl](https://github.com/voedger/voedger/blob/c53190919e5ba6407e6e997ea31cfc106aeaa87b/pkg/isequencer/isequencer_test.go#L807)
+[^12]: `[~server.design.sequences/cmp.ISequencer~impl]` [pkg/isequencer/interface.go:47:impl](https://github.com/voedger/voedger/blob/c4f8d35a83e78109e387041aed83a4183eb01166/pkg/isequencer/interface.go#L47)
+[^13]: `[~server.design.sequences/cmp.sequencer~impl]` [pkg/isequencer/types.go:50:impl](https://github.com/voedger/voedger/blob/c4f8d35a83e78109e387041aed83a4183eb01166/pkg/isequencer/types.go#L50)
+[^14]: `[~server.design.sequences/cmp.sequencer.Start~impl]` [pkg/isequencer/impl.go:26:impl](https://github.com/voedger/voedger/blob/c4f8d35a83e78109e387041aed83a4183eb01166/pkg/isequencer/impl.go#L26)
+[^15]: `[~server.design.sequences/cmp.sequencer.Next~impl]` [pkg/isequencer/impl.go:179:impl](https://github.com/voedger/voedger/blob/c4f8d35a83e78109e387041aed83a4183eb01166/pkg/isequencer/impl.go#L179)
+[^16]: `[~server.design.sequences/cmp.sequencer.Flush~impl]` [pkg/isequencer/impl.go:273:impl](https://github.com/voedger/voedger/blob/c4f8d35a83e78109e387041aed83a4183eb01166/pkg/isequencer/impl.go#L273)
+[^17]: `[~server.design.sequences/cmp.sequencer.Actualize~impl]` [pkg/isequencer/impl.go:492:impl](https://github.com/voedger/voedger/blob/c4f8d35a83e78109e387041aed83a4183eb01166/pkg/isequencer/impl.go#L492)
+[^18]: `[~server.design.sequences/cmp.ISeqStorageImplementation~impl]` [pkg/appparts/internal/seqstorage/type.go:14:impl](https://github.com/voedger/voedger/blob/c4f8d35a83e78109e387041aed83a4183eb01166/pkg/appparts/internal/seqstorage/type.go#L14)
+[^19]: `[~server.design.sequences/cmp.ISeqStorageImplementation.New~impl]` [pkg/appparts/internal/seqstorage/provide.go:14:impl](https://github.com/voedger/voedger/blob/c4f8d35a83e78109e387041aed83a4183eb01166/pkg/appparts/internal/seqstorage/provide.go#L14)
+[^20]: `[~server.design.sequences/cmp.ISeqStorageImplementation.i688~impl]` [pkg/appparts/internal/seqstorage/impl.go:101:impl](https://github.com/voedger/voedger/blob/c4f8d35a83e78109e387041aed83a4183eb01166/pkg/appparts/internal/seqstorage/impl.go#L101)
+[^21]: `[~server.design.sequences/cmp.VVMStorageAdapter~impl]` [pkg/vvm/storage/impl_seqstorage.go:15:impl](https://github.com/voedger/voedger/blob/c4f8d35a83e78109e387041aed83a4183eb01166/pkg/vvm/storage/impl_seqstorage.go#L15)
+[^22]: `[~server.design.sequences/cmp.VVMStorageAdapter.KeyPrefixSeqStorage~impl]` [pkg/vvm/storage/consts.go:15:impl](https://github.com/voedger/voedger/blob/c4f8d35a83e78109e387041aed83a4183eb01166/pkg/vvm/storage/consts.go#L15)
+[^23]: `[~server.design.sequences/test.isequencer.mockISeqStorage~impl]` [pkg/isequencer/types.go:109:impl](https://github.com/voedger/voedger/blob/c4f8d35a83e78109e387041aed83a4183eb01166/pkg/isequencer/types.go#L109)
+[^24]: `[~server.design.sequences/test.isequencer.LongRecovery~impl]` [pkg/isequencer/isequencer_test.go:877:impl](https://github.com/voedger/voedger/blob/c4f8d35a83e78109e387041aed83a4183eb01166/pkg/isequencer/isequencer_test.go#L877)
+[^25]: `[~server.design.sequences/test.isequencer.MultipleActualizes~impl]` [pkg/isequencer/isequencer_test.go:737:impl](https://github.com/voedger/voedger/blob/c4f8d35a83e78109e387041aed83a4183eb01166/pkg/isequencer/isequencer_test.go#L737)
+[^26]: `[~server.design.sequences/test.isequencer.FlushPermanentlyFails~impl]` [pkg/isequencer/isequencer_test.go:807:impl](https://github.com/voedger/voedger/blob/c4f8d35a83e78109e387041aed83a4183eb01166/pkg/isequencer/isequencer_test.go#L807)
 [^27]: `[~server.design.sequences/it.SequencesTrustLevel0~impl]`
 [^28]: `[~server.design.sequences/it.SequencesTrustLevel1~impl]`
 [^29]: `[~server.design.sequences/it.SequencesTrustLevel2~impl]`
