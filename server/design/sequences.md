@@ -97,21 +97,23 @@ As of March 1, 2025, record ID sequences may overlap, and only 5,000,000,000 IDs
 
 Solutions:
 
-- **One sequence for all records**
+- **One sequence for all records**:
   - Pros:
     - 👍Clean for Voedger users
-    - 👍IDs are easy to read by human
-    - 👍Simpler CP
+    - 👍IDs are more human-readable
+    - 👍Simpler Command Processor
   - ❌Cons: CRecords are not cached efficiently
-    - Solution: State should read CRecords from sys.Collection and may from something else (to handle big CRecord data)
-      - ❌Cons: If there are a lot of CDocs then why to keep CRecords?
-- **Keep as is**
+    - Solution: Let the State read copies of CRecords from sys.Collection, or possibly from an alternative optimized storage to handle large CRecord data
+      - ❌Cons: Why we need CRecords then
+      - 👍Pros: Separation of write and read models
+- **Keep as is**:
   - Pros
-    - ✔️Easy to implement
+    - 👍Easy to implement
   - Cons
-    - ❌Only 5 billions of OWRecords () (ClusterAsRegisterID < ClusterAsCRecordRegisterID)
-    - Solution: Configure sequencer to use multiple ranges to avoid collisions
-      - ✔️Pros: Better control over sequences
+    - ❌ No separation between write and read models
+    - ❌ Only 5 billions of OWRecords (ClusterAsRegisterID < ClusterAsCRecordRegisterID)
+      - Solution: Configure sequencer to use multiple ranges to avoid collisions
+        - 👍Pros: Better control over sequences
   
 ## Solution overview
 
