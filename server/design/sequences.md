@@ -4,6 +4,16 @@ reqmd.package: server.design.sequences
 
 # Sequences
 
+## Motivation
+
+As of March 1, 2025, the sequence implementation has several critical limitations that impact system performance and scalability:
+
+- **Unbound Memory Growth**: Sequence data for all workspaces is loaded into memory simultaneously, creating a direct correlation between memory usage and the number of workspaces. This approach becomes unsustainable as applications scale.
+
+- **Prolonged Startup Times**: During command processor initialization, a resource-intensive "recovery process" must read and process the entire PLog to determine the last used sequence numbers. This causes significant startup delays that worsen as event volume grows.
+
+The proposed redesign addresses these issues through intelligent caching, background updates, and optimized storage mechanisms that maintain sequence integrity while dramatically improving resource utilization and responsiveness.
+
 ## Introduction
 
 This document outlines the design for sequence number management within the Voedger platform.
@@ -20,8 +30,10 @@ As of March 1, 2025, Voedger implements four specific sequence types using this 
 - **CRecordIDSequence**: Generates unique identifiers for CRecords
   - Starts from 322685000131072
     - [https://github.com/voedger/voedger/blob/ae787d43bf313f8e3119b8b2ce73ea43969eaaa3/pkg/istructs/utils.go#L35](https://github.com/voedger/voedger/blob/ae787d43bf313f8e3119b8b2ce73ea43969eaaa3/pkg/istructs/utils.go#L35)
-  - To read all CRecords by SELECT
-- **OWRecordIDSequence**: Provides sequential IDs for O/W- Records
+  - Motivation:
+    - Efficient CRecord caching on the DBMS side (Most CRecords reside in the same partition)
+    - Simple iteration over CRecords
+- **OWRecordIDSequence**: Provides sequential IDs for ORecords/WRecords (OWRecords)
   - Starts from 322680000131072
   - There are a potentially lot of such records, so it is not possible to use SELECT to read all of them
 
@@ -50,7 +62,7 @@ Existing design
 - [command/impl.go: Put IDs to response](https://github.com/voedger/voedger/blob/b7fa6fa9e260eac4f1de80312c14ad4250f400a3/pkg/processors/command/impl.go#L790)
 - [command/impl.go: (idGen *implIDGenerator) NextID](https://github.com/voedger/voedger/blob/b7fa6fa9e260eac4f1de80312c14ad4250f400a3/pkg/processors/command/impl.go#L816)
 - [istructmem/idgenerator.go: (g *implIIDGenerator) NextID](https://github.com/voedger/voedger/blob/b7fa6fa9e260eac4f1de80312c14ad4250f400a3/pkg/istructsmem/idgenerator.go#L32)
-  - [onNewID???](https://github.com/voedger/voedger/blob/b7fa6fa9e260eac4f1de80312c14ad4250f400a3/pkg/istructsmem/idgenerator.go#L16)
+  - [onNewID](https://github.com/voedger/voedger/blob/b7fa6fa9e260eac4f1de80312c14ad4250f400a3/pkg/istructsmem/idgenerator.go#L16)
 
 #### Previous flow
 
@@ -64,16 +76,6 @@ Existing design
 - save the event after cmd exec:
   - `istructs.IIDGenerator` instance is provided to `IEvents.PutPlog()` [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/processors/command/impl.go#L307)
   - `istructs.IIDGenerator.Next()` is called to convert rawID->realID for ODoc in arguments and each resulting CUD [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/istructsmem/event-types.go#L189)
-
-## Motivation
-
-As of March 1, 2025, the sequence implementation has several critical limitations that impact system performance and scalability:
-
-- **Unbound Memory Growth**: Sequence data for all workspaces is loaded into memory simultaneously, creating a direct correlation between memory usage and the number of workspaces. This approach becomes unsustainable as applications scale.
-
-- **Prolonged Startup Times**: During command processor initialization, a resource-intensive "recovery process" must read and process the entire PLog to determine the last used sequence numbers. This causes significant startup delays that worsen as event volume grows.
-
-The proposed redesign addresses these issues through intelligent caching, background updates, and optimized storage mechanisms that maintain sequence integrity while dramatically improving resource utilization and responsiveness.
 
 ## Definitions
 
@@ -91,15 +93,17 @@ The `SequencesTrustLevel` setting determines how events and table records are wr
 
 ## Analysis
 
-Options:
+As of March 1, 2025, record ID sequences may overlap, and only 5,000,000,000 IDs are available for OWRecords, since OWRecord IDs start from 322680000131072, while CRecord IDs start from 322685000131072.
+
+Solutions:
 
 - **One sequence for all records**
   - Pros:
-    - ✔️Clean for app developers
-    - ✔️IDs are easy to read
-    - ✔️Simpler CP
-  - ❌Cons: CDocs are not cached effectively
-    - Solution: State should read CDocs from sys.Collection and may from something else (to handle big CDoc data)
+    - 👍Clean for Voedger users
+    - 👍IDs are easy to read by human
+    - 👍Simpler CP
+  - ❌Cons: CRecords are not cached efficiently
+    - Solution: State should read CRecords from sys.Collection and may from something else (to handle big CRecord data)
       - ❌Cons: If there are a lot of CDocs then why to keep CRecords?
 - **Keep as is**
   - Pros
@@ -111,14 +115,14 @@ Options:
   
 ## Solution overview
 
-The proposed approach implements a more efficient and scalable sequence management system through the following key components:
+The proposed approach implements a more efficient and scalable sequence management system through the following principles:
 
-- **Projection-Based Storage**: Each application partition will maintain sequence data in a dedicated projection (`SeqData`), eliminating the need to load all sequence data into memory at once.
-- **Offset Tracking**: `SeqData` will include a `SeqDataOffset` attribute that indicates the PLog partition offset for which the stored sequence data is valid, enabling precise recovery and synchronization.
-- **MRU Cache Implementation**: Sequence data will be accessed through a Most Recently Used (MRU) cache that prioritizes frequently accessed sequences while allowing less active ones to be evicted from memory.
-- **Background Updates**: As new events are written to the PLog, sequence data will be updated in the background, ensuring that the system maintains current sequence values without blocking operations.
-- **Batched Writes**: Sequence updates will be collected and written in batches to reduce I/O operations and improve throughput.
-- **Optimized Actualization**: The actualization process will use the stored `SeqDataOffset` to process only events since the last known valid state, dramatically reducing startup times.
+- **Projection-Based Storage**: Each application partition will maintain sequence data in a dedicated projection ???(`SeqData`). SeqData is a map that eliminates the need to load all sequence data into memory at once
+- **Offset Tracking**: `SeqData` will include a `SeqDataOffset` attribute that indicates the PLog partition offset for which the stored sequence data is valid, enabling precise recovery and synchronization
+- **LRU Cache Implementation**: Sequence data will be accessed through a Most Recently Used (LRU) cache that prioritizes frequently accessed sequences while allowing less active ones to be evicted from memory
+- **Background Updates**: As new events are written to the PLog, sequence data will be updated in the background, ensuring that the system maintains current sequence values without blocking operations
+- **Batched Writes**: Sequence updates will be collected and written in batches to reduce I/O operations and improve throughput
+- **Optimized Actualization**: The actualization process will use the stored `SeqDataOffset` to process only events since the last known valid state, dramatically reducing startup times
 
 This approach decouples memory usage from the total number of workspaces and transforms the recovery process from a linear operation dependent on total event count to one that only needs to process recent events since the last checkpoint.
 
