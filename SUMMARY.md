@@ -33,14 +33,6 @@
         - [Naming conventions](server/apiv2/naming-conventions.md)
         - [Query constraints](server/apiv2/query-constraints.md)
         - [Error handling](server/apiv2/errors.md)
-      - Authentication
-        - [Create a new principal token](server/apiv2/login.md)
-        - [Refresh a valid principal token](server/apiv2/refresh.md)
-      - Users
-        - [Create a new user](server/apiv2/create-user.md)
-        - [Change user password](server/apiv2/change-password.md)
-      - Devices
-        - [Create a new device](server/apiv2/create-device.md)
       - Documents and records  
         - [Create document or record](server/apiv2/create-doc.md)
         - [Update document or record](server/apiv2/update-doc.md)
@@ -79,6 +71,8 @@
     - [Deploy Application](server/apps/deploy-app.md)
     - [Sidecar Applications](server/sidecarapps.md)
   - [AuthNZ](server/authnz/README.md)
+    - [Create a new principal token](server/apiv2/login.md)
+    - [Refresh a valid principal token](server/apiv2/refresh.md)
     - [ACL Rules](server/authnz/aclrules.md)
     - [Enrich token](server/authnz/enrich-token.md)
   - Data types
@@ -98,9 +92,13 @@
     - [Cancel accepted Invite](server/invites/cancel-accepted-invite.md)
     - [Update Invite roles](server/invites/update-invite-roles.md)
   - [Users](server/users/README.md)
+    - [Create a new user](server/apiv2/create-user.md)
+    - [Change user password](server/apiv2/change-password.md)
     - [Send Email](server/users/send_email.md)
     - [Reset password](server/users/reset-password.md)
     - [Change Email](server/users/change-email.md)
+  - Devices
+    - [Create a new device](server/apiv2/create-device.md)
   - [Jobs](server/jobs.md)
   - DMBS Drivers
     - [AmazonDB Driver](server/amazondb-driver.md)
