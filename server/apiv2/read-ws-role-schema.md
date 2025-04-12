@@ -127,7 +127,7 @@ integration test `~it.TestQueryProcessor2_SchemasRole~`covered[^5]✅
 - [List app workspaces](list-app-workspaces.md)
 
 [^1]: `[~server.apiv2.role/cmp.publishedTypes~impl]` [pkg/appdef/acl/provide.go:92:impl](https://github.com/voedger/voedger/blob/965d3b9049d21235163ca2693e0143da2bc247fd/pkg/appdef/acl/provide.go#L92), [pkg/appdef/acl/provide_test.go:851:test](https://github.com/voedger/voedger/blob/965d3b9049d21235163ca2693e0143da2bc247fd/pkg/appdef/acl/provide_test.go#L851)
-[^2]: `[~server.apiv2.role/cmp.schemasRoleHandler~impl]` [pkg/processors/query2/impl_schemas_role_handler.go:25:impl](https://github.com/voedger/voedger/blob/9deb1fd8797c53d383ebed091961ecef39d045f2/pkg/processors/query2/impl_schemas_role_handler.go#L25)
-[^3]: `[~server.apiv2.role/cmp.provideSchemasRoleHandler~impl]` [pkg/processors/query2/impl.go:133:impl](https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/processors/query2/impl.go#L133)
+[^2]: `[~server.apiv2.role/cmp.schemasRoleHandler~impl]` [pkg/processors/query2/impl_schemas_role_handler.go:25:impl](https://github.com/voedger/voedger/blob/8579f87daebfb5c06216aa80eeec75d158bd7c99/pkg/processors/query2/impl_schemas_role_handler.go#L25)
+[^3]: `[~server.apiv2.role/cmp.provideSchemasRoleHandler~impl]` [pkg/processors/query2/impl.go:133:impl](https://github.com/voedger/voedger/blob/8579f87daebfb5c06216aa80eeec75d158bd7c99/pkg/processors/query2/impl.go#L133)
 [^4]: `[~server.apiv2.role/cmp.CreateOpenApiSchema~impl]` [pkg/processors/query2/impl_openapi.go:18:impl](https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/processors/query2/impl_openapi.go#L18)
-[^5]: `[~server.apiv2.role/it.TestQueryProcessor2_SchemasRole~impl]` [pkg/sys/it/impl_qpv2_test.go:2029:impl](https://github.com/voedger/voedger/blob/f087aa888c798ec230f3d4f420b5a7ebae7e68cb/pkg/sys/it/impl_qpv2_test.go#L2029)
+[^5]: `[~server.apiv2.role/it.TestQueryProcessor2_SchemasRole~impl]` [pkg/sys/it/impl_qpv2_test.go:2030:impl](https://github.com/voedger/voedger/blob/8579f87daebfb5c06216aa80eeec75d158bd7c99/pkg/sys/it/impl_qpv2_test.go#L2030)

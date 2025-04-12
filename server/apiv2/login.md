@@ -59,21 +59,21 @@ Example result 200:
 ### Components
 
 - pkg/router
-  - URL path handler `~cmp.routerLoginPathHandler~`uncvrd[^1]❓:
+  - URL path handler `~cmp.routerLoginPathHandler~`covered[^1]✅:
     - parses the request Body and URL parameters; calculates pseudo-wsid;
-      - `~cmp.routerLoginPathHandler.pseudoWSID~`uncvrd[^5]❓
+      - `~cmp.routerLoginPathHandler.pseudoWSID~`covered[^5]✅
     - sends request to `registry` app by calling IssuePrincipalToken function;
 - pkg/processors/query2
   - `IApiPathHandler` implementation for handling `APIPath_Auth_Login`
-    - `~cmp.authLoginHandler~`uncvrd[^3]❓
+    - `~cmp.authLoginHandler~`covered[^3]✅
   - `newQueryProcessorPipeline`: provide API handler for `APIPath_Auth_Login`
-    - `~cmp.provideAuthLoginHandler~`uncvrd[^4]❓
+    - `~cmp.provideAuthLoginHandler~`covered[^4]✅
 - pkg/sys/it
   - integration test for /login
-    - `~it.TestLogin~`uncvrd[^2]❓
+    - `~it.TestLogin~`covered[^2]✅
 
-[^1]: `[~server.apiv2.auth/cmp.routerLoginPathHandler~impl]`
-[^2]: `[~server.apiv2.auth/it.TestLogin~impl]`
-[^3]: `[~server.apiv2.auth/cmp.authLoginHandler~impl]`
-[^4]: `[~server.apiv2.auth/cmp.provideAuthLoginHandler~impl]`
-[^5]: `[~server.apiv2.auth/cmp.routerLoginPathHandler.pseudoWSID~impl]`
+[^1]: `[~server.apiv2.auth/cmp.routerLoginPathHandler~impl]` [pkg/router/impl_apiv2.go:95:impl](https://github.com/voedger/voedger/blob/8579f87daebfb5c06216aa80eeec75d158bd7c99/pkg/router/impl_apiv2.go#L95)
+[^2]: `[~server.apiv2.auth/it.TestLogin~impl]` [pkg/sys/it/impl_qpv2_test.go:2159:impl](https://github.com/voedger/voedger/blob/8579f87daebfb5c06216aa80eeec75d158bd7c99/pkg/sys/it/impl_qpv2_test.go#L2159)
+[^3]: `[~server.apiv2.auth/cmp.authLoginHandler~impl]` [pkg/processors/query2/impl_auth_login_handler.go:21:impl](https://github.com/voedger/voedger/blob/8579f87daebfb5c06216aa80eeec75d158bd7c99/pkg/processors/query2/impl_auth_login_handler.go#L21)
+[^4]: `[~server.apiv2.auth/cmp.provideAuthLoginHandler~impl]` [pkg/processors/query2/impl.go:139:impl](https://github.com/voedger/voedger/blob/8579f87daebfb5c06216aa80eeec75d158bd7c99/pkg/processors/query2/impl.go#L139)
+[^5]: `[~server.apiv2.auth/cmp.routerLoginPathHandler.pseudoWSID~impl]` [pkg/router/impl_apiv2.go:141:impl](https://github.com/voedger/voedger/blob/8579f87daebfb5c06216aa80eeec75d158bd7c99/pkg/router/impl_apiv2.go#L141)
