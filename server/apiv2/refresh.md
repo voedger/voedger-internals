@@ -1,3 +1,6 @@
+---
+reqmd.package: server.apiv2.auth
+---
 # Refresh principal token
 
 ## Motivation
@@ -48,14 +51,19 @@ Example result 200:
 ### Components
 
 - pkg/router
-  - URL path handler `~cmp.routerRefreshHandler~`
+  - URL path handler `~cmp.routerRefreshHandler~`uncvrd[^1]❓
     - extacts ProfileWSID from the token
     - executes RefreshPrincipalToken request in the app;
 - pkg/processors/query2
   - `IApiPathHandler` implementation for handling `APIPath_Auth_Refresh`
-    - `~cmp.authRefreshHandler~`
+    - `~cmp.authRefreshHandler~`uncvrd[^2]❓
   - `newQueryProcessorPipeline`: provide API handler for `APIPath_Auth_Refresh`
-    - `~cmp.provideAuthRefreshHandler~`
+    - `~cmp.provideAuthRefreshHandler~`uncvrd[^3]❓
 - pkg/sys/it
   - integration test for /refresh
-    - `~it.TestRefresh~`
+    - `~it.TestRefresh~`uncvrd[^4]❓
+
+[^1]: `[~server.apiv2.auth/cmp.routerRefreshHandler~impl]`
+[^2]: `[~server.apiv2.auth/cmp.authRefreshHandler~impl]`
+[^3]: `[~server.apiv2.auth/cmp.provideAuthRefreshHandler~impl]`
+[^4]: `[~server.apiv2.auth/it.TestRefresh~impl]`
