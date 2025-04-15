@@ -219,7 +219,9 @@ Tests:
 - `~test.isequencer.NewMustStartActualization~`
   - `isequencer.New()` must start the Actualization process, Start() must return `0, false`
   - Design: blocking hook in mockISeqStorage
-
+- `~test.isequencer.Race~`
+  - If !t.Short() run something like `go test ./... -count 50 -race`
+  
 Some edge case tests:
 
 - `~test.isequencer.LongRecovery~`covered[^24]✅
