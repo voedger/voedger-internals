@@ -77,8 +77,8 @@ Example result 200:
 
 [^1]: `[~server.apiv2.auth/cmp.routerLoginPathHandler~impl]` [pkg/router/impl_apiv2.go:95:impl](https://github.com/voedger/voedger/blob/014f9cafbf7184f24568d65b2e2fc05c3f8cb68f/pkg/router/impl_apiv2.go#L95)
 [^2]: `[~server.apiv2.auth/it.TestLogin~impl]` [pkg/sys/it/impl_qpv2_test.go:2159:impl](https://github.com/voedger/voedger/blob/014f9cafbf7184f24568d65b2e2fc05c3f8cb68f/pkg/sys/it/impl_qpv2_test.go#L2159)
-[^3]: `[~server.apiv2.auth/cmp.authLoginHandler~impl]` [pkg/processors/query2/impl_auth_login_handler.go:21:impl](https://github.com/voedger/voedger/blob/8579f87daebfb5c06216aa80eeec75d158bd7c99/pkg/processors/query2/impl_auth_login_handler.go#L21)
-[^4]: `[~server.apiv2.auth/cmp.provideAuthLoginHandler~impl]` [pkg/processors/query2/impl.go:139:impl](https://github.com/voedger/voedger/blob/8579f87daebfb5c06216aa80eeec75d158bd7c99/pkg/processors/query2/impl.go#L139)
+[^3]: `[~server.apiv2.auth/cmp.authLoginHandler~impl]` [pkg/processors/query2/impl_auth_login_handler.go:20:impl](https://github.com/voedger/voedger/blob/94d91e9155b3cf8e0e5bc914d45f3c33b751b890/pkg/processors/query2/impl_auth_login_handler.go#L20)
+[^4]: `[~server.apiv2.auth/cmp.provideAuthLoginHandler~impl]` [pkg/processors/query2/impl.go:141:impl](https://github.com/voedger/voedger/blob/94d91e9155b3cf8e0e5bc914d45f3c33b751b890/pkg/processors/query2/impl.go#L141)
 [^5]: `[~server.apiv2.auth/cmp.routerLoginPathHandler.pseudoWSID~impl]` [pkg/router/impl_apiv2.go:141:impl](https://github.com/voedger/voedger/blob/014f9cafbf7184f24568d65b2e2fc05c3f8cb68f/pkg/router/impl_apiv2.go#L141)
 [^6]: `[~server.apiv2.auth/cmp.provideAuthLoginPath~impl]` [pkg/processors/query2/impl_openapi.go:231:impl](https://github.com/voedger/voedger/blob/014f9cafbf7184f24568d65b2e2fc05c3f8cb68f/pkg/processors/query2/impl_openapi.go#L231)
 [^7]: `[~server.apiv2.auth/cmp.principalTokenSchema~impl]` [pkg/processors/query2/impl_openapi.go:129:impl](https://github.com/voedger/voedger/blob/014f9cafbf7184f24568d65b2e2fc05c3f8cb68f/pkg/processors/query2/impl_openapi.go#L129)

@@ -52,11 +52,11 @@ Example result 200:
 
 - pkg/router
   - URL path handler `~cmp.routerRefreshHandler~`uncvrd[^1]❓
-    - extacts ProfileWSID from the token
-    - executes RefreshPrincipalToken request in the app;
 - pkg/processors/query2
   - `IApiPathHandler` implementation for handling `APIPath_Auth_Refresh`
     - `~cmp.authRefreshHandler~`uncvrd[^2]❓
+    - handler extracts profile WSID from token and replaces it in the request
+      - `~cmp.authRefreshHandler.WSID~`uncvrd[^5]❓
   - `newQueryProcessorPipeline`: provide API handler for `APIPath_Auth_Refresh`
     - `~cmp.provideAuthRefreshHandler~`uncvrd[^3]❓
 - pkg/sys/it
@@ -67,3 +67,4 @@ Example result 200:
 [^2]: `[~server.apiv2.auth/cmp.authRefreshHandler~impl]`
 [^3]: `[~server.apiv2.auth/cmp.provideAuthRefreshHandler~impl]`
 [^4]: `[~server.apiv2.auth/it.TestRefresh~impl]`
+[^5]: `[~server.apiv2.auth/cmp.authRefreshHandler.WSID~impl]`
