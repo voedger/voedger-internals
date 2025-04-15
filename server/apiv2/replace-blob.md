@@ -50,13 +50,15 @@ Example response 200:
 ```
 
 ## Technical design
-### Components  
+
+### Components
+
 - pkg/router
-  - URL path handler `~cmp.routerBlobsReplacePathHandler~`uncvrd[^1]❓:
+  - URL path handler `~cmp.routerBlobsReplacePathHandler~`covered[^1]✅:
 
 - pkg/sys/it
-    - integration test for replacing BLOBs
-        - `~it.TestBlobsReplace~`uncvrd[^2]❓
+  - integration test for replacing BLOBs
+    - `~it.TestBlobsReplace~`covered[^2]✅
 
-[^1]: `[~server.apiv2.blobs/cmp.routerBlobsReplacePathHandler~impl]`
-[^2]: `[~server.apiv2.blobs/it.TestBlobsReplace~impl]`
+[^1]: `[~server.apiv2.blobs/cmp.routerBlobsReplacePathHandler~impl]` [server/apiv2/replace-blob.md:61:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/apiv2/replace-blob.md#L61)
+[^2]: `[~server.apiv2.blobs/it.TestBlobsReplace~impl]` [server/apiv2/replace-blob.md:62:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/apiv2/replace-blob.md#L62)

@@ -43,14 +43,14 @@ JSON object:
 ## Technical design
 ### Components
 - pkg/router
-  - URL path handler `~cmp.routerUsersChangePasswordPathHandler~`uncvrd[^1]❓:
+  - URL path handler `~cmp.routerUsersChangePasswordPathHandler~`covered[^1]✅:
     - parses the request Body and URL parameters; calculates pseudo-wsid;
     - makes federation query to `registry` app by calling `ChangePassword` function;
     - returns the result, or error, to the client.
 
 - pkg/sys/it
     - integration test for /users
-        - `~it.TestQueryProcessor2_UsersChangePassword~`uncvrd[^2]❓
+        - `~it.TestQueryProcessor2_UsersChangePassword~`covered[^2]✅
 
-[^1]: `[~server.apiv2.users/cmp.routerUsersChangePasswordPathHandler~impl]`
-[^2]: `[~server.apiv2.users/it.TestQueryProcessor2_UsersChangePassword~impl]`
+[^1]: `[~server.apiv2.users/cmp.routerUsersChangePasswordPathHandler~impl]` [server/apiv2/change-password.md:55:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/apiv2/change-password.md#L55)
+[^2]: `[~server.apiv2.users/it.TestQueryProcessor2_UsersChangePassword~impl]` [server/apiv2/change-password.md:56:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/apiv2/change-password.md#L56)

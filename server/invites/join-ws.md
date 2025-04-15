@@ -8,7 +8,7 @@ reqmd.package: server.invites
 
 - `~Join.InitiateJoinWorkspace~`covered[^~Join.InitiateJoinWorkspace~]✅
 - AuthZ: PrincipalToken + VerificationCode
-  - `~Join.InitiateJoinWorkspace.AuthZ~`uncvrd[^~Join.InitiateJoinWorkspace.AuthZ~]❓
+  - `~Join.InitiateJoinWorkspace.AuthZ~`covered[^~Join.InitiateJoinWorkspace.AuthZ~]✅
 - Params
   - InviteID
   - VerificationCode
@@ -59,5 +59,5 @@ reqmd.package: server.invites
 
 ## Footnotes
 
-[^~Join.InitiateJoinWorkspace~]: `[~server.invites/Join.InitiateJoinWorkspace~impl]` [pkg/sys/invite/impl_initiatejoinworkspace.go:26:impl](https://github.com/maxim-ge/voedger/blob/0d4fd4409d374bfd04e11004ddc71ca936e80193/pkg/sys/invite/impl_initiatejoinworkspace.go#L26), [pkg/sys/it/impl_invite_test.go:172:itest](https://github.com/maxim-ge/voedger/blob/0d4fd4409d374bfd04e11004ddc71ca936e80193/pkg/sys/it/impl_invite_test.go#L172)
-[^~Join.InitiateJoinWorkspace.AuthZ~]: `[~server.invites/Join.InitiateJoinWorkspace.AuthZ~impl]`
+[^~Join.InitiateJoinWorkspace~]: `[~server.invites/Join.InitiateJoinWorkspace~impl]` [server/invites/join-ws.md:62:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/invites/join-ws.md#L62), [pkg/sys/it/impl_invite_test.go:172:itest](https://github.com/voedger/voedger/blob/27336951f2bf46b63f8e21532bee82f3b53042d1/pkg/sys/it/impl_invite_test.go#L172)
+[^~Join.InitiateJoinWorkspace.AuthZ~]: `[~server.invites/Join.InitiateJoinWorkspace.AuthZ~impl]` [server/invites/join-ws.md:63:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/invites/join-ws.md#L63)

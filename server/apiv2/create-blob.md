@@ -51,13 +51,15 @@ Example response 201:
 ```
 
 ## Technical design
-### Components  
+
+### Components
+
 - pkg/router
-  - URL path handler `~cmp.routerBlobsCreatePathHandler~`uncvrd[^1]❓:
+  - URL path handler `~cmp.routerBlobsCreatePathHandler~`covered[^1]✅:
 
 - pkg/sys/it
-    - integration test for creating BLOBs
-        - `~it.TestBlobsCreate~`uncvrd[^2]❓
+  - integration test for creating BLOBs
+    - `~it.TestBlobsCreate~`covered[^2]✅
 
-[^1]: `[~server.apiv2.blobs/cmp.routerBlobsCreatePathHandler~impl]`
-[^2]: `[~server.apiv2.blobs/it.TestBlobsCreate~impl]`
+[^1]: `[~server.apiv2.blobs/cmp.routerBlobsCreatePathHandler~impl]` [server/apiv2/create-blob.md:62:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/apiv2/create-blob.md#L62)
+[^2]: `[~server.apiv2.blobs/it.TestBlobsCreate~impl]` [server/apiv2/create-blob.md:63:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/apiv2/create-blob.md#L63)
