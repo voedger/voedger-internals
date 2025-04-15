@@ -216,6 +216,9 @@ Tests:
 
 - `~test.isequencer.mockISeqStorage~`covered[^23]✅
   - Mock implementation of `isequencer.ISeqStorage` for testing purposes
+- `~test.isequencer.NewMustStartActualization~`
+  - `isequencer.New()` must start the Actualization process, Start() must return `0, false`
+  - Design: blocking hook in mockISeqStorage
 
 Some edge case tests:
 
