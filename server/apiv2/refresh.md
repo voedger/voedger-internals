@@ -29,7 +29,7 @@ POST `/api/v2/apps/{owner}/{app}/auth/refresh`
 
 | Code | Description | Body
 | --- | --- | --- |
-| 200 | OK | Returns an updated access token, see below |
+| 200 | OK | Returns a refreshed principal token, see below |
 | 400 | Bad Request | [error object](errors.md) |
 | 401 | Unauthorized | [error object](errors.md) |
 | 403 | Forbidden | [error object](errors.md) |
@@ -52,13 +52,16 @@ Example result 200:
 
 - pkg/router
   - URL path handler `~cmp.routerRefreshHandler~`uncvrd[^1]❓
+    - sends `APIPath_Auth_Refresh` request to QueryProcessor;
 - pkg/processors/query2
-  - `IApiPathHandler` implementation for handling `APIPath_Auth_Refresh`
+  - `IApiPathHandler` implementation for handling `APIPath_Auth_Refresh` in the AppWorkspace
     - `~cmp.authRefreshHandler~`uncvrd[^2]❓
-    - handler extracts profile WSID from token and replaces it in the request
-      - `~cmp.authRefreshHandler.WSID~`uncvrd[^5]❓
+      1) extracts profile WSID from token and makes federation post to refresh token:
+      2) sends federation request to refresh token: `~cmp.authRefreshHandler.refreshToken~`uncvrd[^5]❓
   - `newQueryProcessorPipeline`: provide API handler for `APIPath_Auth_Refresh`
     - `~cmp.provideAuthRefreshHandler~`uncvrd[^3]❓
+  - openapi:
+    - add `/auth/refresh` to the list of API paths; `~cmp.provideAuthRefreshPath~`uncvrd[^6]❓
 - pkg/sys/it
   - integration test for /refresh
     - `~it.TestRefresh~`uncvrd[^4]❓
@@ -67,4 +70,5 @@ Example result 200:
 [^2]: `[~server.apiv2.auth/cmp.authRefreshHandler~impl]`
 [^3]: `[~server.apiv2.auth/cmp.provideAuthRefreshHandler~impl]`
 [^4]: `[~server.apiv2.auth/it.TestRefresh~impl]`
-[^5]: `[~server.apiv2.auth/cmp.authRefreshHandler.WSID~impl]`
+[^5]: `[~server.apiv2.auth/cmp.authRefreshHandler.refreshToken~impl]`
+[^6]: `[~server.apiv2.auth/cmp.provideAuthRefreshPath~impl]`
