@@ -58,26 +58,24 @@ COMMAND CreateEmailLogin (CreateEmailLoginParams, UNLOGGED CreateLoginUnloggedPa
 GRANT EXECUTE ON COMMAND CreateEmailLogin TO sys.Anonymous;
 ```
 
-- declaration in VSQL: `~cmp.registry.CreateEmailLogin.vsql~`covered[^1]✅
-- the extension code: `~cmp.registry.CreateEmailLogin.go~`covered[^2]✅
+- declaration in VSQL: `~cmp.registry.CreateEmailLogin.vsql~`uncvrd[^1]❓
+- the extension code: `~cmp.registry.CreateEmailLogin.go~`uncvrd[^2]❓
 
 
-2) Mark `CreateLogin` as deprecated `~cmp.registry.CreateLogin.vsql~`covered[^3]✅
+2) Mark `CreateLogin` as deprecated `~cmp.registry.CreateLogin.vsql~`uncvrd[^3]❓
 
 #### pkg/router
-
-- URL path handler `~cmp.router.UsersCreatePathHandler~`covered[^4]✅:
+- URL path handler `~cmp.router.UsersCreatePathHandler~`uncvrd[^4]❓:
   - parses the request Body and URL parameters; calculates pseudo-wsid;
   - makes federation query to `registry` app by calling `CreateEmailLogin` function;
   - returns the result, or error, to the client.
 
 #### pkg/sys/it
-
 - integration test for /users
-  - `~it.TestUsersCreate~`covered[^5]✅
+    - `~it.TestUsersCreate~`uncvrd[^5]❓
 
-[^1]: `[~server.apiv2.users/cmp.registry.CreateEmailLogin.vsql~impl]` [server/apiv2/create-user.md:77:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/apiv2/create-user.md#L77)
-[^2]: `[~server.apiv2.users/cmp.registry.CreateEmailLogin.go~impl]` [server/apiv2/create-user.md:78:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/apiv2/create-user.md#L78)
-[^3]: `[~server.apiv2.users/cmp.registry.CreateLogin.vsql~impl]` [server/apiv2/create-user.md:79:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/apiv2/create-user.md#L79)
-[^4]: `[~server.apiv2.users/cmp.router.UsersCreatePathHandler~impl]` [server/apiv2/create-user.md:80:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/apiv2/create-user.md#L80)
-[^5]: `[~server.apiv2.users/it.TestUsersCreate~impl]` [server/apiv2/create-user.md:81:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/apiv2/create-user.md#L81)
+[^1]: `[~server.apiv2.users/cmp.registry.CreateEmailLogin.vsql~impl]`
+[^2]: `[~server.apiv2.users/cmp.registry.CreateEmailLogin.go~impl]`
+[^3]: `[~server.apiv2.users/cmp.registry.CreateLogin.vsql~impl]`
+[^4]: `[~server.apiv2.users/cmp.router.UsersCreatePathHandler~impl]`
+[^5]: `[~server.apiv2.users/it.TestUsersCreate~impl]`

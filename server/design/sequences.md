@@ -132,26 +132,26 @@ This approach decouples memory usage from the total number of workspaces and tra
 
 ### VVMHost: Configure SequencesTrustLevel mode for VVM
 
-`~tuc.VVMConfig.ConfigureSequencesTrustLevel~`covered[^1]✅
+`~tuc.VVMConfig.ConfigureSequencesTrustLevel~`uncvrd[^1]❓
 
 VVMHost uses cmp.VVMConfig.SequencesTrustLevel.
 
 ### CP: Handling SequencesTrustLevel for Events
 
-- `~tuc.SequencesTrustLevelForPLog~`covered[^2]✅
+- `~tuc.SequencesTrustLevelForPLog~`uncvrd[^2]❓
   - When PLog is written then SequencesTrustLevel is used to determine the write mode
-- `~tuc.SequencesTrustLevelForWLog~`covered[^3]✅
+- `~tuc.SequencesTrustLevelForWLog~`uncvrd[^3]❓
   - When WLog is written then SequencesTrustLevel is used to determine the write mode
 
 ### CP: Handling SequencesTrustLevel for Table Records
 
-- `~tuc.SequencesTrustLevelForRecords~`covered[^4]✅
+- `~tuc.SequencesTrustLevelForRecords~`uncvrd[^4]❓
   - When a record is inserted SequencesTrustLevel is used to determine the write mode
   - When a record is updated - nothing is done in connection with SequencesTrustLevel
 
 ### CP: Command processing
 
-- `~tuc.StartSequencesGeneration~`covered[^5]✅
+- `~tuc.StartSequencesGeneration~`uncvrd[^5]❓
   - When: CP starts processing a request
   - Flow:
     - `partitionID` is calculated using request WSID and amount of partitions declared in AppDeploymentDescriptor [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/vvm/impl_requesthandler.go#L61)
@@ -161,22 +161,22 @@ VVMHost uses cmp.VVMConfig.SequencesTrustLevel.
         - Actualization is in progress
         - Flushing queue is full
         - Returns 503: "server is busy"
-- `~tuc.NextSequenceNumber~`covered[^6]✅
+- `~tuc.NextSequenceNumber~`uncvrd[^6]❓
   - When: After CP starts sequences generation
   - Flow:
     - sequencer.Next(sequenceId)
-- `~tuc.FlushSequenceNumbers~`covered[^7]✅
+- `~tuc.FlushSequenceNumbers~`uncvrd[^7]❓
   - When: After CP saves the PLog record successfully
   - Flow:
     - sequencer.Flush()
-- `~tuc.ReactualizeSequences~`covered[^8]✅
+- `~tuc.ReactualizeSequences~`uncvrd[^8]❓
   - When: After CP fails to save the PLog record
   - Flow:
     - sequencer.Actualize()
 
 ### AppParts: Instantiate sequencer on Application deployment
 
-`~tuc.InstantiateSequencer~`covered[^9]✅
+`~tuc.InstantiateSequencer~`uncvrd[^9]❓
 
 - When: Partition with the `partitionID` is deployed
 - Flow:
@@ -190,13 +190,13 @@ VVMHost uses cmp.VVMConfig.SequencesTrustLevel.
 
 ### IAppPartition.Sequencer
 
-- `~cmp.IAppPartition.Sequencer~`covered[^10]✅
+- `~cmp.IAppPartition.Sequencer~`uncvrd[^10]❓
   - Description: Returns `isequencer.ISequencer` for the given `partitionID`
   - Covers: `tuc.StartSequencesGeneration`
 
 ### VVMConfig.SequencesTrustLevel
 
-- `~cmp.VVMConfig.SequencesTrustLevel~`covered[^11]✅
+- `~cmp.VVMConfig.SequencesTrustLevel~`uncvrd[^11]❓
   - Covers: tuc.VVMConfig.ConfigureSequencesTrustLevel
 
 ---
@@ -216,10 +216,10 @@ Tests:
 
 - `~test.isequencer.mockISeqStorage~`covered[^23]✅
   - Mock implementation of `isequencer.ISeqStorage` for testing purposes
-- `~test.isequencer.NewMustStartActualization~`uncvrd[^31]❓  
+- `~test.isequencer.NewMustStartActualization~`  
   - `isequencer.New()` must start the Actualization process, Start() must return `0, false`
   - Design: blocking hook in mockISeqStorage
-- `~test.isequencer.Race~`uncvrd[^32]❓
+- `~test.isequencer.Race~`
   - If !t.Short() run something like `go test ./... -count 50 -race`
   
 Some edge case tests:
@@ -591,13 +591,13 @@ Method:
 
 Tests:
 
-- `~it.SequencesTrustLevel0~`covered[^27]✅: Intergation test for `SequencesTrustLevel = 0`
-- `~it.SequencesTrustLevel1~`covered[^28]✅: Intergation test for `SequencesTrustLevel = 1`
-- `~it.SequencesTrustLevel2~`covered[^29]✅: Intergation test for `SequencesTrustLevel = 2`
+- `~it.SequencesTrustLevel0~`uncvrd[^27]❓: Intergation test for `SequencesTrustLevel = 0`
+- `~it.SequencesTrustLevel1~`uncvrd[^28]❓: Intergation test for `SequencesTrustLevel = 1`
+- `~it.SequencesTrustLevel2~`uncvrd[^29]❓: Intergation test for `SequencesTrustLevel = 2`
 
 ### Intergation tests for built-in sequences
 
-- `~it.BuiltInSequences~`covered[^30]✅: Test for initial values: WLogOffsetSequence, WLogOffsetSequence, CRecordIDSequence, OWRecordIDSequence
+- `~it.BuiltInSequences~`uncvrd[^30]❓: Test for initial values: WLogOffsetSequence, WLogOffsetSequence, CRecordIDSequence, OWRecordIDSequence
 
 ---
 
@@ -617,36 +617,33 @@ History:
 
 ## Footnotes
 
-[^1]: `[~server.design.sequences/tuc.VVMConfig.ConfigureSequencesTrustLevel~impl]` [server/design/sequences.md:620:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/design/sequences.md#L620)
-[^2]: `[~server.design.sequences/tuc.SequencesTrustLevelForPLog~impl]` [server/design/sequences.md:621:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/design/sequences.md#L621)
-[^3]: `[~server.design.sequences/tuc.SequencesTrustLevelForWLog~impl]` [server/design/sequences.md:622:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/design/sequences.md#L622)
-[^4]: `[~server.design.sequences/tuc.SequencesTrustLevelForRecords~impl]` [server/design/sequences.md:623:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/design/sequences.md#L623)
-[^5]: `[~server.design.sequences/tuc.StartSequencesGeneration~impl]` [server/design/sequences.md:624:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/design/sequences.md#L624)
-[^6]: `[~server.design.sequences/tuc.NextSequenceNumber~impl]` [server/design/sequences.md:625:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/design/sequences.md#L625)
-[^7]: `[~server.design.sequences/tuc.FlushSequenceNumbers~impl]` [server/design/sequences.md:626:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/design/sequences.md#L626)
-[^8]: `[~server.design.sequences/tuc.ReactualizeSequences~impl]` [server/design/sequences.md:627:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/design/sequences.md#L627)
-[^9]: `[~server.design.sequences/tuc.InstantiateSequencer~impl]` [server/design/sequences.md:628:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/design/sequences.md#L628)
-[^10]: `[~server.design.sequences/cmp.IAppPartition.Sequencer~impl]` [server/design/sequences.md:629:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/design/sequences.md#L629)
-[^11]: `[~server.design.sequences/cmp.VVMConfig.SequencesTrustLevel~impl]` [server/design/sequences.md:630:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/design/sequences.md#L630)
-[^12]: `[~server.design.sequences/cmp.ISequencer~impl]` [server/design/sequences.md:631:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/design/sequences.md#L631)
-[^13]: `[~server.design.sequences/cmp.sequencer~impl]` [server/design/sequences.md:632:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/design/sequences.md#L632)
-[^14]: `[~server.design.sequences/cmp.sequencer.Start~impl]` [server/design/sequences.md:633:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/design/sequences.md#L633)
-[^15]: `[~server.design.sequences/cmp.sequencer.Next~impl]` [server/design/sequences.md:634:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/design/sequences.md#L634)
-[^16]: `[~server.design.sequences/cmp.sequencer.Flush~impl]` [server/design/sequences.md:635:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/design/sequences.md#L635)
-[^17]: `[~server.design.sequences/cmp.sequencer.Actualize~impl]` [server/design/sequences.md:636:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/design/sequences.md#L636)
-[^18]: `[~server.design.sequences/cmp.ISeqStorageImplementation~impl]` [server/design/sequences.md:637:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/design/sequences.md#L637)
-[^19]: `[~server.design.sequences/cmp.ISeqStorageImplementation.New~impl]` [server/design/sequences.md:638:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/design/sequences.md#L638)
-[^20]: `[~server.design.sequences/cmp.ISeqStorageImplementation.i688~impl]` [server/design/sequences.md:639:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/design/sequences.md#L639)
-[^21]: `[~server.design.sequences/cmp.VVMStorageAdapter~impl]` [server/design/sequences.md:640:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/design/sequences.md#L640)
-[^22]: `[~server.design.sequences/cmp.VVMStorageAdapter.KeyPrefixSeqStorage~impl]` [server/design/sequences.md:641:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/design/sequences.md#L641)
-[^23]: `[~server.design.sequences/test.isequencer.mockISeqStorage~impl]` [server/design/sequences.md:642:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/design/sequences.md#L642)
-[^24]: `[~server.design.sequences/test.isequencer.LongRecovery~impl]` [server/design/sequences.md:643:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/design/sequences.md#L643)
-[^25]: `[~server.design.sequences/test.isequencer.MultipleActualizes~impl]` [server/design/sequences.md:644:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/design/sequences.md#L644)
-[^26]: `[~server.design.sequences/test.isequencer.FlushPermanentlyFails~impl]` [server/design/sequences.md:645:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/design/sequences.md#L645)
-[^27]: `[~server.design.sequences/it.SequencesTrustLevel0~impl]` [server/design/sequences.md:646:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/design/sequences.md#L646)
-[^28]: `[~server.design.sequences/it.SequencesTrustLevel1~impl]` [server/design/sequences.md:647:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/design/sequences.md#L647)
-[^29]: `[~server.design.sequences/it.SequencesTrustLevel2~impl]` [server/design/sequences.md:648:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/design/sequences.md#L648)
-[^30]: `[~server.design.sequences/it.BuiltInSequences~impl]` [server/design/sequences.md:649:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/design/sequences.md#L649)
-
-[^31]: `[~server.design.sequences/test.isequencer.NewMustStartActualization~impl]`
-[^32]: `[~server.design.sequences/test.isequencer.Race~impl]`
+[^1]: `[~server.design.sequences/tuc.VVMConfig.ConfigureSequencesTrustLevel~impl]`
+[^2]: `[~server.design.sequences/tuc.SequencesTrustLevelForPLog~impl]`
+[^3]: `[~server.design.sequences/tuc.SequencesTrustLevelForWLog~impl]`
+[^4]: `[~server.design.sequences/tuc.SequencesTrustLevelForRecords~impl]`
+[^5]: `[~server.design.sequences/tuc.StartSequencesGeneration~impl]`
+[^6]: `[~server.design.sequences/tuc.NextSequenceNumber~impl]`
+[^7]: `[~server.design.sequences/tuc.FlushSequenceNumbers~impl]`
+[^8]: `[~server.design.sequences/tuc.ReactualizeSequences~impl]`
+[^9]: `[~server.design.sequences/tuc.InstantiateSequencer~impl]`
+[^10]: `[~server.design.sequences/cmp.IAppPartition.Sequencer~impl]`
+[^11]: `[~server.design.sequences/cmp.VVMConfig.SequencesTrustLevel~impl]`
+[^12]: `[~server.design.sequences/cmp.ISequencer~impl]` [pkg/isequencer/interface.go:47:impl](https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/isequencer/interface.go#L47)
+[^13]: `[~server.design.sequences/cmp.sequencer~impl]` [pkg/isequencer/types.go:50:impl](https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/isequencer/types.go#L50)
+[^14]: `[~server.design.sequences/cmp.sequencer.Start~impl]` [pkg/isequencer/impl.go:25:impl](https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/isequencer/impl.go#L25)
+[^15]: `[~server.design.sequences/cmp.sequencer.Next~impl]` [pkg/isequencer/impl.go:169:impl](https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/isequencer/impl.go#L169)
+[^16]: `[~server.design.sequences/cmp.sequencer.Flush~impl]` [pkg/isequencer/impl.go:263:impl](https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/isequencer/impl.go#L263)
+[^17]: `[~server.design.sequences/cmp.sequencer.Actualize~impl]` [pkg/isequencer/impl.go:479:impl](https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/isequencer/impl.go#L479)
+[^18]: `[~server.design.sequences/cmp.ISeqStorageImplementation~impl]` [pkg/appparts/internal/seqstorage/type.go:14:impl](https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/appparts/internal/seqstorage/type.go#L14)
+[^19]: `[~server.design.sequences/cmp.ISeqStorageImplementation.New~impl]` [pkg/appparts/internal/seqstorage/provide.go:14:impl](https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/appparts/internal/seqstorage/provide.go#L14)
+[^20]: `[~server.design.sequences/cmp.ISeqStorageImplementation.i688~impl]` [pkg/appparts/internal/seqstorage/impl.go:101:impl](https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/appparts/internal/seqstorage/impl.go#L101)
+[^21]: `[~server.design.sequences/cmp.VVMStorageAdapter~impl]` [pkg/vvm/storage/impl_seqstorage.go:15:impl](https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/vvm/storage/impl_seqstorage.go#L15)
+[^22]: `[~server.design.sequences/cmp.VVMStorageAdapter.KeyPrefixSeqStorage~impl]` [pkg/vvm/storage/consts.go:15:impl](https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/vvm/storage/consts.go#L15)
+[^23]: `[~server.design.sequences/test.isequencer.mockISeqStorage~impl]` [pkg/isequencer/types.go:106:impl](https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/isequencer/types.go#L106)
+[^24]: `[~server.design.sequences/test.isequencer.LongRecovery~impl]` [pkg/isequencer/isequencer_test.go:877:impl](https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/isequencer/isequencer_test.go#L877)
+[^25]: `[~server.design.sequences/test.isequencer.MultipleActualizes~impl]` [pkg/isequencer/isequencer_test.go:737:impl](https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/isequencer/isequencer_test.go#L737)
+[^26]: `[~server.design.sequences/test.isequencer.FlushPermanentlyFails~impl]` [pkg/isequencer/isequencer_test.go:807:impl](https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/isequencer/isequencer_test.go#L807)
+[^27]: `[~server.design.sequences/it.SequencesTrustLevel0~impl]`
+[^28]: `[~server.design.sequences/it.SequencesTrustLevel1~impl]`
+[^29]: `[~server.design.sequences/it.SequencesTrustLevel2~impl]`
+[^30]: `[~server.design.sequences/it.BuiltInSequences~impl]`

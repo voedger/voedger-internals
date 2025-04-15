@@ -41,15 +41,13 @@ GET `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/blobs/{blobId}`
 | 503 | Service Unavailable | [error object](errors.md) |
 
 ## Technical design
-
 ### Components  
-
 - pkg/router
-  - URL path handler `~cmp.routerBlobsReadPathHandler~`covered[^1]✅:
+  - URL path handler `~cmp.routerBlobsReadPathHandler~`uncvrd[^1]❓:
 
 - pkg/sys/it
-  - integration test for reading BLOBs
-    - `~it.TestBlobsRead~`covered[^2]✅
+    - integration test for reading BLOBs
+        - `~it.TestBlobsRead~`uncvrd[^2]❓
 
-[^1]: `[~server.apiv2.blobs/cmp.routerBlobsReadPathHandler~impl]` [server/apiv2/read-blob.md:52:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/apiv2/read-blob.md#L52)
-[^2]: `[~server.apiv2.blobs/it.TestBlobsRead~impl]` [server/apiv2/read-blob.md:53:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/apiv2/read-blob.md#L53)
+[^1]: `[~server.apiv2.blobs/cmp.routerBlobsReadPathHandler~impl]`
+[^2]: `[~server.apiv2.blobs/it.TestBlobsRead~impl]`

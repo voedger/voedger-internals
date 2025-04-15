@@ -51,12 +51,12 @@ The following [query constraints](query-constraints.md) can be used:
     - `~cmp.docsHandler~`covered[^1]✅
   - `newQueryProcessorPipeline`: provide API handler for `ApiPath_Docs`
     - `~cmp.provideDocsHandler~`covered[^2]✅
-  - check ACL when including referenced objects and/or containers `~cmp.includeCheckACL~`covered[^4]✅
+  - check ACL when including referenced objects and/or containers `~cmp.includeCheckACL~`uncvrd[^4]❓
 - pkg/sys/it
   - integration test for /docs/
     - `~it.TestQueryProcessor2_Docs~`covered[^3]✅
 
-[^1]: `[~server.apiv2.docs/cmp.docsHandler~impl]` [server/apiv2/read-doc.md:59:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/apiv2/read-doc.md#L59)
-[^2]: `[~server.apiv2.docs/cmp.provideDocsHandler~impl]` [server/apiv2/read-doc.md:60:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/apiv2/read-doc.md#L60)
-[^3]: `[~server.apiv2.docs/it.TestQueryProcessor2_Docs~impl]` [server/apiv2/read-doc.md:61:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/apiv2/read-doc.md#L61)
-[^4]: `[~server.apiv2.docs/cmp.includeCheckACL~impl]` [server/apiv2/read-doc.md:62:impl](https://github.com/voedger/voedger-internals/blob/7c007d555b627b7fb6d5a6ba14c82c76b7a270e7/server/apiv2/read-doc.md#L62)
+[^1]: `[~server.apiv2.docs/cmp.docsHandler~impl]` [pkg/processors/query2/impl_docs_handler.go:21:impl](https://github.com/voedger/voedger/blob/94d91e9155b3cf8e0e5bc914d45f3c33b751b890/pkg/processors/query2/impl_docs_handler.go#L21)
+[^2]: `[~server.apiv2.docs/cmp.provideDocsHandler~impl]` [pkg/processors/query2/impl.go:128:impl](https://github.com/voedger/voedger/blob/94d91e9155b3cf8e0e5bc914d45f3c33b751b890/pkg/processors/query2/impl.go#L128)
+[^3]: `[~server.apiv2.docs/it.TestQueryProcessor2_Docs~impl]` [pkg/sys/it/impl_qpv2_test.go:2060:impl](https://github.com/voedger/voedger/blob/014f9cafbf7184f24568d65b2e2fc05c3f8cb68f/pkg/sys/it/impl_qpv2_test.go#L2060)
+[^4]: `[~server.apiv2.docs/cmp.includeCheckACL~impl]`
