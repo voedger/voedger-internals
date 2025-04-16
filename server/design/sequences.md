@@ -216,10 +216,10 @@ Tests:
 
 - `~test.isequencer.mockISeqStorage~`covered[^23]✅
   - Mock implementation of `isequencer.ISeqStorage` for testing purposes
-- `~test.isequencer.NewMustStartActualization~`uncvrd[^31]❓  
+- `~test.isequencer.NewMustStartActualization~`  
   - `isequencer.New()` must start the Actualization process, Start() must return `0, false`
   - Design: blocking hook in mockISeqStorage
-- `~test.isequencer.Race~`uncvrd[^32]❓
+- `~test.isequencer.Race~`
   - If !t.Short() run something like `go test ./... -count 50 -race`
   
 Some edge case tests:
@@ -630,23 +630,20 @@ History:
 [^11]: `[~server.design.sequences/cmp.VVMConfig.SequencesTrustLevel~impl]`
 [^12]: `[~server.design.sequences/cmp.ISequencer~impl]` [pkg/isequencer/interface.go:47:impl](https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/isequencer/interface.go#L47)
 [^13]: `[~server.design.sequences/cmp.sequencer~impl]` [pkg/isequencer/types.go:50:impl](https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/isequencer/types.go#L50)
-[^14]: `[~server.design.sequences/cmp.sequencer.Start~impl]` [pkg/isequencer/impl.go:25:impl](https://github.com/voedger/voedger/blob/012bab77ca6ebfa6e3dee6a15f5b292dec478ff8/pkg/isequencer/impl.go#L25)
-[^15]: `[~server.design.sequences/cmp.sequencer.Next~impl]` [pkg/isequencer/impl.go:169:impl](https://github.com/voedger/voedger/blob/012bab77ca6ebfa6e3dee6a15f5b292dec478ff8/pkg/isequencer/impl.go#L169)
-[^16]: `[~server.design.sequences/cmp.sequencer.Flush~impl]` [pkg/isequencer/impl.go:263:impl](https://github.com/voedger/voedger/blob/012bab77ca6ebfa6e3dee6a15f5b292dec478ff8/pkg/isequencer/impl.go#L263)
-[^17]: `[~server.design.sequences/cmp.sequencer.Actualize~impl]` [pkg/isequencer/impl.go:479:impl](https://github.com/voedger/voedger/blob/012bab77ca6ebfa6e3dee6a15f5b292dec478ff8/pkg/isequencer/impl.go#L479)
+[^14]: `[~server.design.sequences/cmp.sequencer.Start~impl]` [pkg/isequencer/impl.go:25:impl](https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/isequencer/impl.go#L25)
+[^15]: `[~server.design.sequences/cmp.sequencer.Next~impl]` [pkg/isequencer/impl.go:169:impl](https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/isequencer/impl.go#L169)
+[^16]: `[~server.design.sequences/cmp.sequencer.Flush~impl]` [pkg/isequencer/impl.go:263:impl](https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/isequencer/impl.go#L263)
+[^17]: `[~server.design.sequences/cmp.sequencer.Actualize~impl]` [pkg/isequencer/impl.go:479:impl](https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/isequencer/impl.go#L479)
 [^18]: `[~server.design.sequences/cmp.ISeqStorageImplementation~impl]` [pkg/appparts/internal/seqstorage/type.go:14:impl](https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/appparts/internal/seqstorage/type.go#L14)
 [^19]: `[~server.design.sequences/cmp.ISeqStorageImplementation.New~impl]` [pkg/appparts/internal/seqstorage/provide.go:14:impl](https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/appparts/internal/seqstorage/provide.go#L14)
 [^20]: `[~server.design.sequences/cmp.ISeqStorageImplementation.i688~impl]` [pkg/appparts/internal/seqstorage/impl.go:101:impl](https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/appparts/internal/seqstorage/impl.go#L101)
 [^21]: `[~server.design.sequences/cmp.VVMStorageAdapter~impl]` [pkg/vvm/storage/impl_seqstorage.go:15:impl](https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/vvm/storage/impl_seqstorage.go#L15)
 [^22]: `[~server.design.sequences/cmp.VVMStorageAdapter.KeyPrefixSeqStorage~impl]` [pkg/vvm/storage/consts.go:15:impl](https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/vvm/storage/consts.go#L15)
 [^23]: `[~server.design.sequences/test.isequencer.mockISeqStorage~impl]` [pkg/isequencer/types.go:106:impl](https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/isequencer/types.go#L106)
-[^24]: `[~server.design.sequences/test.isequencer.LongRecovery~impl]` [pkg/isequencer/isequencer_test.go:873:impl](https://github.com/voedger/voedger/blob/012bab77ca6ebfa6e3dee6a15f5b292dec478ff8/pkg/isequencer/isequencer_test.go#L873)
-[^25]: `[~server.design.sequences/test.isequencer.MultipleActualizes~impl]` [pkg/isequencer/isequencer_test.go:733:impl](https://github.com/voedger/voedger/blob/012bab77ca6ebfa6e3dee6a15f5b292dec478ff8/pkg/isequencer/isequencer_test.go#L733)
-[^26]: `[~server.design.sequences/test.isequencer.FlushPermanentlyFails~impl]` [pkg/isequencer/isequencer_test.go:803:impl](https://github.com/voedger/voedger/blob/012bab77ca6ebfa6e3dee6a15f5b292dec478ff8/pkg/isequencer/isequencer_test.go#L803)
+[^24]: `[~server.design.sequences/test.isequencer.LongRecovery~impl]` [pkg/isequencer/isequencer_test.go:877:impl](https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/isequencer/isequencer_test.go#L877)
+[^25]: `[~server.design.sequences/test.isequencer.MultipleActualizes~impl]` [pkg/isequencer/isequencer_test.go:737:impl](https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/isequencer/isequencer_test.go#L737)
+[^26]: `[~server.design.sequences/test.isequencer.FlushPermanentlyFails~impl]` [pkg/isequencer/isequencer_test.go:807:impl](https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/isequencer/isequencer_test.go#L807)
 [^27]: `[~server.design.sequences/it.SequencesTrustLevel0~impl]`
 [^28]: `[~server.design.sequences/it.SequencesTrustLevel1~impl]`
 [^29]: `[~server.design.sequences/it.SequencesTrustLevel2~impl]`
 [^30]: `[~server.design.sequences/it.BuiltInSequences~impl]`
-
-[^31]: `[~server.design.sequences/test.isequencer.NewMustStartActualization~impl]`
-[^32]: `[~server.design.sequences/test.isequencer.Race~impl]`

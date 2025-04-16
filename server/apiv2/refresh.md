@@ -51,24 +51,24 @@ Example result 200:
 ### Components
 
 - pkg/router
-  - URL path handler `~cmp.routerRefreshHandler~`covered[^1]✅
+  - URL path handler `~cmp.routerRefreshHandler~`uncvrd[^1]❓
     - sends `APIPath_Auth_Refresh` request to QueryProcessor;
 - pkg/processors/query2
   - `IApiPathHandler` implementation for handling `APIPath_Auth_Refresh` in the AppWorkspace
-    - `~cmp.authRefreshHandler~`covered[^2]✅
+    - `~cmp.authRefreshHandler~`uncvrd[^2]❓
       1) extracts profile WSID from token and makes federation post to refresh token:
       2) sends federation request to refresh token: `~cmp.authRefreshHandler.refreshToken~`uncvrd[^5]❓
   - `newQueryProcessorPipeline`: provide API handler for `APIPath_Auth_Refresh`
-    - `~cmp.provideAuthRefreshHandler~`covered[^3]✅
+    - `~cmp.provideAuthRefreshHandler~`uncvrd[^3]❓
   - openapi:
-    - add `/auth/refresh` to the list of API paths; `~cmp.provideAuthRefreshPath~`covered[^6]✅
+    - add `/auth/refresh` to the list of API paths; `~cmp.provideAuthRefreshPath~`uncvrd[^6]❓
 - pkg/sys/it
   - integration test for /refresh
-    - `~it.TestRefresh~`covered[^4]✅
+    - `~it.TestRefresh~`uncvrd[^4]❓
 
-[^1]: `[~server.apiv2.auth/cmp.routerRefreshHandler~impl]` [pkg/router/impl_apiv2.go:100:impl](https://github.com/voedger/voedger/blob/012bab77ca6ebfa6e3dee6a15f5b292dec478ff8/pkg/router/impl_apiv2.go#L100)
-[^2]: `[~server.apiv2.auth/cmp.authRefreshHandler~impl]` [pkg/processors/query2/impl_auth_refresh_handler.go:17:impl](https://github.com/voedger/voedger/blob/012bab77ca6ebfa6e3dee6a15f5b292dec478ff8/pkg/processors/query2/impl_auth_refresh_handler.go#L17)
-[^3]: `[~server.apiv2.auth/cmp.provideAuthRefreshHandler~impl]` [pkg/processors/query2/impl.go:144:impl](https://github.com/voedger/voedger/blob/012bab77ca6ebfa6e3dee6a15f5b292dec478ff8/pkg/processors/query2/impl.go#L144)
-[^4]: `[~server.apiv2.auth/it.TestRefresh~impl]` [pkg/sys/it/impl_qpv2_test.go:2242:impl](https://github.com/voedger/voedger/blob/012bab77ca6ebfa6e3dee6a15f5b292dec478ff8/pkg/sys/it/impl_qpv2_test.go#L2242)
+[^1]: `[~server.apiv2.auth/cmp.routerRefreshHandler~impl]`
+[^2]: `[~server.apiv2.auth/cmp.authRefreshHandler~impl]`
+[^3]: `[~server.apiv2.auth/cmp.provideAuthRefreshHandler~impl]`
+[^4]: `[~server.apiv2.auth/it.TestRefresh~impl]`
 [^5]: `[~server.apiv2.auth/cmp.authRefreshHandler.refreshToken~impl]`
-[^6]: `[~server.apiv2.auth/cmp.provideAuthRefreshPath~impl]` [pkg/processors/query2/impl_openapi.go:276:impl](https://github.com/voedger/voedger/blob/012bab77ca6ebfa6e3dee6a15f5b292dec478ff8/pkg/processors/query2/impl_openapi.go#L276)
+[^6]: `[~server.apiv2.auth/cmp.provideAuthRefreshPath~impl]`
