@@ -53,5 +53,5 @@ Also supports [Query constraints](query-constraints.md)
     - `~it.TestQueryProcessor2_CDocs~`covered[^3]✅
 
 [^1]: `[~server.apiv2.docs/cmp.cdocsHandler~impl]` [pkg/processors/query2/impl_cdocs_handler.go:24:impl](https://github.com/voedger/voedger/blob/94d91e9155b3cf8e0e5bc914d45f3c33b751b890/pkg/processors/query2/impl_cdocs_handler.go#L24)
-[^2]: `[~server.apiv2.docs/cmp.provideCDocsHandler~impl]` [pkg/processors/query2/impl.go:138:impl](https://github.com/voedger/voedger/blob/94d91e9155b3cf8e0e5bc914d45f3c33b751b890/pkg/processors/query2/impl.go#L138)
-[^3]: `[~server.apiv2.docs/it.TestQueryProcessor2_CDocs~impl]` [pkg/sys/it/impl_qpv2_test.go:2122:impl](https://github.com/voedger/voedger/blob/014f9cafbf7184f24568d65b2e2fc05c3f8cb68f/pkg/sys/it/impl_qpv2_test.go#L2122)
+[^2]: `[~server.apiv2.docs/cmp.provideCDocsHandler~impl]` [pkg/processors/query2/impl.go:138:impl](https://github.com/voedger/voedger/blob/012bab77ca6ebfa6e3dee6a15f5b292dec478ff8/pkg/processors/query2/impl.go#L138)
+[^3]: `[~server.apiv2.docs/it.TestQueryProcessor2_CDocs~impl]` [pkg/sys/it/impl_qpv2_test.go:2124:impl](https://github.com/voedger/voedger/blob/012bab77ca6ebfa6e3dee6a15f5b292dec478ff8/pkg/sys/it/impl_qpv2_test.go#L2124)
