@@ -32,6 +32,10 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+update_reqmd() {
+    GOPROXY=direct go install github.com/voedger/reqmd@main
+}
+
 create_work_folder() {
     if [ ! -d ".work" ]; then
         mkdir .work
@@ -84,11 +88,12 @@ actualize_repo() {
 }
 
 tracereqs() {
-    local voedger_path="../voedger"
+    local voedger_path="../../voedger"
     if [[ -z "$LOCAL_VOEDGER" ]]; then
-        voedger_path="../voedger-internals/reqman/.work/repos/voedger"
+        voedger_path="../../voedger-internals/reqman/.work/repos/voedger"
     fi
-    go run -C ../../reqmd . -v trace ${DRY_RUN:-} ../voedger-internals "$voedger_path"
+    update_reqmd
+    reqmd -v trace ${DRY_RUN:-} .. "$voedger_path"
 }
 
 show_help() {
