@@ -8,4 +8,5 @@
 | Reading views | not supported | separate endpoints for every allowed view |
 | Reading single objects | special function with "json" in response | separate endpoints for every allowed document |
 | API Syntax | POST-queries, 4-dimensional array in response | GET/POST-queries, objects in response |
-| Reading referenced objects | "elements" | Parse-like "include" syntax | 
+| Reading referenced objects | "elements" | Parse-like "include" syntax |
+| Developer-friendly | no | yes, per-role OpenAPI shemas built on the fly |
