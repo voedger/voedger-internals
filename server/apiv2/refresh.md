@@ -27,7 +27,7 @@ POST `/api/v2/apps/{owner}/{app}/auth/refresh`
 
 ### Result
 
-| Code | Description | Body
+| Code | Description | Body |
 | --- | --- | --- |
 | 200 | OK | Returns a refreshed principal token, see below |
 | 400 | Bad Request | [error object](errors.md) |

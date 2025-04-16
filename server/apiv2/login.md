@@ -28,6 +28,7 @@ POST `/api/v2/apps/{owner}/{app}/auth/login`
 ### Body
 
 JSON object:
+
 ```json
 {
   "Login": "login",
@@ -40,12 +41,13 @@ JSON object:
 | Code | Description | Body
 | --- | --- | --- |
 | 200 | OK | Returns an access token, see below |
-| 400 | Bad Request | [error object](conventions.md#errors) |
-| 401 | Unauthorized | [error object](conventions.md#errors) |
-| 429 | Too may requests, rate limiting | [error object](conventions.md#errors) |
-| 500+ | Server errors / service unavailable | [error object](conventions.md#errors) |
+| 400 | Bad Request | [error object](errors.md) |
+| 401 | Unauthorized | [error object](errors.md) |
+| 429 | Too may requests, rate limiting | [error object](cerrors.md) |
+| 500+ | Server errors / service unavailable | [error object](errors.md) |
 
 Example result 200:
+
 ```json
 {
   "PrincipalToken": "abc.def.ghi",
