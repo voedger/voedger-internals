@@ -66,9 +66,9 @@ Example result 200:
   - integration test for /refresh
     - `~it.TestRefresh~`covered[^4]✅
 
-[^1]: `[~server.apiv2.auth/cmp.routerRefreshHandler~impl]` [pkg/router/impl_apiv2.go:100:impl](https://github.com/voedger/voedger/blob/012bab77ca6ebfa6e3dee6a15f5b292dec478ff8/pkg/router/impl_apiv2.go#L100)
-[^2]: `[~server.apiv2.auth/cmp.authRefreshHandler~impl]` [pkg/processors/query2/impl_auth_refresh_handler.go:17:impl](https://github.com/voedger/voedger/blob/012bab77ca6ebfa6e3dee6a15f5b292dec478ff8/pkg/processors/query2/impl_auth_refresh_handler.go#L17)
-[^3]: `[~server.apiv2.auth/cmp.provideAuthRefreshHandler~impl]` [pkg/processors/query2/impl.go:144:impl](https://github.com/voedger/voedger/blob/012bab77ca6ebfa6e3dee6a15f5b292dec478ff8/pkg/processors/query2/impl.go#L144)
-[^4]: `[~server.apiv2.auth/it.TestRefresh~impl]` [pkg/sys/it/impl_qpv2_test.go:2242:impl](https://github.com/voedger/voedger/blob/012bab77ca6ebfa6e3dee6a15f5b292dec478ff8/pkg/sys/it/impl_qpv2_test.go#L2242)
+[^1]: `[~server.apiv2.auth/cmp.routerRefreshHandler~impl]` [pkg/router/impl_apiv2.go:100:impl](https://github.com/voedger/voedger/blob/main/pkg/router/impl_apiv2.go#L100)
+[^2]: `[~server.apiv2.auth/cmp.authRefreshHandler~impl]` [pkg/processors/query2/impl_auth_refresh_handler.go:17:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl_auth_refresh_handler.go#L17)
+[^3]: `[~server.apiv2.auth/cmp.provideAuthRefreshHandler~impl]` [pkg/processors/query2/impl.go:144:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl.go#L144)
+[^4]: `[~server.apiv2.auth/it.TestRefresh~impl]` [pkg/sys/it/impl_qpv2_test.go:2242:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_qpv2_test.go#L2242)
 [^5]: `[~server.apiv2.auth/cmp.authRefreshHandler.refreshToken~impl]`
-[^6]: `[~server.apiv2.auth/cmp.provideAuthRefreshPath~impl]` [pkg/processors/query2/impl_openapi.go:276:impl](https://github.com/voedger/voedger/blob/012bab77ca6ebfa6e3dee6a15f5b292dec478ff8/pkg/processors/query2/impl_openapi.go#L276)
+[^6]: `[~server.apiv2.auth/cmp.provideAuthRefreshPath~impl]` [pkg/processors/query2/impl_openapi.go:276:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl_openapi.go#L276)

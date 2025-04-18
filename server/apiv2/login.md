@@ -78,9 +78,9 @@ Example result 200:
   - integration test for /login
     - `~it.TestLogin~`covered[^2]✅
 
-[^1]: `[~server.apiv2.auth/cmp.routerLoginPathHandler~impl]` [pkg/router/impl_apiv2.go:93:impl](https://github.com/voedger/voedger/blob/012bab77ca6ebfa6e3dee6a15f5b292dec478ff8/pkg/router/impl_apiv2.go#L93)
-[^2]: `[~server.apiv2.auth/it.TestLogin~impl]` [pkg/sys/it/impl_qpv2_test.go:2161:impl](https://github.com/voedger/voedger/blob/012bab77ca6ebfa6e3dee6a15f5b292dec478ff8/pkg/sys/it/impl_qpv2_test.go#L2161)
-[^3]: `[~server.apiv2.auth/cmp.authLoginHandler~impl]` [pkg/processors/query2/impl_auth_login_handler.go:20:impl](https://github.com/voedger/voedger/blob/012bab77ca6ebfa6e3dee6a15f5b292dec478ff8/pkg/processors/query2/impl_auth_login_handler.go#L20)
-[^4]: `[~server.apiv2.auth/cmp.provideAuthLoginHandler~impl]` [pkg/processors/query2/impl.go:141:impl](https://github.com/voedger/voedger/blob/012bab77ca6ebfa6e3dee6a15f5b292dec478ff8/pkg/processors/query2/impl.go#L141)
-[^6]: `[~server.apiv2.auth/cmp.provideAuthLoginPath~impl]` [pkg/processors/query2/impl_openapi.go:237:impl](https://github.com/voedger/voedger/blob/012bab77ca6ebfa6e3dee6a15f5b292dec478ff8/pkg/processors/query2/impl_openapi.go#L237)
-[^7]: `[~server.apiv2.auth/cmp.principalTokenSchema~impl]` [pkg/processors/query2/impl_openapi.go:130:impl](https://github.com/voedger/voedger/blob/012bab77ca6ebfa6e3dee6a15f5b292dec478ff8/pkg/processors/query2/impl_openapi.go#L130)
+[^1]: `[~server.apiv2.auth/cmp.routerLoginPathHandler~impl]` [pkg/router/impl_apiv2.go:93:impl](https://github.com/voedger/voedger/blob/main/pkg/router/impl_apiv2.go#L93)
+[^2]: `[~server.apiv2.auth/it.TestLogin~impl]` [pkg/sys/it/impl_qpv2_test.go:2161:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_qpv2_test.go#L2161)
+[^3]: `[~server.apiv2.auth/cmp.authLoginHandler~impl]` [pkg/processors/query2/impl_auth_login_handler.go:20:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl_auth_login_handler.go#L20)
+[^4]: `[~server.apiv2.auth/cmp.provideAuthLoginHandler~impl]` [pkg/processors/query2/impl.go:141:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl.go#L141)
+[^6]: `[~server.apiv2.auth/cmp.provideAuthLoginPath~impl]` [pkg/processors/query2/impl_openapi.go:237:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl_openapi.go#L237)
+[^7]: `[~server.apiv2.auth/cmp.principalTokenSchema~impl]` [pkg/processors/query2/impl_openapi.go:130:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl_openapi.go#L130)
