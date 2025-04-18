@@ -3,18 +3,23 @@ reqmd.package: server.apiv2.blobs
 ---
 
 # Read/download the BLOB 
+
 ## Motivation
+
 Retrieve the BLOB data or metadata using API
 
 ## Functional design
+
 GET `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/blobs/{blobId}`
 
 ### Headers
-| Key | Value | Description
+
+| Key | Value | Description |
 | --- | --- | --- |
 | Authorization | Bearer {PrincipalToken} | The token obtained during the authentication process |
 
 ### Parameters
+
 | Parameter | Type | Description |
 | --- | --- | --- |
 | owner | string | name of a user who owns the application |
@@ -23,12 +28,13 @@ GET `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/blobs/{blobId}`
 | blobId | int64 | ID of a BLOB |
 
 ### Response Headers
-| Key | Value | Description
+
+| Key | Value | Description |
 | --- | --- | --- |
 | Content-type | BLOB metadata| Returns the originally provided metadata |
 
-
 ### Result
+
 | Code | Description | Body |
 | --- | --- | --- |
 | 200 | OK | BLOB binary data |
@@ -41,13 +47,15 @@ GET `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/blobs/{blobId}`
 | 503 | Service Unavailable | [error object](errors.md) |
 
 ## Technical design
+
 ### Components  
+
 - pkg/router
   - URL path handler `~cmp.routerBlobsReadPathHandler~`uncvrd[^1]❓:
 
 - pkg/sys/it
-    - integration test for reading BLOBs
-        - `~it.TestBlobsRead~`uncvrd[^2]❓
+  - integration test for reading BLOBs
+    - `~it.TestBlobsRead~`uncvrd[^2]❓
 
 [^1]: `[~server.apiv2.blobs/cmp.routerBlobsReadPathHandler~impl]`
 [^2]: `[~server.apiv2.blobs/it.TestBlobsRead~impl]`

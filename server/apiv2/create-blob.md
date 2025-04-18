@@ -3,21 +3,26 @@ reqmd.package: server.apiv2.blobs
 ---
 
 # Create/upload a new BLOB
+
 ## Motivation
-Creates a new BLOB with the uploaded binary data 
+
+Creates a new BLOB with the uploaded binary data
 
 ## Functional design
+
 POST `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/blobs`
 
 Creates a new BLOB with the uploaded binary data and metadata.
 
 ### Headers
+
 | Key | Value |
 | --- | --- |
 | Authorization | Bearer {PrincipalToken} |
 | Content-type | BLOB content type |
 
 ### Parameters
+
 | Parameter | Type | Description |
 | --- | --- | --- |
 | owner | string | name of a user who owns the application |
@@ -25,9 +30,12 @@ Creates a new BLOB with the uploaded binary data and metadata.
 | wsid | int64 | the ID of workspace |
 
 ### Body
+
 BLOB data.
 
 ### Result
+
+
 | Code | Description | Body |
 | --- | --- | --- |
 | 201 | Created | blobId, see example below |
@@ -41,7 +49,7 @@ BLOB data.
 | 503 | Service Unavailable | [error object](errors.md) |
 
 Example response 201:
-```
+```json
 {
     "BlobId": "1010231232123123",
     "ContentType": "image/jpeg",
@@ -51,13 +59,15 @@ Example response 201:
 ```
 
 ## Technical design
+
 ### Components  
+
 - pkg/router
   - URL path handler `~cmp.routerBlobsCreatePathHandler~`uncvrd[^1]❓:
 
 - pkg/sys/it
-    - integration test for creating BLOBs
-        - `~it.TestBlobsCreate~`uncvrd[^2]❓
+  - integration test for creating BLOBs
+    - `~it.TestBlobsCreate~`uncvrd[^2]❓
 
 [^1]: `[~server.apiv2.blobs/cmp.routerBlobsCreatePathHandler~impl]`
 [^2]: `[~server.apiv2.blobs/it.TestBlobsCreate~impl]`
