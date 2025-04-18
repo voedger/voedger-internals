@@ -48,7 +48,6 @@
       - BLOBs
         - [Create BLOB](server/apiv2/create-blob.md)
         - [Read BLOB](server/apiv2/read-blob.md)
-        - [Update BLOB metadata](server/apiv2/update-blob-meta.md)
         - [Replace BLOB](server/apiv2/replace-blob.md)
         - [Delete BLOB](server/apiv2/delete-blob.md)
       - Schemas

@@ -3,22 +3,29 @@ reqmd.package: server.apiv2.blobs
 ---
 
 # Replace an existing BLOB
+
 ## Motivation
+
 Replace the binary data of the BLOB using API
 
 ## Functional Design
+
 PUT `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/blobs/{blobId}`
 
 ### Headers
+
 | Key | Value |
 | --- | --- |
 | Authorization | Bearer {PrincipalToken} |
-| Content-type | BLOB content type |
+| Content-Type | BLOB content type |
+| Blob-Name | BLOB name, optional |
 
 ### Body
+
 BLOB data
 
 ### Parameters
+
 | Parameter | Type | Description |
 | --- | --- | --- |
 | owner | string | name of a user who owns the application |
@@ -27,6 +34,7 @@ BLOB data
 | blobId | int64 | ID of a BLOB |
 
 ### Result
+
 | Code | Description | Body |
 | --- | --- | --- |
 | 200 | OK | see example below |
@@ -40,7 +48,7 @@ BLOB data
 | 503 | Service Unavailable | [error object](errors.md) |
 
 Example response 200:
-```
+```json
 {
     "BlobId": "1010231232123123",
     "ContentType": "image/jpeg",
@@ -50,13 +58,15 @@ Example response 200:
 ```
 
 ## Technical design
+
 ### Components  
+
 - pkg/router
   - URL path handler `~cmp.routerBlobsReplacePathHandler~`uncvrd[^1]❓:
 
 - pkg/sys/it
-    - integration test for replacing BLOBs
-        - `~it.TestBlobsReplace~`uncvrd[^2]❓
+  - integration test for replacing BLOBs
+    - `~it.TestBlobsReplace~`uncvrd[^2]❓
 
 [^1]: `[~server.apiv2.blobs/cmp.routerBlobsReplacePathHandler~impl]`
 [^2]: `[~server.apiv2.blobs/it.TestBlobsReplace~impl]`

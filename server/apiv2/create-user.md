@@ -3,24 +3,31 @@ reqmd.package: server.apiv2.users
 ---
 
 # Create user
+
 ## Motivation
+
 Create(register) new user
+
 ## Functional design
+
 POST `/api/v2/apps/{owner}/{app}/users`
 
 ### Headers
+
 | Key | Value |
 | --- | --- |
-| Content-type | application/json |
+| Content-Type | application/json |
 
 ### Parameters
+
 | Parameter | Type | Description |
 | --- | --- | --- |
 | owner | string | name of a user who owns the application |
 | app | string | name of an application |
 
 ### Body
-JSON object: 
+
+JSON object:
 ```json
 {
   "VerifiedEmailToken": "token",
@@ -30,21 +37,24 @@ JSON object:
 ```
 
 ### Result
-| Code | Description | Body
+
+| Code | Description | Body |
 | --- | --- | --- |
-| 201 | Created  |
+| 201 | Created | |
 | 400 | Bad Request | [error object](errors.md) |
 | 401 | Unauthorized | [error object](errors.md) |
 | 403 | Forbidden | [error object](errors.md) |
 | 429 | Too may requests, rate limiting | [error object](errors.md) |
 | 500+ | Server errors / service unavailable | [error object](errors.md) |
- 
 
 ## Technical design
+
 ### Components
+
 #### pkg/registry
- 
+
 1) `CreateEmailLogin` function:
+
 ```sql
 TYPE CreateEmailLoginParams (
   Email varchar VERIFIABLE,
@@ -61,18 +71,18 @@ GRANT EXECUTE ON COMMAND CreateEmailLogin TO sys.Anonymous;
 - declaration in VSQL: `~cmp.registry.CreateEmailLogin.vsql~`uncvrd[^1]❓
 - the extension code: `~cmp.registry.CreateEmailLogin.go~`uncvrd[^2]❓
 
-
-2) Mark `CreateLogin` as deprecated `~cmp.registry.CreateLogin.vsql~`uncvrd[^3]❓
+2) `CreateLogin` must only be allowed to system `~cmp.registry.CreateLogin.vsql~`uncvrd[^3]❓
 
 #### pkg/router
+
 - URL path handler `~cmp.router.UsersCreatePathHandler~`uncvrd[^4]❓:
-  - parses the request Body and URL parameters; calculates pseudo-wsid;
-  - makes federation query to `registry` app by calling `CreateEmailLogin` function;
-  - returns the result, or error, to the client.
+  - parses the request Body; calculates pseudo-wsid;
+  - sends v2 request `c.registry.CreateLogin` to Command Processor
 
 #### pkg/sys/it
+
 - integration test for /users
-    - `~it.TestUsersCreate~`uncvrd[^5]❓
+  - `~it.TestUsersCreate~`uncvrd[^5]❓
 
 [^1]: `[~server.apiv2.users/cmp.registry.CreateEmailLogin.vsql~impl]`
 [^2]: `[~server.apiv2.users/cmp.registry.CreateEmailLogin.go~impl]`

@@ -15,7 +15,7 @@ POST `/api/v2/apps/{owner}/{app}/auth/refresh`
 
 | Key | Value |
 | --- | --- |
-| Content-type | application/json |
+| Content-Type | application/json |
 | Authorization | Bearer {PrincipalToken} |
 
 ### Parameters
