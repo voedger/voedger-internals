@@ -14,6 +14,7 @@ fi
 # Parse arguments
 DRY_RUN=""
 LOCAL_VOEDGER=""
+VERBOSE=""
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -25,6 +26,10 @@ while [[ $# -gt 0 ]]; do
             LOCAL_VOEDGER="true"
             shift
             ;;
+        --v)
+            VERBOSE="true"
+            shift
+            ;;            
         *)
             echo "Error: Unknown flag $1" >&2
             exit 1
@@ -93,7 +98,7 @@ tracereqs() {
         voedger_path="../../voedger-internals/reqman/.work/repos/voedger"
     fi
     update_reqmd
-    reqmd -v trace ${DRY_RUN:-} .. "$voedger_path"
+    reqmd ${VERBOSE:-} trace ${DRY_RUN:-} .. "$voedger_path"
 }
 
 show_help() {

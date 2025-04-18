@@ -1,3 +1,7 @@
+---
+reqmd.package: server.authnz.groles
+---
+
 # Global Roles
 
 ## Abstract
@@ -56,7 +60,7 @@ sequenceDiagram
 
 ### Components
 
-- `~cmp.c.sys.UpdateGlobalRoles~`
+- `~cmp.c.sys.UpdateGlobalRoles~`uncvrd[^1]❓
   - AuthZ: System
 
 ### Login table extension
@@ -74,3 +78,5 @@ ALTER WORKSPACE sys.AppWorkspaceWS (
 
 ???
 
+
+[^1]: `[~server.authnz.groles/cmp.c.sys.UpdateGlobalRoles~impl]`
