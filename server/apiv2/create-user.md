@@ -16,7 +16,7 @@ POST `/api/v2/apps/{owner}/{app}/users`
 
 | Key | Value |
 | --- | --- |
-| Content-type | application/json |
+| Content-Type | application/json |
 
 ### Parameters
 
@@ -71,7 +71,7 @@ GRANT EXECUTE ON COMMAND CreateEmailLogin TO sys.Anonymous;
 - declaration in VSQL: `~cmp.registry.CreateEmailLogin.vsql~`uncvrd[^1]❓
 - the extension code: `~cmp.registry.CreateEmailLogin.go~`uncvrd[^2]❓
 
-2) Mark `CreateLogin` as deprecated `~cmp.registry.CreateLogin.vsql~`uncvrd[^3]❓
+2) `CreateLogin` must only be allowed to system `~cmp.registry.CreateLogin.vsql~`uncvrd[^3]❓
 
 #### pkg/router
 

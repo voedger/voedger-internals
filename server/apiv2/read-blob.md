@@ -31,7 +31,8 @@ GET `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/blobs/{blobId}`
 
 | Key | Value | Description |
 | --- | --- | --- |
-| Content-type | BLOB metadata| Returns the originally provided metadata |
+| Content-Type | BLOB metadata| Returns the originally provided metadata |
+| Blob-Name | BLOB name | Returns the originally provided name |
 
 ### Result
 

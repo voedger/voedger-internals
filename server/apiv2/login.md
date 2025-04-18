@@ -16,7 +16,7 @@ POST `/api/v2/apps/{owner}/{app}/auth/login`
 
 | Key | Value |
 | --- | --- |
-| Content-type | application/json |
+| Content-Type | application/json |
 
 ### Parameters
 

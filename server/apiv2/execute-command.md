@@ -10,7 +10,7 @@ POST `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/commands/{pkg}.{command}`
 | Key | Value |
 | --- | --- |
 | Authorization | Bearer {PrincipalToken} |
-| Content-type | application/json |
+| Content-Type | application/json |
 
 ### Parameters
 | Parameter | Type | Description |
@@ -45,5 +45,9 @@ Example result 200:
 ```json
 {
     "CurrentWLogOffset":114,
+    "Result": {
+        "key1": "value1",
+        "key2": "value2"
+    },
 }
 ```

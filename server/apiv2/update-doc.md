@@ -9,7 +9,7 @@ PATCH `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/docs/{pkg}.{table}/{id}`
 | Key | Value |
 | --- | --- |
 | Authorization | Bearer {PrincipalToken} |
-| Content-type | application/json |
+| Content-Type | application/json |
 
 ### Parameters
 | Parameter | Type | Description |

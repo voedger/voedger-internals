@@ -13,7 +13,7 @@ POST `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/docs/{pkg}.{table}`
 | Key | Value |
 | --- | --- |
 | Authorization | Bearer {PrincipalToken} |
-| Content-type | application/json |
+| Content-Type | application/json |
 
 ### Parameters
 

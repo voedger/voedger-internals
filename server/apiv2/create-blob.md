@@ -19,7 +19,8 @@ Creates a new BLOB with the uploaded binary data and metadata.
 | Key | Value |
 | --- | --- |
 | Authorization | Bearer {PrincipalToken} |
-| Content-type | BLOB content type |
+| Content-Type | BLOB content type |
+| Blob-Name | BLOB name, optional |
 
 ### Parameters
 

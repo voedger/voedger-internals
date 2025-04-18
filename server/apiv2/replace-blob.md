@@ -5,6 +5,7 @@ reqmd.package: server.apiv2.blobs
 # Replace an existing BLOB
 
 ## Motivation
+
 Replace the binary data of the BLOB using API
 
 ## Functional Design
@@ -16,7 +17,8 @@ PUT `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/blobs/{blobId}`
 | Key | Value |
 | --- | --- |
 | Authorization | Bearer {PrincipalToken} |
-| Content-type | BLOB content type |
+| Content-Type | BLOB content type |
+| Blob-Name | BLOB name, optional |
 
 ### Body
 
