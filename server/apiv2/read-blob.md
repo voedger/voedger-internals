@@ -2,7 +2,7 @@
 reqmd.package: server.apiv2.blobs
 ---
 
-# Read/download the BLOB 
+# Read/download the BLOB
 
 ## Motivation
 
