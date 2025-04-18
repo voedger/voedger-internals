@@ -74,7 +74,7 @@
     - [Refresh Principal Token](server/apiv2/refresh.md)
     - [Enrich Principal Token](server/authnz/enrich-token.md)
     - [ACL Rules](server/authnz/aclrules.md)
-    - [Global Roles](server/authnz/grules.md)
+    - [Global Roles](server/authnz/groles.md)
   - Data types
     - [Types](server/vsql/types.md)
       - [Small integers](server/vsql/types-small.md)

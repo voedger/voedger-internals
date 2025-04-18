@@ -17,7 +17,7 @@ This document outlines the design for Global Roles in the authentication and aut
 
 ## Introduction
 
-**Global Roles** represent system-level roles assigned to users that will be included in all PrincipalTokens and participate in authorization regardless of which workspace is being accessed. This design addresses the need for consistent role assignment across the system while maintaining compatibility with the existing authorization model.
+**Global Role**: A system-level role assigned to users that will be included in all PrincipalTokens and participate in authorization regardless of which workspace is being accessed. This design addresses the need for consistent role assignment across the system while maintaining compatibility with the existing authorization model.
 
 ## Concepts
 
@@ -77,6 +77,5 @@ ALTER WORKSPACE sys.AppWorkspaceWS (
 ### Use GlobalRoles in Authnz
 
 ???
-
 
 [^1]: `[~server.authnz.groles/cmp.c.sys.UpdateGlobalRoles~impl]`

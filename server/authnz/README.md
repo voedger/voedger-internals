@@ -2,10 +2,7 @@
 
 Authorization and authentication.
 
-
-## Concepts (Основные понятия)
-
-### Naming
+## Concepts
 
 Naming based on [Stidy existing AuthNZ concepts](../../rsch/20221105-authnz/README.md).
 
@@ -14,12 +11,13 @@ Naming based on [Stidy existing AuthNZ concepts](../../rsch/20221105-authnz/READ
 - **Profile**: Linked to login, personal data and other application specific information
 - **Principal**: An unique key which can be used in ACL (список управления доступом)
   - Login | Group | Role
-- **Role (Роль)**. A schema-level principal (predefined group)
+- **Role**: A schema-level principal (predefined group)
   - Allows to create predefined ACLs
   - Examples
     - unTill: Waiter, Waiter+, Manager
     - PK: Executor, Executor+, Manager
-- **Group (Группа)**: A workspace-level principal
+- **Global Role**: See [here](groles.md)  
+- **Group**: A workspace-level principal
 - **PrincipalToken**: A token which authenticates principals.
   - Login + Role memberships
 - **ACL**: Acces Control List (список управления доступом)
@@ -42,19 +40,19 @@ Naming based on [Stidy existing AuthNZ concepts](../../rsch/20221105-authnz/READ
 
 |Step   |Actor      | Served by   |
 |-      |---------- | ----------  |
-|Send a request to the QueryProcessor |Subject |
-|Authenticate Principal|QueryProcessor |IAuthenticator.Authenticate()
-|Authorize EXECUTE operation|QueryProcessor |IAuthorizer.Authorize()
-|Opt: Authorize READ operation|QueryProcessor|IAuthorizer.Authorize()
+|Send a request to the QueryProcessor |Subject ||
+|Authenticate Principal|QueryProcessor |IAuthenticator.Authenticate()|
+|Authorize EXECUTE operation|QueryProcessor |IAuthorizer.Authorize()|
+|Opt: Authorize READ operation|QueryProcessor|IAuthorizer.Authorize()|
 
 ### Command AuthNZ process
 
 |Step|Actor|Served by|
 |-|-|-|
-|Send a request to the CommandProcessor|Subject |
-|Authenticate Principal|CommandProcessor |IAuthenticator.Authenticate()
-|Authorize EXECUTE operation|CommandProcessor |IAuthorizer.Authorize()
-|Authorize fields CREATE/UPDATE|CommandProcessor |IAuthenticator.Authorize() 
+|Send a request to the CommandProcessor|Subject ||
+|Authenticate Principal|CommandProcessor |IAuthenticator.Authenticate()|
+|Authorize EXECUTE operation|CommandProcessor |IAuthorizer.Authorize()|
+|Authorize fields CREATE/UPDATE|CommandProcessor |IAuthenticator.Authorize() |
 
 ### Roles (by Copilot)
 
