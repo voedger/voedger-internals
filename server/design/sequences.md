@@ -327,13 +327,12 @@ type ISequencer interface {
 
   // Actualize cancels Sequencing Transaction and starts the Actualization process.
   // Panics if Actualization is already in progress.
-  // Panics if Sequencing Transaction is not in progress.
-  // Flow:
+    // Flow:
   // - Mark Sequencing Transaction as not in progress
-  // - Cancel and wait Flushing
-  // - Empty LRU
   // - Do Actualization process
-  // - Write next PLogOffset
+  //   - Cancel and wait Flushing
+  //   - Empty LRU
+  //   - Write next PLogOffset
   Actualize()
 
 }
@@ -475,11 +474,9 @@ func (s *sequencer) batcher(ctx ctx.Context, values []SeqValue, offset PLogOffse
 
 // Actualize implements isequencer.ISequencer.Actualize.
 // Flow:
-// - Validate Sequencing Transaction status (s.currentWSID != 0)
 // - Validate Actualization status (s.actualizerInProgress is false)
 // - Set s.actualizerInProgress to true
 // - Set s.actualizerCtxCancel, s.actualizerWG
-// - Clean s.lru, s.nextOffset, s.currentWSID, s.currentWSKind, s.toBeFlushed, s.inproc, s.toBeFlushedOffset
 // - Start the actualizer() goroutine
 func (s *sequencer) Actualize() {
   // ...
@@ -494,7 +491,7 @@ Flow:
   - s.cancelFlusherCtx()
   - Wait for s.flusherWG
   - s.flusherWG = nil
-- Clean s.toBeFlushed, toBeFlushedOffset
+- Clean s.lru, s.nextOffset, s.currentWSID, s.currentWSKind, s.toBeFlushed, s.inproc, s.toBeFlushedOffset
 - s.flusherWG, s.flusherCtxCancel + start flusher() goroutine
 - Read nextPLogOffset from s.params.SeqStorage.ReadNextPLogOffset()
 - Use s.params.SeqStorage.ActualizeSequencesFromPLog() and s.batcher()
