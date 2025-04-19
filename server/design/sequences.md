@@ -495,6 +495,7 @@ Flow:
 - s.flusherWG, s.flusherCtxCancel + start flusher() goroutine
 - Read nextPLogOffset from s.params.SeqStorage.ReadNextPLogOffset()
 - Use s.params.SeqStorage.ActualizeSequencesFromPLog() and s.batcher()
+
 ctx handling:
  - if ctx is closed exit
 
