@@ -58,8 +58,6 @@ sequenceDiagram
 
 ## Technical design
 
-### Requirements
-
 - `~cmp.c.sys.UpdateGlobalRoles~`uncvrd[^1]❓
   - AuthZ: System
 - `~cmp.cdoc.registry.Login.GlobalRoles~`uncvrd[^2]❓: New field in the `Login` table
@@ -73,10 +71,8 @@ ALTER WORKSPACE sys.AppWorkspaceWS (
 );
 ```
 
-- `~tuc.UseGlobalRolesInAuthnz~`uncvrd[^3]❓
-???
+- `~tuc.UseGlobalRolesInAuthz~`uncvrd[^3]❓
 
 [^1]: `[~server.authnz.groles/cmp.c.sys.UpdateGlobalRoles~impl]`
-
 [^2]: `[~server.authnz.groles/cmp.cdoc.registry.Login.GlobalRoles~impl]`
-[^3]: `[~server.authnz.groles/tuc.UseGlobalRolesInAuthnz~impl]`
+[^3]: `[~server.authnz.groles/tuc.UseGlobalRolesInAuthz~impl]`
