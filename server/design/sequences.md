@@ -91,6 +91,9 @@ The `SequencesTrustLevel` setting determines how events and table records are wr
 | 1     | InsertIfNotExists  | Put                       |
 | 2     | Put                | Put                       |
 
+**Note**
+`SequencesTrustLevel` is not used for the case when we're calling `PutPlog()` to mark the event as corrupted. `Put()` always used in this case
+
 ## Analysis
 
 As of March 1, 2025, record ID sequences may overlap, and only 5,000,000,000 IDs are available for OWRecords, since OWRecord IDs start from 322680000131072, while CRecord IDs start from 322685000131072.
@@ -114,7 +117,7 @@ Solutions:
     - ❌ Only 5 billions of OWRecords (ClusterAsRegisterID < ClusterAsCRecordRegisterID)
       - Solution: Configure sequencer to use multiple ranges to avoid collisions
         - 👍Pros: Better control over sequences
-  
+
 ## Solution overview
 
 The proposed approach implements a more efficient and scalable sequence management system through the following principles:
@@ -140,6 +143,7 @@ VVMHost uses cmp.VVMConfig.SequencesTrustLevel.
 
 - `~tuc.SequencesTrustLevelForPLog~`uncvrd[^2]❓
   - When PLog is written then SequencesTrustLevel is used to determine the write mode
+  - Note: except the `update corrupted` case
 - `~tuc.SequencesTrustLevelForWLog~`uncvrd[^3]❓
   - When WLog is written then SequencesTrustLevel is used to determine the write mode
 
@@ -216,12 +220,12 @@ Tests:
 
 - `~test.isequencer.mockISeqStorage~`covered[^23]✅
   - Mock implementation of `isequencer.ISeqStorage` for testing purposes
-- `~test.isequencer.NewMustStartActualization~`uncvrd[^31]❓  
+- `~test.isequencer.NewMustStartActualization~`uncvrd[^31]❓
   - `isequencer.New()` must start the Actualization process, Start() must return `0, false`
   - Design: blocking hook in mockISeqStorage
 - `~test.isequencer.Race~`uncvrd[^32]❓
   - If !t.Short() run something like `go test ./... -count 50 -race`
-  
+
 Some edge case tests:
 
 - `~test.isequencer.LongRecovery~`covered[^24]✅
@@ -242,7 +246,7 @@ Some edge case tests:
       - Recover
       - Mock error on WriteValuesAndOffset
       - Start/Next/Flush must be ok
-      - loop Start/Next/Flush until Start() is not ok (the 6th times till unflushed values exceed the limit)  
+      - loop Start/Next/Flush until Start() is not ok (the 6th times till unflushed values exceed the limit)
 
 #### interface.go
 
@@ -276,7 +280,7 @@ type SeqValue struct {
 }
 
 // To be injected into the ISequencer implementation.
-// 
+//
 type ISeqStorage interface {
 
   // If number is not found, returns 0
@@ -399,7 +403,7 @@ type sequencer struct {
   flusherCtxCancel context.CancelFunc
   // Used to wait for flusher goroutine to exit
   // Set to nil when flusher is not running
-  // Is not accessed concurrently since 
+  // Is not accessed concurrently since
   // - Is accessed by actualizer() and cleanup()
   // - cleanup() first shutdowns the actualizer() then flusher()
   flusherWG  *sync.WaitGroup
@@ -438,7 +442,7 @@ func (s *sequencer) Flush() {
 
 // Next implements isequencer.ISequencer.Next.
 // It ensures thread-safe access to sequence values and handles various caching layers.
-// 
+//
 // Flow:
 // - Validate equencing Transaction status
 // - Get initialValue from s.params.SeqTypes and ensure that SeqID is known
@@ -458,7 +462,7 @@ func (s *sequencer) Next(seqID SeqID) (num Number, err error) {
 }
 
 // batcher processes a batch of sequence values and writes maximum values to storage.
-// 
+//
 // Flow:
 // - Wait until len(s.toBeFlushed) < s.params.MaxNumUnflushedValues
 //   - Lock/Unlock
@@ -467,7 +471,7 @@ func (s *sequencer) Next(seqID SeqID) (num Number, err error) {
 // - s.nextOffset = offset + 1
 // - Store maxValues in s.toBeFlushed: max Number for each SeqValue.Key
 // - s.toBeFlushedOffset = offset + 1
-// 
+//
 func (s *sequencer) batcher(ctx ctx.Context, values []SeqValue, offset PLogOffset) (err error) {
   // ...
 }
@@ -501,7 +505,7 @@ ctx handling:
 
 Error handling:
 - Handle errors with retry mechanism (500ms wait)
-- Retry mechanism must check `ctx` parameter, if exists 
+- Retry mechanism must check `ctx` parameter, if exists
 */
 func (s *sequencer) actualizer(ctx context.Context) {
   // ...
@@ -526,7 +530,7 @@ Flow:
 Error handling:
 
 - Handle errors with retry mechanism (500ms wait)
-- Retry mechanism must check `ctx` parameter, if exists 
+- Retry mechanism must check `ctx` parameter, if exists
 */
 func (s *sequencer) flusher(ctx context.Context) {
   // ...
