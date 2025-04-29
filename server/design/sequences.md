@@ -146,6 +146,7 @@ VVMHost uses cmp.VVMConfig.SequencesTrustLevel.
   - Note: except the `update corrupted` case
 - `~tuc.SequencesTrustLevelForWLog~`uncvrd[^3]❓
   - When WLog is written then SequencesTrustLevel is used to determine the write mode
+  - Note: except the case when the wlog event was already stored before. Consider PutWLog is called to re-apply the last event
 
 ### CP: Handling SequencesTrustLevel for Table Records
 
