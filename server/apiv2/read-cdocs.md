@@ -44,14 +44,14 @@ Also supports [Query constraints](query-constraints.md)
 
 - pkg/processors/query2
   - `IApiPathHandler` implementation for handling `ApiPath_CDocs`
-    - `~cmp.cdocsHandler~`covered[^1]✅
+    - `~cmp.cdocsHandler~`covrd[^1]✅
   - `newQueryProcessorPipeline`: provide API handler for `ApiPath_CDocs`
-    - `~cmp.provideCDocsHandler~`covered[^2]✅
+    - `~cmp.provideCDocsHandler~`covrd[^2]✅
   - check ACL when including referenced objects and/or containers (same as for [/docs](./read-doc.md#components))
 - pkg/sys/it
   - integration test for /cdocs/
-    - `~it.TestQueryProcessor2_CDocs~`covered[^3]✅
+    - `~it.TestQueryProcessor2_CDocs~`covrd[^3]✅
 
 [^1]: `[~server.apiv2.docs/cmp.cdocsHandler~impl]` [pkg/processors/query2/impl_cdocs_handler.go:24:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl_cdocs_handler.go#L24)
-[^2]: `[~server.apiv2.docs/cmp.provideCDocsHandler~impl]` [pkg/processors/query2/impl.go:138:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl.go#L138)
-[^3]: `[~server.apiv2.docs/it.TestQueryProcessor2_CDocs~impl]` [pkg/sys/it/impl_qpv2_test.go:2124:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_qpv2_test.go#L2124)
+[^2]: `[~server.apiv2.docs/cmp.provideCDocsHandler~impl]` [pkg/processors/query2/impl.go:139:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl.go#L139)
+[^3]: `[~server.apiv2.docs/it.TestQueryProcessor2_CDocs~impl]` [pkg/sys/it/impl_qpv2_test.go:2134:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_qpv2_test.go#L2134)

@@ -76,7 +76,7 @@ classDef G fill:#ffffff15, stroke:#999, stroke-width:2px, stroke-dasharray: 5 5
 
 #### pkg/appdef/acl
 
-New function `PublishedTypes` `~cmp.publishedTypes~`covered[^1]✅
+New function `PublishedTypes` `~cmp.publishedTypes~`covrd[^1]✅
 
 ```go
 /*
@@ -114,11 +114,11 @@ for t, ops := range acl.PublishedTypes(ws, role) {
 
 ##### 1. `IApiPathHandler` implementation for handling `ApiPath_Schemas_WorkspaceRole`
 
-`~cmp.schemasRoleHandler~`covered[^2]✅
+`~cmp.schemasRoleHandler~`covrd[^2]✅
 
 ##### 2. `newQueryProcessorPipeline`: provide API handler for `ApiPath_Schemas_WorkspaceRole`
 
-`~cmp.provideSchemasRoleHandler~`covered[^3]✅
+`~cmp.provideSchemasRoleHandler~`covrd[^3]✅
 
 ##### 3. New function `CreateOpenApiSchema`
 
@@ -135,11 +135,11 @@ func CreateOpenApiSchema(writer io.Wrter, ws appdef.IWorkspace, role appdef.QNam
       pubTypesFunc PublishedTypesFunc, meta SchemaMeta) error
 ```
 
-`~cmp.CreateOpenApiSchema~`covered[^4]✅
+`~cmp.CreateOpenApiSchema~`covrd[^4]✅
 
 ##### 4. pkg/sys/it
 
-integration test `~it.TestQueryProcessor2_SchemasRole~`covered[^5]✅
+integration test `~it.TestQueryProcessor2_SchemasRole~`covrd[^5]✅
 
 ## See Also
 
@@ -149,6 +149,6 @@ integration test `~it.TestQueryProcessor2_SchemasRole~`covered[^5]✅
 
 [^1]: `[~server.apiv2.role/cmp.publishedTypes~impl]` [pkg/appdef/acl/provide.go:92:impl](https://github.com/voedger/voedger/blob/main/pkg/appdef/acl/provide.go#L92), [pkg/appdef/acl/provide_test.go:851:test](https://github.com/voedger/voedger/blob/main/pkg/appdef/acl/provide_test.go#L851)
 [^2]: `[~server.apiv2.role/cmp.schemasRoleHandler~impl]` [pkg/processors/query2/impl_schemas_role_handler.go:24:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl_schemas_role_handler.go#L24)
-[^3]: `[~server.apiv2.role/cmp.provideSchemasRoleHandler~impl]` [pkg/processors/query2/impl.go:135:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl.go#L135)
+[^3]: `[~server.apiv2.role/cmp.provideSchemasRoleHandler~impl]` [pkg/processors/query2/impl.go:136:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl.go#L136)
 [^4]: `[~server.apiv2.role/cmp.CreateOpenApiSchema~impl]` [pkg/processors/query2/impl_openapi.go:19:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl_openapi.go#L19)
-[^5]: `[~server.apiv2.role/it.TestQueryProcessor2_SchemasRole~impl]` [pkg/sys/it/impl_qpv2_test.go:2030:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_qpv2_test.go#L2030)
+[^5]: `[~server.apiv2.role/it.TestQueryProcessor2_SchemasRole~impl]` [pkg/sys/it/impl_qpv2_test.go:2038:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_qpv2_test.go#L2038)
