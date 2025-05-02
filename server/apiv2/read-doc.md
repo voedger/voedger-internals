@@ -48,15 +48,15 @@ The following [query constraints](query-constraints.md) can be used:
 
 - pkg/processors/query2
   - `IApiPathHandler` implementation for handling `ApiPath_Docs`
-    - `~cmp.docsHandler~`covered[^1]✅
+    - `~cmp.docsHandler~`covrd[^1]✅
   - `newQueryProcessorPipeline`: provide API handler for `ApiPath_Docs`
-    - `~cmp.provideDocsHandler~`covered[^2]✅
+    - `~cmp.provideDocsHandler~`covrd[^2]✅
   - check ACL when including referenced objects and/or containers `~cmp.includeCheckACL~`uncvrd[^4]❓
 - pkg/sys/it
   - integration test for /docs/
-    - `~it.TestQueryProcessor2_Docs~`covered[^3]✅
+    - `~it.TestQueryProcessor2_Docs~`covrd[^3]✅
 
 [^1]: `[~server.apiv2.docs/cmp.docsHandler~impl]` [pkg/processors/query2/impl_docs_handler.go:21:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl_docs_handler.go#L21)
-[^2]: `[~server.apiv2.docs/cmp.provideDocsHandler~impl]` [pkg/processors/query2/impl.go:128:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl.go#L128)
-[^3]: `[~server.apiv2.docs/it.TestQueryProcessor2_Docs~impl]` [pkg/sys/it/impl_qpv2_test.go:2060:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_qpv2_test.go#L2060)
+[^2]: `[~server.apiv2.docs/cmp.provideDocsHandler~impl]` [pkg/processors/query2/impl.go:129:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl.go#L129)
+[^3]: `[~server.apiv2.docs/it.TestQueryProcessor2_Docs~impl]` [pkg/sys/it/impl_qpv2_test.go:2068:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_qpv2_test.go#L2068)
 [^4]: `[~server.apiv2.docs/cmp.includeCheckACL~impl]`

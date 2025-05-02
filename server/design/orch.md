@@ -66,7 +66,7 @@ VVMHost creates a VVM instance and launches it. VVM acquires leadership and star
 
 - **pkg/vvm**
 
-  - `~VVMConfig.Orch~`covered[^1]✅
+  - `~VVMConfig.Orch~`covrd[^1]✅
   ```golang
   type NumVVM uint32
   type VVMConfig {
@@ -78,36 +78,36 @@ VVMHost creates a VVM instance and launches it. VVM acquires leadership and star
 
 - **pkg/ielections**
   - Purpose: Describe and implement the interface to acquire and manage leadership for a given key
-  - `~IElections~`covered[^2]✅
-  - `~ITTLStorage~`covered[^3]✅
+  - `~IElections~`covrd[^2]✅
+  - `~ITTLStorage~`covrd[^3]✅
     - Interface with methods InsertIfNotExist(), CompareAndSwap(), CompareAndDelete(). To be injected into IElection implementation.
-  - `~elections~`covered[^4]✅
+  - `~elections~`covrd[^4]✅
     - Implementation of IElections
-  - `~ElectionsTestSuite~`covered[^5]✅
+  - `~ElectionsTestSuite~`covrd[^5]✅
     - Single test function that runs multiple tests against `IElections`
     - It will be used from the components that provide ITTLStorage (pkg/vvm/storage)
-  - `~ttlStorageMock~`covered[^26]✅
+  - `~ttlStorageMock~`covrd[^26]✅
     - Mock implementation of ITTLStorage
-  - `~ElectionsTest~`covered[^6]✅
+  - `~ElectionsTest~`covrd[^6]✅
     - Test that uses `ElectionsTestSuite` and ttlStorageMock to test `elections`
 - **pkg/vvm/storage**
-  - `~ISysVvmStorage~`covered[^7]✅
+  - `~ISysVvmStorage~`covrd[^7]✅
     - Interface to work with sysvvm keyspace
-  - `~TTLStorageTest~`covered[^28]✅
+  - `~TTLStorageTest~`covrd[^28]✅
     - Test ITTLStorage using mem provider for IAppStorage
-  - `~NewElectionsTTLStorage~`covered[^8]✅
+  - `~NewElectionsTTLStorage~`covrd[^8]✅
     - Implementation of ITTLStorage
     - `NewElectionsTTLStorage(ISysVvmStorage) elections.ITTLStorage[TTLStorageImplKey, string]`
     - uses `keyspace(sysvvm)` and keys prefixed with `pKeyPrefix_VVMLeader = 1`
   - Incapsulates possible values of `pKeyPrefix`
-  - `~ElectionsByDriverTests~`covered[^9]✅
+  - `~ElectionsByDriverTests~`covrd[^9]✅
     - Test IELections using TTLStorage backed by different IAppStorage drivers
     - `ielections.ElectionsTestSuite`
-    - `~VVM.test.TTLStorageMem~`covered[^20]✅
-    - `~VVM.test.TTLStorageCas~`covered[^21]✅
-    - `~VVM.test.TTLStorageDyn~`covered[^22]✅
-    - `~VVM.test.TTLStorageBbolt~`covered[^23]✅
-  - `~KeyPrefix_VVMLeader~`covered[^10]✅
+    - `~VVM.test.TTLStorageMem~`covrd[^20]✅
+    - `~VVM.test.TTLStorageCas~`covrd[^21]✅
+    - `~VVM.test.TTLStorageDyn~`covrd[^22]✅
+    - `~VVM.test.TTLStorageBbolt~`covrd[^23]✅
+  - `~KeyPrefix_VVMLeader~`covrd[^10]✅
     - Prefix to store leadership data in keyspace(sysvvm)
 - **pkg/vvm/impl_orch.go**, **pkg/vvm/impl_orch_test.go**
   - orchestration implementation and tests
@@ -149,12 +149,12 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation. (exc
 
 #### VVM.Provide()
 
-- `~VVM.Provide~`covered[^11]✅
+- `~VVM.Provide~`covrd[^11]✅
 - wire `vvm.VVM`: consturct apps, interfaces, Service Pipeline. Do not launch anything
 
 #### VVM.Shutdown()
 
-- `~VVM.Shutdown~`covered[^12]✅
+- `~VVM.Shutdown~`covrd[^12]✅
 - not launched -> panic
 - close(VVM.vvmShutCtx)
 - Wait for `VVM.shutdownedCtx`
@@ -162,7 +162,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation. (exc
 
 #### VVM.Launch() problemCtx
 
-- `~VVM.LaunchVVM~`covered[^13]✅
+- `~VVM.LaunchVVM~`covrd[^13]✅
 - launched already -> panic
 - vvmProblemCtx := VVM.Launch(leadershipAcquisitionDuration)
   - go Shutdowner
@@ -177,7 +177,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation. (exc
 
 #### Shutdowner: go VVM.shutdowner()
 
-- `~VVM.Shutdowner~`covered[^14]✅
+- `~VVM.Shutdowner~`covrd[^14]✅
 - Wait for `VVM.vvmShutCtx`
 - Shutdown everything but `LeadershipMonitor` and `elections`
   - close `VVM.servicesShutCtx` and wait for services to stop
@@ -189,11 +189,11 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation. (exc
 
 #### LeadershipMonitor: go VVM.leadershipMonitor()
 
-- `~LeadershipMonitor~`covered[^15]✅
+- `~LeadershipMonitor~`covrd[^15]✅
 - wait for any of:
   - `VVM.leadershipCtx` (leadership loss)
     - go `killerRoutine`
-      - `~processKillThreshold~`covered[^16]✅: leadershipDurationSecods/4
+      - `~processKillThreshold~`covrd[^16]✅: leadershipDurationSecods/4
       - After `processKillThreshold` seconds kills the process
       - // Never stoped, process must exit and goroutine must die
       - // Yes, this is the anti-patterm "Goroutine/Task/Thread Leak"
@@ -204,7 +204,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation. (exc
 
 #### VVM.tryToAcquireLeadership(leadershipDurationSecods, leadershipAquisitionDuration)
 
-- `~VVM.tryToAcquireLeadership~`covered[^17]✅
+- `~VVM.tryToAcquireLeadership~`covrd[^17]✅
 - Try to acquire leadership during `leadershipAcquisitionDuration`
   - obtain an instance of `elections.IElections`: Interface to acquire and manage leadership for a given key
     - store `VVM.electionsCleanup`
@@ -219,7 +219,7 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation. (exc
 
 #### VVM.updateProblem(err)
 
-- `~VVM.updateProblem~`covered[^18]✅
+- `~VVM.updateProblem~`covrd[^18]✅
 - synchronized via `VVM.problemErrOnce`
   - Close `VVM.problemCtx`
   - Write error to `VVM.problemErrCh` using `VVM.problemErrOnce`
@@ -239,19 +239,19 @@ Each goroutine's lifecycle is controlled by dedicated context cancellation. (exc
 ### Automatic
 
 - Basic
-  - `~VVM.test.Basic~`covered[^19]✅
+  - `~VVM.test.Basic~`covrd[^19]✅
   - provide and launch VVM1
   - wait for successful VVM1 start
   - provide and launch VVM2
   - wait for VVM2 start failure
 - Automatic shutdown on leadership loss
-  - `~VVM.test.Shutdown~`covered[^24]✅
+  - `~VVM.test.Shutdown~`covrd[^24]✅
   - provide and launch a VVM
   - update ttlstorage modify the single value
   - bump mock time
   - expect the VVM shutdown
 - Cancel the leadership on manual shutdown
-  - `~VVM.test.CancelLeadership~`covered[^25]✅
+  - `~VVM.test.CancelLeadership~`covrd[^25]✅
   - provide and launch a VVM
   - shut it down on the launcher side
   - expect that the leadership in canceled
@@ -280,17 +280,17 @@ Flow
 
 ## Footnotes
 
-[^1]: `[~server.design.orch/VVMConfig.Orch~impl]` [pkg/vvm/types.go:176:impl](https://github.com/voedger/voedger/blob/main/pkg/vvm/types.go#L176)
+[^1]: `[~server.design.orch/VVMConfig.Orch~impl]` [pkg/vvm/types.go:177:impl](https://github.com/voedger/voedger/blob/main/pkg/vvm/types.go#L177)
 [^2]: `[~server.design.orch/IElections~impl]` [pkg/ielections/interface.go:12:impl](https://github.com/voedger/voedger/blob/main/pkg/ielections/interface.go#L12)
 [^3]: `[~server.design.orch/ITTLStorage~impl]` [pkg/ielections/interface.go:26:impl](https://github.com/voedger/voedger/blob/main/pkg/ielections/interface.go#L26)
 [^4]: `[~server.design.orch/elections~impl]` [pkg/ielections/impl.go:16:impl](https://github.com/voedger/voedger/blob/main/pkg/ielections/impl.go#L16)
 [^5]: `[~server.design.orch/ElectionsTestSuite~impl]` [pkg/ielections/impl_testsuite.go:19:impl](https://github.com/voedger/voedger/blob/main/pkg/ielections/impl_testsuite.go#L19)
 [^6]: `[~server.design.orch/ElectionsTest~impl]` [pkg/ielections/impl_test.go:12:impl](https://github.com/voedger/voedger/blob/main/pkg/ielections/impl_test.go#L12)
-[^7]: `[~server.design.orch/ISysVvmStorage~impl]` [pkg/vvm/storage/interface.go:7:impl](https://github.com/voedger/voedger/blob/main/pkg/vvm/storage/interface.go#L7)
+[^7]: `[~server.design.orch/ISysVvmStorage~impl]` [pkg/vvm/storage/interface.go:9:impl](https://github.com/voedger/voedger/blob/main/pkg/vvm/storage/interface.go#L9)
 [^8]: `[~server.design.orch/NewElectionsTTLStorage~impl]` [pkg/vvm/storage/provide.go:12:impl](https://github.com/voedger/voedger/blob/main/pkg/vvm/storage/provide.go#L12)
 [^9]: `[~server.design.orch/ElectionsByDriverTests~impl]` [pkg/vvm/storage/impl_electionsbydrivers_test.go:25:impl](https://github.com/voedger/voedger/blob/main/pkg/vvm/storage/impl_electionsbydrivers_test.go#L25)
 [^10]: `[~server.design.orch/KeyPrefix_VVMLeader~impl]` [pkg/vvm/storage/consts.go:12:impl](https://github.com/voedger/voedger/blob/main/pkg/vvm/storage/consts.go#L12)
-[^11]: `[~server.design.orch/VVM.Provide~impl]` [pkg/vvm/provide.go:79:impl](https://github.com/voedger/voedger/blob/main/pkg/vvm/provide.go#L79), [pkg/vvm/wire_gen.go:250:impl](https://github.com/voedger/voedger/blob/main/pkg/vvm/wire_gen.go#L250)
+[^11]: `[~server.design.orch/VVM.Provide~impl]` [pkg/vvm/provide.go:80:impl](https://github.com/voedger/voedger/blob/main/pkg/vvm/provide.go#L80), [pkg/vvm/wire_gen.go:253:impl](https://github.com/voedger/voedger/blob/main/pkg/vvm/wire_gen.go#L253)
 [^12]: `[~server.design.orch/VVM.Shutdown~impl]` [pkg/vvm/impl_orch.go:39:impl](https://github.com/voedger/voedger/blob/main/pkg/vvm/impl_orch.go#L39)
 [^13]: `[~server.design.orch/VVM.LaunchVVM~impl]` [pkg/vvm/impl_orch.go:19:impl](https://github.com/voedger/voedger/blob/main/pkg/vvm/impl_orch.go#L19)
 [^14]: `[~server.design.orch/VVM.Shutdowner~impl]` [pkg/vvm/impl_orch.go:66:impl](https://github.com/voedger/voedger/blob/main/pkg/vvm/impl_orch.go#L66)
