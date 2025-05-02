@@ -61,8 +61,8 @@ We are considering the use of UUIDs as defined in [RFC 4122](https://www.rfc-edi
 
 #### Definitions:
 
-- **GUID/UUID**: A 128-bit value used for unique identification, often with certain bits reserved for version and variant information.
-- **CSPRNG**: Cryptographically Secure Pseudorandom Number Generator, which produces unpredictable and secure random numbers.
+- **GUID/UUID**: A 128-bit identifier used for uniquely identifying objects or records, typically including bits reserved for version and variant information
+- **CSPRNG (Cryptographically Secure Pseudorandom Number Generator)**: A type of random number generator that provides cryptographic-level unpredictability and resistance to prediction or reverse-engineering
 
 #### Comparison of Uniqueness and Security:
 
