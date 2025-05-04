@@ -37,7 +37,6 @@ BLOB data.
 
 ### Result
 
-
 | Code | Description | Body |
 | --- | --- | --- |
 | 201 | Created | blobId, see example below |
@@ -60,6 +59,11 @@ Example response 201:
     "Url": "https://federation.example.com/api/v2/apps/untill/airsbp3/workspaces/12344566789/blobs/1010231232123123"
 }
 ```
+
+### Perimssions
+
+By default, execution of this function is only granted to role `sys.WorkspaceOwner`.
+To allow function for other roles, grant execute permission for command `sys.UploadBLOBHelper` to the role.
 
 ## Technical design
 
