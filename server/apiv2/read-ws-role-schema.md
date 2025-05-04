@@ -151,4 +151,4 @@ integration test `~it.TestQueryProcessor2_SchemasRole~`covrd[^5]✅
 [^2]: `[~server.apiv2.role/cmp.schemasRoleHandler~impl]` [pkg/processors/query2/impl_schemas_role_handler.go:24:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl_schemas_role_handler.go#L24)
 [^3]: `[~server.apiv2.role/cmp.provideSchemasRoleHandler~impl]` [pkg/processors/query2/impl.go:136:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl.go#L136)
 [^4]: `[~server.apiv2.role/cmp.CreateOpenApiSchema~impl]` [pkg/processors/query2/impl_openapi.go:19:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl_openapi.go#L19)
-[^5]: `[~server.apiv2.role/it.TestQueryProcessor2_SchemasRole~impl]` [pkg/sys/it/impl_qpv2_test.go:2038:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_qpv2_test.go#L2038)
+[^5]: `[~server.apiv2.role/it.TestQueryProcessor2_SchemasRole~impl]` [pkg/sys/it/impl_qpv2_test.go:2080:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_qpv2_test.go#L2080)

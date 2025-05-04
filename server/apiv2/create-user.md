@@ -68,24 +68,24 @@ COMMAND CreateEmailLogin (CreateEmailLoginParams, UNLOGGED CreateLoginUnloggedPa
 GRANT EXECUTE ON COMMAND CreateEmailLogin TO sys.Anonymous;
 ```
 
-- declaration in VSQL: `~cmp.registry.CreateEmailLogin.vsql~`uncvrd[^1]❓
-- the extension code: `~cmp.registry.CreateEmailLogin.go~`uncvrd[^2]❓
+- declaration in VSQL: `~cmp.registry.CreateEmailLogin.vsql~`covrd[^1]✅
+- the extension code: `~cmp.registry.CreateEmailLogin.go~`covrd[^2]✅
 
 2) `CreateLogin` must only be allowed to system `~cmp.registry.CreateLogin.vsql~`uncvrd[^3]❓
 
 #### pkg/router
 
-- URL path handler `~cmp.router.UsersCreatePathHandler~`uncvrd[^4]❓:
+- URL path handler `~cmp.router.UsersCreatePathHandler~`covrd[^4]✅:
   - parses the request Body; calculates pseudo-wsid;
   - sends v2 request `c.registry.CreateLogin` to Command Processor
 
 #### pkg/sys/it
 
 - integration test for /users
-  - `~it.TestUsersCreate~`uncvrd[^5]❓
+  - `~it.TestUsersCreate~`covrd[^5]✅
 
-[^1]: `[~server.apiv2.users/cmp.registry.CreateEmailLogin.vsql~impl]`
-[^2]: `[~server.apiv2.users/cmp.registry.CreateEmailLogin.go~impl]`
+[^1]: `[~server.apiv2.users/cmp.registry.CreateEmailLogin.vsql~impl]` [pkg/registry/appws.vsql:106:impl](https://github.com/voedger/voedger/blob/main/pkg/registry/appws.vsql#L106)
+[^2]: `[~server.apiv2.users/cmp.registry.CreateEmailLogin.go~impl]` [pkg/registry/impl_createlogin.go:29:impl](https://github.com/voedger/voedger/blob/main/pkg/registry/impl_createlogin.go#L29)
 [^3]: `[~server.apiv2.users/cmp.registry.CreateLogin.vsql~impl]`
-[^4]: `[~server.apiv2.users/cmp.router.UsersCreatePathHandler~impl]`
-[^5]: `[~server.apiv2.users/it.TestUsersCreate~impl]`
+[^4]: `[~server.apiv2.users/cmp.router.UsersCreatePathHandler~impl]` [pkg/router/impl_apiv2.go:148:impl](https://github.com/voedger/voedger/blob/main/pkg/router/impl_apiv2.go#L148)
+[^5]: `[~server.apiv2.users/it.TestUsersCreate~impl]` [pkg/sys/it/impl_cpv2_test.go:368:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_cpv2_test.go#L368)

@@ -58,14 +58,14 @@ JSON object:
 ### Components
 
 - pkg/router
-  - URL path handler `~cmp.routerDevicesCreatePathHandler~`uncvrd[^1]❓:
+  - URL path handler `~cmp.routerDevicesCreatePathHandler~`covrd[^1]✅:
     - parses the request Body
     - generates, login, password and pseudo-wsid
     - sends v2 request `c.registry.CreateLogin` to Command Processor
-    - ??? handles the response and replies with the login and Password
+    - handles the response and replies with the login and Password
 - pkg/sys/it
   - integration test for /users
-    - `~it.TestDevicesCreate~`uncvrd[^2]❓
+    - `~it.TestDevicesCreate~`covrd[^2]✅
 
-[^1]: `[~server.apiv2.devices/cmp.routerDevicesCreatePathHandler~impl]`
-[^2]: `[~server.apiv2.devices/it.TestDevicesCreate~impl]`
+[^1]: `[~server.apiv2.devices/cmp.routerDevicesCreatePathHandler~impl]` [pkg/router/impl_apiv2.go:190:impl](https://github.com/voedger/voedger/blob/main/pkg/router/impl_apiv2.go#L190)
+[^2]: `[~server.apiv2.devices/it.TestDevicesCreate~impl]` [pkg/sys/it/impl_signupin_test.go:199:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_signupin_test.go#L199)
