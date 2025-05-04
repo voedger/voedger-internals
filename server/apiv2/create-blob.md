@@ -51,6 +51,7 @@ BLOB data.
 | 503 | Service Unavailable | [error object](errors.md) |
 
 Example response 201:
+
 ```json
 {
     "BlobId": "1010231232123123",
