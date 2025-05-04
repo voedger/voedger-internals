@@ -21,6 +21,7 @@ Creates a new BLOB with the uploaded binary data and metadata.
 | Authorization | Bearer {PrincipalToken} |
 | Content-Type | BLOB content type |
 | Blob-Name | BLOB name, optional |
+| TTL | Time to live, specify for temporary BLOB. Only "1d" is supported at the moment. If not specified, the BLOB is stored permanently (default) |
 
 ### Parameters
 
