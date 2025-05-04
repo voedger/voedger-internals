@@ -53,10 +53,10 @@ Example response 201:
 
 ```json
 {
-    "BlobId": "1010231232123123", // Can be either a string (for temporary BLOBs) or an int64 (for permanent BLOBs)
+    "BlobID": "1010231232123123", // Can be either a string (for temporary BLOBs) or an int64 (for permanent BLOBs)
     "ContentType": "image/jpeg",
     "Size": 524288,  
-    "Url": "https://federation.example.com/api/v2/apps/untill/airsbp3/workspaces/12344566789/blobs/1010231232123123"
+    "URL": "https://federation.example.com/api/v2/apps/untill/airsbp3/workspaces/12344566789/blobs/1010231232123123"
 }
 ```
 
