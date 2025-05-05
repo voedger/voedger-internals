@@ -76,8 +76,8 @@
     - [ACL Rules](server/authnz/aclrules.md)
     - [Global Roles](server/authnz/groles.md)
   - Data types
-    - [Types](server/vsql/types.md)
-      - [Small integers](server/vsql/types-small.md)
+    - [Core types](server/vsql/types.md)
+    - [Small integers](server/vsql/types-small.md)
     - [Uniques With Multiple Fields](server/vsql/uniques-multi.md)
     - [Verifiable Fields](server/vsql/ver-fields.md)
   - [Workspaces](server/workspaces/README.md)
