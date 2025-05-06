@@ -2,4 +2,4 @@
 
 set -Eeuo pipefail
 
-bash ./trace.sh trace --dry-run --local-voedger
+bash ./trace.sh trace --dry-run --local-voedger "$@"

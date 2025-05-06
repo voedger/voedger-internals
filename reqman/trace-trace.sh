@@ -2,4 +2,4 @@
 
 set -Eeuo pipefail
 
-bash ./trace.sh trace
+bash ./trace.sh trace "$@"

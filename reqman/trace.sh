@@ -26,8 +26,8 @@ while [[ $# -gt 0 ]]; do
             LOCAL_VOEDGER="true"
             shift
             ;;
-        --v)
-            VERBOSE="true"
+        --verbose)
+            VERBOSE="-v"
             shift
             ;;            
         *)
@@ -110,6 +110,7 @@ show_help() {
     echo ""
     echo "Flags:"
     echo "  --dry-run       Run in dry-run mode"
+    echo "  --verbose       Verbose output"
     echo "  --local-voedger Use local voedger repository"
 }
 

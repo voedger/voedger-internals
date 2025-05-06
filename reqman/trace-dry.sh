@@ -2,4 +2,4 @@
 
 set -Eeuo pipefail
 
-bash ./trace.sh trace --dry-run
+bash ./trace.sh trace --dry-run "$@"
