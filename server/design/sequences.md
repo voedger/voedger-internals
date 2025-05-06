@@ -171,7 +171,7 @@ VVMHost uses cmp.VVMConfig.SequencesTrustLevel.
   - When: CP starts processing a request
   - Flow:
     - `partitionID` is calculated using request WSID and amount of partitions declared in AppDeploymentDescriptor [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/vvm/impl_requesthandler.go#L61)
-    - sequencer, err := IAppPartition.Sequencer(PartitionID) err
+    - sequencer, err := IAppPartition.Sequencer() err
     - nextPLogOffest, ok, err := sequencer.Start(wsKind, WSID)
       - if !ok
         - Actualization is in progress
@@ -190,7 +190,7 @@ VVMHost uses cmp.VVMConfig.SequencesTrustLevel.
   - Flow:
     - sequencer.Actualize()
 
-### AppParts: Instantiate sequencer on Application deployment
+### IAppPartions implementation: Instantiate sequencer on Application deployment
 
 `~tuc.InstantiateSequencer~`uncvrd[^9]❓
 
@@ -198,7 +198,7 @@ VVMHost uses cmp.VVMConfig.SequencesTrustLevel.
 - Flow:
   - Instantiate the implementation of the `isequencer.ISeqStorage` (appparts.internal.seqStorage, see below)
   - Instantiate `sequencer := isequencer.New(*isequencer.Params)`
-  - Save `sequencer` to some `map[partitionID]isequencer.Sequencer`
+  - `sequencer` will be returned by  IAppPartition.Sequencer()
 
 ---
 
