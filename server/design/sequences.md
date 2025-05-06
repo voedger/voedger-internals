@@ -198,7 +198,7 @@ VVMHost uses cmp.VVMConfig.SequencesTrustLevel.
 - Flow:
   - Instantiate the implementation of the `isequencer.ISeqStorage` (appparts.internal.seqStorage, see below)
   - Instantiate `sequencer := isequencer.New(*isequencer.Params)`
-  - `sequencer` will be returned by  IAppPartition.Sequencer()
+  - Save `sequencer` so that it will be returned by  IAppPartition.Sequencer()
 
 ---
 
