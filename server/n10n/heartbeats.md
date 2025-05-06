@@ -12,8 +12,8 @@ reqmd.package: server.n10n.heartbeats
 
 ## Technical design
 
-- `~cmp.sys.Workspace.table.Heartbeat30~`uncvrd[^1]❓
+- `~cmp.wsingleton.sys.Workspace.Heartbeat30~`covrd[^1]❓
 - `~it.TestHeartbeat30~`uncvrd[^2]❓
 
-[^1]: `[~server.n10n.heartbeats/cmp.sys.Workspace.table.Heartbeat30~impl]`
+[^1]: `[~server.n10n.heartbeats/cmp.wsingleton.sys.Workspace.Heartbeat30~impl]`
 [^2]: `[~server.n10n.heartbeats/it.TestHeartbeat30~impl]`
