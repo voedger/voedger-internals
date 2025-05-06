@@ -6,10 +6,14 @@ reqmd.package: server.n10n.heartbeats
 
 ## Functional design
 
-- Client subscribes to the sys.Workspace.Heartbeat30 view
+- Client subscribes to the sys.Workspace.table.Heartbeat30
 - Server sends a heartbeat every 30 seconds
+- It is not necessary to insert a record to the Heartbeat30
 
 ## Technical design
 
-- `~cmp.view.Heartbeat30~`
-- `~it.TestHeartbeat30~`
+- `~cmp.sys.Workspace.table.Heartbeat30~`uncvrd[^1]❓
+- `~it.TestHeartbeat30~`uncvrd[^2]❓
+
+[^1]: `[~server.n10n.heartbeats/cmp.sys.Workspace.table.Heartbeat30~impl]`
+[^2]: `[~server.n10n.heartbeats/it.TestHeartbeat30~impl]`
