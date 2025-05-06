@@ -82,5 +82,5 @@ Example result 200:
 [^2]: `[~server.apiv2.auth/it.TestLogin~impl]` [pkg/sys/it/impl_qpv2_test.go:2250:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_qpv2_test.go#L2250)
 [^3]: `[~server.apiv2.auth/cmp.authLoginHandler~impl]` [pkg/processors/query2/impl_auth_login_handler.go:20:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl_auth_login_handler.go#L20)
 [^4]: `[~server.apiv2.auth/cmp.provideAuthLoginHandler~impl]` [pkg/processors/query2/impl.go:142:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl.go#L142)
-[^6]: `[~server.apiv2.auth/cmp.provideAuthLoginPath~impl]` [pkg/processors/query2/impl_openapi.go:237:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl_openapi.go#L237)
-[^7]: `[~server.apiv2.auth/cmp.principalTokenSchema~impl]` [pkg/processors/query2/impl_openapi.go:130:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl_openapi.go#L130)
+[^6]: `[~server.apiv2.auth/cmp.provideAuthLoginPath~impl]` [pkg/processors/query2/impl_openapi.go:238:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl_openapi.go#L238)
+[^7]: `[~server.apiv2.auth/cmp.principalTokenSchema~impl]` [pkg/processors/query2/impl_openapi.go:131:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl_openapi.go#L131)

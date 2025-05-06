@@ -71,4 +71,4 @@ Example result 200:
 [^3]: `[~server.apiv2.auth/cmp.provideAuthRefreshHandler~impl]` [pkg/processors/query2/impl.go:145:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl.go#L145)
 [^4]: `[~server.apiv2.auth/it.TestRefresh~impl]` [pkg/sys/it/impl_qpv2_test.go:2331:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_qpv2_test.go#L2331)
 [^5]: `[~server.apiv2.auth/cmp.authRefreshHandler.refreshToken~impl]`
-[^6]: `[~server.apiv2.auth/cmp.provideAuthRefreshPath~impl]` [pkg/processors/query2/impl_openapi.go:276:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl_openapi.go#L276)
+[^6]: `[~server.apiv2.auth/cmp.provideAuthRefreshPath~impl]` [pkg/processors/query2/impl_openapi.go:277:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl_openapi.go#L277)

@@ -93,6 +93,8 @@ The `SequencesTrustLevel` setting determines how events and table records are wr
 
 ## Analysis
 
+### Sequencing strategies
+
 As of March 1, 2025, record ID sequences may overlap, and only 5,000,000,000 IDs are available for OWRecords, since OWRecord IDs start from 322680000131072, while CRecord IDs start from 322685000131072.
 
 Solutions:
@@ -114,7 +116,16 @@ Solutions:
     - ❌ Only 5 billions of OWRecords (ClusterAsRegisterID < ClusterAsCRecordRegisterID)
       - Solution: Configure sequencer to use multiple ranges to avoid collisions
         - 👍Pros: Better control over sequences
-  
+
+### SequencesTrustLevel: Performance impact
+
+- https://snapshots.raintank.io/dashboard/snapshot/zEW5AQHECtKLIcUeO2PJnmy3nkQDhp9m?orgId=0
+  - Zero SequencesTrustLevel was introduced to the Air performance testbench on 2025-04-29
+  - Latency is increased from 40 ms to 120 ms with spikes up to 160 ms
+  - Testbench throughput reduced from 4000 command per seconds to 1400 cps
+  - CPU usage is decreased from 75% to 42%
+  - So we can make an educated guess that maximum thoughtput would be reduced by 4000 / 1400 * 42 / 75 = 1.6 times
+
 ## Solution overview
 
 The proposed approach implements a more efficient and scalable sequence management system through the following principles:
@@ -132,7 +143,7 @@ This approach decouples memory usage from the total number of workspaces and tra
 
 ### VVMHost: Configure SequencesTrustLevel mode for VVM
 
-`~tuc.VVMConfig.ConfigureSequencesTrustLevel~`uncvrd[^1]❓
+`~tuc.VVMConfig.ConfigureSequencesTrustLevel~`covrd[^1]✅
 
 VVMHost uses cmp.VVMConfig.SequencesTrustLevel.
 
@@ -191,7 +202,7 @@ VVMHost uses cmp.VVMConfig.SequencesTrustLevel.
 ### IAppPartition.Sequencer
 
 - `~cmp.IAppPartition.Sequencer~`uncvrd[^10]❓
-  - Description: Returns `isequencer.ISequencer` for the given `partitionID`
+  - Description: Returns `isequencer.ISequencer`
   - Covers: `tuc.StartSequencesGeneration`
 
 ### VVMConfig.SequencesTrustLevel
@@ -559,14 +570,20 @@ func (s *sequencer) cleanup() {
 - `~cmp.ISeqStorageImplementation.i688~`uncvrd[^20]❓
   - Handle [#688: record ID leads to different tables](https://github.com/voedger/voedger/issues/688)
   - If existing number is less than ??? 322_680_000_000_000 - do not send it to the batcher
-- Uses VVMStorage Adapter
+- Uses VVMSeqStorage Adapter
 
 ### VVMStorage Adapter
 
-`~cmp.VVMStorageAdapter~`covrd[^21]✅: Adapter that reads and writes sequence data to the VVMStorage
+`~cmp.VVMSeqStorageAdapter~`uncvrd[^21]❓: Adapter that reads and writes sequence data to the VVMStorage
 
-- Key: ((KeyPrefixSeqStorage, AppID), WSID, SeqID)
-  - `~cmp.VVMStorageAdapter.KeyPrefixSeqStorage~`covrd[^22]✅: Prefix for the keys in the storage
+- PLogOffset in Partition storage: ((pKeyPrefix_SeqStorage_Part, PartitionID) PLogOffsetCC(0) )
+  - `~cmp.VVMSeqStorageAdapter.KeyPrefixSeqStoragePart~`uncvrd[^33]❓
+  - `~cmp.VVMSeqStorageAdapter.KeyPrefixSeqStoragePart.test~`uncvrd[^34]❓
+  - `~cmp.VVMSeqStorageAdapter.PLogOffsetCC~`uncvrd[^35]❓
+  - `~cmp.VVMSeqStorageAdapter.PLogOffsetCC.test~`uncvrd[^36]❓
+- Numbers: ((pKeyPrefix_SeqStorage_WS, AppID, WSID) SeqID)  
+  - `~cmp.VVMSeqStorageAdapter.KeyPrefixSeqStorageWS~`uncvrd[^37]❓
+  - `~cmp.VVMSeqStorageAdapter.KeyPrefixSeqStorageWS.test~`uncvrd[^38]❓
 
 ---
 
@@ -615,7 +632,7 @@ History:
 
 ## Footnotes
 
-[^1]: `[~server.design.sequences/tuc.VVMConfig.ConfigureSequencesTrustLevel~impl]`
+[^1]: `[~server.design.sequences/tuc.VVMConfig.ConfigureSequencesTrustLevel~impl]` [pkg/vit/impl.go:84:impl](https://github.com/voedger/voedger/blob/main/pkg/vit/impl.go#L84), [pkg/vvm/impl_cfg.go:59:impl](https://github.com/voedger/voedger/blob/main/pkg/vvm/impl_cfg.go#L59)
 [^2]: `[~server.design.sequences/tuc.SequencesTrustLevelForPLog~impl]`
 [^3]: `[~server.design.sequences/tuc.SequencesTrustLevelForWLog~impl]`
 [^4]: `[~server.design.sequences/tuc.SequencesTrustLevelForRecords~impl]`
@@ -632,19 +649,23 @@ History:
 [^15]: `[~server.design.sequences/cmp.sequencer.Next~impl]` [pkg/isequencer/impl.go:194:impl](https://github.com/voedger/voedger/blob/main/pkg/isequencer/impl.go#L194)
 [^16]: `[~server.design.sequences/cmp.sequencer.Flush~impl]` [pkg/isequencer/impl.go:283:impl](https://github.com/voedger/voedger/blob/main/pkg/isequencer/impl.go#L283)
 [^17]: `[~server.design.sequences/cmp.sequencer.Actualize~impl]` [pkg/isequencer/impl.go:443:impl](https://github.com/voedger/voedger/blob/main/pkg/isequencer/impl.go#L443)
-[^18]: `[~server.design.sequences/cmp.ISeqStorageImplementation~impl]` [pkg/appparts/internal/seqstorage/type.go:14:impl](https://github.com/voedger/voedger/blob/main/pkg/appparts/internal/seqstorage/type.go#L14)
-[^19]: `[~server.design.sequences/cmp.ISeqStorageImplementation.New~impl]` [pkg/appparts/internal/seqstorage/provide.go:14:impl](https://github.com/voedger/voedger/blob/main/pkg/appparts/internal/seqstorage/provide.go#L14)
-[^20]: `[~server.design.sequences/cmp.ISeqStorageImplementation.i688~impl]`
-[^21]: `[~server.design.sequences/cmp.VVMStorageAdapter~impl]` [pkg/vvm/storage/impl_seqstorage.go:17:impl](https://github.com/voedger/voedger/blob/main/pkg/vvm/storage/impl_seqstorage.go#L17)
-[^22]: `[~server.design.sequences/cmp.VVMStorageAdapter.KeyPrefixSeqStorage~impl]` [pkg/vvm/storage/consts.go:15:impl](https://github.com/voedger/voedger/blob/main/pkg/vvm/storage/consts.go#L15)
 [^23]: `[~server.design.sequences/test.isequencer.mockISeqStorage~impl]` [pkg/isequencer/types.go:105:impl](https://github.com/voedger/voedger/blob/main/pkg/isequencer/types.go#L105)
+[^31]: `[~server.design.sequences/test.isequencer.NewMustStartActualization~impl]`
+[^32]: `[~server.design.sequences/test.isequencer.Race~impl]`
 [^24]: `[~server.design.sequences/test.isequencer.LongRecovery~impl]` [pkg/isequencer/isequencer_test.go:981:impl](https://github.com/voedger/voedger/blob/main/pkg/isequencer/isequencer_test.go#L981)
 [^25]: `[~server.design.sequences/test.isequencer.MultipleActualizes~impl]` [pkg/isequencer/isequencer_test.go:841:impl](https://github.com/voedger/voedger/blob/main/pkg/isequencer/isequencer_test.go#L841)
 [^26]: `[~server.design.sequences/test.isequencer.FlushPermanentlyFails~impl]` [pkg/isequencer/isequencer_test.go:911:impl](https://github.com/voedger/voedger/blob/main/pkg/isequencer/isequencer_test.go#L911)
+[^18]: `[~server.design.sequences/cmp.ISeqStorageImplementation~impl]` [pkg/appparts/internal/seqstorage/type.go:14:impl](https://github.com/voedger/voedger/blob/main/pkg/appparts/internal/seqstorage/type.go#L14)
+[^19]: `[~server.design.sequences/cmp.ISeqStorageImplementation.New~impl]` [pkg/appparts/internal/seqstorage/provide.go:14:impl](https://github.com/voedger/voedger/blob/main/pkg/appparts/internal/seqstorage/provide.go#L14)
+[^20]: `[~server.design.sequences/cmp.ISeqStorageImplementation.i688~impl]`
+[^21]: `[~server.design.sequences/cmp.VVMSeqStorageAdapter~impl]`
+[^33]: `[~server.design.sequences/cmp.VVMSeqStorageAdapter.KeyPrefixSeqStoragePart~impl]`
+[^34]: `[~server.design.sequences/cmp.VVMSeqStorageAdapter.KeyPrefixSeqStoragePart.test~impl]`
+[^35]: `[~server.design.sequences/cmp.VVMSeqStorageAdapter.PLogOffsetCC~impl]`
+[^36]: `[~server.design.sequences/cmp.VVMSeqStorageAdapter.PLogOffsetCC.test~impl]`
+[^37]: `[~server.design.sequences/cmp.VVMSeqStorageAdapter.KeyPrefixSeqStorageWS~impl]`
+[^38]: `[~server.design.sequences/cmp.VVMSeqStorageAdapter.KeyPrefixSeqStorageWS.test~impl]`
 [^27]: `[~server.design.sequences/it.SequencesTrustLevel0~impl]`
 [^28]: `[~server.design.sequences/it.SequencesTrustLevel1~impl]`
 [^29]: `[~server.design.sequences/it.SequencesTrustLevel2~impl]`
 [^30]: `[~server.design.sequences/it.BuiltInSequences~impl]`
-
-[^31]: `[~server.design.sequences/test.isequencer.NewMustStartActualization~impl]`
-[^32]: `[~server.design.sequences/test.isequencer.Race~impl]`
