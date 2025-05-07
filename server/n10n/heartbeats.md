@@ -16,7 +16,6 @@ reqmd.package: server.n10n.heartbeats
 
 - `~cmp.wsingleton.Heartbeat30~`covrd[^5]✅
   - No ACL
-- The IN10nBroker interface and implementation are modified according to the functional requirements
 - `~it.Heartbeat30~`covrd[^6]✅
 
 [^1]: `[~server.n10n.heartbeats/freq.Interval30Seconds~impl]` [pkg/in10n/interface.go:31:doc](https://github.com/voedger/voedger/blob/main/pkg/in10n/interface.go#L31), [pkg/in10nmem/impl.go:114:doc](https://github.com/voedger/voedger/blob/main/pkg/in10nmem/impl.go#L114), [pkg/in10nmem/impl.go:406:impl](https://github.com/voedger/voedger/blob/main/pkg/in10nmem/impl.go#L406)
