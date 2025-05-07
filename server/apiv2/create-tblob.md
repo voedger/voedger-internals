@@ -1,17 +1,17 @@
 ---
-reqmd.package: server.apiv2.blobs
+reqmd.package: server.apiv2.tblobs
 ---
 
-# Create/upload a new BLOB
+# Create/upload a temporary BLOB
 
 ## Motivation
 
-Creates a new BLOB with the uploaded binary data
+Creates a temporary BLOB with the uploaded binary data
 
 ## Functional design
 
-- POST `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/docs/{pkg}.{table}/blobs/{fieldName}`
-Creates a new BLOB with the uploaded binary data. The ID of the BLOB is returned in the response and can be used to write the BLOB to specified field of a document or record when creating or updating record.
+- POST `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/tblobs`
+Creates a temporary BLOB with the uploaded binary data. The SUUID of the BLOB is returned in the response and can be used to read the BLOB until it expires.
 
 ### Headers
 
@@ -20,6 +20,7 @@ Creates a new BLOB with the uploaded binary data. The ID of the BLOB is returned
 | Authorization | Bearer {PrincipalToken} |
 | Content-Type | BLOB content type |
 | Blob-Name | BLOB name, optional |
+| TTL | BLOB TTL in seconds, optional. Default is "1d" (other values not supported yet) |
 
 ### Parameters
 
@@ -28,8 +29,6 @@ Creates a new BLOB with the uploaded binary data. The ID of the BLOB is returned
 | owner | string | name of a user who owns the application |
 | app | string | name of an application |
 | wsid | int64 | the ID of workspace |
-| pkg, table | string | identifies a table (document or record) |
-| fieldName | string | name of the field in document which should keep the BLOB |
 
 ### Body
 
@@ -53,7 +52,7 @@ Example response 201:
 
 ```json
 {
-    "BlobID": 123456789, 
+    "BlobSUUID": "cMyxY-HEQHmPnU0JG_UedQ", 
 }
 ```
 
@@ -65,14 +64,7 @@ Example response 201:
 
 ### Components  
 
-- `~cmp.sysBlobOwnerRecord~` extend pkg/sys/Workspace/wdoc.sys.BLOB with new fields:
-  - `OwnerRecord qname NOT NULL`
-  - `OwnerRecordField varchar NOT NULL`
-  - `OwnerRecordID ref`
 - pkg/router
-  - `~cmp.routerBlobsCreatePathHandler~` uncvrd[^1]❓: Create BLOB path handler
+  - `~cmp.routerTBlobsCreatePathHandler~`: Create temporary BLOB path handler
 - pkg/sys/it
-  - `~it.TestBlobsCreate~`uncvrd[^2]: integration test for creating BLOBs  
-
-[^1]: `[~server.apiv2.blobs/cmp.routerBlobsCreatePathHandler~impl]`
-[^2]: `[~server.apiv2.blobs/it.TestBlobsCreate~impl]`
+  - `~it.TestTBlobsCreate~`: integration test for creating temporary BLOBs  

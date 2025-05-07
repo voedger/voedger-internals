@@ -36,6 +36,9 @@
 | **BLOBs** |  |
 | [Create/upload a new BLOB](create-blob.md)                | `POST /api/v2/apps/{owner}/{app}/workspaces/{wsid}/docs/{pkg}.{table}/blobs/{fieldName}`                   |
 | [Retrieve/download the BLOB](read-blob.md)                | `GET /api/v2/apps/{owner}/{app}/workspaces/{wsid}/docs/{pkg}.{table}/{id}/blobs/{fieldName}`          |
+| **Temporary BLOBs** |  |
+| [Create/upload a new BLOB](create-tblob.md)               | `POST /api/v2/apps/{owner}/{app}/workspaces/{wsid}/tblobs`                   |
+| [Retrieve/download the BLOB](read-tblob.md)               | `GET /api/v2/apps/{owner}/{app}/workspaces/{wsid}/tblobs/{suuid}`          |
 | **Extensions** | |
 | [Execute Command](execute-command.md)                     | `POST /api/v2/apps/{owner}/{app}/workspaces/{wsid}/commands/{pkg}.{command}`|
 | [Read from Query](read-from-query.md)                     | `GET /api/v2/apps/{owner}/{app}/workspaces/{wsid}/queries/{pkg}.{query}`   |
