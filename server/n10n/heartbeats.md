@@ -6,7 +6,7 @@ reqmd.package: server.n10n.heartbeats
 
 ## Functional design
 
-- Client subscribes to the `cmp.wsingleton.Heartbeat30` table in any workspace
+- Client subscribes to the `sys.Heartbeat` table in any workspace
   - `~freq.Interval30Seconds~`covrd[^1]✅: Server sends heartbeat every 30 seconds
   - `~freq.ZeroKey~`covrd[^2]✅:  Heartbeat is generated for `AppQName{}` and `NullWSID`
   - `~freq.SingleNotification~`covrd[^4]✅: If the client subscribes to `cmp.wsingleton.Heartbeat30` in multiple workspaces, the server sends only one heartbeat per 30 seconds to the client
