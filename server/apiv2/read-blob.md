@@ -6,11 +6,11 @@ reqmd.package: server.apiv2.blobs
 
 ## Motivation
 
-Retrieve the BLOB data or metadata using API
+Retrieve the BLOB from the field of a document or record, using API
 
 ## Functional design
 
-GET `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/blobs/{blobId}`
+GET `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/docs/{pkg}.{table}/{id}/blobs/{fieldName}`
 
 ### Headers
 
@@ -25,7 +25,9 @@ GET `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/blobs/{blobId}`
 | owner | string | name of a user who owns the application |
 | app | string | name of an application |
 | wsid | int64 | the ID of workspace |
-| blobId | int64 | ID of a BLOB |
+| pkg, table | string | identifies a table (document or record) |
+| id | int64 | ID of a document or record |
+| fieldName | string | name of the field containing the BLOB |
 
 ### Response Headers
 

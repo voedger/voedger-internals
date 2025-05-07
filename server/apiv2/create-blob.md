@@ -10,9 +10,8 @@ Creates a new BLOB with the uploaded binary data
 
 ## Functional design
 
-POST `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/blobs`
-
-Creates a new BLOB with the uploaded binary data and metadata.
+- POST `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/blobs`
+Creates a new BLOB with the uploaded binary data and metadata. The SUUID of the BLOB is returned in the response and can be used to write the BLOB to field of a document or record when creating or updating record.
 
 ### Headers
 
@@ -39,7 +38,7 @@ BLOB data.
 
 | Code | Description | Body |
 | --- | --- | --- |
-| 201 | Created | blobId, see example below |
+| 201 | Created | blob SUUID, see example below |
 | 400 | Bad Request | [error object](errors.md) |
 | 401 | Unauthorized | [error object](errors.md) |
 | 403 | Forbidden | [error object](errors.md) |
@@ -53,7 +52,7 @@ Example response 201:
 
 ```json
 {
-    "BlobID": "1010231232123123", // Can be either a string (for temporary BLOBs) or an int64 (for permanent BLOBs)
+    "SUUID": "fnB6fRCHrPqStSXYEs7W73", 
     "ContentType": "image/jpeg",
     "Size": 524288,  
     "URL": "https://federation.example.com/api/v2/apps/untill/airsbp3/workspaces/12344566789/blobs/1010231232123123"
@@ -62,19 +61,20 @@ Example response 201:
 
 ### Perimssions
 
-By default, execution of this function is only granted to role `sys.WorkspaceOwner`.
-To allow function for other roles, grant execute permission for command `sys.UploadBLOBHelper` to the role.
+- Execution of this function is granted to role `sys.BLOBUploader` which is by default granted to `sys.WorkspaceOwner`.
 
 ## Technical design
 
 ### Components  
 
 - pkg/router
-  - URL path handler `~cmp.routerBlobsCreatePathHandler~`uncvrd[^1]❓:
-
-- pkg/sys/it
-  - integration test for creating BLOBs
-    - `~it.TestBlobsCreate~`uncvrd[^2]❓
+  - `~cmp.routerBlobsCreatePathHandler~` uncvrd[^1]❓: Create BLOB path handler
+pkg/processors/query2
+  - `~cmp.qpv2ReplaceBLOBSUUIDs~` Replace BLOB SUIDs with IDs in query arguments
+pkg/processors/command
+  - `~cmp.cpv2ReplaceBLOBSUUIDs~` Replace BLOB SUIDs with IDs in command arguments and CUD operations
+  - pkg/sys/it
+  - `~it.TestBlobsCreate~`uncvrd[^2]: integration test for creating BLOBs  
 
 [^1]: `[~server.apiv2.blobs/cmp.routerBlobsCreatePathHandler~impl]`
 [^2]: `[~server.apiv2.blobs/it.TestBlobsCreate~impl]`

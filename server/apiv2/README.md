@@ -33,17 +33,15 @@
 | [Deactivate document or record](deactivate-doc.md)        | `DELETE /api/v2/apps/{owner}/{app}/workspaces/{wsid}/docs/{pkg}.{table}/{id}` |
 | [Read document or record](read-doc.md)                    | `GET /api/v2/apps/{owner}/{app}/workspaces/{wsid}/docs/{pkg}.{table}/{id}` |
 | [Read from CDoc Collection](read-cdocs.md)                | `GET /api/v2/apps/{owner}/{app}/workspaces/{wsid}/cdocs/{pkg}.{table}`     |
-| **Extensions** |
+| **Extensions** | |
 | [Execute Command](execute-command.md)                     | `POST /api/v2/apps/{owner}/{app}/workspaces/{wsid}/commands/{pkg}.{command}`|
 | [Read from Query](read-from-query.md)                     | `GET /api/v2/apps/{owner}/{app}/workspaces/{wsid}/queries/{pkg}.{query}`   |
-| **Views** |
+| **Views** | |
 | [Read from View](read-from-view.md)                       | `GET /api/v2/apps/{owner}/{app}/workspaces/{wsid}/views/{pkg}.{view}`      |
-| **BLOBs**
+| **BLOBs** |  |
 | [Create/upload a new BLOB](create-blob.md)                | `POST /api/v2/apps/{owner}/{app}/workspaces/{wsid}/blobs`                   |
 | [Retrieve/download the BLOB](read-blob.md)                | `GET /api/v2/apps/{owner}/{app}/workspaces/{wsid}/blobs/{blobId}`          |
-| [Replace an existing BLOB](replace-blob.md)               | `PUT /api/v2/apps/{owner}/{app}/workspaces/{wsid}/blobs/{blobId}`          |
-| [Delete a BLOB](delete-blob.md)                           | `DELETE /api/v2/apps/{owner}/{app}/workspaces/{wsid}/blobs/{blobId}`          |
-| **Schemas**
+| **Schemas** | |
 | [List app workspaces](list-app-workspaces.md)             | `GET /api/v2/apps/{owner}/{app}/schemas`                                      | 
 | [List workspace roles](list-ws-roles.md)                  | `GET /api/v2/apps/{owner}/{app}/schemas/{pkg}.{workspace}/roles`              |
 | [Read workspace role schema](read-ws-role-schema.md)      | `GET /api/v2/apps/{owner}/{app}/schemas/{pkg}.{workspace}/roles/{pkg}.{role}` |
