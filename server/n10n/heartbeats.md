@@ -6,15 +6,15 @@ reqmd.package: server.n10n.heartbeats
 
 ## Functional design
 
-- Client subscribes to the `sys.Workspace.table.Heartbeat30` table
-- It is not necessary to insert a record to the Heartbeat30
-- Server sends a heartbeat every 30 seconds
+- Client subscribes to the `cmp.wsingleton.Heartbeat30` table in any workspace
+  - `~freq.Interval30Seconds~`: Server sends heartbeat every 30 seconds
+  - `~freq.ZeroKey~`uncvrd[^4]❓:  Heartbeat is generated for `AppQName{}` and `NullWSID`
+  - `~freq.SingleNotification~`: If the client subscribes to `cmp.wsingleton.Heartbeat30` in multiple workspaces, the server sends only one heartbeat per 30 seconds to the client
+- It is not necessary to insert a record to the `Heartbeat30` singleton
 
 ## Technical design
 
-- `~cmp.wsingleton.sys.Workspace.Heartbeat30~`uncvrd[^1]❓
-- `~tuc.SimulateHeartbeat30Updates~`: Simulate Heartbeat30 updates in the notification interface implementation
+- `~cmp.wsingleton.Heartbeat30~`uncvrd[^1]❓
+  - No ACL
+- The IN10nBroker interface and implementation are modified according to the functional requirements
 - `~it.TestHeartbeat30~`uncvrd[^2]❓
-
-[^1]: `[~server.n10n.heartbeats/cmp.wsingleton.sys.Workspace.Heartbeat30~impl]`
-[^2]: `[~server.n10n.heartbeats/it.TestHeartbeat30~impl]`

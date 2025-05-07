@@ -59,5 +59,5 @@ reqmd.package: server.invites
 
 ## Footnotes
 
-[^~Join.InitiateJoinWorkspace~]: `[~server.invites/Join.InitiateJoinWorkspace~impl]` [pkg/sys/invite/impl_initiatejoinworkspace.go:26:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/invite/impl_initiatejoinworkspace.go#L26), [pkg/sys/it/impl_invite_test.go:172:itest](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_invite_test.go#L172)
+[^~Join.InitiateJoinWorkspace~]: `[~server.invites/Join.InitiateJoinWorkspace~impl]` [pkg/sys/invite/impl_initiatejoinworkspace.go:27:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/invite/impl_initiatejoinworkspace.go#L27), [pkg/sys/it/impl_invite_test.go:172:itest](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_invite_test.go#L172)
 [^~Join.InitiateJoinWorkspace.AuthZ~]: `[~server.invites/Join.InitiateJoinWorkspace.AuthZ~impl]`

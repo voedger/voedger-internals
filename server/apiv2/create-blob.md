@@ -70,11 +70,13 @@ Example response 201:
 - pkg/router
   - `~cmp.routerBlobsCreatePathHandler~` uncvrd[^1]❓: Create BLOB path handler
 pkg/processors/query2
-  - `~cmp.qpv2ReplaceBLOBSUUIDs~` Replace BLOB SUIDs with IDs in query arguments
+  - `~cmp.qpv2ReplaceBLOBSUUIDs~`uncvrd[^3]❓ Replace BLOB SUIDs with IDs in query arguments
 pkg/processors/command
-  - `~cmp.cpv2ReplaceBLOBSUUIDs~` Replace BLOB SUIDs with IDs in command arguments and CUD operations
+  - `~cmp.cpv2ReplaceBLOBSUUIDs~`uncvrd[^4]❓ Replace BLOB SUIDs with IDs in command arguments and CUD operations
   - pkg/sys/it
   - `~it.TestBlobsCreate~`uncvrd[^2]: integration test for creating BLOBs  
 
 [^1]: `[~server.apiv2.blobs/cmp.routerBlobsCreatePathHandler~impl]`
 [^2]: `[~server.apiv2.blobs/it.TestBlobsCreate~impl]`
+[^3]: `[~server.apiv2.blobs/cmp.qpv2ReplaceBLOBSUUIDs~impl]`
+[^4]: `[~server.apiv2.blobs/cmp.cpv2ReplaceBLOBSUUIDs~impl]`

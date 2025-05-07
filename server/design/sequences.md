@@ -152,10 +152,10 @@ VVMHost uses cmp.VVMConfig.SequencesTrustLevel.
 
 ### CP: Handling SequencesTrustLevel for Events
 
-- `~tuc.SequencesTrustLevelForPLog~`uncvrd[^2]❓
+- `~tuc.SequencesTrustLevelForPLog~`covrd[^2]✅
   - When PLog is written then SequencesTrustLevel is used to determine the write mode
   - Note: except the `update corrupted` case
-- `~tuc.SequencesTrustLevelForWLog~`uncvrd[^3]❓
+- `~tuc.SequencesTrustLevelForWLog~`covrd[^3]✅
   - When WLog is written then SequencesTrustLevel is used to determine the write mode
   - Note: except the case when the wlog event was already stored before. Consider PutWLog is called to re-apply the last event
 
@@ -212,7 +212,7 @@ VVMHost uses cmp.VVMConfig.SequencesTrustLevel.
 
 ### VVMConfig.SequencesTrustLevel
 
-- `~cmp.VVMConfig.SequencesTrustLevel~`uncvrd[^11]❓
+- `~cmp.VVMConfig.SequencesTrustLevel~`covrd[^11]✅
   - Covers: tuc.VVMConfig.ConfigureSequencesTrustLevel
 
 ---
@@ -579,16 +579,16 @@ func (s *sequencer) cleanup() {
 
 ### VVMStorage Adapter
 
-`~cmp.VVMSeqStorageAdapter~`uncvrd[^21]❓: Adapter that reads and writes sequence data to the VVMStorage
+`~cmp.VVMSeqStorageAdapter~`covrd[^21]✅: Adapter that reads and writes sequence data to the VVMStorage
 
 - PLogOffset in Partition storage: ((pKeyPrefix_SeqStorage_Part, PartitionID) PLogOffsetCC(0) )
-  - `~cmp.VVMSeqStorageAdapter.KeyPrefixSeqStoragePart~`uncvrd[^33]❓
-  - `~cmp.VVMSeqStorageAdapter.KeyPrefixSeqStoragePart.test~`uncvrd[^34]❓
-  - `~cmp.VVMSeqStorageAdapter.PLogOffsetCC~`uncvrd[^35]❓
-  - `~cmp.VVMSeqStorageAdapter.PLogOffsetCC.test~`uncvrd[^36]❓
+  - `~cmp.VVMSeqStorageAdapter.KeyPrefixSeqStoragePart~`covrd[^33]✅
+  - `~cmp.VVMSeqStorageAdapter.KeyPrefixSeqStoragePart.test~`covrd[^34]✅
+  - `~cmp.VVMSeqStorageAdapter.PLogOffsetCC~`covrd[^35]✅
+  - `~cmp.VVMSeqStorageAdapter.PLogOffsetCC.test~`covrd[^36]✅
 - Numbers: ((pKeyPrefix_SeqStorage_WS, AppID, WSID) SeqID)  
-  - `~cmp.VVMSeqStorageAdapter.KeyPrefixSeqStorageWS~`uncvrd[^37]❓
-  - `~cmp.VVMSeqStorageAdapter.KeyPrefixSeqStorageWS.test~`uncvrd[^38]❓
+  - `~cmp.VVMSeqStorageAdapter.KeyPrefixSeqStorageWS~`covrd[^37]✅
+  - `~cmp.VVMSeqStorageAdapter.KeyPrefixSeqStorageWS.test~`covrd[^38]✅
 
 ---
 
@@ -637,9 +637,9 @@ History:
 
 ## Footnotes
 
-[^1]: `[~server.design.sequences/tuc.VVMConfig.ConfigureSequencesTrustLevel~impl]` [pkg/vit/impl.go:84:impl](https://github.com/voedger/voedger/blob/main/pkg/vit/impl.go#L84), [pkg/vvm/impl_cfg.go:59:impl](https://github.com/voedger/voedger/blob/main/pkg/vvm/impl_cfg.go#L59)
-[^2]: `[~server.design.sequences/tuc.SequencesTrustLevelForPLog~impl]`
-[^3]: `[~server.design.sequences/tuc.SequencesTrustLevelForWLog~impl]`
+[^1]: `[~server.design.sequences/tuc.VVMConfig.ConfigureSequencesTrustLevel~impl]` [pkg/vit/impl.go:85:impl](https://github.com/voedger/voedger/blob/main/pkg/vit/impl.go#L85), [pkg/vvm/impl_cfg.go:61:impl](https://github.com/voedger/voedger/blob/main/pkg/vvm/impl_cfg.go#L61)
+[^2]: `[~server.design.sequences/tuc.SequencesTrustLevelForPLog~impl]` [pkg/istructsmem/impl.go:352:impl](https://github.com/voedger/voedger/blob/main/pkg/istructsmem/impl.go#L352)
+[^3]: `[~server.design.sequences/tuc.SequencesTrustLevelForWLog~impl]` [pkg/istructsmem/impl.go:385:impl](https://github.com/voedger/voedger/blob/main/pkg/istructsmem/impl.go#L385)
 [^4]: `[~server.design.sequences/tuc.SequencesTrustLevelForRecords~impl]`
 [^5]: `[~server.design.sequences/tuc.StartSequencesGeneration~impl]`
 [^6]: `[~server.design.sequences/tuc.NextSequenceNumber~impl]`
@@ -647,29 +647,29 @@ History:
 [^8]: `[~server.design.sequences/tuc.ReactualizeSequences~impl]`
 [^9]: `[~server.design.sequences/tuc.InstantiateSequencer~impl]`
 [^10]: `[~server.design.sequences/cmp.IAppPartition.Sequencer~impl]`
-[^11]: `[~server.design.sequences/cmp.VVMConfig.SequencesTrustLevel~impl]`
-[^12]: `[~server.design.sequences/cmp.ISequencer~impl]` [pkg/isequencer/interface.go:46:impl](https://github.com/voedger/voedger/blob/main/pkg/isequencer/interface.go#L46)
-[^13]: `[~server.design.sequences/cmp.sequencer~impl]` [pkg/isequencer/types.go:51:impl](https://github.com/voedger/voedger/blob/main/pkg/isequencer/types.go#L51)
+[^11]: `[~server.design.sequences/cmp.VVMConfig.SequencesTrustLevel~impl]` [pkg/vvm/types.go:181:impl](https://github.com/voedger/voedger/blob/main/pkg/vvm/types.go#L181)
+[^12]: `[~server.design.sequences/cmp.ISequencer~impl]` [pkg/isequencer/interface.go:47:impl](https://github.com/voedger/voedger/blob/main/pkg/isequencer/interface.go#L47)
+[^13]: `[~server.design.sequences/cmp.sequencer~impl]` [pkg/isequencer/types.go:50:impl](https://github.com/voedger/voedger/blob/main/pkg/isequencer/types.go#L50)
 [^14]: `[~server.design.sequences/cmp.sequencer.Start~impl]` [pkg/isequencer/impl.go:25:impl](https://github.com/voedger/voedger/blob/main/pkg/isequencer/impl.go#L25)
 [^15]: `[~server.design.sequences/cmp.sequencer.Next~impl]` [pkg/isequencer/impl.go:194:impl](https://github.com/voedger/voedger/blob/main/pkg/isequencer/impl.go#L194)
 [^16]: `[~server.design.sequences/cmp.sequencer.Flush~impl]` [pkg/isequencer/impl.go:283:impl](https://github.com/voedger/voedger/blob/main/pkg/isequencer/impl.go#L283)
 [^17]: `[~server.design.sequences/cmp.sequencer.Actualize~impl]` [pkg/isequencer/impl.go:443:impl](https://github.com/voedger/voedger/blob/main/pkg/isequencer/impl.go#L443)
-[^23]: `[~server.design.sequences/test.isequencer.mockISeqStorage~impl]` [pkg/isequencer/types.go:105:impl](https://github.com/voedger/voedger/blob/main/pkg/isequencer/types.go#L105)
+[^23]: `[~server.design.sequences/test.isequencer.mockISeqStorage~impl]` [pkg/isequencer/types.go:104:impl](https://github.com/voedger/voedger/blob/main/pkg/isequencer/types.go#L104)
 [^31]: `[~server.design.sequences/test.isequencer.NewMustStartActualization~impl]`
 [^32]: `[~server.design.sequences/test.isequencer.Race~impl]`
-[^24]: `[~server.design.sequences/test.isequencer.LongRecovery~impl]` [pkg/isequencer/isequencer_test.go:981:impl](https://github.com/voedger/voedger/blob/main/pkg/isequencer/isequencer_test.go#L981)
-[^25]: `[~server.design.sequences/test.isequencer.MultipleActualizes~impl]` [pkg/isequencer/isequencer_test.go:841:impl](https://github.com/voedger/voedger/blob/main/pkg/isequencer/isequencer_test.go#L841)
-[^26]: `[~server.design.sequences/test.isequencer.FlushPermanentlyFails~impl]` [pkg/isequencer/isequencer_test.go:911:impl](https://github.com/voedger/voedger/blob/main/pkg/isequencer/isequencer_test.go#L911)
+[^24]: `[~server.design.sequences/test.isequencer.LongRecovery~impl]` [pkg/isequencer/isequencer_test.go:982:impl](https://github.com/voedger/voedger/blob/main/pkg/isequencer/isequencer_test.go#L982)
+[^25]: `[~server.design.sequences/test.isequencer.MultipleActualizes~impl]` [pkg/isequencer/isequencer_test.go:842:impl](https://github.com/voedger/voedger/blob/main/pkg/isequencer/isequencer_test.go#L842)
+[^26]: `[~server.design.sequences/test.isequencer.FlushPermanentlyFails~impl]` [pkg/isequencer/isequencer_test.go:912:impl](https://github.com/voedger/voedger/blob/main/pkg/isequencer/isequencer_test.go#L912)
 [^18]: `[~server.design.sequences/cmp.ISeqStorageImplementation~impl]` [pkg/appparts/internal/seqstorage/type.go:14:impl](https://github.com/voedger/voedger/blob/main/pkg/appparts/internal/seqstorage/type.go#L14)
 [^19]: `[~server.design.sequences/cmp.ISeqStorageImplementation.New~impl]` [pkg/appparts/internal/seqstorage/provide.go:14:impl](https://github.com/voedger/voedger/blob/main/pkg/appparts/internal/seqstorage/provide.go#L14)
 [^20]: `[~server.design.sequences/cmp.ISeqStorageImplementation.i688~impl]`
-[^21]: `[~server.design.sequences/cmp.VVMSeqStorageAdapter~impl]`
-[^33]: `[~server.design.sequences/cmp.VVMSeqStorageAdapter.KeyPrefixSeqStoragePart~impl]`
-[^34]: `[~server.design.sequences/cmp.VVMSeqStorageAdapter.KeyPrefixSeqStoragePart.test~impl]`
-[^35]: `[~server.design.sequences/cmp.VVMSeqStorageAdapter.PLogOffsetCC~impl]`
-[^36]: `[~server.design.sequences/cmp.VVMSeqStorageAdapter.PLogOffsetCC.test~impl]`
-[^37]: `[~server.design.sequences/cmp.VVMSeqStorageAdapter.KeyPrefixSeqStorageWS~impl]`
-[^38]: `[~server.design.sequences/cmp.VVMSeqStorageAdapter.KeyPrefixSeqStorageWS.test~impl]`
+[^21]: `[~server.design.sequences/cmp.VVMSeqStorageAdapter~impl]` [pkg/vvm/storage/impl_seqstorage.go:16:impl](https://github.com/voedger/voedger/blob/main/pkg/vvm/storage/impl_seqstorage.go#L16)
+[^33]: `[~server.design.sequences/cmp.VVMSeqStorageAdapter.KeyPrefixSeqStoragePart~impl]` [pkg/vvm/storage/consts.go:15:impl](https://github.com/voedger/voedger/blob/main/pkg/vvm/storage/consts.go#L15)
+[^34]: `[~server.design.sequences/cmp.VVMSeqStorageAdapter.KeyPrefixSeqStoragePart.test~impl]` [pkg/vvm/storage/consts_test.go:19:impl](https://github.com/voedger/voedger/blob/main/pkg/vvm/storage/consts_test.go#L19), [pkg/vvm/storage/consts_test.go:32:impl](https://github.com/voedger/voedger/blob/main/pkg/vvm/storage/consts_test.go#L32)
+[^35]: `[~server.design.sequences/cmp.VVMSeqStorageAdapter.PLogOffsetCC~impl]` [pkg/vvm/storage/consts.go:23:impl](https://github.com/voedger/voedger/blob/main/pkg/vvm/storage/consts.go#L23)
+[^36]: `[~server.design.sequences/cmp.VVMSeqStorageAdapter.PLogOffsetCC.test~impl]` [pkg/vvm/storage/consts_test.go:38:impl](https://github.com/voedger/voedger/blob/main/pkg/vvm/storage/consts_test.go#L38)
+[^37]: `[~server.design.sequences/cmp.VVMSeqStorageAdapter.KeyPrefixSeqStorageWS~impl]` [pkg/vvm/storage/consts.go:18:impl](https://github.com/voedger/voedger/blob/main/pkg/vvm/storage/consts.go#L18)
+[^38]: `[~server.design.sequences/cmp.VVMSeqStorageAdapter.KeyPrefixSeqStorageWS.test~impl]` [pkg/vvm/storage/consts_test.go:23:impl](https://github.com/voedger/voedger/blob/main/pkg/vvm/storage/consts_test.go#L23), [pkg/vvm/storage/consts_test.go:35:impl](https://github.com/voedger/voedger/blob/main/pkg/vvm/storage/consts_test.go#L35)
 [^27]: `[~server.design.sequences/it.SequencesTrustLevel0~impl]`
 [^28]: `[~server.design.sequences/it.SequencesTrustLevel1~impl]`
 [^29]: `[~server.design.sequences/it.SequencesTrustLevel2~impl]`
