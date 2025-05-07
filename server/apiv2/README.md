@@ -39,10 +39,10 @@
 | **Views** | |
 | [Read from View](read-from-view.md)                       | `GET /api/v2/apps/{owner}/{app}/workspaces/{wsid}/views/{pkg}.{view}`      |
 | **BLOBs** |  |
-| [Create/upload a new BLOB](create-blob.md)                | `POST /api/v2/apps/{owner}/{app}/workspaces/{wsid}/blobs`                   |
+| [Create/upload a new BLOB](create-blob.md)                | `POST /api/v2/apps/{owner}/{app}/workspaces/{wsid}/docs/{pkg}.{table}/blobs/{fieldName}`                   |
 | [Retrieve/download the BLOB](read-blob.md)                | `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/docs/{pkg}.{table}/{id}/blobs/{fieldName}`          |
 | **Schemas** | |
-| [List app workspaces](list-app-workspaces.md)             | `GET /api/v2/apps/{owner}/{app}/schemas`                                      | 
+| [List app workspaces](list-app-workspaces.md)             | `GET /api/v2/apps/{owner}/{app}/schemas`                                      |
 | [List workspace roles](list-ws-roles.md)                  | `GET /api/v2/apps/{owner}/{app}/schemas/{pkg}.{workspace}/roles`              |
 | [Read workspace role schema](read-ws-role-schema.md)      | `GET /api/v2/apps/{owner}/{app}/schemas/{pkg}.{workspace}/roles/{pkg}.{role}` |
 

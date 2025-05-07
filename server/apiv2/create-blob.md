@@ -10,8 +10,8 @@ Creates a new BLOB with the uploaded binary data
 
 ## Functional design
 
-- POST `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/blobs`
-Creates a new BLOB with the uploaded binary data and metadata. The SUUID of the BLOB is returned in the response and can be used to write the BLOB to field of a document or record when creating or updating record.
+- POST `+/api/v2/apps/{owner}/{app}/workspaces/{wsid}/docs/{pkg}.{table}/blobs/{fieldName}`
+Creates a new BLOB with the uploaded binary data and metadata. The ID of the BLOB is returned in the response and can be used to write the BLOB to specified field of a document or record when creating or updating record.
 
 ### Headers
 
@@ -20,7 +20,6 @@ Creates a new BLOB with the uploaded binary data and metadata. The SUUID of the 
 | Authorization | Bearer {PrincipalToken} |
 | Content-Type | BLOB content type |
 | Blob-Name | BLOB name, optional |
-| TTL | Time to live, specify for temporary BLOB. Only "1d" is supported at the moment. If not specified, the BLOB is stored permanently (default) |
 
 ### Parameters
 
@@ -29,6 +28,8 @@ Creates a new BLOB with the uploaded binary data and metadata. The SUUID of the 
 | owner | string | name of a user who owns the application |
 | app | string | name of an application |
 | wsid | int64 | the ID of workspace |
+| pkg, table | string | identifies a table (document or record) |
+| fieldName | string | name of the field in document which should keep the BLOB |
 
 ### Body
 
@@ -52,10 +53,7 @@ Example response 201:
 
 ```json
 {
-    "SUUID": "fnB6fRCHrPqStSXYEs7W73", 
-    "ContentType": "image/jpeg",
-    "Size": 524288,  
-    "URL": "https://federation.example.com/api/v2/apps/untill/airsbp3/workspaces/12344566789/blobs/1010231232123123"
+    "BlobID": 123456789, 
 }
 ```
 
@@ -67,6 +65,10 @@ Example response 201:
 
 ### Components  
 
+- `~cmp.sysBlobOwnerRecord~` extend pkg/sys/Workspace/wdoc.sys.BLOB with new fields:
+  - `OwnerRecord qname NOT NULL`
+  - `OwnerRecordField varchar NOT NULL`
+  - `OwnerRecordID ref`
 - pkg/router
   - `~cmp.routerBlobsCreatePathHandler~` uncvrd[^1]❓: Create BLOB path handler
 pkg/processors/query2
