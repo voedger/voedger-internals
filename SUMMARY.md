@@ -48,8 +48,9 @@
       - BLOBs
         - [Create BLOB](server/apiv2/create-blob.md)
         - [Read BLOB](server/apiv2/read-blob.md)
-        - [Replace BLOB](server/apiv2/replace-blob.md)
-        - [Delete BLOB](server/apiv2/delete-blob.md)
+      - Temporary BLOBs
+        - [Create temporary BLOB](server/apiv2/create-tblob.md)
+        - [Read temporary BLOB](server/apiv2/read-tblob.md)
       - Schemas
         - [List app workspaces](server/apiv2/list-app-workspaces.md)
         - [List workspace roles](server/apiv2/list-ws-roles.md)
@@ -100,7 +101,8 @@
   - [Notifications](server/n10n/n10n.md)
     - [Heartbeats](server/n10n/heartbeats.md)
   - Devices
-    - [Create a new device](server/apiv2/create-device.md)
+    - [Create a new device](server/devices/create-device.md)
+    - [Join device to workspace](server/devices/join-device.md)
   - [Jobs](server/jobs.md)
   - DMBS Drivers
     - [AmazonDB Driver](server/amazondb-driver.md)

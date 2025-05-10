@@ -19,26 +19,27 @@
 
 | Action                                                    | REST API Path                                                                |
 |-----------------------------------------------------------|------------------------------------------------------------------------------|
-| **Authentication** |
+| **Authentication** | |
 | [Creates a new principal token](login.md)                 | `POST /api/v2/apps/{owner}/{app}/auth/login` |
 | [Refreshes a valid principal token](refresh.md)           | `POST /api/v2/apps/{owner}/{app}/auth/refresh` |
-| **Logins** |
+| **Logins** | |
 | [Create(register) a new user](create-user.md)             | `POST /api/v2/apps/{owner}/{app}/users` |
 | [Change user password](change-password.md)                | `POST /api/v2/apps/{owner}/{app}/users/change-password` |
-| **Devices** |
-| [Create(register) a new device](create-device.md)         | `POST /api/v2/apps/{owner}/{app}/devices`                               |
-| **Docs and records** |
+| **Devices** | |
+| [Create(register) a new device](../devices/create-device.md) | `POST /api/v2/apps/{owner}/{app}/devices`                               |
+| [Join device to workspace](../devices/join-device.md)     | `POST /api/v2/apps/{owner}/{app}/workspaces/{wsid}/commands/sys.JoinDevice` |
+| **Docs and records** | |
 | [Create document or record](create-doc.md)                | `POST /api/v2/apps/{owner}/{app}/workspaces/{wsid}/docs/{pkg}.{table}`      |
 | [Update document or record](update-doc.md)                | `PATCH /api/v2/apps/{owner}/{app}/workspaces/{wsid}/docs/{pkg}.{table}/{id}` |
 | [Deactivate document or record](deactivate-doc.md)        | `DELETE /api/v2/apps/{owner}/{app}/workspaces/{wsid}/docs/{pkg}.{table}/{id}` |
 | [Read document or record](read-doc.md)                    | `GET /api/v2/apps/{owner}/{app}/workspaces/{wsid}/docs/{pkg}.{table}/{id}` |
 | [Read from CDoc Collection](read-cdocs.md)                | `GET /api/v2/apps/{owner}/{app}/workspaces/{wsid}/cdocs/{pkg}.{table}`     |
 | **BLOBs** |  |
-| [Create/upload a new BLOB](create-blob.md)                | `POST /api/v2/apps/{owner}/{app}/workspaces/{wsid}/docs/{pkg}.{table}/blobs/{fieldName}`                   |
-| [Retrieve/download the BLOB](read-blob.md)                | `GET /api/v2/apps/{owner}/{app}/workspaces/{wsid}/docs/{pkg}.{table}/{id}/blobs/{fieldName}`          |
+| [Create BLOB](create-blob.md)                             | `POST /api/v2/apps/{owner}/{app}/workspaces/{wsid}/docs/{pkg}.{table}/blobs/{fieldName}`                   |
+| [Read BLOB](read-blob.md)                                 | `GET /api/v2/apps/{owner}/{app}/workspaces/{wsid}/docs/{pkg}.{table}/{id}/blobs/{fieldName}`          |
 | **Temporary BLOBs** |  |
-| [Create/upload a new BLOB](create-tblob.md)               | `POST /api/v2/apps/{owner}/{app}/workspaces/{wsid}/tblobs`                   |
-| [Retrieve/download the BLOB](read-tblob.md)               | `GET /api/v2/apps/{owner}/{app}/workspaces/{wsid}/tblobs/{suuid}`          |
+| [Create temporary BLOB](create-tblob.md)                  | `POST /api/v2/apps/{owner}/{app}/workspaces/{wsid}/tblobs`                   |
+| [Read temporary BLOB](read-tblob.md)                      | `GET /api/v2/apps/{owner}/{app}/workspaces/{wsid}/tblobs/{suuid}`          |
 | **Extensions** | |
 | [Execute Command](execute-command.md)                     | `POST /api/v2/apps/{owner}/{app}/workspaces/{wsid}/commands/{pkg}.{command}`|
 | [Read from Query](read-from-query.md)                     | `GET /api/v2/apps/{owner}/{app}/workspaces/{wsid}/queries/{pkg}.{query}`   |

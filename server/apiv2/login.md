@@ -38,7 +38,7 @@ JSON object:
 
 ### Result
 
-| Code | Description | Body
+| Code | Description | Body |
 | --- | --- | --- |
 | 200 | OK | Returns an access token, see below |
 | 400 | Bad Request | [error object](errors.md) |
