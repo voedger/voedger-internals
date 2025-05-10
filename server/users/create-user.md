@@ -1,5 +1,5 @@
 ---
-reqmd.package: server.apiv2.users
+reqmd.package: server.users
 ---
 
 # Create user
@@ -18,23 +18,29 @@ POST `/api/v2/apps/{owner}/{app}/users`
 | --- | --- |
 | Content-Type | application/json |
 
+### Body
+
+JSON object:
+
+```json
+{
+  "VerifiedEmailToken": "{verified-email-token}",
+  "Password": "{password}",
+  "DisplayName": "{display-name}"
+}
+```
+
 ### Parameters
 
 | Parameter | Type | Description |
 | --- | --- | --- |
+| **Query** | | |
 | owner | string | name of a user who owns the application |
 | app | string | name of an application |
-
-### Body
-
-JSON object:
-```json
-{
-  "VerifiedEmailToken": "token",
-  "Password": "password",
-  "DisplayName": "name"
-}
-```
+| **Body** | | |
+| verified-email-token | string | [verified value token](../vsql/ver-fields.md) for the email |
+| password | string | password for the new user |
+| display-name | string | display name for the new user |
 
 ### Result
 
