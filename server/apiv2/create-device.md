@@ -16,6 +16,7 @@ POST `/api/v2/apps/{owner}/{app}/devices`
 
 | Key | Value |
 | --- | --- |
+| Authorization | Bearer {PrincipalToken} |
 | Content-Type | application/json |
 
 ### Parameters
@@ -28,6 +29,7 @@ POST `/api/v2/apps/{owner}/{app}/devices`
 ### Body
 
 JSON object:
+
 ```json
 {
   "DisplayName": "name"
@@ -44,12 +46,14 @@ JSON object:
 | 403 | Forbidden | [error object](errors.md) |
 | 429 | Too may requests, rate limiting | [error object](errors.md) |
 | 500+ | Server errors / service unavailable | [error object](errors.md) |
- 
+
  Response example 201:
+
 ```json
 {
   "Login": "generated-login",
   "Password": "generated-password",
+  "ProfileWSID": "123456789",
 }
 ```
 
