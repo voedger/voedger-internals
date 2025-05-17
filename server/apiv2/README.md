@@ -20,8 +20,8 @@
 | Action                                                    | REST API Path                                                                |
 |-----------------------------------------------------------|------------------------------------------------------------------------------|
 | **Authentication** | |
-| [Creates a new principal token](login.md)                 | `POST /api/v2/apps/{owner}/{app}/auth/login` |
-| [Refreshes a valid principal token](refresh.md)           | `POST /api/v2/apps/{owner}/{app}/auth/refresh` |
+| [Creates a new principal token](../authnz/login.md)                 | `POST /api/v2/apps/{owner}/{app}/auth/login` |
+| [Refreshes a valid principal token](../authnz/refresh.md)           | `POST /api/v2/apps/{owner}/{app}/auth/refresh` |
 | **Logins** | |
 | [Create(register) a new user](../users/create-user.md)    | `POST /api/v2/apps/{owner}/{app}/users` |
 | [Change user password](../users/change-password.md)       | `POST /api/v2/apps/{owner}/{app}/users/change-password` |

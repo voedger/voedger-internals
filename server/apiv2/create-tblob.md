@@ -65,6 +65,9 @@ Example response 201:
 ### Components  
 
 - pkg/router
-  - `~cmp.routerTBlobsCreatePathHandler~`: Create temporary BLOB path handler
+  - `~cmp.routerTBlobsCreatePathHandler~`uncvrd[^1]❓: Create temporary BLOB path handler
 - pkg/sys/it
-  - `~it.TestTBlobsCreate~`: integration test for creating temporary BLOBs  
+  - `~it.TestTBlobsCreate~`uncvrd[^2]❓: integration test for creating temporary BLOBs  
+
+[^1]: `[~server.apiv2.tblobs/cmp.routerTBlobsCreatePathHandler~impl]`
+[^2]: `[~server.apiv2.tblobs/it.TestTBlobsCreate~impl]`

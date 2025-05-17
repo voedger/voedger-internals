@@ -52,7 +52,9 @@ GET `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/tblobs/{suuid}`
 ### Components  
 
 - pkg/router
-  - `~cmp.routerTBlobsReadPathHandler~`: URL path handler
+  - `~cmp.routerTBlobsReadPathHandler~`uncvrd[^1]❓: URL path handler
 - pkg/sys/it
-  - `~it.TestTBlobsRead~`: integration test for reading BLOBs
-  
+  - `~it.TestTBlobsRead~`uncvrd[^2]❓: integration test for reading BLOBs
+
+[^1]: `[~server.apiv2.blobs/cmp.routerTBlobsReadPathHandler~impl]`
+[^2]: `[~server.apiv2.blobs/it.TestTBlobsRead~impl]`

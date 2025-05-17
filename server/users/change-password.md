@@ -67,5 +67,5 @@ JSON object:
   - integration test for /users
     - `~it.TestQueryProcessor2_UsersChangePassword~`uncvrd[^2]❓
 
-[^1]: `[~server.apiv2.users/cmp.routerUsersChangePasswordPathHandler~impl]`
-[^2]: `[~server.apiv2.users/it.TestQueryProcessor2_UsersChangePassword~impl]`
+[^1]: `[~server.users/cmp.routerUsersChangePasswordPathHandler~impl]`
+[^2]: `[~server.users/it.TestQueryProcessor2_UsersChangePassword~impl]`

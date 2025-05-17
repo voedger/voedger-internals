@@ -1,5 +1,5 @@
 ---
-reqmd.package: server.apiv2.auth
+reqmd.package: server.authnz
 ---
 # Refresh principal token
 
@@ -65,10 +65,3 @@ Example result 200:
 - pkg/sys/it
   - integration test for /refresh
     - `~it.TestRefresh~`covrd[^4]✅
-
-[^1]: `[~server.apiv2.auth/cmp.routerRefreshHandler~impl]` [pkg/router/impl_apiv2.go:216:impl](https://github.com/voedger/voedger/blob/main/pkg/router/impl_apiv2.go#L216)
-[^2]: `[~server.apiv2.auth/cmp.authRefreshHandler~impl]` [pkg/processors/query2/impl_auth_refresh_handler.go:17:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl_auth_refresh_handler.go#L17)
-[^3]: `[~server.apiv2.auth/cmp.provideAuthRefreshHandler~impl]` [pkg/processors/query2/impl.go:145:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl.go#L145)
-[^4]: `[~server.apiv2.auth/it.TestRefresh~impl]` [pkg/sys/it/impl_qpv2_test.go:2331:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_qpv2_test.go#L2331)
-[^5]: `[~server.apiv2.auth/cmp.authRefreshHandler.refreshToken~impl]`
-[^6]: `[~server.apiv2.auth/cmp.provideAuthRefreshPath~impl]` [pkg/processors/query2/impl_openapi.go:277:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl_openapi.go#L277)

@@ -89,8 +89,8 @@ GRANT EXECUTE ON COMMAND CreateEmailLogin TO sys.Anonymous;
 - integration test for /users
   - `~it.TestUsersCreate~`covrd[^5]✅
 
-[^1]: `[~server.apiv2.users/cmp.registry.CreateEmailLogin.vsql~impl]` [pkg/registry/appws.vsql:106:impl](https://github.com/voedger/voedger/blob/main/pkg/registry/appws.vsql#L106)
-[^2]: `[~server.apiv2.users/cmp.registry.CreateEmailLogin.go~impl]` [pkg/registry/impl_createlogin.go:29:impl](https://github.com/voedger/voedger/blob/main/pkg/registry/impl_createlogin.go#L29)
-[^3]: `[~server.apiv2.users/cmp.registry.CreateLogin.vsql~impl]`
-[^4]: `[~server.apiv2.users/cmp.router.UsersCreatePathHandler~impl]` [pkg/router/impl_apiv2.go:148:impl](https://github.com/voedger/voedger/blob/main/pkg/router/impl_apiv2.go#L148)
-[^5]: `[~server.apiv2.users/it.TestUsersCreate~impl]` [pkg/sys/it/impl_cpv2_test.go:368:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_cpv2_test.go#L368)
+[^1]: `[~server.users/cmp.registry.CreateEmailLogin.vsql~impl]` [pkg/registry/appws.vsql:106:impl](https://github.com/voedger/voedger/blob/main/pkg/registry/appws.vsql#L106)
+[^2]: `[~server.users/cmp.registry.CreateEmailLogin.go~impl]` [pkg/registry/impl_createlogin.go:29:impl](https://github.com/voedger/voedger/blob/main/pkg/registry/impl_createlogin.go#L29)
+[^3]: `[~server.users/cmp.registry.CreateLogin.vsql~impl]`
+[^4]: `[~server.users/cmp.router.UsersCreatePathHandler~impl]` [pkg/router/impl_apiv2.go:148:impl](https://github.com/voedger/voedger/blob/main/pkg/router/impl_apiv2.go#L148)
+[^5]: `[~server.users/it.TestUsersCreate~impl]` [pkg/sys/it/impl_cpv2_test.go:368:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_cpv2_test.go#L368)

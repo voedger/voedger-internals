@@ -65,10 +65,12 @@ Joins a device to a workspace. The device must be [created](./create-device.md) 
 ### Components
 
 - pkg/sys
-- `~cmp.sysJoinDevice~` command which joins a device to a workspace
+- `~cmp.sysJoinDevice~`uncvrd[^1]❓ command which joins a device to a workspace
   - `Roles varchar(1024) NOT NULL`
   - `ProfileWSID int64 NOT NULL`
   - Grant execution `sys.JoinDevice` to `sys.WorkspaceOwner` role
 - pkg/sys/it
-  - `~it.TestJoinDevice~`: integration test for joining device to workspace
-  
+  - `~it.TestJoinDevice~`uncvrd[^2]❓: integration test for joining device to workspace
+
+[^1]: `[~server.devices/cmp.sysJoinDevice~impl]`
+[^2]: `[~server.devices/it.TestJoinDevice~impl]`
