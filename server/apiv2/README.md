@@ -45,6 +45,10 @@
 | [Read from Query](read-from-query.md)                     | `GET /api/v2/apps/{owner}/{app}/workspaces/{wsid}/queries/{pkg}.{query}`     |
 | **Views** | |
 | [Read from View](read-from-view.md)                       | `GET /api/v2/apps/{owner}/{app}/workspaces/{wsid}/views/{pkg}.{view}`        |
+| **Notifications** | |
+| Create channel, subscribe and start watching | `POST /api/v2/apps/{owner}/{app}/workspaces/{wsid}/n10n` |
+| Update channel subscriptions and continue watching | `PATCH /api/v2/apps/{owner}/{app}/workspaces/{wsid}/n10n/{channelId}` |
+| Unsubscribe from notifications channel | `DELETE /api/v2/apps/{owner}/{app}/workspaces/{wsid}/n10n/{channelId}` |
 | **Schemas** | |
 | [List app workspaces](list-app-workspaces.md)             | `GET /api/v2/apps/{owner}/{app}/schemas`                                      |
 | [List workspace roles](list-ws-roles.md)                  | `GET /api/v2/apps/{owner}/{app}/schemas/{pkg}.{workspace}/roles`              |
