@@ -25,7 +25,7 @@ GET `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/queries/{pkg}.{query}`
 | pkg, query | string | identifies a query |
 | **Path** | | |
 | [constraints](query-constraints.md) | | Optional query constraints |
-| args | JSON-object | Optional query function arguments |
+| args | URL-encoded JSON-object | Optional query function arguments |
 | **Headers** | | |
 | PrincipalToken | string | Token returned by [login](../apiv2/login.md) |
 
@@ -37,3 +37,21 @@ GET `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/queries/{pkg}.{query}`
 | 401 | Unauthorized | [error object](errors.md) |
 | 403 | Forbidden | [error object](errors.md) |
 | 404 | Query Function Not Found | [error object](errors.md) |
+
+### Example
+
+Example execution of the `sys.Echo` query function with arguments: `{"Text": "Hello world"}` :
+
+```http
+GET /api/v2/apps/test1/app1/workspaces/140737488486402/queries/sys.Echo?args=%7B%22Text%22%3A%22Hello+world%22%7D
+```
+
+Response:
+
+```json
+{ 
+  "results":[
+	  { "Res":"Hello world","sys.Container":"Hello world","sys.QName":"sys.EchoResult" }
+  ]
+}
+```
