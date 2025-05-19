@@ -8,11 +8,6 @@ Read from a query function using API
 
 GET `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/queries/{pkg}.{query}`
 
-### Parameters
-
-- [Query constraints](query-constraints.md)
-- Optional query function argument `&arg=...`
-
 ### Headers
 
 | Key | Value |
@@ -23,10 +18,16 @@ GET `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/queries/{pkg}.{query}`
 
 | Parameter | Type | Description |
 | --- | --- | --- |
+| **Query** | | |
 | owner | string | name of a user who owns the application |
 | app | string | name of an application |
 | wsid | int64 | the ID of workspace |
 | pkg, query | string | identifies a query |
+| **Path** | | |
+| [constraints](query-constraints.md) | | Optional query constraints |
+| args | JSON-object | Optional query function arguments |
+| **Headers** | | |
+| PrincipalToken | string | Token returned by [login](../apiv2/login.md) |
 
 ### Result
 
