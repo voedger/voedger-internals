@@ -50,8 +50,12 @@ Response:
 
 ```json
 { 
-  "results":[
-	  { "Res":"Hello world","sys.Container":"Hello world","sys.QName":"sys.EchoResult" }
+  "results": [
+    {
+      "Res":"Hello world",
+      "sys.Container":"Hello world",
+      "sys.QName":"sys.EchoResult" 
+    }
   ]
 }
 ```
