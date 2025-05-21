@@ -46,9 +46,9 @@
 | **Views** | |
 | [Read from View](read-from-view.md)                       | `GET /api/v2/apps/{owner}/{app}/workspaces/{wsid}/views/{pkg}.{view}`        |
 | **Notifications** | |
-| Create channel, subscribe and start watching | `POST /api/v2/apps/{owner}/{app}/workspaces/{wsid}/n10n` |
-| Update channel subscriptions and continue watching | `PATCH /api/v2/apps/{owner}/{app}/workspaces/{wsid}/n10n/{channelId}` |
-| Unsubscribe from notifications channel | `DELETE /api/v2/apps/{owner}/{app}/workspaces/{wsid}/n10n/{channelId}` |
+| [Create channel, subscribe and start watching](../n10n/create-channel.md) | `POST /api/v2/apps/{owner}/{app}/workspaces/{wsid}/notifications` |
+| [Subscribe to an extra view](../n10n/add-subscription.md) | `PUT /api/v2/apps/{owner}/{app}/workspaces/{wsid}/notifications/{channelId}/subscriptions/{pkg}.{view}` |
+| [Unsubscribe from subscription](../n10n/unsubscribe.md)   | `DELETE /api/v2/apps/{owner}/{app}/workspaces/{wsid}/notifications/{channelId}/subscriptions/{pkg}.{view}` |
 | **Schemas** | |
 | [List app workspaces](list-app-workspaces.md)             | `GET /api/v2/apps/{owner}/{app}/schemas`                                      |
 | [List workspace roles](list-ws-roles.md)                  | `GET /api/v2/apps/{owner}/{app}/schemas/{pkg}.{workspace}/roles`              |
