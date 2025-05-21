@@ -34,7 +34,7 @@ JSON object:
 
 | Parameter | Type | Description |
 | --- | --- | --- |
-| **Query** | | |
+| **Path** | | |
 | owner | string | name of a user who owns the application |
 | app | string | name of an application |
 | **Body** | | |

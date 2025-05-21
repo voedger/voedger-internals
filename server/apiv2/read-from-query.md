@@ -18,12 +18,12 @@ GET `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/queries/{pkg}.{query}`
 
 | Parameter | Type | Description |
 | --- | --- | --- |
-| **Query** | | |
+| **Path** | | |
 | owner | string | name of a user who owns the application |
 | app | string | name of an application |
 | wsid | int64 | the ID of workspace |
 | pkg, query | string | identifies a query |
-| **Path** | | |
+| **Query** | | |
 | [constraints](query-constraints.md) | | Optional query constraints |
 | args | URL-encoded JSON-object | Optional query function arguments |
 | **Headers** | | |

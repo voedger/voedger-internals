@@ -34,7 +34,7 @@ Joins a device to a workspace. The device must be [created](./create-device.md) 
 
 | Parameter | Type | Description |
 | --- | --- | --- |
-| **Query** | | |
+| **Path** | | |
 | owner | string | name of a user who owns the application |
 | app | string | name of an application |
 | wsid | int64 | the ID of workspace |
