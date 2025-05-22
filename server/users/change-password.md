@@ -1,5 +1,5 @@
 ---
-reqmd.package: server.apiv2.users
+reqmd.package: server.users
 ---
 
 # Change password
@@ -19,23 +19,29 @@ POST `/api/v2/apps/{owner}/{app}/users/change-password`
 | Content-Type | application/json |
 | Authorization | Bearer {PrincipalToken} |
 
+### Body
+
+JSON object:
+
+```json
+{
+  "Login": "{login}",
+  "OldPassword": "{old-password}",
+  "NewPassword": "{new-password}",
+}
+```
+
 ### Parameters
 
 | Parameter | Type | Description |
 | --- | --- | --- |
+| **Path** | | |
 | owner | string | name of a user who owns the application |
 | app | string | name of an application |
-
-### Body
-
-JSON object:
-```json
-{
-  "Login": "login",
-  "OldPassword": "old",
-  "NewPassword": "new",
-}
-```
+| **Body** | | |
+| login | string | login of the user |
+| old-password | string | old password of the user |
+| new-password | string | new password of the user |
 
 ### Result
 
@@ -61,5 +67,5 @@ JSON object:
   - integration test for /users
     - `~it.TestQueryProcessor2_UsersChangePassword~`uncvrd[^2]❓
 
-[^1]: `[~server.apiv2.users/cmp.routerUsersChangePasswordPathHandler~impl]`
-[^2]: `[~server.apiv2.users/it.TestQueryProcessor2_UsersChangePassword~impl]`
+[^1]: `[~server.users/cmp.routerUsersChangePasswordPathHandler~impl]`
+[^2]: `[~server.users/it.TestQueryProcessor2_UsersChangePassword~impl]`

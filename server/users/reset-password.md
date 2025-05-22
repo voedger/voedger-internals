@@ -17,7 +17,7 @@
 - `sys/registry/pseudoProfileWSID/q.sys.InitiateResetPasswordByEmail`
   - null auth
   - `loginApp/profileWSID/q.sys.InitiateEmailVerification` is called under the hood with `forRegistry` mark with system auth
-- `sys/refgistry/pseudoProfileWSID/q.sys.IssueVerifiedValueTokenForResetPassword`
+- `sys/registry/pseudoProfileWSID/q.sys.IssueVerifiedValueTokenForResetPassword`
   - null auth
   - `loginApp/profileWSID/q.sys.IssueVerfiedValueToken` is called under the hood with `forRegistry` mark with system auth
 - `sys/registry/pseudoProfileWSID/c.sys.ResetPasswordByEmail`

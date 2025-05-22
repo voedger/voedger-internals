@@ -39,7 +39,7 @@ BLOB data.
 
 | Code | Description | Body |
 | --- | --- | --- |
-| 201 | Created | blob SUUID, see example below |
+| 201 | Created | blob ID, see example below |
 | 400 | Bad Request | [error object](errors.md) |
 | 401 | Unauthorized | [error object](errors.md) |
 | 403 | Forbidden | [error object](errors.md) |
@@ -71,15 +71,9 @@ Example response 201:
   - `OwnerRecordID ref`
 - pkg/router
   - `~cmp.routerBlobsCreatePathHandler~` uncvrd[^1]❓: Create BLOB path handler
-pkg/processors/query2
-  - `~cmp.qpv2ReplaceBLOBSUUIDs~`uncvrd[^3]❓ Replace BLOB SUIDs with IDs in query arguments
-pkg/processors/command
-  - `~cmp.cpv2ReplaceBLOBSUUIDs~`uncvrd[^4]❓ Replace BLOB SUIDs with IDs in command arguments and CUD operations
-  - pkg/sys/it
+- pkg/sys/it
   - `~it.TestBlobsCreate~`uncvrd[^2]: integration test for creating BLOBs  
 
 [^5]: `[~server.apiv2.blobs/cmp.sysBlobOwnerRecord~impl]`
 [^1]: `[~server.apiv2.blobs/cmp.routerBlobsCreatePathHandler~impl]`
-[^3]: `[~server.apiv2.blobs/cmp.qpv2ReplaceBLOBSUUIDs~impl]`
-[^4]: `[~server.apiv2.blobs/cmp.cpv2ReplaceBLOBSUUIDs~impl]`
 [^2]: `[~server.apiv2.blobs/it.TestBlobsCreate~impl]`

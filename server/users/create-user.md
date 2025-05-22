@@ -1,5 +1,5 @@
 ---
-reqmd.package: server.apiv2.users
+reqmd.package: server.users
 ---
 
 # Create user
@@ -18,23 +18,29 @@ POST `/api/v2/apps/{owner}/{app}/users`
 | --- | --- |
 | Content-Type | application/json |
 
+### Body
+
+JSON object:
+
+```json
+{
+  "VerifiedEmailToken": "{verified-email-token}",
+  "Password": "{password}",
+  "DisplayName": "{display-name}"
+}
+```
+
 ### Parameters
 
 | Parameter | Type | Description |
 | --- | --- | --- |
+| **Path** | | |
 | owner | string | name of a user who owns the application |
 | app | string | name of an application |
-
-### Body
-
-JSON object:
-```json
-{
-  "VerifiedEmailToken": "token",
-  "Password": "password",
-  "DisplayName": "name"
-}
-```
+| **Body** | | |
+| verified-email-token | string | [verified value token](../vsql/ver-fields.md) for the email |
+| password | string | password for the new user |
+| display-name | string | display name for the new user |
 
 ### Result
 
@@ -43,7 +49,6 @@ JSON object:
 | 201 | Created | |
 | 400 | Bad Request | [error object](errors.md) |
 | 401 | Unauthorized | [error object](errors.md) |
-| 403 | Forbidden | [error object](errors.md) |
 | 429 | Too may requests, rate limiting | [error object](errors.md) |
 | 500+ | Server errors / service unavailable | [error object](errors.md) |
 
@@ -84,8 +89,8 @@ GRANT EXECUTE ON COMMAND CreateEmailLogin TO sys.Anonymous;
 - integration test for /users
   - `~it.TestUsersCreate~`covrd[^5]✅
 
-[^1]: `[~server.apiv2.users/cmp.registry.CreateEmailLogin.vsql~impl]` [pkg/registry/appws.vsql:106:impl](https://github.com/voedger/voedger/blob/main/pkg/registry/appws.vsql#L106)
-[^2]: `[~server.apiv2.users/cmp.registry.CreateEmailLogin.go~impl]` [pkg/registry/impl_createlogin.go:29:impl](https://github.com/voedger/voedger/blob/main/pkg/registry/impl_createlogin.go#L29)
-[^3]: `[~server.apiv2.users/cmp.registry.CreateLogin.vsql~impl]`
-[^4]: `[~server.apiv2.users/cmp.router.UsersCreatePathHandler~impl]` [pkg/router/impl_apiv2.go:148:impl](https://github.com/voedger/voedger/blob/main/pkg/router/impl_apiv2.go#L148)
-[^5]: `[~server.apiv2.users/it.TestUsersCreate~impl]` [pkg/sys/it/impl_cpv2_test.go:368:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_cpv2_test.go#L368)
+[^1]: `[~server.users/cmp.registry.CreateEmailLogin.vsql~impl]` [pkg/registry/appws.vsql:106:impl](https://github.com/voedger/voedger/blob/main/pkg/registry/appws.vsql#L106)
+[^2]: `[~server.users/cmp.registry.CreateEmailLogin.go~impl]` [pkg/registry/impl_createlogin.go:29:impl](https://github.com/voedger/voedger/blob/main/pkg/registry/impl_createlogin.go#L29)
+[^3]: `[~server.users/cmp.registry.CreateLogin.vsql~impl]`
+[^4]: `[~server.users/cmp.router.UsersCreatePathHandler~impl]` [pkg/router/impl_apiv2.go:148:impl](https://github.com/voedger/voedger/blob/main/pkg/router/impl_apiv2.go#L148)
+[^5]: `[~server.users/it.TestUsersCreate~impl]` [pkg/sys/it/impl_cpv2_test.go:368:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_cpv2_test.go#L368)
