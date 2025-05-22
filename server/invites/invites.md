@@ -140,6 +140,7 @@ stateDiagram-v2
 
 ```mermaid
 stateDiagram-v2
+    ToBeInvited --> ToBeInvited: c.sys.InitiateInvitationByEMail() by Inviter
     Cancelled --> ToBeInvited: c.sys.InitiateInvitationByEMail() by Inviter
     Left --> ToBeInvited: c.sys.InitiateInvitationByEMail() by Inviter
 ```

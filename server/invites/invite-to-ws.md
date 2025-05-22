@@ -11,7 +11,7 @@ reqmd.package: server.invites.invite
 - `~c.sys.Workspace.InitiateInvitationByEMail~`uncvrd[^2]❓
 - `~ap.sys.Workspace.ApplyInvitation~`uncvrd[^3]❓
 
-## c.sys.InitiateInvitationByEMail()
+## c.sys.Workspace.InitiateInvitationByEMail()
 
 - AuthZ: role.sys.WorkspaceAdmin
 - Params
