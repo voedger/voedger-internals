@@ -1,4 +1,10 @@
+---
+reqmd.package: server.invites.invite
+---
+
 # Invite to Workspace
+
+- As a Workspace Owner I want to invite users into workspace with specified roles, so that if they accept it, they are granted to access my workspace
 
 ## c.sys.InitiateInvitationByEMail()
 
@@ -16,7 +22,7 @@
       - ${Email} - Invitee Email
   - EmailSubject
 - Errors
-  - State not in (None, Cancelled, Left, Invited)
+  - `~err.State~`: State not in (None, Cancelled, Left, ToBeInvited)
   - invalid argument EmailTemplate
 - //TODO: EMail => Login must be implemented, currently it is supposed that EMail == Login
 

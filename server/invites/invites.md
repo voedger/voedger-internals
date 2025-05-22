@@ -1,6 +1,16 @@
 # Invites
 
-Invite Users/Devices to Workspaces
+Invite users/devices to workspaces
+
+## Use cases
+
+- [Invite to workspace](invite-to-ws.md)
+- As a workspace owner I want to change invited user's roles
+- As a user, I want to see the list of my workspaces and roles, so that I know what am I available to work with
+- As a user, I want to be able to leave the workspace I'm invited to
+- As a workspace owner I want to ban user to he doesn't have access to my workspace anymore
+
+---
 
 ## Overview
 
@@ -37,19 +47,11 @@ Membership termination:
 - `c.InitiateLeaveWorkspace`: Member voluntarily leaves
 - `c.CancelSentInvite`: Cancels pending invitation
 
-## Motivation
+---
 
-- [Air: Reseller Portal: Invite unTill Payments Users](625718)
-- As a workspace owner I want to invite users into workspace with specified roles, so that if they accept it, they are granted to access my workspace\\
-- As a workspace owner I want to change invited user's roles
-- As a user, I want to see the list of my workspaces and roles, so that I know what am I available to work with
-- As a user, I want to be able to leave the workspace I'm invited to
-- As a workspace owner I want to ban user to he doesn't have access to my workspace anymore
-- [Resellers Portal](https://github.com/untillpro/airs-design/blob/master/resellerportal/usersmgmt.md) 
-- [invites.md](https://github.com/heeus/heeus-design/blob/d9b14d105ef443a2f70cc6fc8530ab42f36a6f5d/workspaces/invites.md)
-- https://github.com/heeus/heeus-design/blob/main/workspaces/invites.md
+## Technical design
 
-## Concepts
+### Data
 
 ```mermaid
     flowchart TD
@@ -74,7 +76,7 @@ Membership termination:
         Invite --- InviteRoles(["Roles"]):::H
         InvitingWorkspace --x Subject["cdoc.sys.Subject"]:::H
 
-    InvitesService([InvitesService]):::S
+    InvitesService([Invites Service]):::S
 
     Subject -.- Invite
     Subject -.- |gives| SubjectRole
@@ -105,15 +107,18 @@ Membership termination:
     classDef H fill:#C9E7B7,color:#333
 
 ```
-## Invite state diagram
 
-### Main sequence
+---
+
+### Invite state diagram
+
 ```mermaid
 stateDiagram-v2
 
     [*] --> ToBeInvited : c.sys.InitiateInvitationByEMail() by Inviter
-    ToBeInvited --> Invited: ap.sys.ApplyInvitation() // send EMail
-
+    
+    ToBeInvited --> Invited: ap.sys.ApplyInvitation()
+    
     Invited --> ToBeInvited: c.sys.InitiateInvitationByEMail() by Inviter
     Invited --> ToBeJoined: c.sys.InitiateJoinWorkspace() by Invitee
     Invited --> Cancelled: c.sys.CancelSentInvite() by Inviter
@@ -131,7 +136,7 @@ stateDiagram-v2
     ToBeCancelled --> Cancelled: ap.sys.ApplyCancelAcceptedInvite()
 ```
 
-### Extra
+**Extra**:
 
 ```mermaid
 stateDiagram-v2
@@ -139,9 +144,11 @@ stateDiagram-v2
     Left --> ToBeInvited: c.sys.InitiateInvitationByEMail() by Inviter
 ```
 
-## Documents
+---
 
-### cdoc.sys.Invite
+### Documents
+
+#### cdoc.sys.Invite
 
 - ID
 - SubjectKind ([User/Device](https://github.com/heeus/core-istructs/blob/b95ff00ea97f3731f58b8d95f71914f29786e6bf/types.go#L81))
@@ -157,9 +164,15 @@ stateDiagram-v2
 - InviteeProfileWSID     // by ap.sys.ApplyJoinWorkspace
 - ActualLogin            // `token.Login`, by ap.sys.ApplyJoinWorkspace
 
-
-### cdoc.sys.Subject
+#### cdoc.sys.Subject
 
 - Login // old stored records -> `Invite.Login` that is actually `c.sys.InitiateInvitationByEMail.Email`, new records (starting from https://github.com/voedger/voedger/issues/1107) - `Invite.ActualLogin` that is login from token
 - SubjectKind ([User/Device](https://github.com/heeus/core-istructs/blob/b95ff00ea97f3731f58b8d95f71914f29786e6bf/types.go#L81))
 - Roles (comma-separated list)
+
+## Background
+
+- [Air: Reseller Portal: Invite unTill Payments Users](625718)
+- [Resellers Portal](https://github.com/untillpro/airs-design/blob/master/resellerportal/usersmgmt.md) 
+- [invites.md](https://github.com/heeus/heeus-design/blob/d9b14d105ef443a2f70cc6fc8530ab42f36a6f5d/workspaces/invites.md)
+- https://github.com/heeus/heeus-design/blob/main/workspaces/invites.md
