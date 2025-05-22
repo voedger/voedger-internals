@@ -6,6 +6,11 @@ reqmd.package: server.invites.invite
 
 - As a Workspace Owner I want to invite users into workspace with specified roles, so that if they accept it, they are granted to access my workspace
 
+## Components
+
+- `~c.sys.Workspace.InitiateInvitationByEMail~`uncvrd[^2]❓
+- `~ap.sys.Workspace.ApplyInvitation~`uncvrd[^3]❓
+
 ## c.sys.InitiateInvitationByEMail()
 
 - AuthZ: role.sys.WorkspaceAdmin
@@ -22,7 +27,7 @@ reqmd.package: server.invites.invite
       - ${Email} - Invitee Email
   - EmailSubject
 - Errors
-  - `~err.State~`: State not in (None, Cancelled, Left, ToBeInvited)
+  - `~err.State~`uncvrd[^1]❓: State not in (None, Cancelled, Left, ToBeInvited)
   - invalid argument EmailTemplate
 - //TODO: EMail => Login must be implemented, currently it is supposed that EMail == Login
 
@@ -54,3 +59,7 @@ activate workspace
   workspace ->> workspace: Update cdoc.Invite State=Invited
 deactivate workspace
 ```
+
+[^1]: `[~server.invites.invite/err.State~impl]`
+[^2]: `[~server.invites.invite/c.sys.Workspace.InitiateInvitationByEMail~impl]`
+[^3]: `[~server.invites.invite/ap.sys.Workspace.ApplyInvitation~impl]`
