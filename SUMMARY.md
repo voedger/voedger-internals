@@ -6,9 +6,9 @@
 
 - [Event Sourcing & CQRS📄](concepts/evsrc/README.md)
 - Editions (deprecated)
-  - [Community Edition📄](concepts/editions/ce.md)
-  - [Standart Edition📄](concepts/editions/se.md)
-  - [Standart Edition (v1)📄](concepts/editions/se1.md)
+  - [Community Edition](concepts/editions/ce.md)
+  - [Standart Edition](concepts/editions/se.md)
+  - [Standart Edition (v1)](concepts/editions/se1.md)
 
 ## 🚀Server
 
@@ -26,7 +26,7 @@
     - [registry](server/design/pkgregistry.md)
 - Features  
   - API Gateway
-    - [API v2](server/apiv2/README.md)
+    - [API v2📄](server/apiv2/README.md)
       - Conventions
         - [API URL](server/apiv2/api-url.md)
         - [HTTP methods and processors](server/apiv2/http-methods-and-processors.md)
