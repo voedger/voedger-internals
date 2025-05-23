@@ -25,7 +25,7 @@ Working with BLOBs (Binary Large Objects).
   - This is the only WRecord that can be referenced from CDocs
   - CDocs reference BLOBs by fields of the `blob` type
   - `blob` type is implemented as a ref to WDoc record
-- `~tuc.HandleBLOBReferences~`uncvrd[^2]❓: Handling references to blob by Command Processor
+- `~tuc.HandleBLOBReferences~`uncvrd[^2]❓: Handling fields of the `blob` type by command processor
 
 ### CP: tuc.HandleBLOBReferences
 
