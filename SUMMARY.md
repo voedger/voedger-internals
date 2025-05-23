@@ -5,7 +5,7 @@
 ## 💡Concepts
 
 - [Event Sourcing & CQRS](concepts/evsrc/README.md)
-- [Editions (deprecated)](concepts/editions/README.md)
+- Editions (deprecated)
   - [Community Edition](concepts/editions/ce.md)
   - [Standart Edition](concepts/editions/se.md)
   - [Standart Edition (v1)](concepts/editions/se1.md)
@@ -57,7 +57,7 @@
         - [Read workspace role schema](server/apiv2/read-ws-role-schema.md)
     - [API v1](server/api-gateway.md)
       - [API Conventions](server/api-conventions.md)
-      - [BLOBs](server/blobs.md)
+      - [BLOBs](server/blobs/blobs0.md)
   - [Admin Endpoint](server/admin-endpoint.md)
   - [Clusters](server/clusters/README.md)
     - [Bootstrap](server/clusters/bootstrap.md)
