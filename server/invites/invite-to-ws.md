@@ -10,6 +10,7 @@ reqmd.package: server.invites.invite
 
 - `~c.sys.Workspace.InitiateInvitationByEMail~`uncvrd[^2]❓
 - `~ap.sys.Workspace.ApplyInvitation~`uncvrd[^3]❓
+- `~it~`uncvrd[^4]❓
 
 ## c.sys.Workspace.InitiateInvitationByEMail()
 
@@ -63,3 +64,4 @@ deactivate workspace
 [^1]: `[~server.invites.invite/err.State~impl]`
 [^2]: `[~server.invites.invite/c.sys.Workspace.InitiateInvitationByEMail~impl]`
 [^3]: `[~server.invites.invite/ap.sys.Workspace.ApplyInvitation~impl]`
+[^4]: `[~server.invites.invite/it~impl]`

@@ -52,6 +52,6 @@ Also supports [Query constraints](query-constraints.md)
   - integration test for /cdocs/
     - `~it.TestQueryProcessor2_CDocs~`covrd[^3]✅
 
-[^1]: `[~server.apiv2.docs/cmp.cdocsHandler~impl]` [pkg/processors/query2/impl_cdocs_handler.go:24:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl_cdocs_handler.go#L24)
+[^1]: `[~server.apiv2.docs/cmp.cdocsHandler~impl]` [pkg/processors/query2/impl_cdocs_handler.go:23:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl_cdocs_handler.go#L23)
 [^2]: `[~server.apiv2.docs/cmp.provideCDocsHandler~impl]` [pkg/processors/query2/impl.go:139:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl.go#L139)
-[^3]: `[~server.apiv2.docs/it.TestQueryProcessor2_CDocs~impl]` [pkg/sys/it/impl_qpv2_test.go:2221:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_qpv2_test.go#L2221)
+[^3]: `[~server.apiv2.docs/it.TestQueryProcessor2_CDocs~impl]` [pkg/sys/it/impl_qpv2_test.go:2228:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_qpv2_test.go#L2228)
