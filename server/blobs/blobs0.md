@@ -1,8 +1,9 @@
-# BLOBs
+# BLOBs, first implementation
 
 ## Upload BLOB
 
-**POST**
+**POST**:
+
 - url: `<federation-domain>/blob/<app-name>/<wsid>`
   - `alpha.dev.mycompany.com/blob/mycompany/airs-bp/127889070?name=blob&mimeType=text/plain`
   - PrincipalToken: header `Authorization`: Bearer `<PrincipalToken>`
@@ -26,7 +27,8 @@ sequenceDiagram
 
 ## Download BLOB
 
-**GET**
+**GET**:
+
 - url: `<federation-domain>/blob/<app-name>/<wsid>/<blobid>`
   - PrincipalToken: cookies/header `Authorization`: Bearer `<PrincipalToken>`
 
@@ -52,12 +54,11 @@ sequenceDiagram
 
 - It is unclear how to AuthZ by blobID
 
-## Related work
+## Background
 
 - [stackexchange.com: Why is 'Bearer' required before the token in 'Authorization' header in a HTTP request?](https://security.stackexchange.com/questions/108662/why-is-bearer-required-before-the-token-in-authorization-header-in-a-http-re)
 
 ### launchpad #!12652
 
-![](../images/download-blob.png)
-
-![](../images/upload-blob.png)
+- ![Download BLOB](../../images/download-blob.png)
+- ![Upload BLOB](../../images/upload-blob.png)

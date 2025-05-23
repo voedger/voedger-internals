@@ -81,6 +81,8 @@
     - [Small integers](server/vsql/types-small.md)
     - [Uniques With Multiple Fields](server/vsql/uniques-multi.md)
     - [Verifiable Fields](server/vsql/ver-fields.md)
+  - [BLOBs](server/blobs/blobs.md)
+    - [BLOBs, first implementation](server/blobs/blobs0.md)
   - [Workspaces](server/workspaces/README.md)
     - [Create Workspace](server/workspaces/create-workspace-v2.md)
     - [Deactivate Workspace](server/workspaces/deactivate-workspace.md)
