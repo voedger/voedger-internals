@@ -1,14 +1,14 @@
 # Table of contents
 
-- [Introduction](README.md)
+- [Introduction📄](README.md)
 
 ## 💡Concepts
 
-- [Event Sourcing & CQRS](concepts/evsrc/README.md)
+- [Event Sourcing & CQRS📄](concepts/evsrc/README.md)
 - Editions (deprecated)
-  - [Community Edition](concepts/editions/ce.md)
-  - [Standart Edition](concepts/editions/se.md)
-  - [Standart Edition (v1)](concepts/editions/se1.md)
+  - [Community Edition📄](concepts/editions/ce.md)
+  - [Standart Edition📄](concepts/editions/se.md)
+  - [Standart Edition (v1)📄](concepts/editions/se1.md)
 
 ## 🚀Server
 
