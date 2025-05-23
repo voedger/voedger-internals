@@ -31,13 +31,15 @@ Working with BLOBs (Binary Large Objects).
 
 - Validate that every modified record its `blob` fields satisifies the following conditions:
   - `~err.BLOBOwnerRecordIDMustBeEmpty~`uncvrd[^3]❓: Target BLOB.OwnerRecordID must be empty
-  - `~err.BLOBOwnershipMismatch~`uncvrd[^4]❓: BLOB.OwnerRecord and BLOB.OwnerRecordField must match the record QName and the field
-  - `~err.DuplicateBLOBReference~`uncvrd[^5]❓: Multiple records in CUD collection cannot refer to the same BLOB
-- `~cmp.UpdateBLOBOwnership~`uncvrd[^6]❓: Operator of the CP that updates the BLOB.OwnerRecordID and BLOB.OwnerRecordField fields in the BLOB table
+  - `~err.BLOBOwnerRecordMismatch~`uncvrd[^4]❓: BLOB.OwnerRecord does not match the record QName
+  - `~err.BLOBOwnerRecordFieldMismatch~`uncvrd[^5]❓: BLOB.OwnerRecordField does not match the record field name
+  - `~err.DuplicateBLOBReference~`uncvrd[^6]❓: Multiple records in CUD collection cannot refer to the same BLOB
+- `~cmp.UpdateBLOBOwnership~`uncvrd[^7]❓: Operator of the CP that updates the BLOB.OwnerRecordID and BLOB.OwnerRecordField fields in the BLOB table
 
-[^1]: `[~server.blobs/wdoc.sys.Workspace.Blob~impl]`
-[^2]: `[~server.blobs/tuc.CPHandleBlobs~impl]`
+[^1]: `[~server.blobs/wdoc.sys.Workspace.BLOB~impl]`
+[^2]: `[~server.blobs/tuc.HandleBLOBReferences~impl]`
 [^3]: `[~server.blobs/err.BLOBOwnerRecordIDMustBeEmpty~impl]`
-[^4]: `[~server.blobs/err.BLOBOwnershipMismatch~impl]`
-[^5]: `[~server.blobs/err.DuplicateBLOBReference~impl]`
-[^6]: `[~server.blobs/cmp.UpdateBLOBOwnership~impl]`
+[^4]: `[~server.blobs/err.BLOBOwnerRecordMismatch~impl]`
+[^5]: `[~server.blobs/err.BLOBOwnerRecordFieldMismatch~impl]`
+[^6]: `[~server.blobs/err.DuplicateBLOBReference~impl]`
+[^7]: `[~server.blobs/cmp.UpdateBLOBOwnership~impl]`
