@@ -19,10 +19,12 @@ Working with BLOBs (Binary Large Objects).
 - BLOB.OwnerRecordField: Name of the field that owns the BLOB
 - CUD collection: Collection of CUDs (Create, Update, Deactivate) that are executed in the same transaction
 
-
 ### Components overview
 
-- `~wdoc.sys.Workspace.BLOB~`uncvrd[^1]❓
+- `~wdoc.sys.Workspace.BLOB~`uncvrd[^1]❓: WDoc for storing BLOB metadata
+  - This is the only WRecord that can be referenced from CDocs
+  - CDocs reference BLOBs by fields of the `blob` type
+  - `blob` type is implemented as a ref to WDoc record
 - `~tuc.HandleBLOBReferences~`uncvrd[^2]❓: Handling references to blob by Command Processor
 
 ### CP: tuc.HandleBLOBReferences
