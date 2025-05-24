@@ -101,6 +101,9 @@
     - [Reset password](server/users/reset-password.md)
     - [Change Email](server/users/change-email.md)
   - [Notifications](server/n10n/n10n.md)
+    - [Create channel and subscribe](server/n10n/create-channel.md)
+    - [Subscribe to an extra view](server/n10n/add-subscription.md)
+    - [Unsubscribe from subscription](server/n10n/unsubscribe.md)
     - [Heartbeats](server/n10n/heartbeats.md)
   - 📁Devices
     - [Create a new device](server/devices/create-device.md)
