@@ -5,7 +5,7 @@
 ## 💡Concepts
 
 - [Event Sourcing & CQRS](concepts/evsrc/README.md)
-- Editions (deprecated)
+- Editions (deprecated)📁
   - [Community Edition](concepts/editions/ce.md)
   - [Standart Edition](concepts/editions/se.md)
   - [Standart Edition (v1)](concepts/editions/se1.md)
@@ -13,7 +13,7 @@
 ## 🚀Server
 
 - [Overview (Server)](server/README.md)
-- Design
+- Design📁
   - [Query Processor](server/design/qp.md)
   - [API Gateway implementation](server/design/agw.md)
   - [N1 Cluster](server/design/c2.n1.md)
@@ -21,62 +21,62 @@
   - [N5 Cluster](server/design/c2.n5.md)
   - [Orchestration](server/design/orch.md)
   - [Sequences](server/design/sequences.md)
-  - Packages overview
+  - Packages overview📁
     - [sys](server/design/pkgsys.md)
     - [registry](server/design/pkgregistry.md)
-- Features  
-  - API Gateway
-    - [API v2📄](server/apiv2/README.md)
-      - Conventions
+- Features📁
+  - API Gateway📁
+    - [API v2](server/apiv2/README.md)
+      - Conventions📁
         - [API URL](server/apiv2/api-url.md)
         - [HTTP methods and processors](server/apiv2/http-methods-and-processors.md)
         - [Naming conventions](server/apiv2/naming-conventions.md)
         - [Query constraints](server/apiv2/query-constraints.md)
         - [Error handling](server/apiv2/errors.md)
-      - Documents and records  
+      - Documents and records📁
         - [Create document or record](server/apiv2/create-doc.md)
         - [Update document or record](server/apiv2/update-doc.md)
         - [Deactivate document or record](server/apiv2/deactivate-doc.md)
         - [Read document or record](server/apiv2/read-doc.md)
         - [Read from CDoc collection](server/apiv2/read-cdocs.md)
-      - Queries
+      - Queries📁
         - [Read from query](server/apiv2/read-from-query.md)
-      - Views
+      - Views📁
         - [Read from view](server/apiv2/read-from-view.md)
-      - Commands
+      - Commands📁
         - [Execute command](server/apiv2/execute-command.md)
-      - BLOBs
+      - BLOBs📁
         - [Create BLOB](server/apiv2/create-blob.md)
         - [Read BLOB](server/apiv2/read-blob.md)
-      - Temporary BLOBs
+      - Temporary BLOBs📁
         - [Create temporary BLOB](server/apiv2/create-tblob.md)
         - [Read temporary BLOB](server/apiv2/read-tblob.md)
-      - Schemas
+      - Schemas📁
         - [List app workspaces](server/apiv2/list-app-workspaces.md)
         - [List workspace roles](server/apiv2/list-ws-roles.md)
         - [Read workspace role schema](server/apiv2/read-ws-role-schema.md)
-    - [API v1📄](server/api-gateway.md)
+    - [API v1](server/api-gateway.md)
       - [API Conventions](server/api-conventions.md)
       - [BLOBs](server/blobs/blobs0.md)
   - [Admin Endpoint](server/admin-endpoint.md)
-  - [Clusters📄](server/clusters/README.md)
+  - [Clusters](server/clusters/README.md)
     - [Bootstrap](server/clusters/bootstrap.md)
     - [Monitoring](server/mon.md)
     - [Secure prometheus and grafana](server/secure-prometheus-grafana.md)
     - [Alerting](server/alerting.md)
-    - Maintenance
+    - Maintenance📁
       - [SELECT, UPDATE](server/clusters/select-update.md)
   - [VVMs](server/vvms/README.md)
-  - Applications
+  - Applications📁
     - [Deploy Application](server/apps/deploy-app.md)
     - [Sidecar Applications](server/sidecarapps.md)
-  - [AuthNZ📄](server/authnz/README.md)
+  - [AuthNZ](server/authnz/README.md)
     - [Issue Principal Token](server/authnz/login.md)
     - [Refresh Principal Token](server/authnz/refresh.md)
     - [Enrich Principal Token](server/authnz/enrich-token.md)
     - [ACL Rules](server/authnz/aclrules.md)
     - [Global Roles](server/authnz/groles.md)
-  - Data types
+  - Data types📁
     - [Core types](server/vsql/types.md)
     - [Small integers](server/vsql/types-small.md)
     - [Uniques With Multiple Fields](server/vsql/uniques-multi.md)
@@ -102,11 +102,11 @@
     - [Change Email](server/users/change-email.md)
   - [Notifications](server/n10n/n10n.md)
     - [Heartbeats](server/n10n/heartbeats.md)
-  - Devices
+  - Devices📁
     - [Create a new device](server/devices/create-device.md)
     - [Join device to workspace](server/devices/join-device.md)
   - [Jobs](server/jobs.md)
-  - DMBS Drivers
+  - DMBS Drivers📁
     - [AmazonDB Driver](server/amazondb-driver.md)
   - Frozen
     - [Ephemeral Storage](server/ephemeral-storage.md)
@@ -115,7 +115,7 @@
 ## 🛠️Framework
 
 - [Overview (Framework)](framework/README.md)
-- Features
+- Features📁
   - [vpm](framework/vpm/README.md)
   - [vpm init](framework/vpm/init.md)
   - [vpm tidy](framework/vpm/tidy.md)
