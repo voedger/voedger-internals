@@ -12,7 +12,8 @@ Retrieve the BLOB from the field of a document or record, using API
 
 GET `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/docs/{pkg}.{table}/{id}/blobs/{fieldName}`
 
-### Headers
+### Headers / Cookies
+Authorization is supported via Bearer token. The token can be passed in the `Authorization` header or as a cookie. The token is obtained during the authentication process.
 
 | Key | Value | Description |
 | --- | --- | --- |
