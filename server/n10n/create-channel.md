@@ -6,11 +6,20 @@ reqmd.package: server.n10n
 
 ## Motivation
 
-As a client, I want to create a channel and subscribe to it, so that I can receive notifications about changes in view(s).
+As a client, I want to create a channel and subscribe to it, so that I can receive notifications about changes in projections.
+
+## Terms
+
+```mermaid
+graph TD
+  Projection[Projection] --> |can be|View[View]
+  Projection[Projection] --> |can be|Heartbeat[Heartbeat]
+```
 
 ## Functional Design
 
-- The client initiates an SSE connection by making POST `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/notifications` with tha payload containing the list of views to subscribe to.
+
+- The client initiates an SSE connection by making POST `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/notifications` with tha payload containing the list of projections to subscribe to.
 - The connection is then kept open, allowing the server to stream events continuously.
 - Client receives events, see [Result](#result)
 
@@ -28,7 +37,7 @@ JSON object:
 
 ```json
 {
-  "Views": [{views}]
+  "Projections": {projections},
   "ExpiresIn": 100, // optional, default is 3600 seconds
 }
 ```
@@ -44,7 +53,12 @@ JSON object:
 | **Headers** | | |
 | PrincipalToken | string | Token returned by [login](../apiv2/login.md) |
 | **Body** | | |
-| views | array of strings | list of views to subscribe to. <br>Example: `"sys.CollectionView", "air.SalesMetrics"` |
+| projections | array of strings | list of projections to subscribe to. Example: `"sys.CollectionView", "air.SalesMetrics"` |
+
+### Heartbeat
+
+When `sys.Heartbeat30` is specified as the name of the projection, the server will send [heartbeat](./heartbeats.md) events every 30 seconds.
+Event for the heartbeat projection contains "." as the projection name, and zero as the workspace ID.
 
 ### Result
 
@@ -63,9 +77,24 @@ event: {event-name}
 data: {event-data}
 ```
 
-The `{event-data}` is an UTF-8 encoded text. Each event ends with a double newline (\n\n)
+The first event is always a channel ID (uuid), which is used to identify the connection, example:
 
-The first event contains the channel ID. The following events contain the updates in the subscribed views.
+```plaintext
+event: channelID
+data: 123e4567-e89b-12d3-a456-426614174000
+```
+
+The subsequent events contain updates for the subscribed projections, where `{event-name}` is `update`, and `{event-data}` is the JSON object containing the details of the update. Example view update event:
+
+```plaintext
+event: update
+data: {"App":"myapp", "Projection":"pkg.SalesView", "WS":0, "Offset": 0}
+
+event: update
+data: {"App":"myapp", "Projection":".", "WS":100341234143, "Offset": 1234567890}
+```
+
+The `{event-data}` is an UTF-8 encoded text. Each event ends with a double newline (\n\n)
 
 In case of an error, the server responds with an HTTP error:
 
