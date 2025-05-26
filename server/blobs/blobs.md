@@ -4,7 +4,9 @@ reqmd.package: server.blobs
 
 # BLOBS
 
-Working with BLOBs (Binary Large Objects).
+Working with BLOBs (Binary Large Objects)
+
+##
 
 ## Use cases
 
