@@ -6,20 +6,19 @@ reqmd.package: server.n10n
 
 ## Motivation
 
-As a client, I want to create a channel and subscribe to it, so that I can receive notifications about changes in projections.
+As a client, I want to create a channel, subscribe and receive notifications about changes.
 
 ## Terms
 
 ```mermaid
 graph TD
-  Projection[Projection] --> |can be|View[View]
-  Projection[Projection] --> |can be|Heartbeat[Heartbeat]
+  SubscriptionItem[Subscription entity] --> |can be|View[pkg.View]
+  SubscriptionItem[Subscription entity] --> |can be|Heartbeat[sys.Heartbeat30]
 ```
 
 ## Functional Design
 
-
-- The client initiates an SSE connection by making POST `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/notifications` with tha payload containing the list of projections to subscribe to.
+- The client initiates an SSE connection by making POST `/api/v2/apps/{owner}/{app}/notifications` with the payload containing the list of subscriptions.
 - The connection is then kept open, allowing the server to stream events continuously.
 - Client receives events, see [Result](#result)
 
@@ -37,8 +36,18 @@ JSON object:
 
 ```json
 {
-  "Projections": {projections},
-  "ExpiresIn": 100, // optional, default is 3600 seconds
+  "subscriptions": [
+    {
+      "entity": "sys.Heartbeat30",
+      "wsid": 0
+    },
+    {
+      "entity": "pkg.SalesView",
+      "wsid": 100341234143
+    }
+    // more subscriptions can be added here
+  ],
+  "expiresIn": 100, // optional, default is 3600 seconds
 }
 ```
 
@@ -52,13 +61,11 @@ JSON object:
 | wsid | int64 | the ID of workspace |
 | **Headers** | | |
 | PrincipalToken | string | Token returned by [login](../apiv2/login.md) |
-| **Body** | | |
-| projections | array of strings | list of projections to subscribe to. Example: `"sys.CollectionView", "air.SalesMetrics"` |
 
 ### Heartbeat
 
-When `sys.Heartbeat30` is specified as the name of the projection, the server will send [heartbeat](./heartbeats.md) events every 30 seconds.
-Event for the heartbeat projection contains "." as the projection name, and zero as the workspace ID.
+When `sys.Heartbeat30` is specified as the name of the subscription item, the server will send [heartbeat](./heartbeats.md) events every 30 seconds.
+Event for the heartbeat contains "." as the name, and zero as the workspace ID.
 
 ### Result
 
@@ -84,14 +91,14 @@ event: channelID
 data: 123e4567-e89b-12d3-a456-426614174000
 ```
 
-The subsequent events contain updates for the subscribed projections, where `{event-name}` is `update`, and `{event-data}` is the JSON object containing the details of the update. Example view update event:
+The subsequent events contain updates for the subscription items, where `{event-name}` is `update`, and `{event-data}` is the JSON object containing the details of the update. Example view update event:
 
 ```plaintext
 event: update
-data: {"App":"myapp", "Projection":"pkg.SalesView", "WS":0, "Offset": 0}
+data: {"app":"myapp", "item":"pkg.SalesView", "wsid":0, "offset": 0}
 
 event: update
-data: {"App":"myapp", "Projection":".", "WS":100341234143, "Offset": 1234567890}
+data: {"app":"myapp", "item":".", "wsid":100341234143, "offset": 1234567890}
 ```
 
 The `{event-data}` is an UTF-8 encoded text. Each event ends with a double newline (\n\n)

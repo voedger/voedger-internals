@@ -6,12 +6,12 @@ reqmd.package: server.n10n
 
 ## Motivation
 
-As a client, I want to remove a subscription to a view from a channel, so that I stop receiving notifications when a specified view changes.
+As a client, I want to remove a subscription from an existing channel, so that I stop receiving notifications when a specified entity.
 
 ## Functional Design
 
-- The client initiates DELETE `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/notifications/{channelId}/subscriptions/{pkg}.{view}`
-- The subscription is removed from the channel, the client stops receiving notifications about changes in the specified view.
+- The client initiates DELETE `/api/v2/apps/{owner}/{app}/notifications/{channelId}/workspaces/{wsid}/subscriptions/{entity}`
+- The subscription is removed from the channel, the client stops receiving notifications about changes in the specified entity.
 
 ### Request headers
 
@@ -29,8 +29,7 @@ As a client, I want to remove a subscription to a view from a channel, so that I
 | app | string | name of an application |
 | wsid | int64 | the ID of workspace |
 | channelId | string | the ID of the channel, returned by [create channel](./create-channel.md) |
-| pkg | string | package name |
-| view | string | view name to receive update notifications from |
+| entity | string | Subscription entity, see [terms](./create-channel.md#terms) |
 | **Headers** | | |
 | PrincipalToken | string | Token returned by [login](../apiv2/login.md) |
 
