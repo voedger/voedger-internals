@@ -40,9 +40,9 @@ Example result 200:
 
 ```json
 {
-  "PrincipalToken": "abc.def.ghi",
-  "ExpiresIn": 3600, // seconds
-  "WSID": 1234567890
+  "principalToken": "abc.def.ghi",
+  "expiresIn": 3600, // seconds
+  "wsid": 1234567890
 }
 ```
 

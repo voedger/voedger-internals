@@ -43,8 +43,8 @@ Example result 201:
 
 ```json
 {
-    "CurrentWLogOffset":114,
-    "NewIDs": {
+    "currentWLogOffset":114,
+    "newIDs": {
         "1":322685000131212
     }
 }

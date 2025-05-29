@@ -24,9 +24,9 @@ JSON object:
 
 ```json
 {
-  "VerifiedEmailToken": "{verified-email-token}",
-  "Password": "{password}",
-  "DisplayName": "{display-name}"
+  "verifiedEmailToken": "{verified-email-token}",
+  "password": "{password}",
+  "displayName": "{display-name}"
 }
 ```
 

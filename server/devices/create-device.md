@@ -32,7 +32,7 @@ JSON object:
 
 ```json
 {
-  "DisplayName": "{device-name}",
+  "displayName": "{device-name}",
 }
 ```
 
@@ -51,9 +51,9 @@ JSON object:
 
 ```json
 {
-  "Login": "{generated-login}",
-  "Password": "{generated-password}",
-  "ProfileWSID": {profile-wsid},
+  "login": "{generated-login}",
+  "password": "{generated-password}",
+  "profileWSID": {profile-wsid},
 }
 ```
 

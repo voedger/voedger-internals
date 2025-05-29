@@ -53,7 +53,7 @@ Example response 201:
 
 ```json
 {
-    "BlobID": 123456789, 
+    "blobID": 123456789, 
 }
 ```
 

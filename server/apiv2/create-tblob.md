@@ -52,7 +52,7 @@ Example response 201:
 
 ```json
 {
-    "BlobSUUID": "cMyxY-HEQHmPnU0JG_UedQ", 
+    "blobSUUID": "cMyxY-HEQHmPnU0JG_UedQ", 
 }
 ```
 
