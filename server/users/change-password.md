@@ -25,9 +25,9 @@ JSON object:
 
 ```json
 {
-  "Login": "{login}",
-  "OldPassword": "{old-password}",
-  "NewPassword": "{new-password}",
+  "login": "{login}",
+  "oldPassword": "{old-password}",
+  "newPassword": "{new-password}",
 }
 ```
 
