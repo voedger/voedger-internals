@@ -26,16 +26,6 @@ POST `/api/v2/apps/{owner}/{app}/devices`
 | owner | string | name of a user who owns the application |
 | app | string | name of an application |
 
-### Body
-
-JSON object:
-
-```json
-{
-  "displayName": "{device-name}",
-}
-```
-
 ### Result
 
 | Code | Description | Body |
