@@ -14,7 +14,7 @@ Supported constraints:
 - limit (int) - limit number of records
 - skip (int) skip number of records
 - include (string) - include referenced objects and/or containers
-- keys (string) - select only some field(s)
+- keys (string) - select only some field(s). Use quotes for fields with dots in the name, e.g. `keys="sys.ID",name`
 - where (object) - filter records
 
 ## Example
@@ -28,7 +28,7 @@ curl -X GET \
 --data-urlencode 'limit=10'
 --data-urlencode 'skip=30'
 --data-urlencode 'include=department.group,article_prices'  #include both department and group; include article_prices container
---data-urlencode 'keys=id,name,department.name,department.group.name' #select only some fields
+--data-urlencode 'keys="sys.ID",name,department.name,department.group.name' #select only some fields
 --data-urlencode 'where={"id_department":123456,"number":{"$gte": 100, "$lte": 200}}'
 
   https://air.untill.com/api/v2/apps/untill/airs-bp/workspaces/140737488486431/cdocs/untill.articles
@@ -40,7 +40,7 @@ curl -X GET \
 {
     "results": [
         {
-            "id": 123,
+            "sys.ID": 123,
             "name": "Coca-Cola 0.5l",
             "department": {
                 "name": "Fresh Drinks",
@@ -50,14 +50,14 @@ curl -X GET \
             },
             "article_prices": [
                 {
-                    "id": 125,
+                    "sys.ID": 125,
                     "price": 1.5,
                     "currency": "EUR"
                 }
             ]
         },
         {
-            "id": 124,
+            "sys.ID": 124,
             "name": "Fanta 0.5l",
             "department": {
                 "name": "Fresh Drinks",
@@ -67,7 +67,7 @@ curl -X GET \
             },
             "article_prices": [
                 {
-                    "id": 126,
+                    "sys.ID": 126,
                     "price": 1.4,
                     "currency": "EUR"
                 }
