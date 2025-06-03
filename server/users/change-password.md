@@ -17,7 +17,6 @@ POST `/api/v2/apps/{owner}/{app}/users/change-password`
 | Key | Value |
 | --- | --- |
 | Content-Type | application/json |
-| Authorization | Bearer {PrincipalToken} |
 
 ### Body
 
