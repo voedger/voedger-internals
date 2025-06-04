@@ -12,11 +12,13 @@ Create(register) a new device
 
 POST `/api/v2/apps/{owner}/{app}/devices`
 
+Function is only allowed to `sys.WorkspaceOwner` role by default.
+
 ### Headers
 
 | Key | Value |
 | --- | --- |
-| Authorization | Bearer {PrincipalToken} |
+| Authorization | Bearer {principalToken} |
 | Content-Type | application/json |
 
 ### Parameters
@@ -47,7 +49,6 @@ POST `/api/v2/apps/{owner}/{app}/devices`
 ```
 
 To fetch the WSID of a profile, the caller should use the [/auth/login](../authnz/login.md) endpoint with the generated login and password.
-
 
 ## Technical design
 
