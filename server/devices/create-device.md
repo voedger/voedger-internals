@@ -42,10 +42,12 @@ POST `/api/v2/apps/{owner}/{app}/devices`
 ```json
 {
   "login": "{generated-login}",
-  "password": "{generated-password}",
-  "profileWSID": {profile-wsid},
+  "password": "{generated-password}"
 }
 ```
+
+To fetch the WSID of a profile, the caller should use the [/auth/login](../authnz/login.md) endpoint with the generated login and password.
+
 
 ## Technical design
 
