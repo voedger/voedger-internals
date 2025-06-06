@@ -55,11 +55,11 @@ Authorization is supported via Bearer token. The token can be passed in the `Aut
 ### Components  
 
 - pkg/router
-  - URL path handler `~cmp.routerBlobsReadPathHandler~`uncvrd[^1]❓:
+  - URL path handler `~cmp.routerBlobsReadPathHandler~`covrd[^1]✅:
 
 - pkg/sys/it
   - integration test for reading BLOBs
-    - `~it.TestBlobsRead~`uncvrd[^2]❓
+    - `~it.TestBlobsRead~`covrd[^2]✅
 
-[^1]: `[~server.apiv2.blobs/cmp.routerBlobsReadPathHandler~impl]`
-[^2]: `[~server.apiv2.blobs/it.TestBlobsRead~impl]`
+[^1]: `[~server.apiv2.blobs/cmp.routerBlobsReadPathHandler~impl]` [pkg/router/impl_apiv2.go:134:impl](https://github.com/voedger/voedger/blob/main/pkg/router/impl_apiv2.go#L134)
+[^2]: `[~server.apiv2.blobs/it.TestBlobsRead~impl]` [pkg/sys/it/impl_blob_test.go:73:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_blob_test.go#L73)

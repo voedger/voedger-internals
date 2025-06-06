@@ -8,9 +8,9 @@ reqmd.package: server.invites.invite
 
 ## Components
 
-- `~c.sys.Workspace.InitiateInvitationByEMail~`uncvrd[^2]❓
-- `~ap.sys.Workspace.ApplyInvitation~`uncvrd[^3]❓
-- `~it~`uncvrd[^4]❓
+- `~c.sys.Workspace.InitiateInvitationByEMail~`covrd[^2]✅
+- `~ap.sys.Workspace.ApplyInvitation~`covrd[^3]✅
+- `~it~`covrd[^4]✅
 
 ## c.sys.Workspace.InitiateInvitationByEMail()
 
@@ -28,7 +28,7 @@ reqmd.package: server.invites.invite
       - ${Email} - Invitee Email
   - EmailSubject
 - Errors
-  - `~err.State~`uncvrd[^1]❓: State not in (None, Cancelled, Left, ToBeInvited)
+  - `~err.State~`covrd[^1]✅: State not in (None, Cancelled, Left, ToBeInvited)
   - invalid argument EmailTemplate
 - //TODO: EMail => Login must be implemented, currently it is supposed that EMail == Login
 
@@ -61,7 +61,7 @@ activate workspace
 deactivate workspace
 ```
 
-[^1]: `[~server.invites.invite/err.State~impl]`
-[^2]: `[~server.invites.invite/c.sys.Workspace.InitiateInvitationByEMail~impl]`
-[^3]: `[~server.invites.invite/ap.sys.Workspace.ApplyInvitation~impl]`
-[^4]: `[~server.invites.invite/it~impl]`
+[^1]: `[~server.invites.invite/err.State~impl]` [pkg/sys/invite/errors.go:18:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/invite/errors.go#L18)
+[^2]: `[~server.invites.invite/c.sys.Workspace.InitiateInvitationByEMail~impl]` [pkg/sys/invite/impl_initiateinvitationbyemail.go:27:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/invite/impl_initiateinvitationbyemail.go#L27)
+[^3]: `[~server.invites.invite/ap.sys.Workspace.ApplyInvitation~impl]` [pkg/sys/invite/impl_applyinvitation.go:32:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/invite/impl_applyinvitation.go#L32)
+[^4]: `[~server.invites.invite/it~impl]` [pkg/sys/it/impl_invite_test.go:36:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_invite_test.go#L36)

@@ -637,9 +637,9 @@ History:
 
 ## Footnotes
 
-[^1]: `[~server.design.sequences/tuc.VVMConfig.ConfigureSequencesTrustLevel~impl]` [pkg/vit/impl.go:85:impl](https://github.com/voedger/voedger/blob/main/pkg/vit/impl.go#L85), [pkg/vvm/impl_cfg.go:61:impl](https://github.com/voedger/voedger/blob/main/pkg/vvm/impl_cfg.go#L61)
-[^2]: `[~server.design.sequences/tuc.SequencesTrustLevelForPLog~impl]` [pkg/istructsmem/impl.go:352:impl](https://github.com/voedger/voedger/blob/main/pkg/istructsmem/impl.go#L352)
-[^3]: `[~server.design.sequences/tuc.SequencesTrustLevelForWLog~impl]` [pkg/istructsmem/impl.go:385:impl](https://github.com/voedger/voedger/blob/main/pkg/istructsmem/impl.go#L385)
+[^1]: `[~server.design.sequences/tuc.VVMConfig.ConfigureSequencesTrustLevel~impl]` [pkg/vit/impl.go:84:impl](https://github.com/voedger/voedger/blob/main/pkg/vit/impl.go#L84), [pkg/vvm/impl_cfg.go:61:impl](https://github.com/voedger/voedger/blob/main/pkg/vvm/impl_cfg.go#L61)
+[^2]: `[~server.design.sequences/tuc.SequencesTrustLevelForPLog~impl]` [pkg/istructsmem/impl.go:411:impl](https://github.com/voedger/voedger/blob/main/pkg/istructsmem/impl.go#L411)
+[^3]: `[~server.design.sequences/tuc.SequencesTrustLevelForWLog~impl]` [pkg/istructsmem/impl.go:444:impl](https://github.com/voedger/voedger/blob/main/pkg/istructsmem/impl.go#L444)
 [^4]: `[~server.design.sequences/tuc.SequencesTrustLevelForRecords~impl]`
 [^5]: `[~server.design.sequences/tuc.StartSequencesGeneration~impl]`
 [^6]: `[~server.design.sequences/tuc.NextSequenceNumber~impl]`

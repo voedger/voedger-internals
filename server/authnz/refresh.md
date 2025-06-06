@@ -66,9 +66,9 @@ Example result 200:
   - integration test for /refresh
     - `~it.TestRefresh~`covrd[^4]✅
 
-[^1]: `[~server.authnz/cmp.routerRefreshHandler~impl]` [pkg/router/impl_apiv2.go:216:impl](https://github.com/voedger/voedger/blob/main/pkg/router/impl_apiv2.go#L216)
+[^1]: `[~server.authnz/cmp.routerRefreshHandler~impl]` [pkg/router/impl_apiv2.go:376:impl](https://github.com/voedger/voedger/blob/main/pkg/router/impl_apiv2.go#L376)
 [^2]: `[~server.authnz/cmp.authRefreshHandler~impl]` [pkg/processors/query2/impl_auth_refresh_handler.go:17:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl_auth_refresh_handler.go#L17)
 [^5]: `[~server.authnz/cmp.authRefreshHandler.refreshToken~impl]`
 [^3]: `[~server.authnz/cmp.provideAuthRefreshHandler~impl]` [pkg/processors/query2/impl.go:145:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl.go#L145)
-[^6]: `[~server.authnz/cmp.provideAuthRefreshPath~impl]` [pkg/processors/query2/impl_openapi.go:377:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl_openapi.go#L377)
-[^4]: `[~server.authnz/it.TestRefresh~impl]` [pkg/sys/it/impl_qpv2_test.go:2346:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_qpv2_test.go#L2346)
+[^6]: `[~server.authnz/cmp.provideAuthRefreshPath~impl]` [pkg/processors/query2/impl_openapi.go:458:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl_openapi.go#L458)
+[^4]: `[~server.authnz/it.TestRefresh~impl]` [pkg/sys/it/impl_qpv2_test.go:2625:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_qpv2_test.go#L2625)

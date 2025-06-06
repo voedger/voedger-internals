@@ -58,13 +58,13 @@ JSON object:
 ### Components
 
 - pkg/router
-  - URL path handler `~cmp.routerUsersChangePasswordPathHandler~`uncvrd[^1]❓:
+  - URL path handler `~cmp.routerUsersChangePasswordPathHandler~`covrd[^1]✅:
     - parses the request Body and URL parameters; calculates pseudo-wsid;
     - sends v2 request `c.registry.ChangePassword` to Command Processor
 
 - pkg/sys/it
   - integration test for /users
-    - `~it.TestQueryProcessor2_UsersChangePassword~`uncvrd[^2]❓
+    - `~it.TestQueryProcessor2_UsersChangePassword~`covrd[^2]✅
 
-[^1]: `[~server.users/cmp.routerUsersChangePasswordPathHandler~impl]`
-[^2]: `[~server.users/it.TestQueryProcessor2_UsersChangePassword~impl]`
+[^1]: `[~server.users/cmp.routerUsersChangePasswordPathHandler~impl]` [pkg/router/impl_apiv2.go:114:impl](https://github.com/voedger/voedger/blob/main/pkg/router/impl_apiv2.go#L114), [pkg/router/impl_apiv2.go:182:impl](https://github.com/voedger/voedger/blob/main/pkg/router/impl_apiv2.go#L182)
+[^2]: `[~server.users/it.TestQueryProcessor2_UsersChangePassword~impl]` [pkg/sys/it/impl_changepassword_test.go:39:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_changepassword_test.go#L39)

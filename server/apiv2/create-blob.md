@@ -65,15 +65,15 @@ Example response 201:
 
 ### Components  
 
-- `~cmp.sysBlobOwnerRecord~`uncvrd[^5]❓ extend pkg/sys/Workspace/wdoc.sys.BLOB with new fields:
+- `~cmp.sysBlobOwnerRecord~`covrd[^5]✅ extend pkg/sys/Workspace/wdoc.sys.BLOB with new fields:
   - `OwnerRecord qname NOT NULL`
   - `OwnerRecordField varchar NOT NULL`
   - `OwnerRecordID ref`
 - pkg/router
-  - `~cmp.routerBlobsCreatePathHandler~` uncvrd[^1]❓: Create BLOB path handler
+  - `~cmp.routerBlobsCreatePathHandler~`covrd[^1]✅: Create BLOB path handler
 - pkg/sys/it
-  - `~it.TestBlobsCreate~`uncvrd[^2]: integration test for creating BLOBs  
+  - `~it.TestBlobsCreate~`covrd[^2]✅: integration test for creating BLOBs  
 
-[^5]: `[~server.apiv2.blobs/cmp.sysBlobOwnerRecord~impl]`
-[^1]: `[~server.apiv2.blobs/cmp.routerBlobsCreatePathHandler~impl]`
-[^2]: `[~server.apiv2.blobs/it.TestBlobsCreate~impl]`
+[^5]: `[~server.apiv2.blobs/cmp.sysBlobOwnerRecord~impl]` [pkg/sys/sys.vsql:67:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/sys.vsql#L67)
+[^1]: `[~server.apiv2.blobs/cmp.routerBlobsCreatePathHandler~impl]` [pkg/router/impl_apiv2.go:127:impl](https://github.com/voedger/voedger/blob/main/pkg/router/impl_apiv2.go#L127)
+[^2]: `[~server.apiv2.blobs/it.TestBlobsCreate~impl]` [pkg/sys/it/impl_blob_test.go:38:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_blob_test.go#L38)
