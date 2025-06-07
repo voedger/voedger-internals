@@ -47,7 +47,7 @@ JSON object:
     }
     // more subscriptions can be added here
   ],
-  "expiresIn": 100, // optional, in seconds, default is 86400 (24h)
+  "expiresInSeconds": 100, // optional, in seconds, default is 86400 (24h)
 }
 ```
 

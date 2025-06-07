@@ -52,8 +52,8 @@ Example result 200:
 ```json
 {
   "principalToken": "abc.def.ghi",
-  "expiresIn": 3600, // seconds
-  "wsid": 1234567890
+  "expiresInSeconds": 3600, // seconds
+  "profileWSID": 1234567890
 }
 ```
 
