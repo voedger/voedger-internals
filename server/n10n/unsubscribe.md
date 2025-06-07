@@ -37,7 +37,7 @@ As a client, I want to remove a subscription from an existing channel, so that I
 
 | Code | Description | Body |
 | --- | --- | --- |
-| 200 | OK | Channel subscription added |
+| 204 | Unsubscribed |  |
 | 400 | Bad Request | [error object](errors.md) |
 | 401 | Unauthorized | [error object](errors.md) |
 | 404 | Not Found | [error object](errors.md) |
