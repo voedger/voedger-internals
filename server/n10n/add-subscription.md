@@ -34,12 +34,17 @@ As a client, I want to add a subscription to an existing channel
 | **Headers** | | |
 | PrincipalToken | string | Token returned by [login](../apiv2/login.md) |
 
+### Authorization
+
+- If entity refers to a view, the client must have `read` permission for that view in the specified workspace.
+
 ### Result
 
 | Code | Description | Body |
 | --- | --- | --- |
 | 200 | OK | Channel subscription added |
 | 400 | Bad Request | [error object](errors.md) |
+| 403 | Forbidden, client has no permissions to read from view | [error object](errors.md) |
 | 404 | Not Found | [error object](errors.md) |
 | 401 | Unauthorized | [error object](errors.md) |
 | 429 | Too may requests, rate limiting | [error object](cerrors.md) |

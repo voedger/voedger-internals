@@ -30,6 +30,22 @@ graph TD
 | Accept | text/event-stream |
 | Authorization | Bearer {PrincipalToken} |
 
+### Parameters
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| **Path** | | |
+| owner | string | name of a user who owns the application |
+| app | string | name of an application |
+| wsid | int64 | the ID of workspace |
+| **Headers** | | |
+| PrincipalToken | string | Token returned by [login](../apiv2/login.md) |
+
+### Authorization
+
+- In order to create a channel, the client must provide a valid, non-expired `PrincipalToken` for the specified application in the `Authorization` header
+- For every specified view in the subscription, the client must have `read` permission for that view in the specified workspace.
+
 ### Request body
 
 JSON object:
@@ -50,17 +66,6 @@ JSON object:
   "expiresInSeconds": 100, // optional, in seconds, default is 86400 (24h)
 }
 ```
-
-### Parameters
-
-| Parameter | Type | Description |
-| --- | --- | --- |
-| **Path** | | |
-| owner | string | name of a user who owns the application |
-| app | string | name of an application |
-| wsid | int64 | the ID of workspace |
-| **Headers** | | |
-| PrincipalToken | string | Token returned by [login](../apiv2/login.md) |
 
 ### Heartbeat
 
@@ -109,6 +114,7 @@ In case of an error, the server responds with an HTTP error:
 | --- | --- | --- |
 | 400 | Bad Request | [error object](errors.md) |
 | 401 | Unauthorized | [error object](errors.md) |
+| 403 | Forbidden, client has no permissions to read from view | [error object](errors.md) |
 | 429 | Too may requests, rate limiting | [error object](cerrors.md) |
 | 500+ | Server errors / service unavailable | [error object](errors.md) |
 
