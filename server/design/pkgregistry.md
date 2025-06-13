@@ -8,7 +8,7 @@ Temporary and possibly incomplete overview of the `registry` package. Actual des
 
 ### Tables
 
-* `table.Login`
+* [`table.Login`](https://github.com/maxim-ge/voedger/blob/2fdbd9f6022ad944709e6ce3191e4af875be8d10/pkg/registry/appws.vsql#L6)
 
 ### Views
 
