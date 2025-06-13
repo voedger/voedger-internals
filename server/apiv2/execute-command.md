@@ -44,8 +44,8 @@ Command arguments in JSON format, with optional "args" and "unloggedArgs" fields
 Example result 200:
 ```json
 {
-    "CurrentWLogOffset":114,
-    "Result": {
+    "currentWLogOffset":114,
+    "result": {
         "key1": "value1",
         "key2": "value2"
     },

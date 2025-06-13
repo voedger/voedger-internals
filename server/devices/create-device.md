@@ -1,5 +1,5 @@
 ---
-reqmd.package: server.apiv2.devices
+reqmd.package: server.devices
 ---
 
 # Create device
@@ -16,7 +16,7 @@ POST `/api/v2/apps/{owner}/{app}/devices`
 
 | Key | Value |
 | --- | --- |
-| Authorization | Bearer {PrincipalToken} |
+| Authorization | Bearer {principalToken} |
 | Content-Type | application/json |
 
 ### Parameters
@@ -26,21 +26,11 @@ POST `/api/v2/apps/{owner}/{app}/devices`
 | owner | string | name of a user who owns the application |
 | app | string | name of an application |
 
-### Body
-
-JSON object:
-
-```json
-{
-  "DisplayName": "{device-name}",
-}
-```
-
 ### Result
 
 | Code | Description | Body |
 | --- | --- | --- |
-| 201 | Created, see response below  |
+| 201 | Created, see response below  | |
 | 400 | Bad Request | [error object](errors.md) |
 | 401 | Unauthorized | [error object](errors.md) |
 | 403 | Forbidden | [error object](errors.md) |
@@ -51,25 +41,26 @@ JSON object:
 
 ```json
 {
-  "Login": "{generated-login}",
-  "Password": "{generated-password}",
-  "ProfileWSID": {profile-wsid},
+  "login": "{generated-login}",
+  "password": "{generated-password}"
 }
 ```
+
+To fetch the WSID of a profile, the caller should use the [/auth/login](../authnz/login.md) endpoint with the generated login and password.
 
 ## Technical design
 
 ### Components
 
 - pkg/router
-  - URL path handler `~cmp.routerDevicesCreatePathHandler~`uncvrd[^1]❓:
+  - URL path handler `~cmp.routerDevicesCreatePathHandler~`covrd[^1]✅:
     - parses the request Body
     - generates, login, password and pseudo-wsid
     - sends v2 request `c.registry.CreateLogin` to Command Processor
     - handles the response and replies with the login and Password
 - pkg/sys/it
   - integration test for /users
-    - `~it.TestDevicesCreate~`uncvrd[^2]❓
+    - `~it.TestDevicesCreate~`covrd[^2]✅
 
-[^1]: `[~server.apiv2.devices/cmp.routerDevicesCreatePathHandler~impl]`
-[^2]: `[~server.apiv2.devices/it.TestDevicesCreate~impl]`
+[^1]: `[~server.devices/cmp.routerDevicesCreatePathHandler~impl]` [pkg/router/impl_apiv2.go:353:impl](https://github.com/voedger/voedger/blob/main/pkg/router/impl_apiv2.go#L353)
+[^2]: `[~server.devices/it.TestDevicesCreate~impl]` [pkg/sys/it/impl_signupin_test.go:199:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_signupin_test.go#L199)

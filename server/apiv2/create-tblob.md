@@ -52,7 +52,7 @@ Example response 201:
 
 ```json
 {
-    "BlobSUUID": "cMyxY-HEQHmPnU0JG_UedQ", 
+    "blobSUUID": "cMyxY-HEQHmPnU0JG_UedQ", 
 }
 ```
 
@@ -65,9 +65,9 @@ Example response 201:
 ### Components  
 
 - pkg/router
-  - `~cmp.routerTBlobsCreatePathHandler~`uncvrd[^1]❓: Create temporary BLOB path handler
+  - `~cmp.routerTBlobsCreatePathHandler~`covrd[^1]✅: Create temporary BLOB path handler
 - pkg/sys/it
-  - `~it.TestTBlobsCreate~`uncvrd[^2]❓: integration test for creating temporary BLOBs  
+  - `~it.TestTBlobsCreate~`covrd[^2]✅: integration test for creating temporary BLOBs  
 
-[^1]: `[~server.apiv2.tblobs/cmp.routerTBlobsCreatePathHandler~impl]`
-[^2]: `[~server.apiv2.tblobs/it.TestTBlobsCreate~impl]`
+[^1]: `[~server.apiv2.tblobs/cmp.routerTBlobsCreatePathHandler~impl]` [pkg/router/impl_apiv2.go:142:impl](https://github.com/voedger/voedger/blob/main/pkg/router/impl_apiv2.go#L142)
+[^2]: `[~server.apiv2.tblobs/it.TestTBlobsCreate~impl]` [pkg/sys/it/impl_blob_test.go:287:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_blob_test.go#L287)

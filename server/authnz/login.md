@@ -31,8 +31,8 @@ JSON object:
 
 ```json
 {
-  "Login": "login",
-  "Password": "password"
+  "login": "login",
+  "password": "password"
 }
 ```
 
@@ -43,6 +43,7 @@ JSON object:
 | 200 | OK | Returns an access token, see below |
 | 400 | Bad Request | [error object](errors.md) |
 | 401 | Unauthorized | [error object](errors.md) |
+| 409 | the profile workspace is not yet ready, repeat the request | [error object](errors.md) |
 | 429 | Too may requests, rate limiting | [error object](cerrors.md) |
 | 500+ | Server errors / service unavailable | [error object](errors.md) |
 
@@ -50,9 +51,9 @@ Example result 200:
 
 ```json
 {
-  "PrincipalToken": "abc.def.ghi",
-  "ExpiresIn": 3600, // seconds
-  "WSID": 1234567890
+  "principalToken": "abc.def.ghi",
+  "expiresInSeconds": 3600, // seconds
+  "profileWSID": 1234567890
 }
 ```
 
@@ -78,9 +79,9 @@ Example result 200:
   - integration test for /login
     - `~it.TestLogin~`covrd[^6]✅
 
-[^1]: `[~server.authnz/cmp.routerLoginPathHandler~impl]` [pkg/router/impl_apiv2.go:230:impl](https://github.com/voedger/voedger/blob/main/pkg/router/impl_apiv2.go#L230)
+[^1]: `[~server.authnz/cmp.routerLoginPathHandler~impl]` [pkg/router/impl_apiv2.go:387:impl](https://github.com/voedger/voedger/blob/main/pkg/router/impl_apiv2.go#L387)
 [^2]: `[~server.authnz/cmp.authLoginHandler~impl]` [pkg/processors/query2/impl_auth_login_handler.go:20:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl_auth_login_handler.go#L20)
 [^3]: `[~server.authnz/cmp.provideAuthLoginHandler~impl]` [pkg/processors/query2/impl.go:142:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl.go#L142)
-[^4]: `[~server.authnz/cmp.provideAuthLoginPath~impl]` [pkg/processors/query2/impl_openapi.go:338:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl_openapi.go#L338)
-[^5]: `[~server.authnz/cmp.principalTokenSchema~impl]` [pkg/processors/query2/impl_openapi.go:149:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl_openapi.go#L149)
-[^6]: `[~server.authnz/it.TestLogin~impl]` [pkg/sys/it/impl_qpv2_test.go:2265:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_qpv2_test.go#L2265)
+[^4]: `[~server.authnz/cmp.provideAuthLoginPath~impl]` [pkg/processors/query2/impl_openapi.go:419:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl_openapi.go#L419)
+[^5]: `[~server.authnz/cmp.principalTokenSchema~impl]` [pkg/processors/query2/impl_openapi.go:154:impl](https://github.com/voedger/voedger/blob/main/pkg/processors/query2/impl_openapi.go#L154)
+[^6]: `[~server.authnz/it.TestLogin~impl]` [pkg/sys/it/impl_qpv2_test.go:2538:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_qpv2_test.go#L2538)

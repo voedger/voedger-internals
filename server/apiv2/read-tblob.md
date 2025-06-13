@@ -52,9 +52,9 @@ GET `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/tblobs/{suuid}`
 ### Components  
 
 - pkg/router
-  - `~cmp.routerTBlobsReadPathHandler~`uncvrd[^1]❓: URL path handler
+  - `~cmp.routerTBlobsReadPathHandler~`covrd[^1]✅: URL path handler
 - pkg/sys/it
-  - `~it.TestTBlobsRead~`uncvrd[^2]❓: integration test for reading BLOBs
+  - `~it.TestTBlobsRead~`covrd[^2]✅: integration test for reading BLOBs
 
-[^1]: `[~server.apiv2.blobs/cmp.routerTBlobsReadPathHandler~impl]`
-[^2]: `[~server.apiv2.blobs/it.TestTBlobsRead~impl]`
+[^1]: `[~server.apiv2.blobs/cmp.routerTBlobsReadPathHandler~impl]` [pkg/router/impl_apiv2.go:149:impl](https://github.com/voedger/voedger/blob/main/pkg/router/impl_apiv2.go#L149)
+[^2]: `[~server.apiv2.blobs/it.TestTBlobsRead~impl]` [pkg/sys/it/impl_blob_test.go:293:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_blob_test.go#L293)

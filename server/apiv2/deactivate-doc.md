@@ -32,6 +32,6 @@ DELETE `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/docs/{pkg}.{table}/{id}`
 Example Result 200:
 ```json
 {
-    "CurrentWLogOffset":114,
+    "currentWLogOffset":114,
 }
 ```
