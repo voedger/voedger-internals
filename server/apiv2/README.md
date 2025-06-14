@@ -27,7 +27,6 @@
 | [Change user password](../users/change-password.md)       | `POST /api/v2/apps/{owner}/{app}/users/change-password` |
 | **Devices** | |
 | [Create(register) a new device](../devices/create-device.md) | `POST /api/v2/apps/{owner}/{app}/devices`                               |
-| [Join device to workspace](../devices/join-device.md)     | `POST /api/v2/apps/{owner}/{app}/workspaces/{wsid}/commands/sys.JoinDevice`|
 | **Docs and records** | |
 | [Create document or record](create-doc.md)                | `POST /api/v2/apps/{owner}/{app}/workspaces/{wsid}/docs/{pkg}.{table}`|
 | [Update document or record](update-doc.md)                | `PATCH /api/v2/apps/{owner}/{app}/workspaces/{wsid}/docs/{pkg}.{table}/{id}` |
