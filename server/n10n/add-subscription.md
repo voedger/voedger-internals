@@ -53,3 +53,11 @@ As a client, I want to add a subscription to an existing channel
 ## Technical design
 
 ### Components
+
+#### pkg/router
+
+url path handler
+
+#### pkg/sys/it
+
+integration tests

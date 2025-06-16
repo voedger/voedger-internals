@@ -47,3 +47,11 @@ As a client, I want to remove a subscription from an existing channel, so that I
 ## Technical design
 
 ### Components
+
+#### pkg/router
+
+url path handler
+
+#### pkg/sys/it
+
+integration tests

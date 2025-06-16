@@ -121,3 +121,11 @@ In case of an error, the server responds with an HTTP error:
 ## Technical design
 
 ### Components
+
+#### pkg/router
+
+url path handler
+
+#### pkg/sys/it
+
+integration tests
