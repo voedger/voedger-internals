@@ -10,10 +10,10 @@ As a Workspace Owner I want to invite a [registered device](./create-device.md) 
 
 ## Components
 
-- `~q.sys.Workspace.IssueInviteToken~`
-- `~c.sys.Workspace.AcceptInviteToken~`
-- `~ap.sys.Workspace.ApplyAcceptInviteToken~`
-- `~c.sys.Workspace.CreateSubject~`
+- `~q.sys.Workspace.IssueInviteToken~`uncvrd[^1]❓
+- `~c.sys.Workspace.AcceptInviteToken~`uncvrd[^2]❓
+- `~ap.sys.Workspace.ApplyAcceptInviteToken~`uncvrd[^3]❓
+- `~c.sys.Workspace.CreateSubject~`uncvrd[^4]❓
 
 ### q.sys.IssueInviteToken
 
@@ -67,3 +67,8 @@ sequenceDiagram
     deactivate InviteeProfileWSID
     
 ```
+
+[^1]: `[~server.devices/q.sys.Workspace.IssueInviteToken~impl]`
+[^2]: `[~server.devices/c.sys.Workspace.AcceptInviteToken~impl]`
+[^3]: `[~server.devices/ap.sys.Workspace.ApplyAcceptInviteToken~impl]`
+[^4]: `[~server.devices/c.sys.Workspace.CreateSubject~impl]`

@@ -66,5 +66,5 @@ JSON object:
   - integration test for /users
     - `~it.TestQueryProcessor2_UsersChangePassword~`covrd[^2]✅
 
-[^1]: `[~server.users/cmp.routerUsersChangePasswordPathHandler~impl]` [pkg/router/impl_apiv2.go:114:impl](https://github.com/voedger/voedger/blob/main/pkg/router/impl_apiv2.go#L114), [pkg/router/impl_apiv2.go:182:impl](https://github.com/voedger/voedger/blob/main/pkg/router/impl_apiv2.go#L182)
+[^1]: `[~server.users/cmp.routerUsersChangePasswordPathHandler~impl]` [pkg/router/impl_apiv2.go:114:impl](https://github.com/voedger/voedger/blob/main/pkg/router/impl_apiv2.go#L114), [pkg/router/impl_apiv2.go:196:impl](https://github.com/voedger/voedger/blob/main/pkg/router/impl_apiv2.go#L196)
 [^2]: `[~server.users/it.TestQueryProcessor2_UsersChangePassword~impl]` [pkg/sys/it/impl_changepassword_test.go:39:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_changepassword_test.go#L39)

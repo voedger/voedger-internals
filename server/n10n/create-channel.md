@@ -121,3 +121,16 @@ In case of an error, the server responds with an HTTP error:
 ## Technical design
 
 ### Components
+
+- `~cmp.routerCreateChannelHandler~`covrd[^1]✅ function to handle the request in router
+  - `~err.routerCreateChannelInvalidToken~`covrd[^3]✅ if the token is invalid or expired
+  - `~err.routerCreateChannelNoPermissions~`uncvrd[^4]❓ if the client has no permissions to read from the specified view
+
+### Integration tests
+
+- `~it.CreateChannelSubscribeAndWatch~`covrd[^2]✅
+
+[^1]: `[~server.n10n/cmp.routerCreateChannelHandler~impl]` [pkg/router/impl_apiv2.go:156:impl](https://github.com/voedger/voedger/blob/main/pkg/router/impl_apiv2.go#L156)
+[^2]: `[~server.n10n/it.CreateChannelSubscribeAndWatch~impl]` [pkg/sys/it/impl_n10n_test.go:49:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_n10n_test.go#L49)
+[^3]: `[~server.n10n/err.routerCreateChannelInvalidToken~impl]` [pkg/router/impl_apiv2.go:280:impl](https://github.com/voedger/voedger/blob/main/pkg/router/impl_apiv2.go#L280)
+[^4]: `[~server.n10n/err.routerCreateChannelNoPermissions~impl]`
