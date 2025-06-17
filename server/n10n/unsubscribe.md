@@ -47,3 +47,14 @@ As a client, I want to remove a subscription from an existing channel, so that I
 ## Technical design
 
 ### Components
+
+- `~cmp.routerUnsubscribeHandler~`covrd[^1]✅ function to handle the request in router
+  - - `~err.routerUnsubscribeInvalidToken~`covrd[^3]✅
+
+### Integration tests
+
+- `~it.Unsubscribe~`covrd[^2]✅
+
+[^1]: `[~server.n10n/cmp.routerUnsubscribeHandler~impl]` [pkg/router/impl_apiv2.go:163:impl](https://github.com/voedger/voedger/blob/main/pkg/router/impl_apiv2.go#L163)
+[^2]: `[~server.n10n/it.Unsubscribe~impl]` [pkg/sys/it/impl_n10n_test.go:91:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_n10n_test.go#L91)
+[^3]: `[~server.n10n/err.routerUnsubscribeInvalidToken~impl]` [pkg/router/impl_apiv2.go:342:impl](https://github.com/voedger/voedger/blob/main/pkg/router/impl_apiv2.go#L342)

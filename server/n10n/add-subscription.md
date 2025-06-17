@@ -44,12 +44,25 @@ As a client, I want to add a subscription to an existing channel
 | --- | --- | --- |
 | 200 | OK | Channel subscription added |
 | 400 | Bad Request | [error object](errors.md) |
+| 401 | Unauthorized | [error object](errors.md) |
 | 403 | Forbidden, client has no permissions to read from view | [error object](errors.md) |
 | 404 | Not Found | [error object](errors.md) |
-| 401 | Unauthorized | [error object](errors.md) |
 | 429 | Too may requests, rate limiting | [error object](cerrors.md) |
 | 500+ | Server errors / service unavailable | [error object](errors.md) |
 
 ## Technical design
 
 ### Components
+
+- `~cmp.routerAddSubscriptionHandler~`covrd[^1]✅ function to handle the request in router
+  - `~err.routerAddSubscriptionInvalidToken~`covrd[^3]✅ if the token is invalid or expired
+  - `~err.routerAddSubscriptionNoPermissions~`uncvrd[^4]❓ if the client has no permissions to read from the specified view
+
+### Integration tests
+
+- `~it.AddSubscription~`covrd[^2]✅
+
+[^1]: `[~server.n10n/cmp.routerAddSubscriptionHandler~impl]` [pkg/router/impl_apiv2.go:170:impl](https://github.com/voedger/voedger/blob/main/pkg/router/impl_apiv2.go#L170)
+[^2]: `[~server.n10n/it.AddSubscription~impl]` [pkg/sys/it/impl_n10n_test.go:414:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_n10n_test.go#L414)
+[^3]: `[~server.n10n/err.routerAddSubscriptionInvalidToken~impl]` [pkg/router/impl_apiv2.go:341:impl](https://github.com/voedger/voedger/blob/main/pkg/router/impl_apiv2.go#L341)
+[^4]: `[~server.n10n/err.routerAddSubscriptionNoPermissions~impl]`

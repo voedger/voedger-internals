@@ -107,7 +107,7 @@
     - [Heartbeats](server/n10n/heartbeats.md)
   - 📁Devices
     - [Create a new device](server/devices/create-device.md)
-    - [Join device to workspace](server/devices/join-device.md)
+    - [Invite device to workspace](server/devices/invite-device.md)
   - [Jobs](server/jobs.md)
   - 📁DMBS Drivers
     - [AmazonDB Driver](server/amazondb-driver.md)
