@@ -64,44 +64,112 @@ ALTER WORKSPACE sys.AppWorkspaceWS (
 
 ---
 
-## Subject.Login usage
+## Subject.Login Usage
 
-In  pkg\sys\invite\impl_applyviewsubjectsidx.go, the applyViewSubjectsIdxProjector function uses the login from a subject:
-actualLogin := cdocSubject.AsString(Field_Login) // cdoc.sys.Subject.Login <- cdoc.sys.Invite.ActualLogin by ap.sys.ApplyJoinWorkspace
+The `Subject.Login` field is a critical component in the Voedger authentication and authorization system. This section documents its usage patterns across the codebase and demonstrates how it serves as a unique identifier for subjects within the system.
 
-In  pkg\sys\it\impl_invite_test.go, there's a function that queries subjects by login:
+### Overview
+
+The `Subject.Login` field serves as the primary identifier for subjects and is used extensively throughout the system for:
+
+- **Subject Creation and Identification**: Creating new subjects and uniquely identifying existing ones
+- **Query Operations**: Retrieving subjects based on their login credentials
+- **Index Management**: Building and maintaining lookup indexes for efficient subject retrieval
+- **Workspace Association**: Linking subjects to their respective profiles and workspaces
+
+### Key Usage Patterns
+
+#### 1. Subject Identification and Retrieval
+
+**Location**: `pkg/sys/invite/impl_applyviewsubjectsidx.go`
+```go
+// Extract login from subject document
+actualLogin := cdocSubject.AsString(Field_Login)
+// Maps cdoc.sys.Subject.Login <- cdoc.sys.Invite.ActualLogin by ap.sys.ApplyJoinWorkspace
+```
+
+#### 2. Subject Query Operations
+
+**Location**: `pkg/sys/it/impl_invite_test.go`
+```go
+// Function to query subjects by login
 findCDocSubjectByLogin := func(login string) []interface{} {
     return vit.PostWS(ws, "q.sys.Collection", fmt.Sprintf(
-        {"args":{"Schema":"sys.Subject"},
+        `{"args":{"Schema":"sys.Subject"},
         "elements":[{"fields":[
             "Login",
             "SubjectKind",
             "Roles",
-            "sys.ID",
+            "sys.ID"
+        ]}]}`
+    ))
+}
+```
 
-In  pkg\vit\impl.go, the createSubjects function creates subjects with login:
-body := fmt.Sprintf({"cuds":[{"fields":{"sys.ID":1,"sys.QName":"sys.Subject","Login":"%s","Roles":"%s","SubjectKind":%d,"ProfileWSID":%d}}]}`,
+#### 3. Subject Creation
+
+**Location**: `pkg/vit/impl.go`
+```go
+// Create subjects with login field
+body := fmt.Sprintf(`{"cuds":[{"fields":{"sys.ID":1,"sys.QName":"sys.Subject","Login":"%s","Roles":"%s","SubjectKind":%d,"ProfileWSID":%d}}]}`,
     subject.login, roles, subject.subjectKind, vit.principals[appQName][subject.login].ProfileWSID)
+```
 
-In  pkg\sys\it\impl_childworkspace_test.go, a subject is created with login:
+#### 4. Subject Lookup and Authentication
 
-In  pkg\vvm\provide.go and  pkg\vvm\wire_gen.go, the provideSubjectGetterFunc uses login to query subjects:
+**Location**: `pkg/vvm/provide.go`
+```go
+// Provider function for subject retrieval by login
+func provideSubjectGetterFunc() iauthnzimpl.SubjectGetterFunc {
+    return func(requestContext context.Context, name string, as istructs.IAppStructs, wsid istructs.WSID) ([]appdef.QName, error) {
+        kb := as.ViewRecords().KeyBuilder(invite.QNameViewSubjectsIdx)
+        kb.PutInt64(invite.Field_LoginHash, coreutils.LoginHash(name))
+        kb.PutString(invite.Field_Login, name)
+        subjectsIdx, err := as.ViewRecords().Get(wsid, kb)
+        if err == istructs.ErrRecordNotFound {
+            return nil, nil
+        }
+        if err != nil {
+            return nil, err
+        }
+        res := []appdef.QName{}
+        subjectID := subjectsIdx.AsRecordID(invite.Field_SubjectID)
+        cdocSubject, err := as.Records().Get(wsid, true, istructs.RecordID(subjectID))
+        if err != nil {
+            return nil, err
+        }
+        if !cdocSubject.AsBool(appdef.SystemField_IsActive) {
+            return nil, nil
+        }
+        roles := strings.Split(cdocSubject.AsString(invite.Field_Roles), ",")
+        for _, role := range roles {
+            roleQName, err := appdef.ParseQName(role)
+            if err != nil {
+                return nil, err
+            }
+            res = append(res, roleQName)
+        }
+        return res, nil
+    }
+}
+```
 
-In  pkg\sys\invite\utils.go, the GetSubjectIdxViewKeyBuilder and SubjectExistsByLogin functions use login to build keys for subject lookups:
+### Implementation Details
 
-These usages show that Subject.Login is a key field used for:
+The `Subject.Login` field is implemented with the following characteristics:
 
-- Creating and identifying subjects
-- Querying subjects by login
-- Building indexes for subject lookups
-- Associating subjects with profiles and workspaces
-- The field is defined in the sys.vsql file as a non-null varchar field with a unique constraint
+- **Data Type**: `varchar` (variable-length character string)
+- **Constraints**: `NOT NULL` and `UNIQUEFIELD` (ensures uniqueness across the system)
+- **Indexing**: Used in `ViewSubjectsIdx` for efficient lookup operations
+- **Hashing**: Login values are hashed using `coreutils.LoginHash()` for index optimization
 
-##
+---
 
-# Subject.Login Field References
+### Database Schema Definition
 
-## Definition in sys.vsql
+The `Subject.Login` field is defined in the system schema as follows:
+
+```sql
 TABLE Subject INHERITS sys.CDoc (
     Login varchar NOT NULL,
     SubjectKind int32 NOT NULL,
@@ -109,15 +177,19 @@ TABLE Subject INHERITS sys.CDoc (
     ProfileWSID int64 NOT NULL,
     UNIQUEFIELD Login
 ) WITH Tags=(WorkspaceOwnerTableTag);
+```
 
-## Usage in pkg\sys\invite\impl_applyviewsubjectsidx.go
-actualLogin := cdocSubject.AsString(Field_Login) // cdoc.sys.Subject.Login <- cdoc.sys.Invite.ActualLogin by ap.sys.ApplyJoinWorkspace
+### Index Management Functions
 
-## Usage in pkg\sys\invite\utils.go
+**Location**: `pkg/sys/invite/utils.go`
+
+The system provides utility functions for efficient subject lookup operations:
+
+```go
+// Build key for subject index lookup
 func GetSubjectIdxViewKeyBuilder(login string, s istructs.IState) (istructs.IStateKeyBuilder, error) {
     skbViewSubjectsIdx, err := s.KeyBuilder(sys.Storage_View, QNameViewSubjectsIdx)
     if err != nil {
-        // notest
         return nil, err
     }
     skbViewSubjectsIdx.PutInt64(Field_LoginHash, coreutils.LoginHash(login))
@@ -125,10 +197,10 @@ func GetSubjectIdxViewKeyBuilder(login string, s istructs.IState) (istructs.ISta
     return skbViewSubjectsIdx, nil
 }
 
+// Check if subject exists by login
 func SubjectExistsByLogin(login string, state istructs.IState) (existingSubjectID istructs.RecordID, err error) {
     skbViewSubjectsIdx, err := GetSubjectIdxViewKeyBuilder(login, state)
     if err != nil {
-        // notest
         return 0, err
     }
     val, ok, err := state.CanExist(skbViewSubjectsIdx)
@@ -137,22 +209,19 @@ func SubjectExistsByLogin(login string, state istructs.IState) (existingSubjectI
     }
     return existingSubjectID, err
 }
+```
 
-## Usage in pkg\vvm\provide.go
-func provideSubjectGetterFunc() iauthnzimpl.SubjectGetterFunc {
-    return func(requestContext context.Context, name string, as istructs.IAppStructs, wsid istructs.WSID) ([]appdef.QName, error) {
-        kb := as.ViewRecords().KeyBuilder(invite.QNameViewSubjectsIdx)
-        kb.PutInt64(invite.Field_LoginHash, coreutils.LoginHash(name))
-        kb.PutString(invite.Field_Login, name)
-        subjectsIdx, err := as.ViewRecords().Get(wsid, kb)
-        // ...
-    }
-}
+### Supporting View Schema
 
-## Related View Definition in sys.vsql
+The system maintains an optimized view for subject lookups:
+
+```sql
 VIEW ViewSubjectsIdx (
     LoginHash int64 NOT NULL,
     Login text NOT NULL,
     SubjectID ref NOT NULL,
     PRIMARY KEY ((LoginHash), Login)
 ) AS RESULT OF ApplyViewSubjectsIdx WITH Tags=(WorkspaceOwnerTableTag);
+```
+
+This view enables efficient subject retrieval by combining login hashing with direct login string matching, providing both performance optimization and exact match capabilities.
