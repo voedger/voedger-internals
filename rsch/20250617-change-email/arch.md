@@ -224,4 +224,4 @@ VIEW ViewSubjectsIdx (
 ) AS RESULT OF ApplyViewSubjectsIdx WITH Tags=(WorkspaceOwnerTableTag);
 ```
 
-This view enables efficient subject retrieval by combining login hashing with direct login string matching, providing both performance optimization and exact match capabilities.
+This view enables efficient subject retrieval by combining login hashing with direct login string matching, providing both performance optimization and exact match capabilities

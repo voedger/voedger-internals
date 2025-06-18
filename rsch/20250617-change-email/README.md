@@ -23,5 +23,3 @@
 - [Architecture](arch.md)
 
 ### Analysis
-
-- 
