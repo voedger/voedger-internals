@@ -4,13 +4,13 @@
 
 - AuthZ: role.sys.WorkspaceAdmin
 - Params
-    - InviteID
-    - Roles
-    - EmailTemplate // Must be prefixed with 'text:' or 'resource:'
-    - EmailSubject
+  - InviteID
+  - Roles
+  - EmailTemplate // Must be prefixed with 'text:' or 'resource:'
+  - EmailSubject
 - Errors
-    - State not in (Joined)
-    - invalid argument EmailTemplate
+  - State not in (Joined)
+  - invalid argument EmailTemplate
 
 **Behavior:**
 
@@ -39,5 +39,4 @@
     deactivate workspace
 
     inviter -->> workspace: Wait for  cdoc.sys.Invite.State == Joined
-
 ```

@@ -7,7 +7,6 @@
 ALTERABLE WORKSPACE UserProfileWS INHERITS sys.ProfileWS (
 	DESCRIPTOR UserProfile (
 		DisplayName varchar,
-        Email varchar,
 	);
     ...
 ```

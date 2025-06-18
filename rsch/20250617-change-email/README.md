@@ -12,7 +12,7 @@
 ## Goals
 
 - Understand the architecture of the existing code
-- Propose the solution
+- Propose the draft solution
 
 ---
 
@@ -20,3 +20,8 @@
 
 ### Architecture
 
+- [Architecture](arch.md)
+
+### Analysis
+
+- 
