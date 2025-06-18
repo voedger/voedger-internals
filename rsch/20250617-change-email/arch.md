@@ -79,20 +79,20 @@ The `Subject.Login` field serves as the primary identifier for subjects and is u
 
 ### Key Usage Patterns
 
-#### 1. Subject Identification and Retrieval
+#### 1. Login Field Extraction for Indexing
 
 **Location**: `pkg/sys/invite/impl_applyviewsubjectsidx.go`
 ```go
-// Extract login from subject document
+// Extract login from subject document for index building
 actualLogin := cdocSubject.AsString(Field_Login)
 // Maps cdoc.sys.Subject.Login <- cdoc.sys.Invite.ActualLogin by ap.sys.ApplyJoinWorkspace
 ```
 
-#### 2. Subject Query Operations
+#### 2. Test Helper for Subject Queries
 
 **Location**: `pkg/sys/it/impl_invite_test.go`
 ```go
-// Function to query subjects by login
+// Test helper function to query subjects by login
 findCDocSubjectByLogin := func(login string) []interface{} {
     return vit.PostWS(ws, "q.sys.Collection", fmt.Sprintf(
         `{"args":{"Schema":"sys.Subject"},
@@ -106,20 +106,20 @@ findCDocSubjectByLogin := func(login string) []interface{} {
 }
 ```
 
-#### 3. Subject Creation
+#### 3. Test Subject Creation
 
 **Location**: `pkg/vit/impl.go`
 ```go
-// Create subjects with login field
+// Create test subjects with login field
 body := fmt.Sprintf(`{"cuds":[{"fields":{"sys.ID":1,"sys.QName":"sys.Subject","Login":"%s","Roles":"%s","SubjectKind":%d,"ProfileWSID":%d}}]}`,
     subject.login, roles, subject.subjectKind, vit.principals[appQName][subject.login].ProfileWSID)
 ```
 
-#### 4. Subject Lookup and Authentication
+#### 4. Subject Role Retrieval by Login
 
 **Location**: `pkg/vvm/provide.go`
 ```go
-// Provider function for subject retrieval by login
+// Provider function for retrieving subject roles by login
 func provideSubjectGetterFunc() iauthnzimpl.SubjectGetterFunc {
     return func(requestContext context.Context, name string, as istructs.IAppStructs, wsid istructs.WSID) ([]appdef.QName, error) {
         kb := as.ViewRecords().KeyBuilder(invite.QNameViewSubjectsIdx)
