@@ -1,5 +1,7 @@
 # Architecture
 
+Components related to the "Allow users to update their login and email addresses"
+
 ## Schema
 
 [ws.sys.UserProfileWS.UserProfile](https://github.com/voedger/voedger/blob/ecb97b1f282e2b1d4e19b1ab0394fa4eacafcbdd/pkg/sys/userprofile.vsql#L4)
