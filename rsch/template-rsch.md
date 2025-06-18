@@ -1,8 +1,8 @@
 # Put paper title here
 
 - **Author(s)**:
-  - Author 1. Affiliation 1
-  - Author 2. Affiliation 2
+  - Maxim Geraskin. unTill Software Development Group B. V.
+  - Alexey Ponomarev. Sigma-Soft, Ltd.
 - **Date**: YYYY-MM-DD
 - **Keywords**: Keyword 1, Keyword 2, Keyword 3
 

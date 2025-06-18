@@ -1,4 +1,9 @@
-# Change Email
+# Allow users to update their login and email addresses
+
+- **Author(s)**:
+  - Maxim Geraskin. unTill Software Development Group B. V.
+- **Date**: 2025-06-17
+- **Keywords**: login, email, user
 
 ## Motivation
 
@@ -9,6 +14,9 @@
 - Understand the architecture of the existing code
 - Propose the solution
 
-## Architecture
+---
 
-- 
+## Results
+
+### Architecture
+
