@@ -154,6 +154,79 @@ func provideSubjectGetterFunc() iauthnzimpl.SubjectGetterFunc {
 }
 ```
 
+### Additional Login usage patterns
+
+#### 5. Login Extraction from Authentication Token
+
+**Location**: `pkg/sys/invite/utils.go`
+```go
+// Extract login from authentication token
+func LoginFromToken(st istructs.IState) (loginFromToken string, err error) {
+    skbPrincipal, err := st.KeyBuilder(sys.Storage_RequestSubject, appdef.NullQName)
+    if err != nil {
+        return "", err
+    }
+    svPrincipal, err := st.MustExist(skbPrincipal)
+    if err != nil {
+        return "", err
+    }
+    return svPrincipal.AsString(sys.Storage_RequestSubject_Field_Name), nil
+}
+```
+
+#### 6. Subject Creation in Workspace Configuration
+
+**Location**: `pkg/vit/impl_vitcfg.go`
+```go
+// Add subject with specific login to workspace or login configuration
+func WithSubject(login string, subjectKind istructs.SubjectKindType, roles []appdef.QName) PostConstructFunc {
+    return func(intf interface{}) {
+        switch withSubjects := intf.(type) {
+        case *WSParams:
+            withSubjects.subjects = append(withSubjects.subjects, subject{
+                login:       login,
+                subjectKind: subjectKind,
+                roles:       roles,
+            })
+        case *Login:
+            withSubjects.subjects = append(withSubjects.subjects, subject{
+                login:       login,
+                subjectKind: subjectKind,
+                roles:       roles,
+            })
+        }
+    }
+}
+```
+
+#### 7. Subject Existence Verification
+
+**Location**: `pkg/sys/invite/impl_applyjoinworkspace.go`
+```go
+// Check if subject exists by login before creating new one
+login := svCDocInvite.AsString(Field_Login)
+subjectExistsByActualLogin := false
+existingSubjectID, err := SubjectExistsByLogin(login, s) // for backward compatibility
+subjectExistsByLogin := existingSubjectID > 0
+if err == nil && !subjectExistsByLogin {
+    login = svCDocInvite.AsString(field_ActualLogin)
+    existingSubjectID, err = SubjectExistsByLogin(login, s)
+    subjectExistsByActualLogin = existingSubjectID > 0
+}
+```
+
+#### 8. Device Login Generation
+
+**Location**: `pkg/router/impl_apiv2.go`
+```go
+// Generate random login for device authentication
+login, pwd := coreutils.DeviceRandomLoginPwd()
+pseudoWSID := coreutils.GetPseudoWSID(istructs.NullWSID, login, istructs.CurrentClusterID())
+url := fmt.Sprintf("api/v2/apps/sys/registry/workspaces/%d/commands/registry.CreateLogin", pseudoWSID)
+body := fmt.Sprintf(`{"args":{"Login":"%s","AppName":"%s","SubjectKind":%d,"WSKindInitializationData":"{}","ProfileCluster":%d},"unloggedArgs":{"Password":"%s"}}`,
+    login, busRequest.AppQName, istructs.SubjectKind_Device, istructs.CurrentClusterID(), pwd)
+```
+
 ### Implementation Details
 
 The `Subject.Login` field is implemented with the following characteristics:
