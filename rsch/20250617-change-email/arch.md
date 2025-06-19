@@ -54,6 +54,42 @@ ALTER WORKSPACE sys.AppWorkspaceWS (
 		ProfileWSID int64 NOT NULL,
 		UNIQUEFIELD Login
 	) WITH Tags=(WorkspaceOwnerTableTag);
+
+	VIEW ViewSubjectsIdx (
+		LoginHash int64 NOT NULL,
+		Login text NOT NULL,
+		SubjectID ref NOT NULL,
+		PRIMARY KEY ((LoginHash), Login)
+	) AS RESULT OF ApplyViewSubjectsIdx WITH Tags=(WorkspaceOwnerTableTag);
+```
+
+## Invite.Email usage
+
+This is the primary place where the `Email` field is set in the `Invite` record during the invitation process. The [code](https://github.com/voedger/voedger/blob/b1a796a9d8479f4a1ed9d30f21ed7a27a523d60a/pkg/sys/invite/impl_initiateinvitationbyemail.go#L101) is in the `execCmdInitiateInvitationByEMail` function which creates a new invitation:
+
+```go
+// Initial creation of the invite record with Email field
+svbCDocInvite.PutString(Field_Login, args.ArgumentObject.AsString(field_Email))
+svbCDocInvite.PutString(field_Email, args.ArgumentObject.AsString(field_Email))
+svbCDocInvite.PutString(Field_Roles, args.ArgumentObject.AsString(Field_Roles))
+```
+
+The email is also used in several places, particularly when sending emails:
+
+pkg\sys\invite\impl_applyupdateinviteroles.go:
+```go
+// Using the Email field to send notification about role updates
+skbSendMail.PutString(sys.Storage_SendMail_Field_Subject, event.ArgumentObject().AsString(field_EmailSubject))
+skbSendMail.PutString(sys.Storage_SendMail_Field_To, svCDocInvite.AsString(field_Email))
+skbSendMail.PutString(sys.Storage_SendMail_Field_Body, replacer.Replace(emailTemplate))
+```
+
+pkg\sys\invite\impl_applyinvitation.go
+```go
+// Using the Email field to send invitation email
+skbSendMail.PutString(sys.Storage_SendMail_Field_Subject, event.ArgumentObject().AsString(field_EmailSubject))
+skbSendMail.PutString(sys.Storage_SendMail_Field_To, event.ArgumentObject().AsString(field_Email))
+skbSendMail.PutString(sys.Storage_SendMail_Field_Body, replacer.Replace(emailTemplate))
 ```
 
 ## sys.Storage_SendMail usage
