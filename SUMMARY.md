@@ -107,7 +107,7 @@
     - [Unsubscribe from subscription](server/n10n/unsubscribe.md)
     - [Heartbeats](server/n10n/heartbeats.md)
   - 📁Devices
-    - [Create a new device](server/devices/create-device.md)
+    - [Create new device](server/devices/create-device.md)
     - [Invite device to workspace](server/devices/invite-device.md)
   - [Jobs](server/jobs.md)
   - 📁DMBS Drivers
