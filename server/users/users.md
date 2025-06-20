@@ -1,27 +1,19 @@
-# Server.Users
+# Users
 
-## Data
+The Users feature provides core user management functionality in the Voedger system. It handles user registration, profile management, and password operations.
 
-[sys.UserProfileWS.UserProfile](https://github.com/voedger/voedger/blob/ecb97b1f282e2b1d4e19b1ab0394fa4eacafcbdd/pkg/sys/userprofile.vsql#L4)
-```sql
-ALTERABLE WORKSPACE UserProfileWS INHERITS sys.ProfileWS (
-	DESCRIPTOR UserProfile (
-		DisplayName varchar,
-	);
-    ...
-```
+## Architecture
 
-[registry.AppWorkspaceWS.Login](https://github.com/voedger/voedger/blob/ecb97b1f282e2b1d4e19b1ab0394fa4eacafcbdd/pkg/registry/appws.vsql#L6)
-```sql
-ALTER WORKSPACE sys.AppWorkspaceWS (
-	TABLE Login INHERITS sys.CDoc (
-		ProfileCluster int32 NOT NULL,
-		PwdHash bytes NOT NULL,
-		AppName varchar NOT NULL,
-		SubjectKind int32,
-		LoginHash varchar NOT NULL,
-		WSID int64,                                     -- to be written after workspace init
-		WSError varchar(1024),                          -- to be written after workspace init
-		WSKindInitializationData varchar(1024) NOT NULL
-	);
-```
+- [Architecture](users-arch.md)
+
+## Use cases
+
+- [Create user](create-user.md)
+- [Change password](change-password.md)
+- [Reset password](reset-password.md)
+- [Send email](send-email.md)
+
+## Related features
+
+- [Invites](../invites/invites.md)
+- [AuthNZ](../authnz/README.md)

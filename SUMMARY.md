@@ -97,7 +97,7 @@
   - [Users](server/users/users.md)
     - [Create a new user](server/users/create-user.md)
     - [Change user password](server/users/change-password.md)
-    - [Send Email](server/users/send_email.md)
+    - [Send Email](server/users/send-email.md)
     - [Reset password](server/users/reset-password.md)
     - [Change Email](server/users/change-email.md)
   - [Notifications](server/n10n/n10n.md)

@@ -4,8 +4,6 @@ reqmd.package: server.users
 
 # Change password
 
-## Motivation
-
 Change password of an existing user
 
 ## Functional design
@@ -14,8 +12,8 @@ POST `/api/v2/apps/{owner}/{app}/users/change-password`
 
 ### Headers
 
-| Key | Value |
-| --- | --- |
+| Key          | Value            |
+|--------------|------------------|
 | Content-Type | application/json |
 
 ### Body
@@ -32,26 +30,28 @@ JSON object:
 
 ### Parameters
 
-| Parameter | Type | Description |
-| --- | --- | --- |
-| **Path** | | |
-| owner | string | name of a user who owns the application |
-| app | string | name of an application |
-| **Body** | | |
-| login | string | login of the user |
-| old-password | string | old password of the user |
-| new-password | string | new password of the user |
+| Parameter    | Type   | Description                             |
+|--------------|--------|-----------------------------------------|
+| **Path**     |        |                                         |
+| owner        | string | name of a user who owns the application |
+| app          | string | name of an application                  |
+| **Body**     |        |                                         |
+| login        | string | login of the user                       |
+| old-password | string | old password of the user                |
+| new-password | string | new password of the user                |
 
 ### Result
 
-| Code | Description | Body |
-| --- | --- | --- |
-| 200 | OK  | |
-| 400 | Bad Request | [error object](errors.md) |
-| 401 | Unauthorized | [error object](errors.md) |
-| 403 | Forbidden | [error object](errors.md) |
-| 429 | Too may requests, rate limiting | [error object](errors.md) |
+| Code | Description                         | Body                      |
+|------|-------------------------------------|---------------------------|
+| 200  | OK                                  |                           |
+| 400  | Bad Request                         | [error object](errors.md) |
+| 401  | Unauthorized                        | [error object](errors.md) |
+| 403  | Forbidden                           | [error object](errors.md) |
+| 429  | Too may requests, rate limiting     | [error object](errors.md) |
 | 500+ | Server errors / service unavailable | [error object](errors.md) |
+
+---
 
 ## Technical design
 
