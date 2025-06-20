@@ -101,6 +101,7 @@
     - [Reset password](server/users/reset-password.md)
     - [Send Email](server/users/send-email.md)
     - [Change Email](server/users/change-email.md)
+    - [See also (Users)](server/users/users-seealso.md)
   - [Notifications](server/n10n/n10n.md)
     - [Create channel and subscribe](server/n10n/create-channel.md)
     - [Subscribe to an extra view](server/n10n/add-subscription.md)
