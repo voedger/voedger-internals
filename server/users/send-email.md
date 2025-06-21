@@ -19,4 +19,4 @@ As Application, I want to send an Email to a User.
 **Behavior:**
     - Update UserProfileWS.UserProfile.Email
 
-[^1]: `[~server.users/SendEmailToUser~impl]`
+[^1]: `[~server.users.SendEMail/SendEmailToUser~impl]`

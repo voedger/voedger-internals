@@ -637,7 +637,7 @@ History:
 
 ## Footnotes
 
-[^1]: `[~server.design.sequences/tuc.VVMConfig.ConfigureSequencesTrustLevel~impl]` [pkg/vit/impl.go:84:impl](https://github.com/voedger/voedger/blob/main/pkg/vit/impl.go#L84), [pkg/vvm/impl_cfg.go:61:impl](https://github.com/voedger/voedger/blob/main/pkg/vvm/impl_cfg.go#L61)
+[^1]: `[~server.design.sequences/tuc.VVMConfig.ConfigureSequencesTrustLevel~impl]` [pkg/vit/impl.go:83:impl](https://github.com/voedger/voedger/blob/main/pkg/vit/impl.go#L83), [pkg/vvm/impl_cfg.go:61:impl](https://github.com/voedger/voedger/blob/main/pkg/vvm/impl_cfg.go#L61)
 [^2]: `[~server.design.sequences/tuc.SequencesTrustLevelForPLog~impl]` [pkg/istructsmem/impl.go:411:impl](https://github.com/voedger/voedger/blob/main/pkg/istructsmem/impl.go#L411)
 [^3]: `[~server.design.sequences/tuc.SequencesTrustLevelForWLog~impl]` [pkg/istructsmem/impl.go:444:impl](https://github.com/voedger/voedger/blob/main/pkg/istructsmem/impl.go#L444)
 [^4]: `[~server.design.sequences/tuc.SequencesTrustLevelForRecords~impl]`

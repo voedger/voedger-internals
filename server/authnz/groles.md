@@ -81,7 +81,7 @@ ALTER WORKSPACE sys.AppWorkspaceWS (
 );
 ```
 
-- `~cmp.c.registry.IssuePrincipalToken~`
+- `~cmp.c.registry.IssuePrincipalToken~`uncvrd[^4]❓
   - Include `GlobalRoles` in the PrincipalToken
 - `~tuc.UseGlobalRolesInAuthz~`uncvrd[^3]❓
   - Include principals according to PrincipalToken.GlobalRoles
@@ -91,3 +91,4 @@ ALTER WORKSPACE sys.AppWorkspaceWS (
 [^1]: `[~server.authnz.groles/cmp.c.sys.UpdateGlobalRoles~impl]`
 [^2]: `[~server.authnz.groles/cmp.cdoc.registry.Login.GlobalRoles~impl]`
 [^3]: `[~server.authnz.groles/tuc.UseGlobalRolesInAuthz~impl]`
+[^4]: `[~server.authnz.groles/cmp.c.registry.IssuePrincipalToken~impl]`
