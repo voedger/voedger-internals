@@ -58,8 +58,18 @@ sequenceDiagram
 
 ## Technical design
 
-- `~cmp.c.sys.UpdateGlobalRoles~`uncvrd[^1]❓
+- `~cmp.c.registry.UpdateGlobalRoles~`uncvrd[^1]❓
   - AuthZ: System
+
+```sql
+TYPE UpdateGlobalRolesParams (
+  Login text NOT NULL,
+  AppName text NOT NULL,
+  GlobalRoles text(1024)
+);
+COMMAND UpdateGlobalRoles (UpdateGlobalRolesParams);
+```
+
 - `~cmp.cdoc.registry.Login.GlobalRoles~`uncvrd[^2]❓: New field in the `Login` table
 
 ```sql
@@ -71,7 +81,12 @@ ALTER WORKSPACE sys.AppWorkspaceWS (
 );
 ```
 
+- `~cmp.c.registry.IssuePrincipalToken~`
+  - Include `GlobalRoles` in the PrincipalToken
 - `~tuc.UseGlobalRolesInAuthz~`uncvrd[^3]❓
+  - Include principals according to PrincipalToken.GlobalRoles
+- ~it.TestGlobalRoles~
+  - Integration test to verify Global Roles functionality
 
 [^1]: `[~server.authnz.groles/cmp.c.sys.UpdateGlobalRoles~impl]`
 [^2]: `[~server.authnz.groles/cmp.cdoc.registry.Login.GlobalRoles~impl]`
