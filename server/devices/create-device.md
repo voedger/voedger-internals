@@ -63,4 +63,4 @@ To fetch the WSID of a profile, the caller should use the [/auth/login](../authn
     - `~it.TestDevicesCreate~`covrd[^2]✅
 
 [^1]: `[~server.devices/cmp.routerDevicesCreatePathHandler~impl]` [pkg/router/impl_apiv2.go:425:impl](https://github.com/voedger/voedger/blob/main/pkg/router/impl_apiv2.go#L425)
-[^2]: `[~server.devices/it.TestDevicesCreate~impl]` [pkg/sys/it/impl_signupin_test.go:199:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_signupin_test.go#L199)
+[^2]: `[~server.devices/it.TestDevicesCreate~impl]` [pkg/sys/it/impl_signupin_test.go:201:impl](https://github.com/voedger/voedger/blob/main/pkg/sys/it/impl_signupin_test.go#L201)

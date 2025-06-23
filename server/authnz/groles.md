@@ -70,7 +70,7 @@ TYPE UpdateGlobalRolesParams (
 COMMAND UpdateGlobalRoles (UpdateGlobalRolesParams);
 ```
 
-- `~cmp.cdoc.registry.Login.GlobalRoles~`uncvrd[^2]❓: New field in the `Login` table
+- `~cmp.cdoc.registry.Login.GlobalRoles~`covrd[^2]✅: New field in the `Login` table
 
 ```sql
 ALTER WORKSPACE sys.AppWorkspaceWS (
@@ -81,14 +81,14 @@ ALTER WORKSPACE sys.AppWorkspaceWS (
 );
 ```
 
-- `~cmp.c.registry.IssuePrincipalToken~`uncvrd[^4]❓
+- `~cmp.c.registry.IssuePrincipalToken~`covrd[^4]✅
   - Include `GlobalRoles` in the PrincipalToken
-- `~tuc.UseGlobalRolesInAuthz~`uncvrd[^3]❓
+- `~tuc.UseGlobalRolesInAuthz~`covrd[^3]✅
   - Include principals according to PrincipalToken.GlobalRoles
 - ~it.TestGlobalRoles~
   - Integration test to verify Global Roles functionality
 
 [^1]: `[~server.authnz.groles/cmp.c.sys.UpdateGlobalRoles~impl]`
-[^2]: `[~server.authnz.groles/cmp.cdoc.registry.Login.GlobalRoles~impl]`
-[^3]: `[~server.authnz.groles/tuc.UseGlobalRolesInAuthz~impl]`
-[^4]: `[~server.authnz.groles/cmp.c.registry.IssuePrincipalToken~impl]`
+[^2]: `[~server.authnz.groles/cmp.cdoc.registry.Login.GlobalRoles~impl]` [pkg/registry/appws.vsql:17:impl](https://github.com/voedger/voedger/blob/main/pkg/registry/appws.vsql#L17)
+[^3]: `[~server.authnz.groles/tuc.UseGlobalRolesInAuthz~impl]` [pkg/iauthnzimpl/impl.go:77:impl](https://github.com/voedger/voedger/blob/main/pkg/iauthnzimpl/impl.go#L77)
+[^4]: `[~server.authnz.groles/cmp.c.registry.IssuePrincipalToken~impl]` [pkg/registry/impl_issueprincipaltoken.go:98:impl](https://github.com/voedger/voedger/blob/main/pkg/registry/impl_issueprincipaltoken.go#L98)
