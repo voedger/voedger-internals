@@ -58,7 +58,7 @@ sequenceDiagram
 
 ## Technical design
 
-- `~cmp.c.registry.UpdateGlobalRoles~`uncvrd[^1]❓
+- `~cmp.c.registry.UpdateGlobalRoles~`covrd[^1]✅
   - AuthZ: System
 
 ```sql
@@ -88,7 +88,7 @@ ALTER WORKSPACE sys.AppWorkspaceWS (
 - ~it.TestGlobalRoles~
   - Integration test to verify Global Roles functionality
 
-[^1]: `[~server.authnz.groles/cmp.c.sys.UpdateGlobalRoles~impl]`
+[^1]: `[~server.authnz.groles/cmp.c.registry.UpdateGlobalRoles~impl]` [pkg/registry/appws.vsql:106:impl](https://github.com/voedger/voedger/blob/main/pkg/registry/appws.vsql#L106), [pkg/registry/appws.vsql:118:impl](https://github.com/voedger/voedger/blob/main/pkg/registry/appws.vsql#L118), [pkg/registry/impl_updateglobalroles.go:26:impl](https://github.com/voedger/voedger/blob/main/pkg/registry/impl_updateglobalroles.go#L26)
 [^2]: `[~server.authnz.groles/cmp.cdoc.registry.Login.GlobalRoles~impl]` [pkg/registry/appws.vsql:17:impl](https://github.com/voedger/voedger/blob/main/pkg/registry/appws.vsql#L17)
 [^3]: `[~server.authnz.groles/tuc.UseGlobalRolesInAuthz~impl]` [pkg/iauthnzimpl/impl.go:77:impl](https://github.com/voedger/voedger/blob/main/pkg/iauthnzimpl/impl.go#L77)
 [^4]: `[~server.authnz.groles/cmp.c.registry.IssuePrincipalToken~impl]` [pkg/registry/impl_issueprincipaltoken.go:98:impl](https://github.com/voedger/voedger/blob/main/pkg/registry/impl_issueprincipaltoken.go#L98)
