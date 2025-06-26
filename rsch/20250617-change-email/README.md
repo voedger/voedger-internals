@@ -56,6 +56,14 @@ Key findings:
 
 ### Proposed solution
 
+Change login -> Create an alias
+
 - The User can create an alias
 - Only one alias can be created by the user (to prevent abuse)
 - Further aliases can be created by the Admin
+
+Change email
+
+- Actual Email is kept in the `cs.sys.UserProfileWS.UserProfile.Email` field
+- `c.sys.UserProfileWS.ChangeEmail` command is used to change the user Email
+- `q.sys.UserProfileWS.SendEmail` is used to send an Email to the user
