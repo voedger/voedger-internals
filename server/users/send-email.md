@@ -3,9 +3,13 @@ reqmd.package: server.users.SendEMail
 ---
 # Send Email
 
-As Application, I want to send an Email to a User.
+As Application, I want to send an Email to a User
 
-## Technical design
+## Related work
+
+- [20250617-change-email/README.md](../../rsch/20250617-change-email/README.md)
+
+## Functional design
 
 ## sys.UserProfileWS.SendEmailToUser
 
