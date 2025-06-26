@@ -38,11 +38,11 @@ As a client, I want to remove a subscription from an existing channel, so that I
 | Code | Description | Body |
 | --- | --- | --- |
 | 204 | Unsubscribed |  |
-| 400 | Bad Request | [error object](errors.md) |
-| 401 | Unauthorized | [error object](errors.md) |
-| 404 | Not Found | [error object](errors.md) |
-| 429 | Too may requests, rate limiting | [error object](cerrors.md) |
-| 500+ | Server errors / service unavailable | [error object](errors.md) |
+| 400 | Bad Request | [error object](../apiv2/errors.md) |
+| 401 | Unauthorized | [error object](../apiv2/errors.md) |
+| 404 | Not Found | [error object](../apiv2/errors.md) |
+| 429 | Too may requests, rate limiting | [error object](../apiv2/errors.md) |
+| 500+ | Server errors / service unavailable | [error object](../apiv2/errors.md) |
 
 ## Technical design
 

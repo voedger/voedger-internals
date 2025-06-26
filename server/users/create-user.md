@@ -47,10 +47,10 @@ JSON object:
 | Code | Description | Body |
 | --- | --- | --- |
 | 201 | Created | |
-| 400 | Bad Request | [error object](errors.md) |
-| 401 | Unauthorized | [error object](errors.md) |
-| 429 | Too may requests, rate limiting | [error object](errors.md) |
-| 500+ | Server errors / service unavailable | [error object](errors.md) |
+| 400 | Bad Request | [error object](../apiv2/errors.md) |
+| 401 | Unauthorized | [error object](../apiv2/errors.md) |
+| 429 | Too may requests, rate limiting | [error object](../apiv2/errors.md) |
+| 500+ | Server errors / service unavailable | [error object](../apiv2/errors.md) |
 
 ## Technical design
 

@@ -41,11 +41,11 @@ JSON object:
 | Code | Description | Body |
 | --- | --- | --- |
 | 200 | OK | Returns an access token, see below |
-| 400 | Bad Request | [error object](errors.md) |
-| 401 | Unauthorized | [error object](errors.md) |
-| 409 | the profile workspace is not yet ready, repeat the request | [error object](errors.md) |
-| 429 | Too may requests, rate limiting | [error object](cerrors.md) |
-| 500+ | Server errors / service unavailable | [error object](errors.md) |
+| 400 | Bad Request | [error object](../apiv2/errors.md) |
+| 401 | Unauthorized | [error object](../apiv2/errors.md) |
+| 409 | the profile workspace is not yet ready, repeat the request | [error object](../apiv2/errors.md) |
+| 429 | Too may requests, rate limiting | [error object](../apiv2/errors.md) |
+| 500+ | Server errors / service unavailable | [error object](../apiv2/errors.md) |
 
 Example result 200:
 

@@ -112,11 +112,11 @@ In case of an error, the server responds with an HTTP error:
 
 | Code | Description | Body |
 | --- | --- | --- |
-| 400 | Bad Request | [error object](errors.md) |
-| 401 | Unauthorized | [error object](errors.md) |
-| 403 | Forbidden, client has no permissions to read from view | [error object](errors.md) |
-| 429 | Too may requests, rate limiting | [error object](cerrors.md) |
-| 500+ | Server errors / service unavailable | [error object](errors.md) |
+| 400 | Bad Request | [error object](../apiv2/errors.md) |
+| 401 | Unauthorized | [error object](../apiv2/errors.md) |
+| 403 | Forbidden, client has no permissions to read from view | [error object](../apiv2/errors.md) |
+| 429 | Too may requests, rate limiting | [error object](../apiv2/errors.md) |
+| 500+ | Server errors / service unavailable | [error object](../apiv2/errors.md) |
 
 ## Technical design
 
