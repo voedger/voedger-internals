@@ -99,10 +99,9 @@
     - [Create new user](server/users/create-user.md)
     - [Change password](server/users/change-password.md)
     - [Reset password](server/users/reset-password.md)
-    - [Send Email](server/users/send-email.md)
     - 📁Email operations
-     
-    - [Change Email](server/users/change-email.md)
+      - [Send Email](server/users/send-email.md)
+      - [Change Email](server/users/change-email.md)
     - [See also (Users)](server/users/users-seealso.md)
   - [Notifications](server/n10n/n10n.md)
     - [Create channel and subscribe](server/n10n/create-channel.md)
