@@ -1,5 +1,5 @@
 ---
-reqmd.package: server.users.SendEMail
+reqmd.package: server.users
 ---
 # Send Email
 
@@ -9,14 +9,15 @@ As Application, I want to send an Email to a User
 
 - [20250617-change-email/README.md](../../rsch/20250617-change-email/README.md)
 
-## Functional design
+## q.sys.UserProfileWS.SendEmailToUser
 
-## sys.UserProfileWS.SendEmailToUser
-
-- `~SendEmailToUser~`uncvrd[^1]❓
-- AuthZ: role.sys.Workspace.ProfileOwner
+- `~q.sys.UserProfileWS.SendEmailToUser~`uncvrd[^1]❓: Send an email to a user
+- AuthZ: role.Application
 - Params
-  - NewEMail
+  - To: Email address of the user
+  - Subject: Email subject
+  - Body: Email body
+  - BodyMime: MIME type of the body, e.g. `text/plain`, `text/html`
 - Errors
   - Email is mailformed // See similar message
 
