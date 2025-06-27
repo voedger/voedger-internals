@@ -19,9 +19,11 @@ As Application, I want to send an Email to a User
   - Body: Email body
   - BodyMime: MIME type of the body, e.g. `text/plain`, `text/html`
 - Errors
-  - Email is mailformed // See similar message
+  - `~err.EmailMalformed~`: Email is malformed
+  - `~err.InvalidMimeType~`: Invalid MIME type for the body
 
-**Behavior:**
-    - Update UserProfileWS.UserProfile.Email
+Behavior:
+
+- Updates cdoc.UserProfileWS.UserProfile.Email
 
 [^1]: `[~server.users.SendEMail/SendEmailToUser~impl]`

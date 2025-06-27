@@ -1,7 +1,3 @@
----
-reqmd.package: server.users
----
-
 # Architecture
 
 ---
