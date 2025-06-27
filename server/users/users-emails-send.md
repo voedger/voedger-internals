@@ -11,7 +11,8 @@ As Application, I want to send an Email to a User
 
 ## q.sys.UserProfileWS.SendEmailToUser
 
-- `~q.sys.UserProfileWS.SendEmailToUser~`uncvrd[^1]❓: Send an email to a user
+- `~q.SendEmailToUser~`uncvrd[^1]❓: Send an email to a user
+- Workspace: `sys.UserProfileWS`
 - AuthZ: role.Application
 - Params
   - To: Email address of the user
@@ -19,11 +20,13 @@ As Application, I want to send an Email to a User
   - Body: Email body
   - BodyMime: MIME type of the body, e.g. `text/plain`, `text/html`
 - Errors
-  - `~err.EmailMalformed~`: Email is malformed
-  - `~err.InvalidMimeType~`: Invalid MIME type for the body
+  - `~err.EmailMalformed~`uncvrd[^2]❓: Email is malformed
+  - `~err.InvalidMimeType~`uncvrd[^3]❓: Invalid MIME type for the body
 
 Behavior:
 
 - Updates cdoc.UserProfileWS.UserProfile.Email
 
-[^1]: `[~server.users.SendEMail/SendEmailToUser~impl]`
+[^1]: `[~server.users/q.SendEmailToUser~impl]`
+[^2]: `[~server.users/err.EmailMalformed~impl]`
+[^3]: `[~server.users/err.InvalidMimeType~impl]`
