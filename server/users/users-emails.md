@@ -6,13 +6,7 @@ reqmd.package: server.users
 
 ## Email operations: Architecture
 
-- `q.sys.UserProfileWS.SendEmail` is used to send an email to the user
-  - The first non-empty value is used as email address:
-    - `descr.sys.UserProfileWS.Email` field
-    - User's login
-- `c.sys.UserProfileWS.ChangeEmail` command is used to change the s.sys.UserProfileWS.UserProfile.Email
-
-### User Email field
+### Email field
 
 - `~field.Email~`uncvrd[^1]❓: is used to store the user's email address
 
@@ -24,6 +18,14 @@ ALTERABLE WORKSPACE UserProfileWS INHERITS sys.ProfileWS (
 	);
   ...
 ```
+
+### Send email
+
+- `c.sys.UserProfileWS.SendEmail` is used to initialize the email sending process
+  - The first non-empty value is used as email address:
+    - `descr.sys.UserProfileWS.UserProfile.Email` field
+    - User's login
+- `ap.sys.UserProfileWS.ApplySendEmail` is triggered by the SendEmail command and sends an email to the user using an appropriate storage
 
 ## See also
 
