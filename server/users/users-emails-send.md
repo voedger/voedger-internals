@@ -26,7 +26,7 @@ As Application, I want to send an Email to a User.
 
 ## ap.ApplySendEmail
 
-- `~ap.ApplySendEmail~`: Send an email to a user
+- `~ap.ApplySendEmail~`uncvrd[^4]❓: Send an email to a user
 - Workspace: `sys.UserProfileWS`
 - Triggered by: `c.SendEmailToUser`
 - Behavior:
@@ -35,3 +35,4 @@ As Application, I want to send an Email to a User.
 [^1]: `[~server.users/c.SendEmailToUser~impl]`
 [^2]: `[~server.users/err.EmailMalformed~impl]`
 [^3]: `[~server.users/err.InvalidMimeType~impl]`
+[^4]: `[~server.users/ap.ApplySendEmail~impl]`
