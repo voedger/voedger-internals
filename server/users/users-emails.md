@@ -4,7 +4,7 @@ reqmd.package: server.users
 
 # Email operations
 
-## Email operations: Architecture
+## Architecture
 
 ### Email field
 
