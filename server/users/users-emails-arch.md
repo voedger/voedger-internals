@@ -19,15 +19,15 @@ ALTERABLE WORKSPACE UserProfileWS INHERITS sys.ProfileWS (
   ...
 ```
 
-### Send email
+### Principles
 
-- `c.sys.UserProfileWS.SendEmail` is used to initialize the email sending process
+- `c.SendEmailToUser` is used to initialize the email sending process
   - The first non-empty value is used as email address:
-    - `descr.sys.UserProfileWS.UserProfile.Email` field
+    - `field.Email` field
     - User's login
-- `ap.sys.UserProfileWS.ApplySendEmail` is triggered by the SendEmail command and sends an email to the user using an appropriate storage
+- `ap.ApplySendEmail` is triggered by the SendEmail command and sends an email to the user using an appropriate storage
 
-## See also
+## Related work
 
 - [20250617-change-email/README.md](../../rsch/20250617-change-email/README.md)
 
