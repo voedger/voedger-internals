@@ -95,7 +95,6 @@
     - [Cancel accepted Invite](server/invites/cancel-accepted-invite.md)
     - [Update Invite roles](server/invites/update-invite-roles.md)
   - [Users](server/users/users.md)
-    - [Architecture](server/users/users-arch.md)
     - [Create new user](server/users/users-create-user.md)
     - [Change password](server/users/users-change-password.md)
     - [Reset password](server/users/users-reset-password.md)
