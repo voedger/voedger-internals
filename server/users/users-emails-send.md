@@ -9,11 +9,11 @@ As Application, I want to send an Email to a User.
 
 - `~c.SendEmailToUser~`uncvrd[^1]❓: Initiate sending an email to a user
 - Workspace: `sys.UserProfileWS`
-- AuthZ: role.Application
+- AuthZ: `role.Application`
 - Params
   - To: Email address of the user
-  - Subject: Email subject
-  - Body: Email body
+  - Subject
+  - Body
   - BodyMime: MIME type of the body, e.g. `text/plain`, `text/html`
 - Errors
   - `~err.EmailMalformed~`uncvrd[^2]❓: Email is malformed
@@ -31,6 +31,7 @@ As Application, I want to send an Email to a User.
 - Triggered by: `c.SendEmailToUser`
 - Behavior:
   - Sends an email to the user using an appropriate storage based on the command parameters
+  - ??? What if the storage fails permanently?
 
 [^1]: `[~server.users/c.SendEmailToUser~impl]`
 [^2]: `[~server.users/err.EmailMalformed~impl]`
