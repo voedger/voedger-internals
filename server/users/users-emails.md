@@ -21,7 +21,7 @@ ALTERABLE WORKSPACE UserProfileWS INHERITS sys.ProfileWS (
 
 - AuthZ: UPDATE: `role.ProfileOwner`
 
-### Principles
+### Commands
 
 - `c.SendEmailToUser` is used to initialize the email sending process
   - The first non-empty value is used as email address:
