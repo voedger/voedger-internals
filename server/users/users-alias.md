@@ -21,36 +21,38 @@ Best practices
 
 ### Create Login Alias
 
-- User calls `c.IssueLoginAliasToken` in registry.AppWorkspaceWS[Login] to create an alias for their Login
-- `c.CreateLoginAlias` returns a `LoginAliasToken`
-  - A short-lived token that keeps NewAlias and PreviousAlias
-- User calls `c.CreateLoginAlias` in registry.AppWorkspaceWS[Alias] with LoginAliasToken as a parameter
-- `c.CreateLoginAlias` creates an alias for the Login and triggers `ap.ApplyCreateLoginAlias`
-  - cdoc.LoginAlias
-- `ap.ApplyCreateLoginAlias` invokes `c.DeactivateAlias` in registry.AppWorkspaceWS[PreviousAlias]
-- `c.DeactivateAlias` deactivates the previous alias, if exists
+- User calls `c.CreateLoginAlias` in registry.AppWorkspaceWS[Login] to create an alias for their Login
+- `c.CreateLoginAlias` updates the `cdoc.Login.Alias` field
+- `cdoc.Login.Alias` update triggers `ap.ApplyCreateLoginAlias`
+- `ap.ApplyCreateLoginAlias`
+  - calls `c.DeactivateAlias` in registry.AppWorkspaceWS[OldLoginAlias]
+  - calls `c.CreateAlias` in registry.AppWorkspaceWS[NewLoginAlias]
+- User waits until `q.IssuePrincipalToken` in registry.AppWorkspaceWS[Alias] succeeds
 
 ```mermaid
 sequenceDiagram
     actor User
     participant LoginWS as registry.AppWorkspaceWS[Login]
-    participant AliasWS as registry.AppWorkspaceWS[Alias]
-    participant PrevAliasWS as registry.AppWorkspaceWS[PreviousAlias]
+    participant NewAliasWS as registry.AppWorkspaceWS[NewLoginAlias]
+    participant OldAliasWS as registry.AppWorkspaceWS[OldLoginAlias]
     
-    User->>LoginWS: c.IssueLoginAliasToken(LoginAsEmail, Alias)
-    Note over LoginWS: Verify LoginAsEmail matches Login
-    LoginWS-->>User: LoginAliasToken (TTL: 1 min)
+    User->>LoginWS: c.CreateLoginAlias()
+    Note over LoginWS: Update cdoc.Login.Alias field
+    LoginWS->>LoginWS: Trigger ap.ApplyCreateLoginAlias
     
-    User->>AliasWS: c.CreateLoginAlias(LoginAliasToken)
-    AliasWS->>AliasWS: Create alias for Login
-    Note over AliasWS: INSERT INTO TABLE LoginAlias
-    AliasWS->>AliasWS: Trigger ap.ApplyCreateLoginAlias
+    LoginWS->>OldAliasWS: c.DeactivateAlias()
+    Note over OldAliasWS: Deactivate previous alias if exists
+    OldAliasWS-->>LoginWS: Alias deactivated
     
-    AliasWS->>PrevAliasWS: c.DeactivateAlias()
-    Note over PrevAliasWS: Deactivate previous alias if exists
+    LoginWS->>NewAliasWS: c.CreateAlias()
+    Note over NewAliasWS: Create new alias for Login
+    NewAliasWS-->>LoginWS: Alias created
     
-    PrevAliasWS-->>AliasWS: Alias deactivated
-    AliasWS-->>User: Alias created successfully
+    LoginWS-->>User: Login alias updated
+    
+    User->>NewAliasWS: q.IssuePrincipalToken()
+    Note over NewAliasWS: Verify alias is active
+    NewAliasWS-->>User: PrincipalToken
 ```
 
 ### IssuePrincipalToken for Alias
@@ -107,8 +109,6 @@ registry.AppWorkspaceWS:
   - Invokes DeactivateAlias in the workspace of the PreviousAlias
 - `c.DeactivateAlias`: Invoked by ApplyCreateAlias
   - Called by the system only to deactivate the alias
-
-
 
 ## Related work
 
