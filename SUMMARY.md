@@ -101,7 +101,7 @@
     - [Email operations](server/users/users-emails.md)
       - [Send Email](server/users/users-emails-send.md)
       - [Change Email](server/users/users-emails-change.md)
-    - [Operations with Login](server/users/users-login.md)
+    - [Login alias](server/users/users-alias.md)
     - [See also (Users)](server/users/users-seealso.md)
   - [Notifications](server/n10n/n10n.md)
     - [Create channel and subscribe](server/n10n/create-channel.md)
