@@ -6,6 +6,10 @@ The Users feature provides core user management functionality in the Voedger sys
 
 ## Architecture
 
+### Principles
+
+- 🏡 Login table keeps hashes of logins to avoid potential personal data compliance issues
+
 ### Core tables
 
 [sys.UserProfileWS.UserProfile](https://github.com/voedger/voedger/blob/ecb97b1f282e2b1d4e19b1ab0394fa4eacafcbdd/pkg/sys/userprofile.vsql#L4)

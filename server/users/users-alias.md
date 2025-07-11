@@ -10,10 +10,12 @@ Best practices
 
 - Instagram allows users to change their username multiple times
 
-## 🏡Principles
+## Principles
 
-- Instead of changing the login we are creating an alias, so old login is kept and can be used to log in
+- 🏡Instead of changing the login we are creating an alias, so old login is kept and can be used to log in
   - Rationale: Login value is used extensively in the data, so it is hard to change the value
+- 🏡Login table keeps workspace ID of the aliased login in the AliasedLoginWSID field
+  - Rationale: This is the only way to route the request from the Alias workspace to the Login workspace since we do not keep actual Login value, only hash
 - Alias can be changed
   - Previous alias is deactivated and can be re-used
 
@@ -21,13 +23,29 @@ Best practices
 
 ### Create Login Alias
 
+- User calls `c.CreateLoginAlias` in registry.AppWorkspaceWS[Alias] to create an alias for their Login
+- `c.CreateLoginAlias` inserts a record into `cdoc.Login`, setting the `AliasedLoginWSID`, `AliasedLoginHash` fields
+  - Update of the `cdoc.Login.AliasedLoginWSID` triggers `ap.ApplyCreateLoginAlias`
+- `ap.ApplyCreateLoginAlias`
+  - Invokes `c.RegisterCreatedAlias` in registry.AppWorkspaceWS[Login]
+- `c.RegisterCreatedAlias` updates `cdoc.Login` table, setting the `AliasWSID` and `AliasHash` fields
+  - Update of the `cdoc.Login.Alias*` fields triggers `ap.RegisterCreatedAlias`
+  - calls `c.DeactivateAlias` in registry.AppWorkspaceWS[OldLoginAlias]
+  - calls `c.CreateAlias` in registry.AppWorkspaceWS[NewLoginAlias]
+- User calls `q.IssuePrincipalToken` in registry.AppWorkspaceWS[Alias] multiple times until it succeeds
+- q.IssuePrincipalToken in registry.AppWorkspaceWS[Alias]
+  - Reads `cdoc.Login` and routes the request to the q.IssuePrincipalToken in registry.AppWorkspaceWS[Login]
+
+
 - User calls `c.CreateLoginAlias` in registry.AppWorkspaceWS[Login] to create an alias for their Login
-- `c.CreateLoginAlias` updates the `cdoc.Login.Alias` field
-- `cdoc.Login.Alias` update triggers `ap.ApplyCreateLoginAlias`
+- `c.CreateLoginAlias` inserts a record into `cdoc.Login` setting the `AliasedLoginWSID` field
+- Update of the `cdoc.Login` triggers `ap.ApplyCreateLoginAlias`
 - `ap.ApplyCreateLoginAlias`
   - calls `c.DeactivateAlias` in registry.AppWorkspaceWS[OldLoginAlias]
   - calls `c.CreateAlias` in registry.AppWorkspaceWS[NewLoginAlias]
-- User waits until `q.IssuePrincipalToken` in registry.AppWorkspaceWS[Alias] succeeds
+- User calls `q.IssuePrincipalToken` in registry.AppWorkspaceWS[Alias] multiple times until it succeeds
+- q.IssuePrincipalToken in registry.AppWorkspaceWS[Alias]
+  - Reads `cdoc.Login` and routes the request to the q.IssuePrincipalToken in registry.AppWorkspaceWS[Login]
 
 ```mermaid
 sequenceDiagram
