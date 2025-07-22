@@ -13,6 +13,7 @@ Retrieve the BLOB from the field of a document or record, using API
 GET `/api/v2/apps/{owner}/{app}/workspaces/{wsid}/docs/{pkg}.{table}/{id}/blobs/{fieldName}`
 
 ### Headers / Cookies
+
 Authorization is supported via Bearer token. The token can be passed in the `Authorization` header or as a cookie. The token is obtained during the authentication process.
 
 | Key | Value | Description |
@@ -56,6 +57,19 @@ Authorization is supported via Bearer token. The token can be passed in the `Aut
 
 - pkg/router
   - URL path handler `~cmp.routerBlobsReadPathHandler~`covrd[^1]✅:
+
+- pkg/processors/blobber
+  - BLOB processor, which handles read and write operations for BLOBs
+  - Sync Pipeline of the processor
+    - pipeline branch which handles read operation:
+      - getBLOBMessageRead
+      ...
+    - pipeline branch which handles write operation:
+      - getBLOBMessageWrite
+      - parseQueryParams
+      ...
+  - interface: BLOB request handler
+  - implementation: BLOB request handler which sends messages to the bus
 
 - pkg/sys/it
   - integration test for reading BLOBs
