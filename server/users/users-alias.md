@@ -36,7 +36,6 @@ Best practices
 - q.IssuePrincipalToken in registry.AppWorkspaceWS[Alias]
   - Reads `cdoc.Login` and routes the request to the q.IssuePrincipalToken in registry.AppWorkspaceWS[Login]
 
-
 - User calls `c.CreateLoginAlias` in registry.AppWorkspaceWS[Login] to create an alias for their Login
 - `c.CreateLoginAlias` inserts a record into `cdoc.Login` setting the `AliasedLoginWSID` field
 - Update of the `cdoc.Login` triggers `ap.ApplyCreateLoginAlias`
