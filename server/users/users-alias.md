@@ -107,7 +107,7 @@ sequenceDiagram
 
 registry.AppWorkspaceWS:
 
-- `~c.IssueCreateAliasToken~`: Called by the user to issue a CreateAliasToken
+- `~c.IssueCreateAliasToken~`uncvrd[^1]❓: Called by the user to issue a CreateAliasToken
   - AuthZ: ??? How to name the role for authenticated user
   - Parameters:
     - LoginAsEmail: verified, must match the Login
@@ -130,3 +130,5 @@ registry.AppWorkspaceWS:
 ## Related work
 
 - [20250617-change-email/README.md](../../rsch/20250617-change-email/README.md)
+
+[^1]: `[~server.users/c.IssueCreateAliasToken~impl]`
