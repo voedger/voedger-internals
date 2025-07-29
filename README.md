@@ -1,4 +1,4 @@
-# ⚠️ Repository Archived
+# ⚠️ Repository archived
 
 > **Note:** This repository has been archived. Active development has moved to [https://github.com/untillpro/voedger-internals](https://github.com/untillpro/voedger-internals). Please refer to the new repository for the latest updates and contributions.
 
