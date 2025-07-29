@@ -1,4 +1,8 @@
-# Introduction
+# ⚠️ Repository Archived
+
+> **Note:** This repository has been archived. Active development has moved to [https://github.com/untillpro/voedger-internals](https://github.com/untillpro/voedger-internals). Please refer to the new repository for the latest updates and contributions.
+
+## Introduction
 
 This documentation provides a detailed description of the internal design and architecture of the Voedger platform.  It serves as a base for the development and includes the latest designs, which may still be not implemented.
 
