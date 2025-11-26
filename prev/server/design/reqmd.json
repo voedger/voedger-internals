@@ -1,0 +1,29 @@
+{
+  "FileUrl2FileHash": {
+    "https://github.com/voedger/voedger/blob/6cdaf984d07a84e3e0a24c3bfc7e5e0fc3850e78/pkg/ielections/impl_mockstorage.go": "a6a7717812ecf0e76991bd6e287ab64da5115c58",
+    "https://github.com/voedger/voedger/blob/6cdaf984d07a84e3e0a24c3bfc7e5e0fc3850e78/pkg/ielections/impl_test.go": "80c867796f11a560dbaf61f8c6885853bc30da32",
+    "https://github.com/voedger/voedger/blob/6cdaf984d07a84e3e0a24c3bfc7e5e0fc3850e78/pkg/ielections/impl_testsuite.go": "f17bd49cec7688cf0fdc6abac5a5d272419f207c",
+    "https://github.com/voedger/voedger/blob/6cdaf984d07a84e3e0a24c3bfc7e5e0fc3850e78/pkg/ielections/interface.go": "cf6fb21e9a9074402b423d267feed9b1af8703dd",
+    "https://github.com/voedger/voedger/blob/6cdaf984d07a84e3e0a24c3bfc7e5e0fc3850e78/pkg/vvm/storage/impl_electionsbydrivers_test.go": "5b35ab1438fbd31db9624404cf22588ab0c77652",
+    "https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/appparts/internal/seqstorage/impl.go": "3d5fb6b2207202b73a3a27559e54cc4b551c29b4",
+    "https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/appparts/internal/seqstorage/provide.go": "ad46b6baba4ee7ec82e2a4eaaea4939063149a10",
+    "https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/appparts/internal/seqstorage/type.go": "828c7a3fd5b99b979aff00ba5b96e98dac84c84c",
+    "https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/isequencer/impl.go": "390963322c0604909c202d61905acfb029f16406",
+    "https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/isequencer/interface.go": "1708057d4d7b0092bf63f45735e89abb571e0e24",
+    "https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/isequencer/isequencer_test.go": "b60c6da5cd21a87bdd56b59860dffd1d2699b23e",
+    "https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/isequencer/types.go": "d6315a07446ed80be2c1fdbefd5dc8f557a0e3c5",
+    "https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/vvm/storage/consts.go": "2c0a4d630171828a11fed32204258ee159d70f72",
+    "https://github.com/voedger/voedger/blob/851a05a0c957fcedef4ad51c3f1977abe0678a3d/pkg/vvm/storage/impl_seqstorage.go": "ae8c4029bd2883004fb9fd9cf0a4cc6ddfdc4600",
+    "https://github.com/voedger/voedger/blob/9deb1fd8797c53d383ebed091961ecef39d045f2/pkg/vvm/provide.go": "52ef1108753005fe0ea1a54dbaf0bf0a8beb1fc0",
+    "https://github.com/voedger/voedger/blob/9deb1fd8797c53d383ebed091961ecef39d045f2/pkg/vvm/types.go": "4c134e1a48f83dea0286cd59018c813e6fcbc261",
+    "https://github.com/voedger/voedger/blob/9deb1fd8797c53d383ebed091961ecef39d045f2/pkg/vvm/wire_gen.go": "53c0f00ebcb79549b11231d0130fe9c3558c1896",
+    "https://github.com/voedger/voedger/blob/c53190919e5ba6407e6e997ea31cfc106aeaa87b/pkg/vvm/storage/consts.go": "2c0a4d630171828a11fed32204258ee159d70f72",
+    "https://github.com/voedger/voedger/blob/c53190919e5ba6407e6e997ea31cfc106aeaa87b/pkg/vvm/storage/impl_elections_test.go": "cf6d8c35af41a0eec3314cb11f735fd645b7b12d",
+    "https://github.com/voedger/voedger/blob/c53190919e5ba6407e6e997ea31cfc106aeaa87b/pkg/vvm/storage/interface.go": "eb6b017bfd994306cc8fe962446382e3c1cf4693",
+    "https://github.com/voedger/voedger/blob/c53190919e5ba6407e6e997ea31cfc106aeaa87b/pkg/vvm/storage/provide.go": "a698641d6a74b76420a3a4b1e02fe0fdbfa56114",
+    "https://github.com/voedger/voedger/blob/d10452dae8a296059137b1d44fb7a411f90aa52f/pkg/ielections/impl.go": "49819ab4346b93e0fd6e1ee5b7a619eca1166a26",
+    "https://github.com/voedger/voedger/blob/d10452dae8a296059137b1d44fb7a411f90aa52f/pkg/vvm/impl_orch.go": "ea306cca0574f40a3b6185449e50a00c09cb9d11",
+    "https://github.com/voedger/voedger/blob/d10452dae8a296059137b1d44fb7a411f90aa52f/pkg/vvm/impl_orch_test.go": "f611104092ae87457c1d2ab6e79afc7c70d1c1b9",
+    "https://github.com/voedger/voedger/blob/e81fd33926adedebd9eb832d9940e3b8acaac578/pkg/vvm/shutdowntest/iml_shutdown_test.go": "08958c61cc34f6a28e90571a8c676a3ce5cfe761"
+  }
+}

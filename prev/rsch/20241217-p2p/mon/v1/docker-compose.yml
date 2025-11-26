@@ -1,0 +1,233 @@
+version: '3.5'
+services:
+  prometheus:
+    image: prom/prometheus:v2.44.0
+    networks:
+      - voedger_net
+    volumes:
+      - /prometheus:/prometheus
+      - ~/prometheus:/etc/prometheus
+      - /etc/hosts:/etc/hosts
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--web.config.file=/etc/prometheus/web.yml'
+      - '--web.enable-admin-api'
+      - '--web.enable-lifecycle'
+      - '--web.route-prefix=/prometheus'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=30d'
+    restart: unless-stopped
+    ports:
+      - target: 9090
+        published: 9090
+        protocol: tcp
+    deploy:
+      mode: global
+      placement:
+        constraints:
+          - node.labels.AppNode == true
+    logging:
+      driver: "local"
+      options: 
+        max-size: 10m
+        max-file: "3"
+
+  grafana:
+    image: grafana/grafana:8.3.4
+    networks:
+      - voedger_net
+    volumes:
+      - ~/grafana/grafana.ini:/etc/grafana/grafana.ini
+      - ~/grafana/provisioning/datasources/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
+      - ~/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - /var/lib/grafana:/var/lib/grafana
+      - /etc/hosts:/etc/hosts
+    ports:
+      - target: 3000
+        published: 3000
+        protocol: tcp
+    deploy:
+      mode: global
+      placement:
+        constraints:
+          - node.labels.AppNode == true
+    logging:
+      driver: "local"
+      options: 
+        max-size: 10m
+        max-file: "3"
+    links:
+      - prometheus
+
+  cadvisor1:
+    image: gcr.io/cadvisor/cadvisor:v0.47.1
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.AppNode1 == true
+    networks:
+      - voedger_net
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /etc/hosts:/etc/hosts
+    restart: unless-stopped
+
+  cadvisor2:
+    image: gcr.io/cadvisor/cadvisor:v0.47.1
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.AppNode2 == true
+    networks:
+      - voedger_net
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /etc/hosts:/etc/hosts
+    restart: unless-stopped
+
+  cadvisor3:
+    image: gcr.io/cadvisor/cadvisor:v0.47.1
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.AppNode3 == true
+    networks:
+      - voedger_net
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /etc/hosts:/etc/hosts
+    restart: unless-stopped
+
+  alertmanager1:
+    image: prom/alertmanager:v0.26.0
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.AppNode1 == true
+    volumes:
+      - /alertmanager:/alertmanager
+      - ~/alertmanager:/etc/alertmanager
+      - /etc/hosts:/etc/hosts
+    entrypoint: >
+      /bin/sh -c "
+      i=1;
+      while [ \$$i -le 15 ]; do \
+          NODE_ADDRESS=\$$(hostname -i);
+          echo \"Attempt \$$i: NODE_ADDRESS=\$$NODE_ADDRESS\";
+          if echo \$$NODE_ADDRESS | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$$'; then
+            echo \"Valid IP address: \$$NODE_ADDRESS\";
+            break;
+          fi \
+          sleep 1;
+          i=\$$(expr \$$i + 1);
+          if [ \$$i -eq 15 ]; then \
+            echo \"Failed to determine valid IP address within 15 seconds.\";
+            exit 1;
+          fi \
+      done && \
+      exec /bin/alertmanager \
+      --config.file=/etc/alertmanager/config.yml \
+      --storage.path=/alertmanager \
+      --cluster.peer=alertmanager2:9094 \
+      --cluster.peer=alertmanager3:9094 \
+      --cluster.listen-address=\$${NODE_ADDRESS}:9094 \
+      --cluster.advertise-address=\$${NODE_ADDRESS}:9094"
+    restart: unless-stopped
+    networks:
+      - voedger_net
+
+  alertmanager2:
+    image: prom/alertmanager:v0.26.0
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.AppNode2 == true
+    volumes:
+      - /alertmanager:/alertmanager
+      - ~/alertmanager:/etc/alertmanager
+      - /etc/hosts:/etc/hosts
+    entrypoint: >                    
+      /bin/sh -c "
+      i=1;
+      while [ \$$i -le 15 ]; do \
+          NODE_ADDRESS=\$$(hostname -i);
+          echo \"Attempt \$$i: NODE_ADDRESS=\$$NODE_ADDRESS\";
+          if echo \$$NODE_ADDRESS | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$$'; then
+            echo \"Valid IP address: \$$NODE_ADDRESS\";
+            break;
+          fi \
+          sleep 1;
+          i=\$$(expr \$$i + 1);
+          if [ \$$i -eq 15 ]; then \
+            echo \"Failed to determine valid IP address within 15 seconds.\";
+            exit 1;
+          fi \
+      done && \
+      exec /bin/alertmanager \
+      --config.file=/etc/alertmanager/config.yml \
+      --storage.path=/alertmanager \
+      --cluster.peer=alertmanager1:9094 \
+      --cluster.peer=alertmanager3:9094 \
+      --cluster.listen-address=$${NODE_ADDRESS}:9094 \
+      --cluster.advertise-address=$${NODE_ADDRESS}:9094"
+    restart: unless-stopped
+    networks:
+      - voedger_net
+
+  alertmanager3:
+    image: prom/alertmanager:v0.26.0
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.AppNode3 == true
+    volumes:
+      - /alertmanager:/alertmanager
+      - ~/alertmanager:/etc/alertmanager
+      - /etc/hosts:/etc/hosts
+    entrypoint: >                    
+      /bin/sh -c "
+      i=1;
+      while [ \$$i -le 15 ]; do \
+          NODE_ADDRESS=\$$(hostname -i);
+          echo \"Attempt \$$i: NODE_ADDRESS=\$$NODE_ADDRESS\";
+          if echo \$$NODE_ADDRESS | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$$'; then
+            echo \"Valid IP address: \$$NODE_ADDRESS\";
+            break;
+          fi \
+          sleep 1;
+          i=\$$(expr \$$i + 1);
+          if [ \$$i -eq 15 ]; then \
+            echo \"Failed to determine valid IP address within 15 seconds.\";
+            exit 1;
+          fi \
+      done && \
+      exec /bin/alertmanager \
+      --config.file=/etc/alertmanager/config.yml \
+      --storage.path=/alertmanager \
+      --cluster.peer=alertmanager2:9094 \
+      --cluster.peer=alertmanager1:9094 \
+      --cluster.listen-address=$${NODE_ADDRESS}:9094 \
+      --cluster.advertise-address=$${NODE_ADDRESS}:9094"
+    restart: unless-stopped
+    networks:
+      - voedger_net
+
+networks:
+  voedger_net:
+    external: true
+
