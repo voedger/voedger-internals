@@ -1,6 +1,6 @@
 # Docusaurus Setup Complete
 
-This document summarizes the Docusaurus implementation for the airs-design repository.
+This document summarizes the Docusaurus implementation for the voedger-internals repository.
 
 ## What Has Been Implemented
 
@@ -25,7 +25,7 @@ This document summarizes the Docusaurus implementation for the airs-design repos
 ### 2. Directory Structure
 
 ```
-airs-design/
+voedger-internals/
 ├── .github/
 │   └── workflows/
 │       └── deploy.yml          # GitHub Actions deployment workflow

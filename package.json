@@ -1,5 +1,5 @@
 {
-  "name": "airs-design",
+  "name": "voedger-internals",
   "version": "1.0.0",
   "description": "- [Notation](notation.md)\r - [Actors and Principals](roles-services.md#actors--principals)\r - [Air Roles Hierarchy](roles-services.md#air-roles-hierarchy)\r - [Workspaces Hierarchy](roles-services.md#workspaces-hierarchy)\r - [Principals, Products, Features and Workspaces](roles-services.md#principals-products-features-and-workspaces)",
   "main": "index.js",

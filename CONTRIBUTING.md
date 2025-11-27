@@ -14,7 +14,7 @@ Thank you for contributing to the Voedger Internals documentation! This guide wi
 1. Clone the repository:
    ```bash
    git clone https://github.com/voedger/voedger-internals.git
-   cd airs-design
+   cd voedger-internals
    ```
 
 2. Install dependencies:
@@ -257,4 +257,3 @@ If you have questions or need help, please:
 - Open an issue on GitHub
 - Contact the documentation team
 - Review the README.md for additional information
-
