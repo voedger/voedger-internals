@@ -53,18 +53,13 @@ npm run serve
 
 ## Contributing
 
-### For Tech Writers and Translators
+See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines on how to contribute to this documentation.
 
-1. **Edit Documentation**: All documentation files are located in the `docs/` directory. Edit markdown files directly.
+### Quick Overview
 
-2. **Add Images**: Place images in the `static/img/` directory and reference them in markdown:
-   ```markdown
-   ![Alt text](/img/your-image.png)
-   ```
-
-3. **Test Locally**: Run `npm start` to preview your changes locally before committing.
-
-4. **Submit Changes**: Create a pull request with your changes. Once merged to the main branch, changes will be automatically deployed.
+1. **Edit Documentation**: All documentation files are located in the `docs/` directory
+2. **Test Locally**: Run `npm start` to preview your changes
+3. **Submit Changes**: Create a pull request with your changes
 
 ### Content Structure
 
@@ -72,18 +67,6 @@ npm run serve
 - `static/` - Static assets (images, files)
 - `sidebars.js` - Navigation sidebar configuration
 - `docusaurus.config.js` - Site configuration
-
-### Writing Guidelines
-
-- Use standard markdown syntax
-- Add front matter to each document:
-  ```markdown
-  ---
-  title: Document Title
-  ---
-  ```
-- Use relative links for internal documentation
-- Follow the existing structure and naming conventions
 
 ## Deployment
 

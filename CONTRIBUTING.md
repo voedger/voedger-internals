@@ -41,18 +41,13 @@ The documentation site will open in your browser at http://localhost:3000
 ### Adding a New Page
 
 1. Create a new `.md` file in the appropriate `docs/` subdirectory
-2. Add front matter at the top:
-   ```markdown
-   ---
-   title: Your Page Title
-   ---
-   
+   ```markdown  
    # Your Page Title
    
    Your content here...
    ```
 
-3. Update `sidebars.js` to include the new page in navigation
+2. Update `SUMMARY.md` to include the new page in navigation
 
 ### Adding Images
 
@@ -72,75 +67,11 @@ Link to other documentation pages:
 
 ## Markdown Features
 
-### Basic Formatting
+This documentation uses standard Markdown with Docusaurus extensions.
 
-```markdown
-**Bold text**
-*Italic text*
-`Code`
-[Link](https://example.com)
-![Image](/img/example.png)
-```
-
-### Headings
-
-```markdown
-# H1 - Page Title
-## H2 - Section
-### H3 - Subsection
-```
-
-### Lists
-
-```markdown
-- Unordered list item
-- Another item
-  - Nested item
-
-1. Ordered list item
-2. Another item
-```
-
-### Code Blocks
-
-````markdown
-```javascript
-const example = "code";
-```
-````
-
-### Admonitions (Callouts)
-
-```markdown
-:::note
-This is a note
-:::
-
-:::tip
-This is a tip
-:::
-
-:::info
-This is info
-:::
-
-:::warning
-This is a warning
-:::
-
-:::danger
-This is danger
-:::
-```
-
-### Tables
-
-```markdown
-| Column 1 | Column 2 |
-|----------|----------|
-| Cell 1   | Cell 2   |
-| Cell 3   | Cell 4   |
-```
+For detailed syntax reference, see:
+- [Basic Markdown Guide](https://www.markdownguide.org/basic-syntax/)
+- [Docusaurus Markdown Features](https://docusaurus.io/docs/markdown-features)
 
 ## Testing Your Changes
 
@@ -168,27 +99,16 @@ node scripts/validate-links.js docs/
 
 ## Submitting Changes
 
-1. Create a new branch:
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
+Follow the standard GitHub fork and pull request workflow:
 
-2. Make your changes and commit:
-   ```bash
-   git add .
-   git commit -m "Description of your changes"
-   ```
+1. Fork the repository and clone your fork
+2. Create a feature branch for your changes
+3. Commit and push your changes
+4. Open a Pull Request
 
-3. Push to GitHub:
-   ```bash
-   git push origin feature/your-feature-name
-   ```
+For detailed instructions, see [GitHub's Contributing to Projects Guide](https://docs.github.com/en/get-started/exploring-projects-on-github/contributing-to-a-project).
 
-4. Create a Pull Request on GitHub
-
-5. Wait for review and approval
-
-6. Once merged to main, changes will be automatically deployed to GitHub Pages
+Once merged to main, changes will be automatically deployed to GitHub Pages.
 
 ## Best Practices
 
