@@ -13,6 +13,30 @@ function parseSummaryMd(filePath) {
   const sidebar = [];
   const stack = [{ items: sidebar, level: -1 }];
 
+  // Helper function to check if a line item has subitems
+  function hasSubitems(currentIndex, currentLevel) {
+    for (let j = currentIndex + 1; j < lines.length; j++) {
+      const nextLine = lines[j];
+      const nextLineTrimmed = nextLine.trim();
+      
+      // Skip empty lines
+      if (!nextLineTrimmed) continue;
+      
+      // Stop at section headers
+      if (nextLineTrimmed.match(/^##\s+/)) return false;
+      
+      const nextIndent = nextLine.match(/^(\s*)/)[1].length;
+      const nextLevel = Math.floor(nextIndent / 2) + 1;
+      
+      // If next item is at a deeper level, this item has subitems
+      if (nextLevel > currentLevel) return true;
+      
+      // If next item is at the same or shallower level, no subitems
+      if (nextLevel <= currentLevel) return false;
+    }
+    return false;
+  }
+
   for (let i = 0; i < lines.length; i++) {
     let line = lines[i].trim(); // Trim to remove any trailing whitespace
     // Skip empty lines and the title
@@ -79,20 +103,47 @@ function parseSummaryMd(filePath) {
       // Keep README as-is (both root and folder READMEs)
       // Docusaurus will use the document ID based on the file name
 
-      const docItem = {
-        type: 'doc',
-        id: docPath,
-        label: label,
-      };
+      // Check if this link has subitems - if so, create a category
+      if (hasSubitems(i, level)) {
+        const category = {
+          type: 'category',
+          label: label,
+          link: {
+            type: 'doc',
+            id: docPath,
+          },
+          items: [],
+          collapsed: true,
+        };
 
-      // Find the right parent
-      while (stack.length > level && stack[stack.length - 1].level >= level) {
-        stack.pop();
-      }
+        // Find the right parent
+        while (stack.length > level && stack[stack.length - 1].level >= level) {
+          stack.pop();
+        }
 
-      const parent = stack[stack.length - 1];
-      if (parent.items) {
-        parent.items.push(docItem);
+        const parent = stack[stack.length - 1];
+        if (parent.items) {
+          parent.items.push(category);
+        }
+
+        stack.push({ items: category.items, level: level });
+      } else {
+        // No subitems, create a regular doc item
+        const docItem = {
+          type: 'doc',
+          id: docPath,
+          label: label,
+        };
+
+        // Find the right parent
+        while (stack.length > level && stack[stack.length - 1].level >= level) {
+          stack.pop();
+        }
+
+        const parent = stack[stack.length - 1];
+        if (parent.items) {
+          parent.items.push(docItem);
+        }
       }
     }
   }

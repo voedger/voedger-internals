@@ -29,7 +29,7 @@ const sidebars = {
       {
         "type": "doc",
         "id": "concepts/evsrc/README",
-        "label": "Event Sourcing & CQRS"
+        "label": "Event Sourcing and CQRS"
       },
       {
         "type": "category",
@@ -149,180 +149,192 @@ const sidebars = {
             "label": "📁API Gateway",
             "items": [
               {
-                "type": "doc",
-                "id": "server/apiv2/README",
-                "label": "API v2"
-              },
-              {
                 "type": "category",
-                "label": "📁Conventions",
+                "label": "API v2",
+                "link": {
+                  "type": "doc",
+                  "id": "server/apiv2/README"
+                },
                 "items": [
                   {
-                    "type": "doc",
-                    "id": "server/apiv2/api-url",
-                    "label": "API URL"
+                    "type": "category",
+                    "label": "📁Conventions",
+                    "items": [
+                      {
+                        "type": "doc",
+                        "id": "server/apiv2/api-url",
+                        "label": "API URL"
+                      },
+                      {
+                        "type": "doc",
+                        "id": "server/apiv2/http-methods-and-processors",
+                        "label": "HTTP methods and processors"
+                      },
+                      {
+                        "type": "doc",
+                        "id": "server/apiv2/naming-conventions",
+                        "label": "Naming conventions"
+                      },
+                      {
+                        "type": "doc",
+                        "id": "server/apiv2/query-constraints",
+                        "label": "Query constraints"
+                      },
+                      {
+                        "type": "doc",
+                        "id": "server/apiv2/errors",
+                        "label": "Error handling"
+                      }
+                    ],
+                    "collapsed": true
                   },
                   {
-                    "type": "doc",
-                    "id": "server/apiv2/http-methods-and-processors",
-                    "label": "HTTP methods and processors"
+                    "type": "category",
+                    "label": "📁Documents and records",
+                    "items": [
+                      {
+                        "type": "doc",
+                        "id": "server/apiv2/create-doc",
+                        "label": "Create document or record"
+                      },
+                      {
+                        "type": "doc",
+                        "id": "server/apiv2/update-doc",
+                        "label": "Update document or record"
+                      },
+                      {
+                        "type": "doc",
+                        "id": "server/apiv2/deactivate-doc",
+                        "label": "Deactivate document or record"
+                      },
+                      {
+                        "type": "doc",
+                        "id": "server/apiv2/read-doc",
+                        "label": "Read document or record"
+                      },
+                      {
+                        "type": "doc",
+                        "id": "server/apiv2/read-cdocs",
+                        "label": "Read from CDoc collection"
+                      }
+                    ],
+                    "collapsed": true
                   },
                   {
-                    "type": "doc",
-                    "id": "server/apiv2/naming-conventions",
-                    "label": "Naming conventions"
+                    "type": "category",
+                    "label": "📁Queries",
+                    "items": [
+                      {
+                        "type": "doc",
+                        "id": "server/apiv2/read-from-query",
+                        "label": "Read from query"
+                      }
+                    ],
+                    "collapsed": true
                   },
                   {
-                    "type": "doc",
-                    "id": "server/apiv2/query-constraints",
-                    "label": "Query constraints"
+                    "type": "category",
+                    "label": "📁Views",
+                    "items": [
+                      {
+                        "type": "doc",
+                        "id": "server/apiv2/read-from-view",
+                        "label": "Read from view"
+                      }
+                    ],
+                    "collapsed": true
                   },
                   {
-                    "type": "doc",
-                    "id": "server/apiv2/errors",
-                    "label": "Error handling"
+                    "type": "category",
+                    "label": "📁Commands",
+                    "items": [
+                      {
+                        "type": "doc",
+                        "id": "server/apiv2/execute-command",
+                        "label": "Execute command"
+                      }
+                    ],
+                    "collapsed": true
+                  },
+                  {
+                    "type": "category",
+                    "label": "📁BLOBs",
+                    "items": [
+                      {
+                        "type": "doc",
+                        "id": "server/apiv2/create-blob",
+                        "label": "Create BLOB"
+                      },
+                      {
+                        "type": "doc",
+                        "id": "server/apiv2/read-blob",
+                        "label": "Read BLOB"
+                      }
+                    ],
+                    "collapsed": true
+                  },
+                  {
+                    "type": "category",
+                    "label": "📁Temporary BLOBs",
+                    "items": [
+                      {
+                        "type": "doc",
+                        "id": "server/apiv2/create-tblob",
+                        "label": "Create temporary BLOB"
+                      },
+                      {
+                        "type": "doc",
+                        "id": "server/apiv2/read-tblob",
+                        "label": "Read temporary BLOB"
+                      }
+                    ],
+                    "collapsed": true
+                  },
+                  {
+                    "type": "category",
+                    "label": "📁Schemas",
+                    "items": [
+                      {
+                        "type": "doc",
+                        "id": "server/apiv2/list-app-workspaces",
+                        "label": "List app workspaces"
+                      },
+                      {
+                        "type": "doc",
+                        "id": "server/apiv2/list-ws-roles",
+                        "label": "List workspace roles"
+                      },
+                      {
+                        "type": "doc",
+                        "id": "server/apiv2/read-ws-role-schema",
+                        "label": "Read workspace role schema"
+                      }
+                    ],
+                    "collapsed": true
                   }
                 ],
                 "collapsed": true
               },
               {
                 "type": "category",
-                "label": "📁Documents and records",
+                "label": "API v1",
+                "link": {
+                  "type": "doc",
+                  "id": "server/api-gateway"
+                },
                 "items": [
                   {
                     "type": "doc",
-                    "id": "server/apiv2/create-doc",
-                    "label": "Create document or record"
+                    "id": "server/api-conventions",
+                    "label": "API Conventions"
                   },
                   {
                     "type": "doc",
-                    "id": "server/apiv2/update-doc",
-                    "label": "Update document or record"
-                  },
-                  {
-                    "type": "doc",
-                    "id": "server/apiv2/deactivate-doc",
-                    "label": "Deactivate document or record"
-                  },
-                  {
-                    "type": "doc",
-                    "id": "server/apiv2/read-doc",
-                    "label": "Read document or record"
-                  },
-                  {
-                    "type": "doc",
-                    "id": "server/apiv2/read-cdocs",
-                    "label": "Read from CDoc collection"
+                    "id": "server/blobs/blobs0",
+                    "label": "BLOBs"
                   }
                 ],
                 "collapsed": true
-              },
-              {
-                "type": "category",
-                "label": "📁Queries",
-                "items": [
-                  {
-                    "type": "doc",
-                    "id": "server/apiv2/read-from-query",
-                    "label": "Read from query"
-                  }
-                ],
-                "collapsed": true
-              },
-              {
-                "type": "category",
-                "label": "📁Views",
-                "items": [
-                  {
-                    "type": "doc",
-                    "id": "server/apiv2/read-from-view",
-                    "label": "Read from view"
-                  }
-                ],
-                "collapsed": true
-              },
-              {
-                "type": "category",
-                "label": "📁Commands",
-                "items": [
-                  {
-                    "type": "doc",
-                    "id": "server/apiv2/execute-command",
-                    "label": "Execute command"
-                  }
-                ],
-                "collapsed": true
-              },
-              {
-                "type": "category",
-                "label": "📁BLOBs",
-                "items": [
-                  {
-                    "type": "doc",
-                    "id": "server/apiv2/create-blob",
-                    "label": "Create BLOB"
-                  },
-                  {
-                    "type": "doc",
-                    "id": "server/apiv2/read-blob",
-                    "label": "Read BLOB"
-                  }
-                ],
-                "collapsed": true
-              },
-              {
-                "type": "category",
-                "label": "📁Temporary BLOBs",
-                "items": [
-                  {
-                    "type": "doc",
-                    "id": "server/apiv2/create-tblob",
-                    "label": "Create temporary BLOB"
-                  },
-                  {
-                    "type": "doc",
-                    "id": "server/apiv2/read-tblob",
-                    "label": "Read temporary BLOB"
-                  }
-                ],
-                "collapsed": true
-              },
-              {
-                "type": "category",
-                "label": "📁Schemas",
-                "items": [
-                  {
-                    "type": "doc",
-                    "id": "server/apiv2/list-app-workspaces",
-                    "label": "List app workspaces"
-                  },
-                  {
-                    "type": "doc",
-                    "id": "server/apiv2/list-ws-roles",
-                    "label": "List workspace roles"
-                  },
-                  {
-                    "type": "doc",
-                    "id": "server/apiv2/read-ws-role-schema",
-                    "label": "Read workspace role schema"
-                  }
-                ],
-                "collapsed": true
-              },
-              {
-                "type": "doc",
-                "id": "server/api-gateway",
-                "label": "API v1"
-              },
-              {
-                "type": "doc",
-                "id": "server/api-conventions",
-                "label": "API Conventions"
-              },
-              {
-                "type": "doc",
-                "id": "server/blobs/blobs0",
-                "label": "BLOBs"
               }
             ],
             "collapsed": true
@@ -333,38 +345,44 @@ const sidebars = {
             "label": "Admin Endpoint"
           },
           {
-            "type": "doc",
-            "id": "server/clusters/README",
-            "label": "Clusters"
-          },
-          {
-            "type": "doc",
-            "id": "server/clusters/bootstrap",
-            "label": "Bootstrap"
-          },
-          {
-            "type": "doc",
-            "id": "server/mon",
-            "label": "Monitoring"
-          },
-          {
-            "type": "doc",
-            "id": "server/secure-prometheus-grafana",
-            "label": "Secure prometheus and grafana"
-          },
-          {
-            "type": "doc",
-            "id": "server/alerting",
-            "label": "Alerting"
-          },
-          {
             "type": "category",
-            "label": "📁Maintenance",
+            "label": "Clusters",
+            "link": {
+              "type": "doc",
+              "id": "server/clusters/README"
+            },
             "items": [
               {
                 "type": "doc",
-                "id": "server/clusters/select-update",
-                "label": "SELECT, UPDATE"
+                "id": "server/clusters/bootstrap",
+                "label": "Bootstrap"
+              },
+              {
+                "type": "doc",
+                "id": "server/mon",
+                "label": "Monitoring"
+              },
+              {
+                "type": "doc",
+                "id": "server/secure-prometheus-grafana",
+                "label": "Secure prometheus and grafana"
+              },
+              {
+                "type": "doc",
+                "id": "server/alerting",
+                "label": "Alerting"
+              },
+              {
+                "type": "category",
+                "label": "📁Maintenance",
+                "items": [
+                  {
+                    "type": "doc",
+                    "id": "server/clusters/select-update",
+                    "label": "SELECT, UPDATE"
+                  }
+                ],
+                "collapsed": true
               }
             ],
             "collapsed": true
@@ -387,34 +405,40 @@ const sidebars = {
             "collapsed": true
           },
           {
-            "type": "doc",
-            "id": "server/authnz/README",
-            "label": "AuthNZ"
-          },
-          {
-            "type": "doc",
-            "id": "server/authnz/login",
-            "label": "Issue Principal Token"
-          },
-          {
-            "type": "doc",
-            "id": "server/authnz/refresh",
-            "label": "Refresh Principal Token"
-          },
-          {
-            "type": "doc",
-            "id": "server/authnz/enrich-token",
-            "label": "Enrich Principal Token"
-          },
-          {
-            "type": "doc",
-            "id": "server/authnz/aclrules",
-            "label": "ACL Rules"
-          },
-          {
-            "type": "doc",
-            "id": "server/authnz/groles",
-            "label": "Global Roles"
+            "type": "category",
+            "label": "AuthNZ",
+            "link": {
+              "type": "doc",
+              "id": "server/authnz/README"
+            },
+            "items": [
+              {
+                "type": "doc",
+                "id": "server/authnz/login",
+                "label": "Issue Principal Token"
+              },
+              {
+                "type": "doc",
+                "id": "server/authnz/refresh",
+                "label": "Refresh Principal Token"
+              },
+              {
+                "type": "doc",
+                "id": "server/authnz/enrich-token",
+                "label": "Enrich Principal Token"
+              },
+              {
+                "type": "doc",
+                "id": "server/authnz/aclrules",
+                "label": "ACL Rules"
+              },
+              {
+                "type": "doc",
+                "id": "server/authnz/groles",
+                "label": "Global Roles"
+              }
+            ],
+            "collapsed": true
           },
           {
             "type": "category",
@@ -444,169 +468,211 @@ const sidebars = {
             "collapsed": true
           },
           {
-            "type": "doc",
-            "id": "server/blobs/blobs",
-            "label": "BLOBs"
+            "type": "category",
+            "label": "BLOBs",
+            "link": {
+              "type": "doc",
+              "id": "server/blobs/blobs"
+            },
+            "items": [
+              {
+                "type": "doc",
+                "id": "server/blobs/blobs0",
+                "label": "BLOBs, first implementation"
+              }
+            ],
+            "collapsed": true
           },
           {
-            "type": "doc",
-            "id": "server/blobs/blobs0",
-            "label": "BLOBs, first implementation"
+            "type": "category",
+            "label": "Views",
+            "link": {
+              "type": "doc",
+              "id": "server/views/README"
+            },
+            "items": [
+              {
+                "type": "doc",
+                "id": "server/views/declare-view",
+                "label": "Declare view"
+              },
+              {
+                "type": "doc",
+                "id": "server/views/populate-view",
+                "label": "Populate view"
+              },
+              {
+                "type": "doc",
+                "id": "server/apiv2/read-from-view",
+                "label": "Read views using API"
+              },
+              {
+                "type": "doc",
+                "id": "server/views/read-view",
+                "label": "Read views in extensions"
+              },
+              {
+                "type": "doc",
+                "id": "server/views/sync-views",
+                "label": "Sync views"
+              }
+            ],
+            "collapsed": true
           },
           {
-            "type": "doc",
-            "id": "server/views/README",
-            "label": "Views"
+            "type": "category",
+            "label": "Workspaces",
+            "link": {
+              "type": "doc",
+              "id": "server/workspaces/README"
+            },
+            "items": [
+              {
+                "type": "doc",
+                "id": "server/workspaces/create-workspace-v2",
+                "label": "Create Workspace"
+              },
+              {
+                "type": "doc",
+                "id": "server/workspaces/deactivate-workspace",
+                "label": "Deactivate Workspace"
+              },
+              {
+                "type": "doc",
+                "id": "server/workspaces/workspaces-seealso",
+                "label": "See also (Workspaces)"
+              }
+            ],
+            "collapsed": true
           },
           {
-            "type": "doc",
-            "id": "server/views/declare-view",
-            "label": "Declare view"
+            "type": "category",
+            "label": "Invites",
+            "link": {
+              "type": "doc",
+              "id": "server/invites/invites"
+            },
+            "items": [
+              {
+                "type": "doc",
+                "id": "server/invites/invite-to-ws",
+                "label": "Invite to Workspace"
+              },
+              {
+                "type": "doc",
+                "id": "server/invites/join-ws",
+                "label": "Join Workspace"
+              },
+              {
+                "type": "doc",
+                "id": "server/invites/leave-ws",
+                "label": "Leave Workspace"
+              },
+              {
+                "type": "doc",
+                "id": "server/invites/cancel-sent-invite",
+                "label": "Cancel sent Invite"
+              },
+              {
+                "type": "doc",
+                "id": "server/invites/cancel-accepted-invite",
+                "label": "Cancel accepted Invite"
+              },
+              {
+                "type": "doc",
+                "id": "server/invites/update-invite-roles",
+                "label": "Update Invite roles"
+              }
+            ],
+            "collapsed": true
           },
           {
-            "type": "doc",
-            "id": "server/views/populate-view",
-            "label": "Populate view"
+            "type": "category",
+            "label": "Users",
+            "link": {
+              "type": "doc",
+              "id": "server/users/users"
+            },
+            "items": [
+              {
+                "type": "doc",
+                "id": "server/users/users-create-user",
+                "label": "Create new user"
+              },
+              {
+                "type": "doc",
+                "id": "server/users/users-change-password",
+                "label": "Change password"
+              },
+              {
+                "type": "doc",
+                "id": "server/users/users-reset-password",
+                "label": "Reset password"
+              },
+              {
+                "type": "category",
+                "label": "Email operations",
+                "link": {
+                  "type": "doc",
+                  "id": "server/users/users-emails"
+                },
+                "items": [
+                  {
+                    "type": "doc",
+                    "id": "server/users/users-emails-send",
+                    "label": "Send Email"
+                  },
+                  {
+                    "type": "doc",
+                    "id": "server/users/users-emails-change",
+                    "label": "Change Email"
+                  }
+                ],
+                "collapsed": true
+              },
+              {
+                "type": "doc",
+                "id": "server/users/users-alias",
+                "label": "Login alias"
+              },
+              {
+                "type": "doc",
+                "id": "server/users/users-seealso",
+                "label": "See also (Users)"
+              }
+            ],
+            "collapsed": true
           },
           {
-            "type": "doc",
-            "id": "server/apiv2/read-from-view",
-            "label": "Read views using API"
-          },
-          {
-            "type": "doc",
-            "id": "server/views/read-view",
-            "label": "Read views in extensions"
-          },
-          {
-            "type": "doc",
-            "id": "server/views/sync-views",
-            "label": "Sync views"
-          },
-          {
-            "type": "doc",
-            "id": "server/workspaces/README",
-            "label": "Workspaces"
-          },
-          {
-            "type": "doc",
-            "id": "server/workspaces/create-workspace-v2",
-            "label": "Create Workspace"
-          },
-          {
-            "type": "doc",
-            "id": "server/workspaces/deactivate-workspace",
-            "label": "Deactivate Workspace"
-          },
-          {
-            "type": "doc",
-            "id": "server/workspaces/workspaces-seealso",
-            "label": "See also (Workspaces)"
-          },
-          {
-            "type": "doc",
-            "id": "server/invites/invites",
-            "label": "Invites"
-          },
-          {
-            "type": "doc",
-            "id": "server/invites/invite-to-ws",
-            "label": "Invite to Workspace"
-          },
-          {
-            "type": "doc",
-            "id": "server/invites/join-ws",
-            "label": "Join Workspace"
-          },
-          {
-            "type": "doc",
-            "id": "server/invites/leave-ws",
-            "label": "Leave Workspace"
-          },
-          {
-            "type": "doc",
-            "id": "server/invites/cancel-sent-invite",
-            "label": "Cancel sent Invite"
-          },
-          {
-            "type": "doc",
-            "id": "server/invites/cancel-accepted-invite",
-            "label": "Cancel accepted Invite"
-          },
-          {
-            "type": "doc",
-            "id": "server/invites/update-invite-roles",
-            "label": "Update Invite roles"
-          },
-          {
-            "type": "doc",
-            "id": "server/users/users",
-            "label": "Users"
-          },
-          {
-            "type": "doc",
-            "id": "server/users/users-create-user",
-            "label": "Create new user"
-          },
-          {
-            "type": "doc",
-            "id": "server/users/users-change-password",
-            "label": "Change password"
-          },
-          {
-            "type": "doc",
-            "id": "server/users/users-reset-password",
-            "label": "Reset password"
-          },
-          {
-            "type": "doc",
-            "id": "server/users/users-emails",
-            "label": "Email operations"
-          },
-          {
-            "type": "doc",
-            "id": "server/users/users-emails-send",
-            "label": "Send Email"
-          },
-          {
-            "type": "doc",
-            "id": "server/users/users-emails-change",
-            "label": "Change Email"
-          },
-          {
-            "type": "doc",
-            "id": "server/users/users-alias",
-            "label": "Login alias"
-          },
-          {
-            "type": "doc",
-            "id": "server/users/users-seealso",
-            "label": "See also (Users)"
-          },
-          {
-            "type": "doc",
-            "id": "server/n10n/n10n",
-            "label": "Notifications"
-          },
-          {
-            "type": "doc",
-            "id": "server/n10n/create-channel",
-            "label": "Create channel and subscribe"
-          },
-          {
-            "type": "doc",
-            "id": "server/n10n/add-subscription",
-            "label": "Subscribe to an extra view"
-          },
-          {
-            "type": "doc",
-            "id": "server/n10n/unsubscribe",
-            "label": "Unsubscribe from subscription"
-          },
-          {
-            "type": "doc",
-            "id": "server/n10n/heartbeats",
-            "label": "Heartbeats"
+            "type": "category",
+            "label": "Notifications",
+            "link": {
+              "type": "doc",
+              "id": "server/n10n/n10n"
+            },
+            "items": [
+              {
+                "type": "doc",
+                "id": "server/n10n/create-channel",
+                "label": "Create channel and subscribe"
+              },
+              {
+                "type": "doc",
+                "id": "server/n10n/add-subscription",
+                "label": "Subscribe to an extra view"
+              },
+              {
+                "type": "doc",
+                "id": "server/n10n/unsubscribe",
+                "label": "Unsubscribe from subscription"
+              },
+              {
+                "type": "doc",
+                "id": "server/n10n/heartbeats",
+                "label": "Heartbeats"
+              }
+            ],
+            "collapsed": true
           },
           {
             "type": "category",
