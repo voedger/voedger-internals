@@ -1,10 +1,12 @@
 # API Gateway implementation
 Design of the implementation of the API Gateway.
 
-# Motivation
+## Motivation
+
 [API Gateway (APIv2)](https://github.com/voedger/voedger/issues/1162)
 
-# Context
+## Context
+
 ```mermaid
 flowchart
 qp1[/Query Processor v1/]:::S
@@ -35,13 +37,15 @@ classDef H fill:#C9E7B7,color:#333
 classDef G fill:#ffffff15, stroke:#999, stroke-width:2px, stroke-dasharray: 5 5
 ```
 
-# Components
+## Components
+
 - Command Processor: `processors/command`
 - Query Processor 1: `processors/query`
 - Query Processor 2: `processors/query2`
 - Request Handler `vvm/impl_requesthandler.go`
 
-# Request dispatching
+## Request dispatching
+
 ```mermaid
 flowchart
 qpMessage1>Query Message v1]:::S
@@ -76,7 +80,7 @@ classDef H fill:#C9E7B7,color:#333
 classDef G fill:#ffffff15, stroke:#999, stroke-width:2px, stroke-dasharray: 5 5
 ```
 
-# See Also
-- [Design: Query Processor](/server/design/qp.md)
-- [Design: API v2](/server/apiv2/README.md)
+## See Also
 
+- [Design: Query Processor](qp.md)
+- [Design: API v2](../apiv2/README.md)

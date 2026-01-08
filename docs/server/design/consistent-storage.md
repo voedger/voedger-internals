@@ -11,7 +11,6 @@
     * saving to cache and reporting cache consistency of records;
   * ViewRecords, Records: offset-consistent reading
 
-
 ## Requirements
 
 * 2-phase write: caching and flushing must be supported due to actualizers nature
@@ -31,7 +30,7 @@
 
 ### Offset-consistency read
 
-1. Storage state can see if offset-consistent read is requested. For fully-specified key it reads from App Storage with offset-consistency. 
+1. Storage state can see if offset-consistent read is requested. For fully-specified key it reads from App Storage with offset-consistency.
 
 ## Technical design
 
@@ -100,4 +99,3 @@ TODO
    // TODO: offset-consistency GET operations
 
 ```
-
