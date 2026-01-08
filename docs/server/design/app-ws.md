@@ -88,7 +88,7 @@ func AppPartitionID(wsid istructs.WSID, numAppPartitions istructs.NumAppPartitio
 
 ### 3. Partition Borrowing
 
-```go 
+```go
 // path=pkg/appparts/impl.go mode=EXCERPT
 func (aps *apps) AppWorkspacePartitionID(name appdef.AppQName, ws istructs.WSID) (istructs.PartitionID, error) {
 	pc, err := aps.AppPartsCount(name)
