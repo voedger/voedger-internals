@@ -12,6 +12,7 @@
 - [Consistent Storage](consistent-storage.md) - Offset-consistency in app storage
 - [TTL Storage](ttl-storage.md)
 - [Sequences](sequences.md) - Sequence implementation and scalability improvements
+  - [sequences-260109.md](sequences-260109.md)
 
 ## Core components
 
