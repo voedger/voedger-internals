@@ -1,6 +1,73 @@
-# Actual Sequences design as of 26-01-09
+# Actual sequences design as of 26-01-09
 
-## Architecture Overview
+## Historical context
+
+### Previous design (before April 2025)
+
+The system previously used **multiple separate sequences** for different record types:
+
+1. **CRecordIDSequence** - For CRecords (Collection Records)
+   - Started from: `322685000131072`
+   - Purpose: Efficient CRecord caching on DBMS side (most CRecords in same partition)
+   - Enabled simple iteration over CRecords
+
+2. **OWRecordIDSequence** - For ORecords/WRecords (O/W Records)
+   - Started from: `322680000131072`
+   - Purpose: Sequential IDs for O/W Records
+
+3. **WLogOffsetSequence** - For WLog offsets
+   - Started from: `1`
+
+4. **PLogOffsetSequence** - For PLog offsets
+   - Started from: `1`
+
+### The problem
+
+As documented on March 1, 2025, this design had critical issues:
+
+- Record ID sequences could overlap
+- Only 5,000,000,000 IDs available for OWRecords before colliding with CRecord IDs
+- OWRecord IDs started at 322680000131072
+- CRecord IDs started at 322685000131072
+- Gap between sequences: only 5 billion IDs
+
+### The change (April 29, 2025)
+
+Commit `de5532b17a255f1eaac84bf72187283502d69bda` - PR `#3620` addressing issue `#3600`:
+
+**"`#3600` one sequence for all records"**
+
+The system was refactored to use a **single unified sequence**:
+
+- **QNameRecordIDSequence** - Single sequence for ALL record IDs
+  - Replaces both `QNameCRecordIDSequence` and `QNameOWRecordIDSequence`
+  - Starts from: `FirstUserRecordID = 200001`
+  - Much more human-readable IDs
+  - Simpler Command Processor implementation
+
+**Decision rationale:**
+
+Pros:
+
+- Clean for Voedger users
+- IDs are more human-readable (200001, 200002, ... vs 322685000131072, ...)
+- Simpler Command Processor
+- No collision risk
+
+Cons:
+
+- CRecords are not cached as efficiently (accepted tradeoff)
+
+### Current sequences
+
+Only **2 sequences** remain:
+
+1. **QNameRecordIDSequence** - All record IDs (starts from 200001)
+2. **QNameWLogOffsetSequence** - WLog offsets (starts from 1)
+
+Note: PLog offset is managed per partition in `appPartition.nextPLogOffset`, not as a separate sequence.
+
+## Architecture overview
 
 The system uses **in-memory per-workspace state** with **PLog-based recovery**. There are three main components:
 
@@ -8,7 +75,7 @@ The system uses **in-memory per-workspace state** with **PLog-based recovery**. 
 2. **workspace** - One per WSID, tracks WLog offset and ID generator
 3. **IIDGenerator** - Simple incrementing ID generator per workspace
 
-## Data Structures
+## Data structures
 
 ````go path=pkg/processors/command/provide.go mode=EXCERPT
 type appPartition struct {
@@ -22,7 +89,7 @@ type workspace struct {
 }
 ````
 
-## ID Generator Implementation
+## ID generator implementation
 
 ````go path=pkg/istructsmem/idgenerator.go mode=EXCERPT
 type implIIDGenerator struct {
@@ -37,7 +104,7 @@ func (g *implIIDGenerator) NextID(rawID istructs.RecordID) (storageID istructs.R
 }
 ````
 
-## Initialization Flow
+## Initialization flow
 
 **On first access to a workspace:**
 
@@ -60,7 +127,7 @@ Initial values:
 - `NextWLogOffset = istructs.FirstOffset` (which is 1)
 - `nextRecordID = istructs.FirstUserRecordID` (which is 200001)
 
-## Recovery Flow
+## Recovery flow
 
 **On partition restart, the entire PLog is scanned:**
 
@@ -94,7 +161,7 @@ func (g *implIIDGenerator) UpdateOnSync(syncID istructs.RecordID) {
 }
 ````
 
-## Command Processing Flow
+## Command processing flow
 
 **1. Get workspace:**
 ````go path=pkg/processors/command/impl.go mode=EXCERPT
@@ -165,7 +232,7 @@ if err != nil {
 }
 ````
 
-## Key Constants
+## Key constants
 
 ````go path=pkg/istructs/consts.go mode=EXCERPT
 const NullRecordID = RecordID(0)
@@ -185,6 +252,10 @@ const FirstUserRecordID = MaxReservedRecordID + 1  // 200001
 
 **Current design characteristics:**
 
+- **Single sequence for all records** (since April 2025)
+  - Replaced separate CRecordIDSequence and OWRecordIDSequence
+  - Starts from 200001 (human-readable)
+  - No collision risk
 - **All workspace state is in memory** (map of workspaces per partition)
 - **Simple increment** for ID generation (no complex sequencer logic)
 - **Full PLog scan on recovery** to rebuild all workspace states
@@ -193,4 +264,10 @@ const FirstUserRecordID = MaxReservedRecordID + 1  // 200001
 - **Memory grows** with number of active workspaces per partition
 - **Recovery time grows** with PLog size
 
-This is fundamentally different from the sequencer design documented in `sequences.md`, which was intended to solve these scalability issues but has not been integrated.
+**Historical note:**
+
+Before April 2025, the system used separate sequences for CRecords (starting at 322685000131072) and OWRecords (starting at 322680000131072), which created a collision risk with only 5 billion IDs available for OWRecords. The unified sequence design eliminated this problem while simplifying the implementation.
+
+**Future evolution:**
+
+This is fundamentally different from the sequencer design documented in `sequences.md`, which was intended to solve scalability issues (memory growth, recovery time) but has not been integrated. The current simple design prioritizes correctness and simplicity over performance optimization.
