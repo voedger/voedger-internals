@@ -74,8 +74,14 @@ Existing design
       - CUD.ID is set as the current RecordID
         - `IIDGenerator.UpdateOnSync` [is called](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/processors/command/impl.go#L253)
 - save the event after cmd exec:
-  - `istructs.IIDGenerator` instance is provided to `IEvents.PutPlog()` [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/processors/command/impl.go#L307)
-  - `istructs.IIDGenerator.Next()` is called to convert rawID->realID for ODoc in arguments and each resulting CUD [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/istructsmem/event-types.go#L189)
+  - `istructs.IIDGenerator` [instance is provided to `IEvents.PutPlog()`] (https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/processors/command/impl.go#L307)
+  - `istructs.IIDGenerator.Next()` is called to convert rawID->realID for ODoc in arguments and [each resulting CUD](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/istructsmem/event-types.go#L189)
+
+#### Actual Sequences design as of 26-01-09
+
+- [sequences-260109.md](sequences-260109.md)
+
+---
 
 ## Definitions
 
@@ -170,7 +176,7 @@ VVMHost uses cmp.VVMConfig.SequencesTrustLevel.
 - `~tuc.StartSequencesGeneration~`uncvrd[^5]❓
   - When: CP starts processing a request
   - Flow:
-    - `partitionID` is calculated using request WSID and amount of partitions declared in AppDeploymentDescriptor [here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/vvm/impl_requesthandler.go#L61)
+    - `partitionID` is calculated using request WSID and amount of partitions declared [in AppDeploymentDescriptor here](https://github.com/voedger/voedger/blob/9d400d394607ef24012dead0d59d5b02e2766f7d/pkg/vvm/impl_requesthandler.go#L61)
     - sequencer, err := IAppPartition.Sequencer() err
     - nextPLogOffest, ok, err := sequencer.Start(wsKind, WSID)
       - if !ok
