@@ -164,15 +164,15 @@ bytes     -> Written as-is (raw bytes)
 
 **Note:** Variable-size fields (string, bytes) should be placed last in clustering columns for efficient range queries.
 
-## SysView_Versions
+### SysView_Versions
 
 SysView_Versions (ID=16) is a system view that tracks the schema version of other system views in Voedger's storage layer. It acts as a version registry for internal data structures, enabling schema evolution and backward compatibility.
 
-### Purpose
+#### Purpose
 
 SysView_Versions solves the schema evolution problem for system views. When Voedger's internal storage format changes (e.g., how QNames are stored, how containers are organized), this view tracks which version of each system view's schema is currently in use.
 
-### Data structure
+#### Data structure
 
 **Partition key:**
 
@@ -192,7 +192,7 @@ SysView_Versions solves the schema evolution problem for system views. When Voed
 [0-1]    uint16   VersionValue (the version number)
 ```
 
-### Version keys
+#### Version keys
 
 The system tracks versions for these internal views:
 
@@ -204,7 +204,7 @@ VersionKey    System view           Purpose
 4             SysUniquesVersion     Uniques format (deprecated)
 ```
 
-### How it works
+#### How it works
 
 **On application startup:**
 
@@ -251,7 +251,7 @@ if ver := versions.Get(vers.SysQNamesVersion); ver != latestVersion {
 // Value: [latestVersion]
 ```
 
-### Storage example
+#### Storage example
 
 If an application has QNames, Containers, and Singletons system views all at version 1:
 
@@ -271,7 +271,7 @@ Entry 3:
   Value: [0x00][0x01]               (version 1)
 ```
 
-### Schema evolution
+#### Schema evolution
 
 When Voedger's internal storage format needs to change:
 
@@ -302,13 +302,15 @@ func (names *QNames) load(storage, versions) error {
 }
 ```
 
-### Implementation characteristics
+#### Implementation characteristics
 
 - Centralized version tracking - All system view versions in one place
 - Lazy loading - Loaded once at startup, cached in memory
 - Atomic updates - Version updated when system view data is written
 - Backward compatibility - Enables reading old formats
 - Migration support - Can detect when migration is needed
+
+---
 
 ## Key structure by data type
 
