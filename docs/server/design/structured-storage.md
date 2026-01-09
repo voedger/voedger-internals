@@ -34,25 +34,6 @@ Storage Backends
     +-- DynamoDB (amazondb)
 ```
 
-### Key interfaces
-
-**IAppStorage** (pkg/istorage/interface.go)
-
-- Core storage interface with partition key + clustering columns model
-- Methods: Put, Get, PutBatch, GetBatch, Read
-- TTL operations: InsertIfNotExists, CompareAndSwap, CompareAndDelete
-
-**IAppStructs** (pkg/istructs/interface.go)
-
-- High-level application data access
-- Provides: Records(), ViewRecords(), Events()
-
-**IViewRecords** (pkg/istructs/interface.go)
-
-- View-specific operations
-- Key builders with partition key and clustering columns
-- Value builders for view data
-
 ## Data layout
 
 All data in Voedger storage is organized using a two-level key structure:
