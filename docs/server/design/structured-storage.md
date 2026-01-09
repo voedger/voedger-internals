@@ -60,6 +60,26 @@ All data in Voedger storage is organized using a two-level key structure:
 1. **Partition key (pKey)** - Determines data distribution across nodes
 2. **Clustering columns (cCols)** - Determines sorting within a partition
 
+### Key characteristics
+
+1. **All multi-byte integers use BigEndian encoding**
+2. **Fields are written left-to-right** in the order defined
+3. **Partition key fields must all be specified**
+4. **Clustering columns can be partially specified** for range queries
+5. **Variable-size fields (string, bytes) are written last** in clustering columns for efficient range queries
+6. **System view IDs (16-22) occupy first 2 bytes** of partition key to distinguish data types
+7. **QNames are stored as 2-byte QNameIDs**, not as strings
+8. **RecordID and Offset are split** into Hi/Lo parts for efficient partitioning
+
+This layout enables:
+
+- Efficient partitioning across storage nodes (via partition key)
+- Sorted storage within partitions (via clustering columns)
+- Range queries (by partially specifying clustering columns)
+- Type discrimination (via system view ID prefix)
+- Compact storage (QNameID vs full QName strings)
+- Fast lookups (integer comparisons vs string comparisons)
+
 ### System views
 
 Voedger uses predefined system view IDs for internal data structures:
@@ -308,7 +328,7 @@ Value:          1234567890               200001
 Hex:            [OrderDate bytes]        [OrderID bytes]
 ```
 
-## RecordID Structure
+## RecordID structure
 
 RecordID is a 64-bit unsigned integer with specific ranges:
 
@@ -329,7 +349,7 @@ Range                    Purpose
 - Formula: `partitionBits = 16`
 - Hi = upper 48 bits, Lo = lower 16 bits
 
-## WSID (Workspace ID) Structure
+## WSID (Workspace ID) structure
 
 WSID is a 63-bit value (highest bit always 0):
 
@@ -347,7 +367,7 @@ Bit:  63  62-47        46-0
 WSID = (ClusterID << 47) + BaseWSID
 ```
 
-## Data Flow
+## Data flow
 
 ### Writing a View Record
 
@@ -398,9 +418,9 @@ WSID = (ClusterID << 47) + BaseWSID
 6. Deserialize and process each record
 ```
 
-## Implementation Details
+## Implementation details
 
-### Translation Layer (pkg/istructsmem)
+### Translation layer (pkg/istructsmem)
 
 The `istructsmem` package implements high-level `istructs` interfaces by translating them into low-level `IAppStorage` calls:
 
@@ -423,7 +443,7 @@ IEvents.ReadWLog(...)     ->   wlogKey()       ->   IAppStorage.Read(pKey, start
 - `storeViewPartKey(ws WSID) []byte` - Generates partition key for views
 - `storeViewClustKey() []byte` - Generates clustering columns for views
 
-### Caching Layer
+### Caching layer
 
 **istoragecache** (pkg/istoragecache) provides transparent caching:
 
@@ -435,7 +455,7 @@ IAppStorage (cached)
     +-- IAppStorage (underlying)
 ```
 
-## Usage Examples
+## Usage examples
 
 ### Example: Writing a Record
 
@@ -524,22 +544,3 @@ err := viewRecords.Read(ctx, wsid, kb, func(key IKey, value IValue) error {
 })
 ```
 
-## Key Characteristics
-
-1. **All multi-byte integers use BigEndian encoding**
-2. **Fields are written left-to-right** in the order defined
-3. **Partition key fields must all be specified**
-4. **Clustering columns can be partially specified** for range queries
-5. **Variable-size fields (string, bytes) are written last** in clustering columns for efficient range queries
-6. **System view IDs (16-22) occupy first 2 bytes** of partition key to distinguish data types
-7. **QNames are stored as 2-byte QNameIDs**, not as strings
-8. **RecordID and Offset are split** into Hi/Lo parts for efficient partitioning
-
-This layout enables:
-
-- Efficient partitioning across storage nodes (via partition key)
-- Sorted storage within partitions (via clustering columns)
-- Range queries (by partially specifying clustering columns)
-- Type discrimination (via system view ID prefix)
-- Compact storage (QNameID vs full QName strings)
-- Fast lookups (integer comparisons vs string comparisons)
