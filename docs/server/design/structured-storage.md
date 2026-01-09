@@ -312,6 +312,295 @@ func (names *QNames) load(storage, versions) error {
 
 ---
 
+### SysView_QNames
+
+SysView_QNames (ID=17) is a system view that stores the mapping between QNames (qualified names like `"myapp.Order"`) and their corresponding QNameIDs (uint16 numeric identifiers). This mapping enables compact storage by using 2-byte integers instead of variable-length strings in storage keys.
+
+#### QNames purpose
+
+SysView_QNames solves the storage efficiency problem for qualified names:
+
+- QNames are used extensively throughout Voedger (table names, view names, field types, etc.)
+- Storing full string QNames in every storage key would be inefficient
+- Instead, each QName is assigned a unique 2-byte QNameID
+- Storage keys use QNameID (2 bytes) instead of QName strings (variable length)
+
+#### QName structure
+
+**QName (Qualified Name)** is a two-part identifier: `<package>.<entity>`
+
+Examples:
+
+- `"air.Restaurant"`
+- `"sys.CDoc"`
+- `"myapp.Order"`
+- `"untill.bill"`
+
+#### QNames data structure
+
+**Partition key (4 bytes total):**
+
+```text
+[0-1]    uint16   SysView_QNames (constant = 17)
+[2-3]    uint16   Version (ver01 = 1)
+```
+
+**Clustering columns (variable length):**
+
+```text
+[0...]   string   QName as string (e.g., "myapp.Order")
+```
+
+**Value (2 bytes):**
+
+```text
+[0-1]    uint16   QNameID (e.g., 1000)
+```
+
+#### QNameID ranges
+
+```text
+Range           Purpose                      Examples
+0               NullQNameID                  (null/empty)
+1-5             Hardcoded system QNames      Error, CUD, etc.
+6-255           Reserved (QNameIDSysLast)    System use
+256-65535       User-defined QNames          Application types
+```
+
+#### Hardcoded system QNameIDs
+
+These are predefined and never stored in SysView_QNames:
+
+```text
+QNameID    QName
+0          NullQName
+1          QNameForError
+2          QNameCommandCUD
+3          QNameForCorruptedData
+4          QNameWLogOffsetSequence
+5          QNameRecordIDSequence
+...
+255        QNameIDSysLast (boundary)
+```
+
+#### QNames lifecycle
+
+**On application startup:**
+
+```go
+// 1. Load versions
+versions := vers.New()
+err := versions.Prepare(storage)
+
+// 2. Load existing QName mappings from storage
+qnames := qnames.New()
+err = qnames.Prepare(storage, versions, appDef)
+
+// This process:
+// - Reads all QName -> QNameID mappings from SysView_QNames
+// - Collects all QNames from application definition (appDef)
+// - Assigns new QNameIDs to any new QNames
+// - Writes new mappings back to storage if changes detected
+```
+
+**Loading from storage (version 1 format):**
+
+```go
+func (names *QNames) load01(storage istorage.IAppStorage) error {
+    readQName := func(cCols, value []byte) error {
+        // Parse QName from clustering columns
+        qName, err := appdef.ParseQName(string(cCols))
+        if err != nil {
+            return err
+        }
+
+        // Read QNameID from value
+        id := binary.BigEndian.Uint16(value)
+
+        // Skip deleted QNames
+        if id == istructs.NullQNameID {
+            return nil
+        }
+
+        // Store in memory cache
+        names.qNames[qName] = id
+        names.ids[id] = qName
+
+        return nil
+    }
+
+    // Read all entries from SysView_QNames
+    pKey := utils.ToBytes(consts.SysView_QNames, ver01)
+    return storage.Read(context.Background(), pKey, nil, nil, readQName)
+}
+```
+
+**Assigning new QNameIDs:**
+
+```go
+func (names *QNames) collect(qName appdef.QName) error {
+    if _, ok := names.qNames[qName]; ok {
+        return nil // Already known QName
+    }
+
+    // Find next available ID after lastID
+    for id := names.lastID + 1; id < MaxAvailableQNameID; id++ {
+        if _, ok := names.ids[id]; !ok {
+            // Found unused ID
+            names.qNames[qName] = id
+            names.ids[id] = qName
+            names.lastID = id
+            names.changes++
+            return nil
+        }
+    }
+
+    return ErrQNameIDsExceeds // No more IDs available
+}
+```
+
+**Storing to storage:**
+
+```go
+func (names *QNames) store(storage, versions) error {
+    pKey := utils.ToBytes(consts.SysView_QNames, ver01)
+
+    batch := make([]istorage.BatchItem, 0)
+    for qName, id := range names.qNames {
+        // Only store user-defined QNames (> 255)
+        if id > istructs.QNameIDSysLast {
+            item := istorage.BatchItem{
+                PKey:  pKey,
+                CCols: []byte(qName.String()),
+                Value: utils.ToBytes(id),
+            }
+            batch = append(batch, item)
+        }
+    }
+
+    // Write all mappings in one batch
+    err = storage.PutBatch(batch)
+
+    // Update version in SysView_Versions
+    if ver := versions.Get(vers.SysQNamesVersion); ver != latestVersion {
+        err = versions.Put(vers.SysQNamesVersion, latestVersion)
+    }
+
+    return nil
+}
+```
+
+#### QNames storage example
+
+If an application has these QNames:
+
+```text
+"myapp.Order" -> 256
+"myapp.Customer" -> 257
+"myapp.Product" -> 258
+```
+
+SysView_QNames contains:
+
+```text
+Partition Key: [0x00][0x11][0x00][0x01]  (SysView_QNames=17, ver01=1)
+
+Entry 1:
+  Clustering Columns: "myapp.Customer"
+  Value: [0x01][0x01]  (257)
+
+Entry 2:
+  Clustering Columns: "myapp.Order"
+  Value: [0x01][0x00]  (256)
+
+Entry 3:
+  Clustering Columns: "myapp.Product"
+  Value: [0x01][0x02]  (258)
+```
+
+Note: Entries are sorted by clustering columns (QName strings)
+
+#### QName renaming
+
+Voedger supports renaming QNames while preserving their QNameID:
+
+```go
+// Rename "old.Name" to "new.Name"
+err := qnames.Rename(storage, oldQName, newQName)
+
+// This:
+// 1. Loads existing mappings
+// 2. Finds QNameID for oldQName
+// 3. Marks oldQName as deleted (sets ID to NullQNameID)
+// 4. Assigns the same ID to newQName
+// 5. Writes changes to storage
+```
+
+This is critical because:
+
+- QNameIDs are used in storage keys throughout the system
+- Changing a QNameID would require rewriting all data
+- Renaming preserves the ID, so existing data remains valid
+
+#### Lookup operations
+
+**QName to QNameID:**
+
+```go
+id, err := qnames.ID(appdef.NewQName("myapp", "Order"))
+// Returns: 256, nil
+```
+
+**QNameID to QName:**
+
+```go
+qname, err := qnames.QName(256)
+// Returns: QName{pkg: "myapp", entity: "Order"}, nil
+```
+
+#### QNames implementation characteristics
+
+- Bidirectional mapping - Fast lookup in both directions (QName -> ID and ID -> QName)
+- In-memory cache - All mappings loaded at startup, no storage access during runtime
+- Immutable IDs - Once assigned, a QNameID never changes for a given QName
+- Sequential allocation - New IDs assigned sequentially from lastID + 1
+- Batch writes - All changes written in a single batch operation
+- Version tracking - Uses SysView_Versions to track schema version
+- Deletion support - QNames can be marked as deleted (ID set to NullQNameID)
+- Rename support - QNames can be renamed while preserving their ID
+
+#### Why it's needed
+
+**Storage efficiency:**
+
+- 2 bytes (QNameID) vs 10-50 bytes (QName string)
+- Used in every record, view, and event log entry
+- Massive space savings across the entire database
+
+**Performance:**
+
+- Integer comparison (2 bytes) vs string comparison (variable length)
+- Faster key generation and lookups
+- Reduced memory footprint
+
+**Example impact:**
+
+Without QNameID:
+```text
+View partition key: [ViewID][WSID]["myapp.OrderStatus"]
+Size: 2 + 8 + 18 = 28 bytes
+```
+
+With QNameID:
+```text
+View partition key: [ViewQNameID][WSID]
+Size: 2 + 8 = 10 bytes
+```
+
+Savings: 18 bytes per key × millions of records = significant storage reduction
+
+---
+
 ## Key structure by data type
 
 ### 1. Records (CDoc, WDoc, GDoc, CRecord, WRecord, GRecord)
