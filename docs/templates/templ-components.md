@@ -1,21 +1,25 @@
 # Components design template
 
-## c.sys.Workspace.TemplateInitiateInvitationByEMail()
+## untill.airs-bp/workspace/c.sys.TemplateInitiateInvitationByEMail()
 
 - AuthZ: role.sys.WorkspaceAdmin
-- Params:
+- Input
   - Email
   - Roles
   - ExpireDatetime
   - EmailTemplate // Must be prefixed with 'text:' or 'resource:'
-    - Placeholders:
+    - Placeholders
       - ${VerificationCode}
       - ${InviteID}
       - ${WSID} - Inviting Workspace ID
       - ${WSName} - Inviting Workspace Name
       - ${Email} - Invitee Email
   - EmailSubject
-- Errors:
-  - `~err.State~`covrd[^1]✅: State not in (None, Cancelled, Left, ToBeInvited)
+- Output
+  - token
+- Errors
+  - `~err.State~`covrd[^1]✅: state not in (None, Cancelled, Left, ToBeInvited)
   - invalid argument EmailTemplate
-  
+- Behavior or Flow
+  - Behavior uses present simple tense
+  - Flow uses imperative mood
