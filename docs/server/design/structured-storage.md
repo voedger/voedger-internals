@@ -164,6 +164,152 @@ bytes     -> Written as-is (raw bytes)
 
 **Note:** Variable-size fields (string, bytes) should be placed last in clustering columns for efficient range queries.
 
+## SysView_Versions
+
+SysView_Versions (ID=16) is a system view that tracks the schema version of other system views in Voedger's storage layer. It acts as a version registry for internal data structures, enabling schema evolution and backward compatibility.
+
+### Purpose
+
+SysView_Versions solves the schema evolution problem for system views. When Voedger's internal storage format changes (e.g., how QNames are stored, how containers are organized), this view tracks which version of each system view's schema is currently in use.
+
+### Data structure
+
+**Partition key:**
+
+```text
+[0-1]    uint16   SysView_Versions (constant = 16)
+```
+
+**Clustering columns:**
+
+```text
+[0-1]    uint16   VersionKey (identifies which system view)
+```
+
+**Value:**
+
+```text
+[0-1]    uint16   VersionValue (the version number)
+```
+
+### Version keys
+
+The system tracks versions for these internal views:
+
+```text
+VersionKey    System view           Purpose
+1             SysQNamesVersion      QName to QNameID mapping format
+2             SysContainersVersion  Container names format
+3             SysSingletonsVersion  Singleton IDs format
+4             SysUniquesVersion     Uniques format (deprecated)
+```
+
+### How it works
+
+**On application startup:**
+
+```go
+// Load all version information from storage
+versions := vers.New()
+err := versions.Prepare(storage)
+
+// This reads all entries from SysView_Versions into memory
+// Partition Key: [16]
+// Reads all clustering columns and values
+```
+
+**When loading a system view (e.g., QNames):**
+
+```go
+// Check what version of QNames view is stored
+ver := versions.Get(vers.SysQNamesVersion)
+
+switch ver {
+case vers.UnknownVersion:
+    // No data exists yet - first time initialization
+    return nil
+case ver01:
+    // Load using version 1 format
+    return names.load01(storage)
+default:
+    // Unknown version - error
+    return ErrorInvalidVersion
+}
+```
+
+**When storing a system view:**
+
+```go
+// After storing QNames data, update the version
+if ver := versions.Get(vers.SysQNamesVersion); ver != latestVersion {
+    err = versions.Put(vers.SysQNamesVersion, latestVersion)
+}
+
+// This writes to SysView_Versions:
+// Partition Key: [16]
+// Clustering Columns: [1] (SysQNamesVersion)
+// Value: [latestVersion]
+```
+
+### Storage example
+
+If an application has QNames, Containers, and Singletons system views all at version 1:
+
+```text
+Partition Key: [0x00][0x10]  (SysView_Versions = 16)
+
+Entry 1:
+  Clustering Columns: [0x00][0x01]  (SysQNamesVersion = 1)
+  Value: [0x00][0x01]               (version 1)
+
+Entry 2:
+  Clustering Columns: [0x00][0x02]  (SysContainersVersion = 2)
+  Value: [0x00][0x01]               (version 1)
+
+Entry 3:
+  Clustering Columns: [0x00][0x03]  (SysSingletonsVersion = 3)
+  Value: [0x00][0x01]               (version 1)
+```
+
+### Schema evolution
+
+When Voedger's internal storage format needs to change:
+
+1. New code can read old format (backward compatibility)
+2. New code can write new format
+3. Version number indicates which format is in use
+4. Migration can be performed incrementally
+
+**Example scenario:**
+
+```go
+// Old code stored QNames with version 1 format
+// New code needs to support both version 1 and version 2
+
+func (names *QNames) load(storage, versions) error {
+    ver := versions.Get(vers.SysQNamesVersion)
+
+    switch ver {
+    case vers.UnknownVersion:
+        return nil  // No data yet
+    case ver01:
+        return names.load01(storage)  // Old format
+    case ver02:
+        return names.load02(storage)  // New format
+    default:
+        return ErrorInvalidVersion
+    }
+}
+```
+
+### Implementation characteristics
+
+- Centralized version tracking - All system view versions in one place
+- Lazy loading - Loaded once at startup, cached in memory
+- Atomic updates - Version updated when system view data is written
+- Backward compatibility - Enables reading old formats
+- Migration support - Can detect when migration is needed
+
 ## Key structure by data type
 
 ### 1. Records (CDoc, WDoc, GDoc, CRecord, WRecord, GRecord)
