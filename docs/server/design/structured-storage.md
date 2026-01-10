@@ -36,6 +36,8 @@ Storage Backends
 
 ## PL/CC layouts
 
+Information in structured storage is organized into **views**. Each view has a specific layout for its **Partition Key (PK)** and **Clustering Columns (CC)**.
+
 ```text
 pkg\istructsmem\internal\consts\qnames.go
 
@@ -156,35 +158,7 @@ This mapping is:
 
 ---
 
-## Field serialization rules
-
-When fields are serialized in partition keys and clustering columns:
-
-**Fixed-size types (BigEndian):**
-```text
-int8      -> 1 byte
-int16     -> 2 bytes (BigEndian)
-int32     -> 4 bytes (BigEndian)
-int64     -> 8 bytes (BigEndian)
-uint16    -> 2 bytes (BigEndian)
-uint32    -> 4 bytes (BigEndian)
-uint64    -> 8 bytes (BigEndian)
-float32   -> 4 bytes (BigEndian, IEEE 754 bits)
-float64   -> 8 bytes (BigEndian, IEEE 754 bits)
-bool      -> 1 byte (0x00=false, 0x01=true)
-QName     -> 2 bytes (BigEndian QNameID)
-RecordID  -> 8 bytes (BigEndian)
-```
-
-**Variable-size types:**
-```text
-string    -> Written as-is (UTF-8 bytes)
-bytes     -> Written as-is (raw bytes)
-```
-
-**Note:** Variable-size fields (string, bytes) should be placed last in clustering columns for efficient range queries.
-
-## Views
+## System views
 
 ### SysView_Versions
 
@@ -705,6 +679,36 @@ func (st *Singletons) store(storage, versions) error {
     return nil
 }
 ```
+
+---
+
+## Field serialization rules
+
+When fields are serialized in partition keys and clustering columns:
+
+**Fixed-size types (BigEndian):**
+```text
+int8      -> 1 byte
+int16     -> 2 bytes (BigEndian)
+int32     -> 4 bytes (BigEndian)
+int64     -> 8 bytes (BigEndian)
+uint16    -> 2 bytes (BigEndian)
+uint32    -> 4 bytes (BigEndian)
+uint64    -> 8 bytes (BigEndian)
+float32   -> 4 bytes (BigEndian, IEEE 754 bits)
+float64   -> 8 bytes (BigEndian, IEEE 754 bits)
+bool      -> 1 byte (0x00=false, 0x01=true)
+QName     -> 2 bytes (BigEndian QNameID)
+RecordID  -> 8 bytes (BigEndian)
+```
+
+**Variable-size types:**
+```text
+string    -> Written as-is (UTF-8 bytes)
+bytes     -> Written as-is (raw bytes)
+```
+
+**Note:** Variable-size fields (string, bytes) should be placed last in clustering columns for efficient range queries.
 
 ---
 
