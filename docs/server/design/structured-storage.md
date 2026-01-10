@@ -34,7 +34,7 @@ Storage Backends
 
 ---
 
-## PL/CC layouts
+## System views: PL/CC layouts
 
 Information in structured storage is organized into **views**. Each view has a specific layout for its **Partition Key (PK)** and **Clustering Columns (CC)**.
 
