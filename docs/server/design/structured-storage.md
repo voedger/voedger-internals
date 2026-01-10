@@ -723,4 +723,3 @@ err := viewRecords.Read(ctx, wsid, kb, func(key IKey, value IValue) error {
     return nil
 })
 ```
-
