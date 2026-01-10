@@ -720,10 +720,29 @@ RecordID is a 64-bit unsigned integer with specific ranges:
 Range                    Purpose
 0                        NullRecordID
 1 - 65535               Raw IDs (temporary, client-generated)
-65536 - 66047           Singleton IDs
-66048                   NonExistingRecordID (testing)
 65536 - 200000          Reserved range
+  65536 - 66047           - Singleton IDs (512 total)
+  66048                   - NonExistingRecordID (testing)
+  66049 - 200000          - Other reserved IDs
 200001+                 User record IDs
+```
+
+**Key constants:**
+
+```go
+const NullRecordID = RecordID(0)
+const MinRawRecordID = RecordID(1)
+const MaxRawRecordID = RecordID(0xffff)  // 65535
+
+const MinReservedRecordID = MaxRawRecordID + 1  // 65536
+const MaxReservedRecordID = RecordID(200000)
+
+const FirstSingletonID = MinReservedRecordID  // 65536
+const MaxSingletonID = FirstSingletonID + 0x1ff  // 66047 (512 singletons)
+
+const NonExistingRecordID = MaxSingletonID + 1  // 66048
+
+const FirstUserRecordID = MaxReservedRecordID + 1  // 200001
 ```
 
 **Splitting for Storage:**
