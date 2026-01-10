@@ -4,8 +4,6 @@
 
 Structured storage is Voedger's abstraction layer for persisting and retrieving structured data. It provides a unified interface for storing records, views, and event logs (PLog/WLog) across different storage backends (Cassandra, ScyllaDB, BoltDB, in-memory, DynamoDB).
 
-The storage model is inspired by Apache Cassandra's data model with partition keys and clustering columns, enabling efficient data distribution and range queries.
-
 ## Architecture
 
 ### Component hierarchy
@@ -34,38 +32,13 @@ Storage Backends
     +-- DynamoDB (amazondb)
 ```
 
-## Data layout
+---
 
-All data in Voedger storage is organized using a two-level key structure:
-
-1. **Partition key (pKey)** - Determines data distribution across nodes
-2. **Clustering columns (cCols)** - Determines sorting within a partition
-
-### Key characteristics
-
-1. **All multi-byte integers use BigEndian encoding**
-2. **Fields are written left-to-right** in the order defined
-3. **Partition key fields must all be specified**
-4. **Clustering columns can be partially specified** for range queries
-5. **Variable-size fields (string, bytes) are written last** in clustering columns for efficient range queries
-6. **System view IDs (16-22) occupy first 2 bytes** of partition key to distinguish data types
-7. **QNames are stored as 2-byte QNameIDs**, not as strings
-8. **RecordID and Offset are split** into Hi/Lo parts for efficient partitioning
-
-This layout enables:
-
-- Efficient partitioning across storage nodes (via partition key)
-- Sorted storage within partitions (via clustering columns)
-- Range queries (by partially specifying clustering columns)
-- Type discrimination (via system view ID prefix)
-- Compact storage (QNameID vs full QName strings)
-- Fast lookups (integer comparisons vs string comparisons)
-
-### System views
-
-Voedger uses predefined system view IDs for internal data structures:
+## PL/CC layouts
 
 ```text
+pkg\istructsmem\internal\consts\qnames.go
+
 ID    Name                Purpose
 16    SysView_Versions    System view versions
 17    SysView_QNames      Application QNames mapping
@@ -76,13 +49,45 @@ ID    Name                Purpose
 22    SysView_SingletonIDs Application singletons IDs
 ```
 
-### QName to QNameID mapping
+### SysView_Versions (16)
+
+- PK: `[uint16: 16]`
+- CC: `[uint16: VersionKey]`
+
+### SysView_QNames (17)
+
+- PK: `[uint16: 17][uint16: Version]`
+- CC: `[string: QName]`
+
+### SysView_Records (19) - CDoc/WDoc/CRecord/WRecord
+
+- PK: `[uint16: 19][uint64: WSID][uint64: RecordID_Hi]` (18 bytes)
+- CC: `[uint16: RecordID_Lo]` (2 bytes)
+
+### SysView_PLog (20)
+
+- PK: `[uint16: 20][uint16: PartitionID][uint64: Offset_Hi]` (12 bytes)
+- CC: `[uint16: Offset_Lo]` (2 bytes)
+
+### SysView_WLog (21)
+
+- PK: `[uint16: 21][uint64: WSID][uint64: Offset_Hi]` (18 bytes)
+- CC: `[uint16: Offset_Lo]` (2 bytes)
+
+### User Views
+
+- PK: `[uint16: ViewQNameID][uint64: WSID][...user PK fields]`
+- CC: `[...user CC fields]`
+
+---
+
+## QNameID
 
 **QName (Qualified Name)** is a two-part identifier: `<package>.<entity>`
 
 - Examples: `"air.Restaurant"`, `"sys.CDoc"`, `"myapp.Order"`
 
-QNames are **NOT stored as strings** in storage keys. Instead, they are mapped to **QNameID** (uint16):
+QNames are are mapped to **QNameID** (uint16):
 
 ```text
 Type:        QNameID = uint16
@@ -91,7 +96,7 @@ Encoding:    BigEndian
 Range:       0 - 65535 (0xFFFF)
 ```
 
-**QNameID ranges:**
+### QNameID ranges
 
 ```text
 Range           Purpose                      Examples
@@ -101,8 +106,11 @@ Range           Purpose                      Examples
 256-65535       User-defined QNames          Application types
 ```
 
-**Hardcoded system QNameIDs:**
+### Hardcoded system QNameIDs
+
 ```text
+pkg/istructs/consts.go
+
 0    NullQNameID
 1    QNameIDForError
 2    QNameIDCommandCUD
@@ -113,9 +121,9 @@ Range           Purpose                      Examples
 255  QNameIDSysLast (boundary)
 ```
 
-**QName mapping storage:**
+### QName mapping storage
 
-The QName ↔ QNameID mapping is stored in SysView_QNames (ID=17):
+The QName <-> QNameID mapping is stored in SysView_QNames (ID=17):
 
 ```text
 Partition Key:
@@ -136,7 +144,9 @@ This mapping is:
 - Persisted to storage when new QNames are added
 - Immutable once assigned (QNameID never changes for a given QName)
 
-### Field serialization rules
+---
+
+## Field serialization rules
 
 When fields are serialized in partition keys and clustering columns:
 
@@ -164,13 +174,11 @@ bytes     -> Written as-is (raw bytes)
 
 **Note:** Variable-size fields (string, bytes) should be placed last in clustering columns for efficient range queries.
 
+## Views
+
 ### SysView_Versions
 
 SysView_Versions (ID=16) is a system view that tracks the schema version of other system views in Voedger's storage layer. It acts as a version registry for internal data structures, enabling schema evolution and backward compatibility.
-
-#### Purpose
-
-SysView_Versions solves the schema evolution problem for system views. When Voedger's internal storage format changes (e.g., how QNames are stored, how containers are organized), this view tracks which version of each system view's schema is currently in use.
 
 #### Data structure
 
@@ -221,6 +229,8 @@ err := versions.Prepare(storage)
 **When loading a system view (e.g., QNames):**
 
 ```go
+// pkg/istructsmem/internal/qnames/impl.go
+
 // Check what version of QNames view is stored
 ver := versions.Get(vers.SysQNamesVersion)
 
@@ -240,6 +250,8 @@ default:
 **When storing a system view:**
 
 ```go
+// pkg/istructsmem/internal/qnames/impl.go
+
 // After storing QNames data, update the version
 if ver := versions.Get(vers.SysQNamesVersion); ver != latestVersion {
     err = versions.Put(vers.SysQNamesVersion, latestVersion)
@@ -251,90 +263,11 @@ if ver := versions.Get(vers.SysQNamesVersion); ver != latestVersion {
 // Value: [latestVersion]
 ```
 
-#### Storage example
-
-If an application has QNames, Containers, and Singletons system views all at version 1:
-
-```text
-Partition Key: [0x00][0x10]  (SysView_Versions = 16)
-
-Entry 1:
-  Clustering Columns: [0x00][0x01]  (SysQNamesVersion = 1)
-  Value: [0x00][0x01]               (version 1)
-
-Entry 2:
-  Clustering Columns: [0x00][0x02]  (SysContainersVersion = 2)
-  Value: [0x00][0x01]               (version 1)
-
-Entry 3:
-  Clustering Columns: [0x00][0x03]  (SysSingletonsVersion = 3)
-  Value: [0x00][0x01]               (version 1)
-```
-
-#### Schema evolution
-
-When Voedger's internal storage format needs to change:
-
-1. New code can read old format (backward compatibility)
-2. New code can write new format
-3. Version number indicates which format is in use
-4. Migration can be performed incrementally
-
-**Example scenario:**
-
-```go
-// Old code stored QNames with version 1 format
-// New code needs to support both version 1 and version 2
-
-func (names *QNames) load(storage, versions) error {
-    ver := versions.Get(vers.SysQNamesVersion)
-
-    switch ver {
-    case vers.UnknownVersion:
-        return nil  // No data yet
-    case ver01:
-        return names.load01(storage)  // Old format
-    case ver02:
-        return names.load02(storage)  // New format
-    default:
-        return ErrorInvalidVersion
-    }
-}
-```
-
-#### Implementation characteristics
-
-- Centralized version tracking - All system view versions in one place
-- Lazy loading - Loaded once at startup, cached in memory
-- Atomic updates - Version updated when system view data is written
-- Backward compatibility - Enables reading old formats
-- Migration support - Can detect when migration is needed
-
 ---
 
 ### SysView_QNames
 
 SysView_QNames (ID=17) is a system view that stores the mapping between QNames (qualified names like `"myapp.Order"`) and their corresponding QNameIDs (uint16 numeric identifiers). This mapping enables compact storage by using 2-byte integers instead of variable-length strings in storage keys.
-
-#### QNames purpose
-
-SysView_QNames solves the storage efficiency problem for qualified names:
-
-- QNames are used extensively throughout Voedger (table names, view names, field types, etc.)
-- Storing full string QNames in every storage key would be inefficient
-- Instead, each QName is assigned a unique 2-byte QNameID
-- Storage keys use QNameID (2 bytes) instead of QName strings (variable length)
-
-#### QName structure
-
-**QName (Qualified Name)** is a two-part identifier: `<package>.<entity>`
-
-Examples:
-
-- `"air.Restaurant"`
-- `"sys.CDoc"`
-- `"myapp.Order"`
-- `"untill.bill"`
 
 #### QNames data structure
 
@@ -355,32 +288,6 @@ Examples:
 
 ```text
 [0-1]    uint16   QNameID (e.g., 1000)
-```
-
-#### QNameID ranges
-
-```text
-Range           Purpose                      Examples
-0               NullQNameID                  (null/empty)
-1-5             Hardcoded system QNames      Error, CUD, etc.
-6-255           Reserved (QNameIDSysLast)    System use
-256-65535       User-defined QNames          Application types
-```
-
-#### Hardcoded system QNameIDs
-
-These are predefined and never stored in SysView_QNames:
-
-```text
-QNameID    QName
-0          NullQName
-1          QNameForError
-2          QNameCommandCUD
-3          QNameForCorruptedData
-4          QNameWLogOffsetSequence
-5          QNameRecordIDSequence
-...
-255        QNameIDSysLast (boundary)
 ```
 
 #### QNames lifecycle
@@ -601,151 +508,6 @@ Savings: 18 bytes per key × millions of records = significant storage reduction
 
 ---
 
-## Key structure by data type
-
-### 1. Records (CDoc, WDoc, GDoc, CRecord, WRecord, GRecord)
-
-**Partition key (18 bytes total):**
-```text
-Byte Position:  [0-1]    [2-9]      [10-17]
-Data Type:      uint16   uint64     uint64
-Content:        19       WSID       RecordID_Hi
-Encoding:       BigEndian BigEndian BigEndian
-Description:    SysView_Records constant
-```
-
-**Clustering columns (2 bytes total):**
-```text
-Byte Position:  [0-1]
-Data Type:      uint16
-Content:        RecordID_Lo
-Encoding:       BigEndian
-```
-
-**RecordID splitting:**
-
-RecordID is a 64-bit unsigned integer split into Hi (upper 48 bits) and Lo (lower 16 bits):
-
-- Formula: `Hi = RecordID >> 16`, `Lo = RecordID & 0xFFFF`
-- This creates partitions of 65,536 records each
-- Constant: `partitionBits = 16`
-
-**Example:**
-```text
-RecordID = 131072 (0x20000)
-Hi = 131072 >> 16 = 2
-Lo = 131072 & 0xFFFF = 0
-
-For WSID=1000, RecordID=131072:
-
-Partition Key (18 bytes):
-[0x00][0x13][0x00][0x00][0x00][0x00][0x00][0x00][0x03][0xE8][0x00][0x00][0x00][0x00][0x00][0x00][0x00][0x02]
-  19 (SysView_Records)    WSID=1000                           RecordID_Hi=2
-
-Clustering Columns (2 bytes):
-[0x00][0x00]
-  RecordID_Lo=0
-```
-
-**Value:** Serialized record data (dynobuffer format)
-
-### 2. PLog (Partition Event Log)
-
-**Partition Key (12 bytes total):**
-```text
-Byte Position:  [0-1]    [2-3]         [4-11]
-Data Type:      uint16   uint16        uint64
-Content:        20       PartitionID   Offset_Hi
-Encoding:       BigEndian BigEndian    BigEndian
-Description:    SysView_PLog constant
-```
-
-**Clustering Columns (2 bytes total):**
-```text
-Byte Position:  [0-1]
-Data Type:      uint16
-Content:        Offset_Lo
-Encoding:       BigEndian
-```
-
-**Offset Splitting:**
-
-Similar to RecordID, Offset is split into Hi (upper 48 bits) and Lo (lower 16 bits):
-
-- Formula: `Hi = Offset >> 16`, `Lo = Offset & 0xFFFF`
-
-**Value:** Serialized event data
-
-### 3. WLog (Workspace Event Log)
-
-**Partition Key (18 bytes total):**
-```text
-Byte Position:  [0-1]    [2-9]      [10-17]
-Data Type:      uint16   uint64     uint64
-Content:        21       WSID       Offset_Hi
-Encoding:       BigEndian BigEndian BigEndian
-Description:    SysView_WLog constant
-```
-
-**Clustering Columns (2 bytes total):**
-```text
-Byte Position:  [0-1]
-Data Type:      uint16
-Content:        Offset_Lo
-Encoding:       BigEndian
-```
-
-**Value:** Serialized event data
-
-### 4. User-Defined Views
-
-**Partition Key (variable length):**
-```text
-Byte Position:  [0-1]         [2-9]      [10...]
-Data Type:      uint16        uint64     variable
-Content:        ViewQNameID   WSID       User partition key fields
-Encoding:       BigEndian     BigEndian  Field-specific
-```
-
-**Clustering Columns (variable length):**
-```text
-Byte Position:  [0...]
-Data Type:      variable
-Content:        User clustering column fields
-Encoding:       Field-specific
-```
-
-**Value:** Serialized view value data
-
-**Example View with QName Field:**
-
-Schema:
-```sql
-VIEW OrdersByStatus (
-    Status qname,           -- Partition key (QName field!)
-    OrderDate int64,        -- Clustering column
-    OrderID int64           -- Clustering column
-)
-```
-
-Data: Status = "myapp.Completed" (QNameID=750), OrderDate=1234567890, OrderID=200001
-
-Partition Key (12 bytes):
-```text
-Byte Position:  [0-1]         [2-9]           [10-11]
-Data:           ViewQNameID   WSID            Status QNameID
-Value:          2500          1000            750
-Hex:            [0x09][0xC4]  [WSID bytes]    [0x02][0xEE]
-```
-
-Clustering Columns (16 bytes):
-```text
-Byte Position:  [0-7]                    [8-15]
-Data:           OrderDate                OrderID
-Value:          1234567890               200001
-Hex:            [OrderDate bytes]        [OrderID bytes]
-```
-
 ## RecordID structure
 
 RecordID is a 64-bit unsigned integer with specific ranges:
@@ -961,3 +723,4 @@ err := viewRecords.Read(ctx, wsid, kb, func(key IKey, value IValue) error {
     return nil
 })
 ```
+

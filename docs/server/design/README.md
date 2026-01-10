@@ -8,6 +8,7 @@
 
 ## Consistency and storage
 
+- [Structured Storage](structured-storage.md) - Design of structured storage for app data
 - [Consistency Coordinator](consistency-coordinator.md) - Coordinates consistency checks for sync views and records
 - [Consistent Storage](consistent-storage.md) - Offset-consistency in app storage
 - [TTL Storage](ttl-storage.md)
