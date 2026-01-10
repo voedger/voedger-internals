@@ -59,6 +59,11 @@ ID    Name                Purpose
 - PK: `[uint16: 17][uint16: Version]`
 - CC: `[string: QName]`
 
+### SysView_Containers (18)
+
+- PK: `[uint16: 18][uint16: Version]`
+- CC: `[string: ContainerName]`
+
 ### SysView_Records (19) - CDoc/WDoc/CRecord/WRecord
 
 - PK: `[uint16: 19][uint64: WSID][uint64: RecordID_Hi]` (18 bytes)
@@ -73,6 +78,11 @@ ID    Name                Purpose
 
 - PK: `[uint16: 21][uint64: WSID][uint64: Offset_Hi]` (18 bytes)
 - CC: `[uint16: Offset_Lo]` (2 bytes)
+
+### SysView_SingletonIDs (22)
+
+- PK: `[uint16: 22][uint16: Version]`
+- CC: `[string: QName]`
 
 ### User Views
 
@@ -505,6 +515,196 @@ Size: 2 + 8 = 10 bytes
 ```
 
 Savings: 18 bytes per key × millions of records = significant storage reduction
+
+---
+
+### SysView_Containers
+
+SysView_Containers (ID=18) is a system view that stores the mapping between container names and their corresponding ContainerIDs (uint16 numeric identifiers). Containers are used to organize records within documents.
+
+#### Containers data structure
+
+**Partition key (4 bytes total):**
+
+```text
+[0-1]    uint16   SysView_Containers (constant = 18)
+[2-3]    uint16   Version (ver01 = 1)
+```
+
+**Clustering columns (variable length):**
+
+```text
+[0...]   string   Container name as string (e.g., "items")
+```
+
+**Value (2 bytes):**
+
+```text
+[0-1]    uint16   ContainerID (e.g., 64)
+```
+
+#### Container ID ranges
+
+```text
+Range           Purpose
+0               NullContainerID
+1-63            Reserved (ContainerNameIDSysLast)
+64-65535        User-defined containers
+```
+
+#### Containers lifecycle
+
+Similar to QNames, containers are:
+
+- Loaded at application startup
+- Cached in memory (pkg/istructsmem/internal/containers)
+- Persisted to storage when new containers are added
+- Immutable once assigned (ContainerID never changes for a given name)
+
+**Loading from storage:**
+
+```go
+func (cnt *Containers) load01(storage istorage.IAppStorage) error {
+    readName := func(cCols, value []byte) error {
+        name := string(cCols)
+        id := ContainerID(binary.BigEndian.Uint16(value))
+
+        if id == NullContainerID {
+            return nil // deleted Container
+        }
+
+        cnt.containers[name] = id
+        cnt.ids[id] = name
+        return nil
+    }
+
+    pKey := utils.ToBytes(consts.SysView_Containers, ver01)
+    return storage.Read(context.Background(), pKey, nil, nil, readName)
+}
+```
+
+**Storing to storage:**
+
+```go
+func (cnt *Containers) store(storage, versions) error {
+    pKey := utils.ToBytes(consts.SysView_Containers, latestVersion)
+
+    batch := make([]istorage.BatchItem, 0)
+    for name, id := range cnt.containers {
+        if name == "" {
+            continue // skip NullContainerID
+        }
+        item := istorage.BatchItem{
+            PKey:  pKey,
+            CCols: []byte(name),
+            Value: utils.ToBytes(id),
+        }
+        batch = append(batch, item)
+    }
+
+    err = storage.PutBatch(batch)
+
+    // Update version in SysView_Versions
+    if ver := versions.Get(vers.SysContainersVersion); ver != latestVersion {
+        err = versions.Put(vers.SysContainersVersion, latestVersion)
+    }
+
+    return nil
+}
+```
+
+---
+
+### SysView_SingletonIDs
+
+SysView_SingletonIDs (ID=22) is a system view that stores the mapping between singleton QNames and their corresponding RecordIDs. Singletons are special records that exist only once per workspace.
+
+#### SingletonIDs data structure
+
+**Partition key (4 bytes total):**
+
+```text
+[0-1]    uint16   SysView_SingletonIDs (constant = 22)
+[2-3]    uint16   Version (ver01 = 1)
+```
+
+**Clustering columns (variable length):**
+
+```text
+[0...]   string   QName as string (e.g., "myapp.Settings")
+```
+
+**Value (8 bytes):**
+
+```text
+[0-7]    uint64   RecordID (e.g., 65536)
+```
+
+#### Singleton ID ranges
+
+```text
+Range                    Purpose
+65536 - 66047           Singleton IDs (512 total)
+```
+
+#### SingletonIDs lifecycle
+
+Similar to QNames and Containers, singleton IDs are:
+
+- Loaded at application startup
+- Cached in memory (pkg/istructsmem/internal/singletons)
+- Persisted to storage when new singletons are added
+- Immutable once assigned (RecordID never changes for a given singleton)
+
+**Loading from storage:**
+
+```go
+func (st *Singletons) load01(storage istorage.IAppStorage) error {
+    readSingleton := func(cCols, value []byte) error {
+        qName, err := appdef.ParseQName(string(cCols))
+        if err != nil {
+            return err
+        }
+        id := istructs.RecordID(binary.BigEndian.Uint64(value))
+
+        st.qNames[qName] = id
+        st.ids[id] = qName
+        return nil
+    }
+
+    pKey := utils.ToBytes(consts.SysView_SingletonIDs, ver01)
+    return storage.Read(context.Background(), pKey, nil, nil, readSingleton)
+}
+```
+
+**Storing to storage:**
+
+```go
+func (st *Singletons) store(storage, versions) error {
+    pKey := utils.ToBytes(consts.SysView_SingletonIDs, latestVersion)
+
+    batch := make([]istorage.BatchItem, 0)
+    for qName, id := range st.qNames {
+        if id >= istructs.FirstSingletonID {
+            item := istorage.BatchItem{
+                PKey:  pKey,
+                CCols: []byte(qName.String()),
+                Value: utils.ToBytes(uint64(id)),
+            }
+            batch = append(batch, item)
+        }
+    }
+
+    err = storage.PutBatch(batch)
+
+    // Update version in SysView_Versions
+    if ver := versions.Get(vers.SysSingletonsVersion); ver != latestVersion {
+        err = versions.Put(vers.SysSingletonsVersion, latestVersion)
+    }
+
+    return nil
+}
+```
 
 ---
 
