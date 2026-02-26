@@ -37,6 +37,7 @@ Authorization is supported via Bearer token. The token can be passed in the `Aut
 | --- | --- | --- |
 | Content-Type | BLOB metadata| Returns the originally provided metadata |
 | Blob-Name | BLOB name | Returns the originally provided name |
+| Content-Length | BLOB size | Returns the BLOB size in bytes |
 
 ### Result
 
@@ -82,7 +83,7 @@ classDef H fill:#C9E7B7,color:#333
 classDef G fill:#ffffff15, stroke:#999, stroke-width:2px, stroke-dasharray: 5 5
 ```
 
-### Components  
+### Components
 
 - pkg/router
   - API v2 URL path handler `~cmp.routerBlobsReadPathHandler~`covrd[^1]✅:
@@ -108,7 +109,7 @@ classDef G fill:#ffffff15, stroke:#999, stroke-width:2px, stroke-dasharray: 5 5
       - reads BLOB from `iblobstoragestg` and writes it to the response
     - catchReadError `~cmp.blobber.ServicePipeline_catchReadError~`covrd[^14]✅
       - handles errors
-  
+
 - pkg/sys/it
   - integration test for reading BLOBs
     - `~it.TestBlobsRead~`covrd[^2]✅
