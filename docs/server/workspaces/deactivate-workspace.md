@@ -4,7 +4,6 @@
 
 - [Deactivate Workspace](https://github.com/voedger/voedger/issues/53)
 
-
 ## Principles
 
 - Workspace with WorkspaceDescriptor.Status != Active accepts only System token. 403 forbidden otherwise
@@ -17,6 +16,10 @@
 - Deactivating a previously created workspaces is possible but nothing will be made on `c.sys.OnJoinedWorkspaceDeactivated` beacuse:
   - there was no `sp.sys.WorkspaceIDIdx`
   - there was no field `view.sys.WorkspaceIDIdx.InvitingWorkspaceWSID`
+- `c.sys.OnWorkspaceDeactivated` is routed to the app and pseudoWSID where `cdoc.sys.WorkspaceID` actually lives:
+  - child workspace (`ownerApp == projectorApp`): `ownerApp` at `pseudoWSID(ownerWSID, wsName)`
+  - login profile (`ownerApp != projectorApp`): `projectorApp` (= target app) at `pseudoWSID(NullWSID, wsName)` — per `pkg/registry/impl_invokecreateworkspaceid.go`
+- `c.sys.OnWorkspaceDeactivated` and `c.sys.OnChildWorkspaceDeactivated` are issued with a system token for `ownerApp` (separate from the projector-app token) when `ownerApp != projectorApp`, e.g., login-profile deactivation cascade where the registry login lives in `sys/registry`
 
 ## c.sys.InitiateDeactivateWorkspace()
 

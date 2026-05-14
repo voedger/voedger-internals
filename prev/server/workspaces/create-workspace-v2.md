@@ -42,20 +42,20 @@ Additional Information
 
 - FIXME: cdoc.sys.WorkspaceID is a large collection, must be wdoc.sys.WorkspaceID
 
-|entity|app|ws|cluster
-|---|---|---|---
-|c.registry.CreateLogin()|sys/registry|pseudoWS|main
-|cdoc.registry.Login (owner)<br/>aproj.sys.InvokeCreateWorkspaceID|sys/registry|app ws|main
-|c.sys.CreateWorkspaceID()<br/>cdoc.sys.WorkspaceID<br/>aproj.sys.InvokeCreateWorkspace()|Target App|(Target Cluster, base App WSID)|Target Cluster
-|c.sys.CreateWorkspace()<br/>cdoc.sys.WorkspaceDescriptor<br/>cdoc.sys.UserProfile/DeviceProfile<br/>aproj.sys.InitializeWorkspace()|Target App|new WSID|Target Cluster
+| entity                                                                                                                              | app          | ws                              | cluster        |
+| ----------------------------------------------------------------------------------------------------------------------------------- | ------------ | ------------------------------- | -------------- |
+| c.registry.CreateLogin()                                                                                                            | sys/registry | pseudoWS                        | main           |
+| cdoc.registry.Login (owner)<br/>aproj.sys.InvokeCreateWorkspaceID                                                                   | sys/registry | app ws                          | main           |
+| c.sys.CreateWorkspaceID()<br/>cdoc.sys.WorkspaceID<br/>aproj.sys.InvokeCreateWorkspace()                                            | Target App   | (Target Cluster, base App WSID) | Target Cluster |
+| c.sys.CreateWorkspace()<br/>cdoc.sys.WorkspaceDescriptor<br/>cdoc.sys.UserProfile/DeviceProfile<br/>aproj.sys.InitializeWorkspace() | Target App   | new WSID                        | Target Cluster |
 
 ## Create ChildWorkspace
 
-|entity|app|ws|cluster
-|---|---|---|---
-|c.sys.InitChildWorkspace()<br/>cdoc.sys.ChildWorkspace (owner)<br/>aproj.sys.InvokeCreateWorkspaceID()|Tagret App|Profile|Profile Cluster
-|c.sys.CreateWorkspaceID()<br/>cdoc.sys.WorkspaceID<br/>aproj.sys.InvokeCreateWorkspace()|Target App|(Target Cluster, CRC16(ownerWSID+"/"+wsName))|Target Cluster
-|c.sys.CreateWorkspace()<br/>cdoc.sys.WorkspaceDescriptor<br/>cdoc.$wsKind (air.Restaurant)<br/>aproj.sys.InitializeWorkspace()|Target App|new WSID|Target Cluster
+| entity                                                                                                                         | app        | ws                                            | cluster         |
+| ------------------------------------------------------------------------------------------------------------------------------ | ---------- | --------------------------------------------- | --------------- |
+| c.sys.InitChildWorkspace()<br/>cdoc.sys.ChildWorkspace (owner)<br/>aproj.sys.InvokeCreateWorkspaceID()                         | Tagret App | Profile                                       | Profile Cluster |
+| c.sys.CreateWorkspaceID()<br/>cdoc.sys.WorkspaceID<br/>aproj.sys.InvokeCreateWorkspace()                                       | Target App | (Target Cluster, CRC16(ownerWSID+"/"+wsName)) | Target Cluster  |
+| c.sys.CreateWorkspace()<br/>cdoc.sys.WorkspaceDescriptor<br/>cdoc.$wsKind (air.Restaurant)<br/>aproj.sys.InitializeWorkspace() | Target App | new WSID                                      | Target Cluster  |
 
 ## c.sys.InitChildWorkspace()
 
@@ -65,7 +65,7 @@ Additional Information
 - Params: wsName, wsKind, wsKindInitializationData, templateName, templateParams (JSON), wsClusterID
 - Check that wsName does not exist yet: View<ChildWorkspaceIdx>{pk: dummy, cc: wsName, value: idOfChildWorkspace}
   - 409 conflict
-- Create CDoc<ChildWorkspace> {wsName, wsKind, wsKindInitializationData, templateName, templateParams, wsClusterID, `/* Updated aftewards by UpdateOwner*/` WSID, wsError}
+- Create CDoc<ChildWorkspace> {wsName, wsKind, wsKindInitializationData, templateName, templateParams, wsClusterID, `/* Updated afterwards by UpdateOwner*/` WSID, wsError}
   - Trigger Projector<A, InvokeCreateWorkspaceID>
   - Trigger Projector<ChildWorkspaceIdx>
 
@@ -83,7 +83,7 @@ Subject:
 
 - Triggered by CDoc<ChildWorkspace>
 - PseudoWSID = NewWSID(wsClusterID, CRC32(wsName))
-- // PseudoWSID  is needed to avoid WSID generation bottlenecks
+- // PseudoWSID is needed to avoid WSID generation bottlenecks
 - Call WS[$PseudoWSID].c.CreateWorkspaceID()
 
 ## c.sys.CreateWorkspaceID()
@@ -118,7 +118,7 @@ Subject:
   - return ok otherwise
 - if wsKindInitializationData is not valid
   - error = "Invalid workspaced descriptor data: ???"
-- Create CDoc<sys.WorkspaceDescriptor>{wsParams, WSID, createError: error, createdAtMs int64,  `/* Updated aftewards */` initStartedAtMs int64, initError, initCompletedAtMs int64}
+- Create CDoc<sys.WorkspaceDescriptor>{wsParams, WSID, createError: error, createdAtMs int64, `/* Updated afterwards */` initStartedAtMs int64, initError, initCompletedAtMs int64}
   - Trigger Projector<A, InitializeWorkspace>
 - if not error
   - Create CDoc<wsKind>{wsKindInitializationData}
@@ -126,7 +126,7 @@ Subject:
 ## aproj.sys.InitializeWorkspace()
 
 - // error handling: just return
-- // Triggered by  CDoc<sys.WorkspaceDescriptor>
+- // Triggered by CDoc<sys.WorkspaceDescriptor>
 
 - If updated return // We do NOT react on update since we update record from projector
 - If len(new.createError) > 0

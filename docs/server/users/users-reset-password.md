@@ -11,6 +11,7 @@
 - code is wrong -> tries amount is limited to 3 times per hour per profile
 - passord is reset for `CDoc<sys.Login>`, not for `CDoc<sys.UserProfile>`
 - `c.sys.ResetPasswordByEmail` has no rate limits
+- if `cdoc.registry.Login` is deactivated (`sys.IsActive == false`), the registry treats the login as non-existent for all reset-password endpoints — same response as for an unknown login
 
 ## Functional design
 
@@ -85,7 +86,7 @@ sequenceDiagram
 - //TODO issued Principal Tokens are kept valid after password reset
 - //TODO works only if Login == Email
 - //TODO it is possible to reset password for an unlimited amount of times when the verified value token is still valid (10 minutes)
-- //TODO WSID where the token is using must  be the same the token is issued for. To be done in [Check WSID on Verified Field value apply](https://dev.heeus.io/launchpad/#!25720)
+- //TODO WSID where the token is using must be the same the token is issued for. To be done in [Check WSID on Verified Field value apply](https://dev.heeus.io/launchpad/#!25720)
 
 ## Appendix: Best practices
 

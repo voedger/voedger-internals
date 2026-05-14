@@ -41,9 +41,10 @@ Additional Information
 ## Create Login
 
 - ⚠️ cdoc.sys.WorkspaceID is a large collection, must be wdoc.sys.WorkspaceID
+- If `cdoc.registry.Login` for the same login name already exists but `sys.IsActive == false` (login was previously deactivated), `c.registry.CreateLogin` proceeds and creates a new `cdoc.registry.Login`; `view.registry.LoginIdx` is overwritten by `projectorLoginIdx` by its PK `(AppWSID, AppIDLoginHash)` and a fresh profile workspace is created via the same flow below
 
 | entity                                                                                                                              | app          | ws                              | cluster        |
-|-------------------------------------------------------------------------------------------------------------------------------------|--------------|---------------------------------|----------------|
+| ----------------------------------------------------------------------------------------------------------------------------------- | ------------ | ------------------------------- | -------------- |
 | c.registry.CreateLogin()                                                                                                            | sys/registry | pseudoWS                        | main           |
 | cdoc.registry.Login (owner)<br/>aproj.sys.InvokeCreateWorkspaceID                                                                   | sys/registry | app ws                          | main           |
 | c.sys.CreateWorkspaceID()<br/>cdoc.sys.WorkspaceID<br/>aproj.sys.InvokeCreateWorkspace()                                            | Target App   | (Target Cluster, base App WSID) | Target Cluster |
@@ -52,7 +53,7 @@ Additional Information
 ## Create ChildWorkspace
 
 | entity                                                                                                                         | app        | ws                                            | cluster         |
-|--------------------------------------------------------------------------------------------------------------------------------|------------|-----------------------------------------------|-----------------|
+| ------------------------------------------------------------------------------------------------------------------------------ | ---------- | --------------------------------------------- | --------------- |
 | c.sys.InitChildWorkspace()<br/>cdoc.sys.ChildWorkspace (owner)<br/>aproj.sys.InvokeCreateWorkspaceID()                         | Tagret App | Profile                                       | Profile Cluster |
 | c.sys.CreateWorkspaceID()<br/>cdoc.sys.WorkspaceID<br/>aproj.sys.InvokeCreateWorkspace()                                       | Target App | (Target Cluster, CRC16(ownerWSID+"/"+wsName)) | Target Cluster  |
 | c.sys.CreateWorkspace()<br/>cdoc.sys.WorkspaceDescriptor<br/>cdoc.$wsKind (air.Restaurant)<br/>aproj.sys.InitializeWorkspace() | Target App | new WSID                                      | Target Cluster  |
@@ -65,7 +66,7 @@ Additional Information
 - Params: wsName, wsKind, wsKindInitializationData, templateName, templateParams (JSON), wsClusterID
 - Check that wsName does not exist yet: View<ChildWorkspaceIdx>{pk: dummy, cc: wsName, value: idOfChildWorkspace}
   - 409 conflict
-- Create CDoc<ChildWorkspace> {wsName, wsKind, wsKindInitializationData, templateName, templateParams, wsClusterID, `/* Updated aftewards by UpdateOwner*/` WSID, wsError}
+- Create CDoc<ChildWorkspace> {wsName, wsKind, wsKindInitializationData, templateName, templateParams, wsClusterID, `/* Updated afterwards by UpdateOwner*/` WSID, wsError}
   - Trigger Projector<A, InvokeCreateWorkspaceID>
   - Trigger Projector<ChildWorkspaceIdx>
 
@@ -83,7 +84,7 @@ Subject:
 
 - Triggered by CDoc<ChildWorkspace>
 - PseudoWSID = NewWSID(wsClusterID, CRC32(wsName))
-- // PseudoWSID  is needed to avoid WSID generation bottlenecks
+- // PseudoWSID is needed to avoid WSID generation bottlenecks
 - Call WS[$PseudoWSID].c.CreateWorkspaceID()
 
 ## c.sys.CreateWorkspaceID()
@@ -97,7 +98,8 @@ Subject:
 - Check that ownerWSID + wsName does not exist yet: View<WorkspaceIDIdx> to deduplication
   - pk: ownerWSID
   - cc: wsName
-  - val: WSID
+  - val: WSID, IDOfCDocWorkspaceID
+  - if found: read `cdoc.sys.WorkspaceID` by `IDOfCDocWorkspaceID` and return 409 conflict only when `sys.IsActive == true`; if inactive (previous workspace was deactivated), proceed with creation — `Projector[WorkspaceIDIdx]` overwrites the index entry by its PK `(OwnerWSID, WSName)`
 - Get new WSID from View[NextBaseWSID]
 - Create WDoc[WorkspaceID]{wsParams, WSID: $NewWSID}
   - Triggers Projector[A, InvokeCreateWorkspace]
@@ -118,7 +120,7 @@ Subject:
   - return ok otherwise
 - if wsKindInitializationData is not valid
   - error = "Invalid workspaced descriptor data: ???"
-- Create CDoc<sys.WorkspaceDescriptor>{wsParams, WSID, createError: error, createdAtMs int64,  `/* Updated aftewards */` initStartedAtMs int64, initError, initCompletedAtMs int64}
+- Create CDoc<sys.WorkspaceDescriptor>{wsParams, WSID, createError: error, createdAtMs int64, `/* Updated afterwards */` initStartedAtMs int64, initError, initCompletedAtMs int64}
   - Trigger Projector<A, InitializeWorkspace>
 - if not error
   - Create CDoc<wsKind>{wsKindInitializationData}
@@ -126,7 +128,7 @@ Subject:
 ## aproj.sys.InitializeWorkspace()
 
 - // error handling: just return
-- // Triggered by  CDoc<sys.WorkspaceDescriptor>
+- // Triggered by CDoc<sys.WorkspaceDescriptor>
 
 - If updated return // We do NOT react on update since we update record from projector
 - If len(new.createError) > 0
