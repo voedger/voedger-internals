@@ -66,7 +66,7 @@ Additional Information
 - Params: wsName, wsKind, wsKindInitializationData, templateName, templateParams (JSON), wsClusterID
 - Check that wsName does not exist yet: View<ChildWorkspaceIdx>{pk: dummy, cc: wsName, value: idOfChildWorkspace}
   - 409 conflict
-- Create CDoc<ChildWorkspace> {wsName, wsKind, wsKindInitializationData, templateName, templateParams, wsClusterID, `/* Updated aftewards by UpdateOwner*/` WSID, wsError}
+- Create CDoc<ChildWorkspace> {wsName, wsKind, wsKindInitializationData, templateName, templateParams, wsClusterID, `/* Updated afterwards by UpdateOwner*/` WSID, wsError}
   - Trigger Projector<A, InvokeCreateWorkspaceID>
   - Trigger Projector<ChildWorkspaceIdx>
 
@@ -120,7 +120,7 @@ Subject:
   - return ok otherwise
 - if wsKindInitializationData is not valid
   - error = "Invalid workspaced descriptor data: ???"
-- Create CDoc<sys.WorkspaceDescriptor>{wsParams, WSID, createError: error, createdAtMs int64, `/* Updated aftewards */` initStartedAtMs int64, initError, initCompletedAtMs int64}
+- Create CDoc<sys.WorkspaceDescriptor>{wsParams, WSID, createError: error, createdAtMs int64, `/* Updated afterwards */` initStartedAtMs int64, initError, initCompletedAtMs int64}
   - Trigger Projector<A, InitializeWorkspace>
 - if not error
   - Create CDoc<wsKind>{wsKindInitializationData}
